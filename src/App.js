@@ -1,10 +1,12 @@
 import './App.css';
 import AppRoutes from './routes/AppRoutes';
-
+import { ModalProvider } from './context/ModalProvider';
 
 function App() {
   return (
-      <AppRoutes />
+     <ModalProvider>
+       <AppRoutes />
+     </ModalProvider>
   );
 }
 
