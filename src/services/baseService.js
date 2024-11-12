@@ -10,7 +10,7 @@ class BaseService {
       },
     });
 
-    this.api.interceptors.request.use(
+    /*this.api.interceptors.request.use(
       (config) => {
         // const token = localStorage.getItem('token');
 
@@ -33,7 +33,7 @@ class BaseService {
         //handleRefreshToken
         return Promise.reject(error);
       }
-    );
+    );*/
   }
 }
 

@@ -3,8 +3,39 @@ import { BaseModal } from '../../components/modal';
 import { useModal } from '../../context/ModalProvider';
 import { UsersAdd } from '../users'
 
+import { useEffect, useState } from "react";
+import { userService } from '../../services';
+
 const UsersList = () => {
     const { openModal } = useModal();
+
+    const [data, setData] = useState([]);
+
+     // Define an async function inside useEffect
+     const fetchUsers = async () => {
+        try {
+            console.log("service",userService);
+            const response = await userService.getUsers();
+            setData(response.data);  // Assuming response.data contains the user list
+            console.log("response",response);
+            console.log("data",data);
+            
+        } catch (error) {
+            console.error("Error fetching users:", error);
+           
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+        /* userService.getUsers()
+            .then(response => {
+                setData(response.data);  
+            })
+            .catch(error => {
+                console.error("Error fetching users:", error);
+            });*/
+    }, []);  
 
   const onAddUserClick = () => {
     openModal(<UsersAdd />);
@@ -23,9 +54,42 @@ const UsersList = () => {
                 </button>
             </div>
             <BaseModal />
+            
+            {/* 
             <div>
                 <p>No data available.</p>
+            </div>*/}
+
+             
+             <div>
+                <table className="min-w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th className="border px-4 py-2">First Name</th>
+                            <th className="border px-4 py-2">Last Name</th>
+                            <th className="border px-4 py-2">Full Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.length > 0 ? (
+                            data.map((user, index) => (
+                                <tr key={index}>
+                                    <td className="border px-4 py-2">{user.firstName}</td>
+                                    <td className="border px-4 py-2">{user.lastName}</td>
+                                    <td className="border px-4 py-2">{user.fullName}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="3" className="border px-4 py-2 text-center">
+                                    No users available.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
+
         </div>
     );
 };
