@@ -13,7 +13,7 @@ const CountriesList = () => {
 
     const fetchData = async () => {
         try{
-            const response = await countriesService.getCountries();
+            const response = await countriesService.getList();
             setData(response.data);
         }catch (error){
             console.error("Error fetching countries:", error);
@@ -30,7 +30,7 @@ const CountriesList = () => {
 
     const columns = [
         {
-            name: 'Full Name',
+            name: 'Name',
             selector: row => row.name,
             sortable: true,
         },
@@ -60,7 +60,7 @@ const CountriesList = () => {
             data={data}
             pagination
             highlightOnHover
-            noDataComponent="No users available." />
+            noDataComponent="No countries available." />
 
     </div>
     );

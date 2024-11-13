@@ -1,14 +1,14 @@
 import BaseService from "./baseService"
 
 class CountriesService extends BaseService{
-    async getCountries() {
+    async getList() {
         const response = await this.api.get(`/countries/get-countries`, {
             cancelToken: null
         });
         return response;
     }
 
-    async addCountry(countryData){
+    async add(countryData){
         const response = await this.api.post(`/countries`, countryData, {
             cancelToken: null,
         });

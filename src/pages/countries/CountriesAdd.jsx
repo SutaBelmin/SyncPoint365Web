@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup"
 import countriesService from "../../services/countriesService";
-import { data } from "autoprefixer";
+
 
 const CountriesAdd = ({ closeModal, fetchData }) => {
     
@@ -13,7 +13,7 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
         .required("Display name is required!")
     });
 
-    const formik = useFormik({
+    const form = useFormik({
         initialValues:{
             name:"",
             displayName:"",
@@ -21,7 +21,7 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
         validationSchema,
         onSubmit: async (values) => {
             try {
-                await countriesService.addCountry(values);
+                await countriesService.add(values);
                 fetchData();
                 closeModal();
             } catch (error) {
@@ -32,27 +32,27 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
 
     return (
         <div className="p-4">
-        <h1 className="text-xl font-bold mb-4">Add Country</h1>
-        <form onSubmit={formik.handleSubmit}>
+        <h1 className="text-xl font-bold mb-4">Add</h1>
+        <form onSubmit={form.handleSubmit}>
             <div className="mb-4">
                 <label
                     htmlFor="name"
                     className="block text-sm font-medium text-gray-700"
                 >
-                    Full Name
+                    Name
                 </label>
                 <input
                     type="text"
                     id="name"
                     name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+                    value={form.values.name}
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter full name"
                 />
-                {formik.touched.name && formik.errors.name ? (
-                    <div className="text-red-500 text-sm">{formik.errors.name}</div>
+                {form.touched.name && form.errors.name ? (
+                    <div className="text-red-500 text-sm">{form.errors.name}</div>
                 ) : null}
             </div>
 
@@ -67,18 +67,25 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
                     type="text"
                     id="displayName"
                     name="displayName"
-                    value={formik.values.displayName}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+                    value={form.values.displayName}
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter display name"
                 />
-                {formik.touched.displayName && formik.errors.displayName ? (
-                    <div className="text-red-500 text-sm">{formik.errors.displayName}</div>
+                {form.touched.displayName && form.errors.displayName ? (
+                    <div className="text-red-500 text-sm">{form.errors.displayName}</div>
                 ) : null}
             </div>
 
             <div className="flex justify-end">
+                <button
+                    type="button"
+                    onClick={closeModal}
+                    className="rounded bg-gray-500 text-white px-4 py-2 hover:bg-gray-400 mr-2"
+                >
+                    Cancel
+                    </button>
                 <button
                     type="submit"
                     className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
