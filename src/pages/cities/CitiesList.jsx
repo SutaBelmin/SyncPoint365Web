@@ -10,6 +10,7 @@ const CitiesList = () => {
         try {
             const response = await cityService.getCities();
             setData(response.data);
+            console.log("podaci:", response.data);
         } catch (error) {
             console.log("Error fetching cities:", error);
         }
@@ -26,8 +27,13 @@ const CitiesList = () => {
             sortable: true,
         },
         {
-            name: 'Short Name',
-            selector: row => row.shortName,
+            name: 'Display Name',
+            selector: row => row.displayName,
+            sortable: true,
+        },
+        {
+            name: 'Country Name',
+            selector: row => row.country.name,
             sortable: true,
         },
         {
