@@ -6,6 +6,7 @@ import { MainLayout } from '../components/layout';
 import Home from '../pages/home';
 import Login from '../pages/login';
 import { UsersList } from '../pages/users';
+import { CountriesList } from '../pages/countries';
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/users" element={<UsersList />} />
+          <Route path="/countries" element={<CountriesList />} />
         </Route>
       </Routes>
     </Router>
