@@ -25,9 +25,7 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
                 fetchData();
                 closeModal();
             } catch (error) {
-                console.log("Error:",error);
-                console.log("Data:", data);
-                console.log("values:", values);
+               
             }
         },
     });
