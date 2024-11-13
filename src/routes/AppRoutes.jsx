@@ -8,6 +8,7 @@ import Login from '../pages/login';
 import { UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
 import CitiesList from '../pages/cities/CitiesList';
+import AbsenceRequestTypesList from '../pages/absenceRequestTypes/AbsenceRequestTypesList';
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/users" element={<UsersList />} />
+          <Route path="/absenceRequestTypes" element={<AbsenceRequestTypesList />} />
           <Route path="/countries" element={<CountriesList />} />
           <Route path="/cities" element={<CitiesList />} />
         </Route>
