@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from 'react-data-table-component';
 
 import absenceRequestTypeService from "../../services/absenceRequestTypeService";
-import { AbsenceRequestTypesAdd } from "../absence-request-types";
+import AbsenceRequestTypesAdd from "./AbsenceRequestTypesAdd";
 import { useModal } from "../../context";
 import { BaseModal } from '../../components/modal';
 import './AbsenceRequestTypesList.css';
@@ -22,6 +22,14 @@ const AbsenceRequestTypesList = () => {
         }
     };
 
+    const addNewRequestClick = () => {
+        openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     const columns = [
         {
             name: "Name",
@@ -34,14 +42,6 @@ const AbsenceRequestTypesList = () => {
             sortable: true
         }
     ];
-
-    const addNewRequestClick = () => {
-        openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     return (
         <div className="p-4">
@@ -61,7 +61,7 @@ const AbsenceRequestTypesList = () => {
                 data={data}
                 highlightOnHover
                 progressPending={loading}  
-                noDataComponent="No request types available." 
+                noDataComponent="No requests available." 
             />
         </div>
     );
