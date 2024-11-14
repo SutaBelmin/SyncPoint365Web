@@ -2,7 +2,7 @@ import BaseService from "./baseService"
 
 class CountriesService extends BaseService{
     async getList() {
-        const response = await this.api.get(`/countries/get-countries`, {
+        const response = await this.api.get(`/countries/list`, {
             cancelToken: null
         });
         return response;
