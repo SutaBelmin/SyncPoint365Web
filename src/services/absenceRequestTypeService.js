@@ -2,11 +2,10 @@ import BaseService from "./baseService";
 
 
 class AbsenceRequestTypesService extends BaseService {
-    async getAbsenceRequestTypes() {
-        const response = await this.api.get("/absencerequesttypes/get-absencerequesttypes", {
+    async getList() {
+        const response = await this.api.get("/absencerequesttypes/list", {
             cancelToken: null
         });
-        console.log(response);
         return response;
     }
 }
