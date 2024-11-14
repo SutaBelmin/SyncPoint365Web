@@ -7,6 +7,7 @@ import Home from '../pages/home';
 import Login from '../pages/login';
 import { UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
+import CitiesList from '../pages/cities/CitiesList';
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/users" element={<UsersList />} />
           <Route path="/countries" element={<CountriesList />} />
+          <Route path="/cities" element={<CitiesList />} />
         </Route>
       </Routes>
     </Router>
