@@ -8,11 +8,10 @@ const CitiesList = () => {
 
     const fetchData = async () => {
         try {
-            const response = await cityService.getCities();
+            const response = await cityService.getList();
             setData(response.data);
-            console.log("podaci:", response.data);
         } catch (error) {
-            console.log("Error fetching cities:", error);
+            
         }
     }
 

@@ -2,8 +2,8 @@ import BaseService from "./baseService";
 
 
 class CityService extends BaseService {
-    async getCities() {
-        const response = this.api.get("/cities/get-cities");
+    async getList() {
+        const response = this.api.get("/cities/list");
         return response;
     }
 }
