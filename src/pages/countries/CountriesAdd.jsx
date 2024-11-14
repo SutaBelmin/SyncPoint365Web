@@ -32,7 +32,7 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
 
     return (
         <div className="p-4">
-        <h1 className="text-xl font-bold mb-4">Add</h1>
+        <h1 className="text-xl font-bold mb-4">Add Country</h1>
         <form onSubmit={form.handleSubmit}>
             <div className="mb-4">
                 <label
@@ -49,7 +49,7 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Enter full name"
+                    placeholder="Name"
                 />
                 {form.touched.name && form.errors.name ? (
                     <div className="text-red-500 text-sm">{form.errors.name}</div>
@@ -71,7 +71,7 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Enter display name"
+                    placeholder="Display Name"
                 />
                 {form.touched.displayName && form.errors.displayName ? (
                     <div className="text-red-500 text-sm">{form.errors.displayName}</div>
@@ -90,7 +90,7 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
                     type="submit"
                     className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
                 >
-                    Add Country
+                    Add 
                 </button>
             </div>
         </form>
