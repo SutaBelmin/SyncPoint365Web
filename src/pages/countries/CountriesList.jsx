@@ -2,7 +2,7 @@ import React from "react";
 import { BaseModal, DeleteModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import {CountriesAdd, CountriesEdit} from "../countries"
-import countriesService from "../../services/countriesService";
+import {countriesService} from "../../services";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,7 +31,8 @@ const CountriesList = () => {
     };
 
     const onEditCountriesClick = (country) => {
-        openModal(<CountriesEdit country={country} closeModal={closeModal} fetchData={fetchData} />)
+        const modalProps = {country, closeModal, fetchData};
+        openModal(<CountriesEdit {...modalProps} />);
     }
 
     const onDeleteCountriesClick = (country) => {
@@ -44,7 +45,7 @@ const CountriesList = () => {
             fetchData();
             closeModal();
         } catch (error) {
-            console.error("Error deleteing country:", error);
+           
         }
     };
 
@@ -99,7 +100,7 @@ const CountriesList = () => {
         <DataTable
             columns={columns}
             data={data}
-            pagination={false}
+            pagination
             highlightOnHover
             noDataComponent="No countries available." />
 

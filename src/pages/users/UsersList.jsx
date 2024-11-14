@@ -68,7 +68,6 @@ const UsersList = () => {
                 pagination
                 highlightOnHover
                 noDataComponent="No users available." />
-
         </div>
     );
 };

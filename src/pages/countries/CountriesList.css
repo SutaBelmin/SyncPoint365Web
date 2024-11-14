@@ -19,3 +19,8 @@
     color: #1F2937;
     font-family: sans-serif;
 }
+.rdt_Pagination select {
+    appearance: none; /* Uklanja strelicu u većini pretraživača */
+    -webkit-appearance: none; /* Uklanja strelicu u WebKit pretraživačima (Chrome, Safari) */
+    -moz-appearance: none; /* Uklanja strelicu u Firefox-u */
+}
