@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DataTable from 'react-data-table-component';
 
-import absenceRequestTypeService from "../../services/absenceRequestTypeService";
-import AbsenceRequestTypesAdd from "./AbsenceRequestTypesAdd";
+import { absenceRequestTypeService } from "../../services";
+import { AbsenceRequestTypesAdd } from ".";
 import { useModal } from "../../context";
 import { BaseModal } from '../../components/modal';
 import './AbsenceRequestTypesList.css';

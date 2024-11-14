@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
-import absenceRequestTypeService from '../../services/absenceRequestTypeService';
+import { absenceRequestTypeService } from "../../services";
 
 const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
 
@@ -21,7 +21,7 @@ const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                 validationSchema={validationSchema}
                 onSubmit={async (values) => {
                     try {
-                        await absenceRequestTypeService.addData(values);
+                        await absenceRequestTypeService.add(values);
                         fetchData();
                         closeModal(); 
                     } catch (error) {

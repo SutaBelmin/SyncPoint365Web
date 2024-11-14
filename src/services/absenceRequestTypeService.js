@@ -8,7 +8,7 @@ class AbsenceRequestTypesService extends BaseService {
         });
         return response;
     }
-    async addData(absenceRequestTypesData){
+    async add(absenceRequestTypesData){
         const response = await this.api.post(`/absencerequesttypes`, absenceRequestTypesData, {
             cancelToken: null,
         });
