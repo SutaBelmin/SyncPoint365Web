@@ -60,7 +60,7 @@ const CitiesEdit = ({ city, closeModal, fetchData }) => {
 
     return (
         <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Edit City</h1>
+            <h1 className="text-xl font-bold flex flex-col items-center">Edit City</h1>
             <form onSubmit={form.handleSubmit}>
                 <div className="mb-4">
                     <label
