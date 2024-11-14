@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import DataTable from 'react-data-table-component';
 
 import absenceRequestTypeService from "../../services/absenceRequestTypeService";
-import { useModal } from "../../context/ModalProvider";
+import { AbsenceRequestTypesAdd } from "../absence-request-types";
+import { useModal } from "../../context";
 import { BaseModal } from '../../components/modal';
 import './AbsenceRequestTypesList.css';
-import AbsenceRequestTypesAdd from "./AbsenceRequestTypesAdd";
 
 const AbsenceRequestTypesList = () => {
     const [data, setData] = useState([]);

@@ -8,7 +8,7 @@ import Login from '../pages/login';
 import { UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
 import CitiesList from '../pages/cities/CitiesList';
-import AbsenceRequestTypesList from '../pages/absenceRequestTypes/AbsenceRequestTypesList';
+import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 
 const AppRoutes = () => {
   return (
