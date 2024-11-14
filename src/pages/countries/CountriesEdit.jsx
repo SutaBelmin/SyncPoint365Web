@@ -1,38 +1,41 @@
 import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup"
+import * as Yup from "yup";
 import countriesService from "../../services/countriesService";
- 
+import { useFormik } from "formik";
 
-const CountriesAdd = ({ closeModal, fetchData }) => {
-    
+const CountriesEdit = ({country, closeModal, fetchData}) => {
+
     const validationSchema = Yup.object({
-        name: Yup.string()
-        .required("Name is required!"),
-        displayName: Yup.string()
-        .required("Display name is required!")
+        name: Yup.string().required("Name is required!"),
+        displayName: Yup.string().required("Display name is required!")
     });
 
     const form = useFormik({
-        initialValues:{
-            name:"",
-            displayName:"",
+        initialValues: {
+            id: country.id,
+            name: country.name || "",
+            displayName: country.displayName || "",
         },
         validationSchema,
         onSubmit: async (values) => {
-            try {
-                await countriesService.add(values);
+            try{
+                await countriesService.update({
+                    id: values.id,
+                    name: values.name,
+                    displayName: values.displayName
+                });
                 fetchData();
                 closeModal();
-            } catch (error) {
-               
+            } catch (error){
+                console.log(values);
+                console.error("Error while trying to update country:", error);
             }
         },
     });
-
+    
     return (
         <div className="p-4">
-        <h1 className="text-xl font-bold mb-4">Add Country</h1>
+        <h1 className="text-xl font-bold mb-4">Edit Country</h1>
         <form onSubmit={form.handleSubmit}>
             <div className="mb-4">
                 <label
@@ -85,12 +88,12 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
                     className="rounded bg-gray-500 text-white px-4 py-2 hover:bg-gray-400 mr-2"
                 >
                     Cancel
-                    </button>
+                </button>
                 <button
                     type="submit"
                     className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
                 >
-                    Add 
+                    Save Changes
                 </button>
             </div>
         </form>
@@ -98,4 +101,4 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
     );
 };
 
-export default CountriesAdd;
+export default CountriesEdit;
