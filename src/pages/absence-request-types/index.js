@@ -1,2 +1,2 @@
-export { default as AbsenceRequestTypesList } from './AbsenceRequestTypesList';
-export { default as AbsenceRequestTypesAdd } from './AbsenceRequestTypesAdd';
+export { AbsenceRequestTypesList } from './AbsenceRequestTypesList';
+export { AbsenceRequestTypesAdd } from './AbsenceRequestTypesAdd';

@@ -3,7 +3,7 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypeService } from "../../services";
 
-const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
+export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
 
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -74,5 +74,3 @@ const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
         </div>
     );
 };
-
-export default AbsenceRequestTypesAdd;

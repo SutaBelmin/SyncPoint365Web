@@ -7,7 +7,7 @@ import { useModal } from "../../context";
 import { BaseModal } from '../../components/modal';
 import './AbsenceRequestTypesList.css';
 
-const AbsenceRequestTypesList = () => {
+export const AbsenceRequestTypesList = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
@@ -66,5 +66,3 @@ const AbsenceRequestTypesList = () => {
         </div>
     );
 };
-
-export default AbsenceRequestTypesList;
