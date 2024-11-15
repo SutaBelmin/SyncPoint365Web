@@ -5,6 +5,7 @@ import { citiesService, countriesService } from "../../services";
 import { useState } from "react";
 import Select from "react-select";
 import { toast } from 'react-toastify';
+import './CitiesAdd.css';
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
