@@ -87,7 +87,7 @@ export const AbsenceRequestTypesList = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Absence Request Types</h1>
+            <h1 className="text-xl font-bold mb-4">Absence Requests</h1>
             <div className="flex justify-end mb-4">
                 <button
                     type="button"
