@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DataTable from 'react-data-table-component';
 
-import { absenceRequestTypeService } from "../../services";
-import { AbsenceRequestTypesAdd } from "../absence-request-types";
+import { absenceRequestTypesService } from "../../services";
+import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { useModal } from "../../context";
 import { BaseModal } from '../../components/modal';
 import './AbsenceRequestTypesList.css';
@@ -14,7 +14,7 @@ export const AbsenceRequestTypesList = () => {
 
     const fetchData = async () => {
         try {
-            const response = await absenceRequestTypeService.getList();
+            const response = await absenceRequestTypesService.getList();
             setData(response.data);
         } catch (error) {
         } finally {
@@ -25,6 +25,11 @@ export const AbsenceRequestTypesList = () => {
     const addNewRequestClick = () => {
         openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
     };
+
+    const editRequestClick = (absenceRequestTypes) => {
+        const modalProps = {absenceRequestTypes, closeModal, fetchData};
+        openModal(<AbsenceRequestTypesEdit {... modalProps}/>);
+    }
 
     useEffect(() => {
         fetchData();
@@ -37,9 +42,22 @@ export const AbsenceRequestTypesList = () => {
             sortable: true
         },
         {
-            name: "IsActive",
+            name: "Active",
             selector: (row) => row.isActive ? "Yes" : "No", 
             sortable: true
+        },
+        {
+            name: "Actions",
+            cell: row => (
+                <button
+                    type="button"
+                    onClick={() => editRequestClick(row)}
+                    className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-500"
+                >
+                    Edit
+                </button>
+            ),
+            button: true,
         }
     ];
 
@@ -65,4 +83,4 @@ export const AbsenceRequestTypesList = () => {
             />
         </div>
     );
-};
+}

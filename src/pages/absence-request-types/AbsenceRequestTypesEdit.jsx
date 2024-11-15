@@ -3,17 +3,20 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
 
-export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
+export const AbsenceRequestTypesEdit = ({ absenceRequestTypes, closeModal, fetchData }) => {
 
     const validationSchema = Yup.object({
-        name: Yup.string()
-        .required("Name is required!")
+        name: Yup.string().required("Name is required!")
     });
 
-    const addHandling = async (values, actions) => {
+    const editHandling = async (values, actions) => {
         const { setSubmitting } = actions;
         try {
-            await absenceRequestTypesService.add(values);
+            await absenceRequestTypesService.update({
+                id: absenceRequestTypes.id,
+                name: values.name,
+                isActive: values.isActive,
+            });
             fetchData();
             closeModal(); 
         } catch (error) {
@@ -23,16 +26,18 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
         }
     }
 
+
     return (
         <div className="p-4">
-            <h2 className="text-lg font-bold mb-4">New Absence Request</h2>
+            <h2 className="text-lg font-bold mb-4">Edit Absence Request</h2>
             <Formik
                 initialValues={{
-                    name: "",
-                    isActive: false,
+                    id: absenceRequestTypes.id,
+                    name: absenceRequestTypes.name,
+                    isActive: absenceRequestTypes.isActive,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, actions) => addHandling(values, actions)}
+                onSubmit={(values, actions) => editHandling(values, actions)}
             >
                 <Form>
                     <div className="mb-4">
@@ -70,7 +75,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             type="submit"
                             className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
                         >
-                            Add 
+                            Submit 
                         </button>
                     </div>
                 </Form>
@@ -78,4 +83,6 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
             </Formik>
         </div>
     );
-};
+
+
+}
