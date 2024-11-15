@@ -9,7 +9,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestTypes, closeModal, fetch
         name: Yup.string().required("Name is required!")
     });
 
-    const editHandling = async (values, actions, absenceRequestTypes, fetchData, closeModal) => {
+    const editHandling = async (values, actions, absenceRequestTypes) => {
         const { setSubmitting } = actions;
         try {
             await absenceRequestTypesService.update({
@@ -37,7 +37,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestTypes, closeModal, fetch
                     isActive: absenceRequestTypes.isActive,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, actions) => editHandling(values, actions, absenceRequestTypes, fetchData, closeModal)}
+                onSubmit={(values, actions) => editHandling(values, actions, absenceRequestTypes)}
             >
                 <Form>
                     <div className="mb-4">
