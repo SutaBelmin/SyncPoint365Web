@@ -1,15 +1,17 @@
 import React from "react";
-import { BaseModal } from "../../components/modal";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
-import CountriesAdd from "./CountriesAdd";
-import countriesService from "../../services/countriesService";
+import {CountriesAdd, CountriesEdit} from "../countries"
+import {countriesService} from "../../services";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-const CountriesList = () => {
+export const CountriesList = () => {
     const {openModal, closeModal} = useModal();
-
     const [data, setData] = useState([]);
+    
 
     const fetchData = async () => {
         try{
@@ -28,6 +30,25 @@ const CountriesList = () => {
         openModal(<CountriesAdd closeModal={closeModal} fetchData={fetchData}/>);
     };
 
+    const onEditCountriesClick = (country) => {
+        const modalProps = {country, closeModal, fetchData};
+        openModal(<CountriesEdit {...modalProps} />);
+    }
+
+    const onDeleteCountriesClick = (country) => {
+        openModal(<DeleteConfirmationModal entityName={country.name} onDelete={()=>handleDelete(country.id)} onCancel={closeModal}/>);
+    };
+
+    const handleDelete = async (countryId) => {
+        try {
+            await countriesService.delete(countryId);
+            fetchData();
+            closeModal();
+        } catch (error) {
+           
+        }
+    };
+
     const columns = [
         {
             name: 'Name',
@@ -38,6 +59,27 @@ const CountriesList = () => {
             name: 'Display Name',
             selector: row => row.displayName,
             sortable: true,
+        },
+        {
+            name: 'Actions',
+            cell: row => (
+                <div className="flex space-x-2">
+                <button
+                type="button"
+                onClick={()=>onEditCountriesClick(row)}
+                className="p-2"
+                >
+                <FontAwesomeIcon icon={faPen} className="text-lg"/>
+                </button>
+                 <button
+                 type="button"
+                 onClick={() => onDeleteCountriesClick(row)}
+                 className="p-2" 
+                >
+                 <FontAwesomeIcon icon={faTrashAlt} className="text-lg"/>
+             </button>
+             </div>
+            )
         }
     ];
 
@@ -65,5 +107,3 @@ const CountriesList = () => {
     </div>
     );
 };
-
-export default CountriesList;

@@ -14,6 +14,21 @@ class CountriesService extends BaseService{
         });
         return response.data;
     }
+
+    async update(countryData){
+        const response = await this.api.put(`/countries`, countryData, {
+            cancelToken: null,
+        });
+        return response.data;
+    }
+
+    async delete(countryId) {
+        const response = await this.api.delete(`/countries/${countryId}`, {
+            cancelToken: null,
+        });
+        return response.data;
+    }
+
 }
 
 const countriesService = new CountriesService();

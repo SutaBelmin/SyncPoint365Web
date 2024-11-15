@@ -1,2 +1,3 @@
-export { default as CountriesList } from './CountriesList'
-export { default as CountriesAdd } from './CountriesAdd'
+export { CountriesList } from './CountriesList'
+export { CountriesAdd } from './CountriesAdd'
+export { CountriesEdit} from './CountriesEdit'
