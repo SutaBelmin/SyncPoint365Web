@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import cityService from "../../services/cityService";
+import cityService from "../../services/citiesService";
 import DataTable from "react-data-table-component";
 import './CitiesList.css';
 import { BaseModal } from "../../components/modal";
@@ -8,7 +8,7 @@ import {CitiesAdd, CitiesEdit} from "../cities";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
-const CitiesList = () => {
+export const CitiesList = () => {
     const [data, setData] = useState([]);
     const {openModal, closeModal} = useModal();
 
@@ -93,5 +93,3 @@ const CitiesList = () => {
         </div>
     );
 }
-
-export default CitiesList;

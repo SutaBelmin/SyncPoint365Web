@@ -1,3 +1,3 @@
-export { default as CitiesList } from './CitiesList';
-export { default as CitiesAdd } from './CitiesAdd';
-export { default as CitiesEdit } from './CitiesEdit';
+export { CitiesList } from './CitiesList';
+export { CitiesAdd } from './CitiesAdd';
+export { CitiesEdit } from './CitiesEdit';
