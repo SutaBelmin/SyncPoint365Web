@@ -14,7 +14,12 @@ class AbsenceRequestTypesService extends BaseService {
         });
         return response.data;
     }
+    async update(absenceRequestTypesData){
+        const response = await this.api.put(`/absencerequesttypes`, absenceRequestTypesData, {
+            cancelToken: null,
+        });
+        return response.data;
+    }
 }
-
 const absenceRequestTypes = new AbsenceRequestTypesService();
 export default absenceRequestTypes;
