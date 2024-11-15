@@ -20,6 +20,13 @@ class CityService extends BaseService {
         });
         return response.data;
     }
+
+    async delete(cityId){
+        const response = await this.api.delete(`/cities/${cityId}`,{
+            cancelToken: null,
+        });
+        return response.data;
+    }
 }
 
 const cityService = new CityService();
