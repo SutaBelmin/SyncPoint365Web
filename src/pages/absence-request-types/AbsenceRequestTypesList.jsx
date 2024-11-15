@@ -22,9 +22,9 @@ export const AbsenceRequestTypesList = () => {
         }
     };
 
-    const handleDelete = async (absenceRequestTypesId) => {
+    const handleDelete = async (absenceRequestTypeId) => {
         try {
-            await absenceRequestTypesService.delete(absenceRequestTypesId);
+            await absenceRequestTypesService.delete(absenceRequestTypeId);
             fetchData();
             closeModal();
         } catch (error) {
@@ -36,13 +36,13 @@ export const AbsenceRequestTypesList = () => {
         openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
     };
 
-    const editRequestClick = (absenceRequestTypes) => {
-        const modalProps = {absenceRequestTypes, closeModal, fetchData};
+    const editRequestClick = (absenceRequestType) => {
+        const modalProps = {absenceRequestType, closeModal, fetchData};
         openModal(<AbsenceRequestTypesEdit {... modalProps}/>);
     }
 
-    const deleteRequestClick = (absenceRequestTypes) => {
-        openModal(<DeleteConfirmationModal onDelete={()=>handleDelete(absenceRequestTypes.id)} onCancel={closeModal} name={absenceRequestTypes.name}/>);
+    const deleteRequestClick = (absenceRequestType) => {
+        openModal(<DeleteConfirmationModal onDelete={()=>handleDelete(absenceRequestType.id)} onCancel={closeModal} name={absenceRequestType.name}/>);
     }
 
     useEffect(() => {
