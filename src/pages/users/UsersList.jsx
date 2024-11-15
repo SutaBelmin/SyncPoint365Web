@@ -2,7 +2,6 @@ import React from 'react';
 import { BaseModal } from '../../components/modal';
 import { useModal } from '../../context/ModalProvider';
 import { UsersAdd } from '../users'
-
 import { useEffect, useState } from "react";
 import { userService } from '../../services';
 import DataTable from 'react-data-table-component';

@@ -3,7 +3,20 @@ import * as Yup from "yup";
 import { countriesService } from "../../services";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const CountriesAdd = ({ closeModal, fetchData }) => {
+export const CountriesAdd = ({ closeModal, fetchData }) => {
+
+  const addCountry = async (values, setSubmitting) => {
+    try {
+      await countriesService.add(values);
+      fetchData(); 
+      closeModal();
+    } catch (error) {
+      console.error("Failed to add country:", error); 
+    } finally {
+      setSubmitting(false); 
+    }
+  };
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required!"),
     displayName: Yup.string().required("Display name is required!"),
@@ -18,16 +31,8 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
           displayName: "",
         }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          try {
-            await countriesService.add(values);
-            fetchData();
-            closeModal();
-          } catch (error) {
-            
-          } finally {
-            setSubmitting(false);
-          }
+        onSubmit={(values, { setSubmitting }) => {
+          addCountry(values, setSubmitting); 
         }}
       >
         {({ isSubmitting }) => (
@@ -97,4 +102,4 @@ const CountriesAdd = ({ closeModal, fetchData }) => {
   );
 };
 
-export default CountriesAdd;
+

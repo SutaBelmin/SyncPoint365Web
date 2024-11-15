@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { countriesService } from "../../services";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const CountriesEdit = ({ country, closeModal, fetchData }) => {
+export const CountriesEdit = ({ country, closeModal, fetchData }) => {
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required!"),
     displayName: Yup.string().required("Display name is required!"),
@@ -102,4 +102,3 @@ const CountriesEdit = ({ country, closeModal, fetchData }) => {
   );
 };
 
-export default CountriesEdit;
