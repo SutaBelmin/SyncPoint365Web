@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-cancel {
+    @apply text-sm font-semibold text-gray-900 border border-indigo-500 rounded-md px-3 py-2 shadow-sm;
+  }
+  
+  .btn-save {
+    @apply rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
+  }
+  
+  .btn-container {
+    @apply flex justify-end gap-4;
+  }
+  
+  .btn-no {
+    @apply text-sm font-semibold text-black border border-red-500 rounded-md px-3 py-2 shadow-sm;
+  }
+  
+  .btn-yes {
+    @apply rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm 
+      hover:bg-red-500 focus-visible:outline focus-visible:outline-2 
+      focus-visible:outline-offset-2 focus-visible:outline-red-600;
+  }
+
+.btn-new {
+  @apply rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm 
+    hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 
+    focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
+}

@@ -18,7 +18,7 @@ export const AbsenceRequestTypesList = () => {
             const response = await absenceRequestTypesService.getList();
             setData(response.data);
         } catch (error) {
-            toast.error("Failed to fetch absence request types. Please try again.");
+            toast.error("There was an error. Please contact administrator.");
         } finally {
             setLoading(false);
         }
@@ -92,7 +92,7 @@ export const AbsenceRequestTypesList = () => {
                 <button
                     type="button"
                     onClick={addNewRequestClick}
-                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="btn-new"
                 >
                     New Request
                 </button>

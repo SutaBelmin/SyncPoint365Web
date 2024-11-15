@@ -18,8 +18,7 @@ export const CitiesList = () => {
             const response = await citiesService.getList();
             setData(response.data);
         } catch (error) {
-
-            toast.error("Failed to fetch cities. Please try again.");
+            toast.error("There was an error. Please contact administrator.");
         }
     }
 
