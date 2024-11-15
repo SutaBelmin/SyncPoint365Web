@@ -20,6 +20,12 @@ class AbsenceRequestTypesService extends BaseService {
         });
         return response.data;
     }
+    async delete(absenceRequestTypesId){
+        const response = await this.api.delete(`/absencerequesttypes/${absenceRequestTypesId}`, {
+            cancelToken: null,
+        });
+        return response.data;
+    }
 }
 const absenceRequestTypes = new AbsenceRequestTypesService();
 export default absenceRequestTypes;

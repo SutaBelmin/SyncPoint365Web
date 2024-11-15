@@ -3,7 +3,7 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
 
-export const AbsenceRequestTypesEdit = ({ absenceRequestTypes, closeModal, fetchData }) => {
+export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchData }) => {
 
     const validationSchema = Yup.object({
         name: Yup.string().required("Name is required!")
@@ -13,7 +13,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestTypes, closeModal, fetch
         const { setSubmitting } = actions;
         try {
             await absenceRequestTypesService.update({
-                id: absenceRequestTypes.id,
+                id: absenceRequestType.id,
                 name: values.name,
                 isActive: values.isActive,
             });
@@ -32,9 +32,9 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestTypes, closeModal, fetch
             <h2 className="text-lg font-bold mb-4">Edit Absence Request</h2>
             <Formik
                 initialValues={{
-                    id: absenceRequestTypes.id,
-                    name: absenceRequestTypes.name,
-                    isActive: absenceRequestTypes.isActive,
+                    id: absenceRequestType.id,
+                    name: absenceRequestType.name,
+                    isActive: absenceRequestType.isActive,
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => editHandling(values, actions)}
