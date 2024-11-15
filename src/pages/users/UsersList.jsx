@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { userService } from '../../services';
 import DataTable from 'react-data-table-component';
 import './UsersList.css';
+import { toast } from 'react-toastify';
 
 const UsersList = () => {
     const { openModal } = useModal();
@@ -17,7 +18,7 @@ const UsersList = () => {
             const response = await userService.getUsers();
             setData(response.data);
         } catch (error) {
-            console.error("Error fetching users:", error);
+            toast.error("Failed to fetch users. Please try again.");
         }
     };
 
@@ -54,7 +55,7 @@ const UsersList = () => {
                 <button
                     type='button'
                     onClick={onAddUserClick}
-                    className="rounded bg-gray-700 text-white px-4 py-2 hover:bg-gray-600"
+                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                     Add User
                 </button>
@@ -66,6 +67,7 @@ const UsersList = () => {
                 data={data}
                 pagination
                 highlightOnHover
+                persistTableHead={true}
                 noDataComponent="No users available." />
         </div>
     );

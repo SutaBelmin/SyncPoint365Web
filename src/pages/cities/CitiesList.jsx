@@ -7,6 +7,7 @@ import { useModal } from "../../context/ModalProvider";
 import { CitiesAdd, CitiesEdit } from "../cities";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 export const CitiesList = () => {
     const [data, setData] = useState([]);
@@ -18,6 +19,7 @@ export const CitiesList = () => {
             setData(response.data);
         } catch (error) {
 
+            toast.error("Failed to fetch cities. Please try again.");
         }
     }
 
@@ -91,6 +93,7 @@ export const CitiesList = () => {
                 data={data}
                 pagination
                 highlightOnHover
+                persistTableHead={true}
                 noDataComponent="No cities available" />
 
         </div>
