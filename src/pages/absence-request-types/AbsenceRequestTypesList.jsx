@@ -4,7 +4,7 @@ import DataTable from 'react-data-table-component';
 import { absenceRequestTypesService } from "../../services";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { useModal } from "../../context";
-import { BaseModal } from '../../components/modal';
+import { BaseModal, DeleteConfirmationModal } from '../../components/modal';
 import './AbsenceRequestTypesList.css';
 
 export const AbsenceRequestTypesList = () => {
@@ -22,6 +22,16 @@ export const AbsenceRequestTypesList = () => {
         }
     };
 
+    const handleDelete = async (absenceRequestTypesId) => {
+        try {
+            await absenceRequestTypesService.delete(absenceRequestTypesId);
+            fetchData();
+            closeModal();
+        } catch (error) {
+           
+        }
+    };
+
     const addNewRequestClick = () => {
         openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
     };
@@ -29,6 +39,10 @@ export const AbsenceRequestTypesList = () => {
     const editRequestClick = (absenceRequestTypes) => {
         const modalProps = {absenceRequestTypes, closeModal, fetchData};
         openModal(<AbsenceRequestTypesEdit {... modalProps}/>);
+    }
+
+    const deleteRequestClick = (absenceRequestTypes) => {
+        openModal(<DeleteConfirmationModal onDelete={()=>handleDelete(absenceRequestTypes.id)} onCancel={closeModal} name={absenceRequestTypes.name}/>);
     }
 
     useEffect(() => {
@@ -49,15 +63,23 @@ export const AbsenceRequestTypesList = () => {
         {
             name: "Actions",
             cell: row => (
-                <button
-                    type="button"
-                    onClick={() => editRequestClick(row)}
-                    className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-500"
-                >
-                    Edit
-                </button>
+                <div className="flex space-x-2">
+                    <button
+                        type="button"
+                        onClick={() => editRequestClick(row)}
+                        className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-500"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => deleteRequestClick(row)}
+                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500"
+                    >
+                        Delete
+                    </button>
+                </div>
             ),
-            button: true,
         }
     ];
 
