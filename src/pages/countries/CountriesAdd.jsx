@@ -92,7 +92,7 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
                 disabled={isSubmitting}
                 className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
               >
-                Add
+                Save
               </button>
             </div>
           </Form>
