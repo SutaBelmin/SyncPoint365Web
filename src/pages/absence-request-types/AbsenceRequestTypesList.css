@@ -1,0 +1,14 @@
+
+.rdt_TableHead .rdt_TableCol {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F2937; 
+    font-family: sans-serif;
+}
+
+.rdt_TableBody .rdt_TableRow {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+    font-family: sans-serif;
+}
