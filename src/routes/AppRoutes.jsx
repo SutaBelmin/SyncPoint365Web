@@ -7,8 +7,8 @@ import Home from '../pages/home';
 import Login from '../pages/login';
 import { UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
-import CitiesList from '../pages/cities/CitiesList';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
+import { CitiesList } from '../pages/cities';
 
 const AppRoutes = () => {
   return (
