@@ -10,6 +10,19 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
         .required("Name is required!")
     });
 
+    const addHandling = async (values, actions) => {
+        const { setSubmitting } = actions;
+        try {
+            await absenceRequestTypesService.add(values);
+            fetchData();
+            closeModal(); 
+        } catch (error) {
+        }
+        finally{
+            setSubmitting(false);
+        }
+    }
+
     return (
         <div className="p-4">
             <h2 className="text-lg font-bold mb-4">New Absence Request</h2>
@@ -19,15 +32,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                     isActive: false,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={async (values) => {
-                    try {
-                        await absenceRequestTypesService.add(values);
-                        fetchData();
-                        closeModal(); 
-                    } catch (error) {
-                        console.error(error);
-                    }
-                }}
+                onSubmit={(values, actions) => addHandling(values, actions)}
             >
                 <Form>
                     <div className="mb-4">
