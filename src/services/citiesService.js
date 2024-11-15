@@ -1,7 +1,7 @@
 import BaseService from "./baseService";
 
 
-class CityService extends BaseService {
+class CitiesService extends BaseService {
     async getList() {
         const response = this.api.get("/cities/list");
         return response;
@@ -29,5 +29,5 @@ class CityService extends BaseService {
     }
 }
 
-const cityService = new CityService();
-export default cityService;
+const citiesService = new CitiesService();
+export default citiesService;

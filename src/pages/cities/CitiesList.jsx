@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import cityService from "../../services/citiesService";
+import {citiesService} from "../../services";
 import DataTable from "react-data-table-component";
 import './CitiesList.css';
 import { BaseModal } from "../../components/modal";
@@ -14,7 +14,7 @@ export const CitiesList = () => {
 
     const fetchData = async () => {
         try {
-            const response = await cityService.getList();
+            const response = await citiesService.getList();
             setData(response.data);
         } catch (error) {
 
@@ -59,8 +59,8 @@ export const CitiesList = () => {
 
             ),
             ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
+            //allowOverflow: true,
+            button: 'true',
         }
 
     ];

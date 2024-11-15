@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import cityService from "../../services/citiesService";
+import {citiesService, countriesService} from "../../services";
 import * as Yup from "yup"
-import countriesService from "../../services/countriesService";
 import Select from "react-select";
 
 export const CitiesEdit = ({ city, closeModal, fetchData }) => {
-    const [data, setData] = useState([]);
+    const [countries, setCountries] = useState([]);
 
     const fetchCountries = async () => {
         try {
             const response = await countriesService.getList();
-            setData(response.data.map(country => ({
+            setCountries(response.data.map(country => ({
                 value: country.id,
                 label: country.name
             })));
@@ -23,6 +22,16 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
     useEffect(() => {
         fetchCountries();
     }, []);
+
+    const updateCity = async (values) => {
+        try {
+            await citiesService.update(values);
+            fetchData();
+            closeModal();
+        } catch (error) {
+
+        }
+    }
 
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -48,15 +57,7 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
                     countryId: city.countryId || ""
                 }}
                 validationSchema={validationSchema}
-                onSubmit={async (values) => {
-                    try {
-                        await cityService.update(values);
-                        fetchData();
-                        closeModal();
-                    } catch (error) {
-
-                    }
-                }}
+                onSubmit={updateCity}
             >
                 {({ values, setFieldValue }) => (
                     <Form className="w-full max-w-md">
@@ -116,11 +117,11 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
                                 Country
                             </label>
                             <Select
-                                options={data}
+                                options={countries}
                                 onChange={(selectedOption) =>
                                     setFieldValue("countryId", selectedOption ? selectedOption.value : "")
                                 }
-                                value={data.find((option) => option.value === values.countryId) || null}
+                                value={countries.find((option) => option.value === values.countryId) || null}
                                 placeholder="Select a Country"
                                 className="shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />

@@ -1,18 +1,17 @@
 import React, { useEffect } from "react";
 import * as Yup from "yup"
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import cityService from "../../services/citiesService";
-import countriesService from "../../services/countriesService";
+import { citiesService, countriesService } from "../../services";
 import { useState } from "react";
 import Select from "react-select";
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
-    const [data, setData] = useState([]);
+    const [countries, setCountries] = useState([]);
 
     const fetchCountries = async () => {
         try {
             const response = await countriesService.getList();
-            setData(response.data.map(country => ({
+            setCountries(response.data.map(country => ({
                 value: country.id,
                 label: country.name
             })));
@@ -24,6 +23,16 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
     useEffect(() => {
         fetchCountries();
     }, []);
+
+    const addCity = async (values) => {
+        try {
+            await citiesService.add(values);
+            fetchData();
+            closeModal();
+        } catch (error) {
+
+        }
+    }
 
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -48,15 +57,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                     countryId: ""
                 }}
                 validationSchema={validationSchema}
-                onSubmit={async (values) => {
-                    try {
-                        await cityService.add(values);
-                        fetchData();
-                        closeModal();
-                    } catch (error) {
-
-                    }
-                }}
+                onSubmit={addCity}
             >
                 {({ values, setFieldValue }) => (
                     <Form className="w-full max-w-sm">
@@ -105,16 +106,16 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                 Country
                             </label>
                             <Select
-                                options={data}
+                                options={countries}
                                 onChange={(selectedOption) =>
                                     setFieldValue("countryId", selectedOption ? selectedOption.value : "")
                                 }
-                                value={data.find((option) => option.value === values.countryId) || null}
+                                value={countries.find((option) => option.value === values.countryId) || null}
                                 placeholder="Select a Country"
-                                className="shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                className="shadow-sm focus:outline-none focus:ring-0 focus:ring-indigo-500"
                             />
                             <ErrorMessage name="countryId" component="div" className="text-red-500 text-sm" />
-                        </div>
+                        </div> 
 
                         <div className="flex justify-end space-x-2">
                             <button
@@ -128,7 +129,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                 type="submit"
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             >
-                                Add
+                                Save
                             </button>
                         </div>
                     </Form>
