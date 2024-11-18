@@ -4,4 +4,4 @@ export { default as userService } from './userService';
 export {default as countriesService} from './countriesService'
 export { default as absenceRequestTypesService } from './absenceRequestTypesService';
 export { default as citiesService } from './citiesService';
-
+export {default as localizationService} from './localizationService'
