@@ -1,2 +1,2 @@
-export { default as UsersAdd } from './UsersAdd';
-export { default as UsersList } from './UsersList';
+export { UsersAdd } from './UsersAdd';
+export { UsersList } from './UsersList';
