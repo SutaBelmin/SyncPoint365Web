@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import LanguageSwitcher from '../localization/LanguageSwitcher';
+import LanguageSwitcher from '../localization';
 import { useLocation } from 'react-router-dom';
 
 const Header = () => {
