@@ -1,6 +1,6 @@
 import BaseService from "./baseService"
 
-class CountriesService extends BaseService{
+class CountriesService extends BaseService {
     async getList() {
         const response = await this.api.get(`/countries/list`, {
             cancelToken: null
@@ -8,14 +8,14 @@ class CountriesService extends BaseService{
         return response;
     }
 
-    async add(countryData){
+    async add(countryData) {
         const response = await this.api.post(`/countries`, countryData, {
             cancelToken: null,
         });
         return response.data;
     }
 
-    async update(countryData){
+    async update(countryData) {
         const response = await this.api.put(`/countries`, countryData, {
             cancelToken: null,
         });
@@ -29,6 +29,13 @@ class CountriesService extends BaseService{
         return response.data;
     }
 
+    async getPagedList(page = 1, rowsPerPage = 10, cancelToken = null) {
+
+        const response = await this.api.get(`/countries/paged/${page}?rowsPerPage=${rowsPerPage}`, {
+            cancelToken: cancelToken,
+        });
+        return response;
+    }
 }
 
 const countriesService = new CountriesService();
