@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { userService } from '../../services';
 import DataTable from 'react-data-table-component';
 import './UsersList.css';
+import { toast } from 'react-toastify';
 
 export const UsersList = () => {
     const { openModal } = useModal();
@@ -18,14 +19,11 @@ export const UsersList = () => {
     const fetchData = useCallback(async () => {
         try {
             const response = await userService.getPagedUsers(page);
-            console.log("API Response:", response);
-    
             setData(response.data.items);
             setTotalItemCount(response.data.totalItemCount);
-            console.log("Set data:", response.data);
     
         } catch (error) {
-            console.error("Error fetching data:", error);
+            toast.error("There was an error. Please contact administrator.");
         }
     }, [page]); 
     
