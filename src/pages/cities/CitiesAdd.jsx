@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { citiesService, countriesService } from "../../services";
 import { useState } from "react";
 import Select from "react-select";
+import { toast } from 'react-toastify';
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
@@ -16,7 +17,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                 label: country.name
             })));
         } catch (error) {
-
+            toast.error("There was an error. Please contact administrator.");
         }
     };
 
@@ -29,8 +30,9 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
             await citiesService.add(values);
             fetchData();
             closeModal();
+            toast.success("Added new city succesfully!");
         } catch (error) {
-
+            toast.error("There was an error. Please contact administrator.");
         }
     }
 
@@ -121,13 +123,13 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                             <button
                                 type="button"
                                 onClick={closeModal}
-                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="btn-cancel"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="btn-save"
                             >
                                 Save
                             </button>

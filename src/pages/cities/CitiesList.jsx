@@ -80,7 +80,7 @@ export const CitiesList = () => {
                 <button
                     type='button'
                     onClick={onAddCitiesClick}
-                    className="rounded bg-gray-700 text-white px-4 py-2 hover:bg-gray-600">
+                    className="btn-new">
                     Add City
                 </button>
             </div>
