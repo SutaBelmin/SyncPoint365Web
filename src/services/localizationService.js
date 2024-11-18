@@ -13,6 +13,12 @@ i18n
   defaultNS:'translation',
   lng: 'bs',
   fallbackLng:'en',
+  whitelist: ['en', 'ba'],
+  debug:false,
+  load: currentOnly,
+  react: {
+    useSuspense: true,
+  },
   interpolation:{
     escapeValue: false,
   },
