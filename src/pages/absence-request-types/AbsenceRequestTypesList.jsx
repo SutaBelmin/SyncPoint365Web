@@ -94,7 +94,7 @@ export const AbsenceRequestTypesList = () => {
                     onClick={addNewRequestClick}
                     className="btn-new"
                 >
-                    New Request
+                    New Request Type
                 </button>
             </div>
             <BaseModal />

@@ -26,7 +26,7 @@ const SideNavbar = () => {
                 </li>
                 <li className="flex items-center hover:bg-gray-800 py-2 px-4 rounded">
                     <FontAwesomeIcon icon={faUserTimes} className="mr-3" />
-                    <a href="/absenceRequestTypes" className="text-lg">Absence Requests</a>
+                    <a href="/absenceRequestTypes" className="text-lg">Request Types</a>
                 </li>
             </ul>
         </nav>
