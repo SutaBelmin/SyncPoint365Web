@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { FlagIcon } from "react-flag-kit"; 
+import { useTranslation } from 'react-i18next';
+
 
 const LanguageSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const { i18n } = useTranslation();
+ 
+ const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
 
   const languages = [
-    { code: "en", label: "English", flag: "GB" },
+    { code: "en-US", label: "English", flag: "GB" },
     { code: "bs", label: "Bosnian", flag: "BA" },
   ];
-
+  
+console.log("Selectedlanguage ", selectedLanguage);
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleLanguageChange = (code) => {
     setSelectedLanguage(code);
     setIsOpen(false);
+    i18n.changeLanguage(code);
   };
 
   const selectedFlag = languages.find((lang) => lang.code === selectedLanguage)?.flag;

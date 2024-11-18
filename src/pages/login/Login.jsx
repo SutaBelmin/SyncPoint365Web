@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { authService } from '../../services';
-import { Header } from '../login';
+import LanguageSwitcher from '../../components/localization';
 
 const validationSchema = Yup.object({
   email: Yup.string().required('Email is required'),
@@ -32,7 +32,11 @@ const Login = () => {
 
   return (
     <div className="flex min-h-full flex-col justify-center">
-      <Header/>
+      <header className="text-white flex justify-end items-center h-16 px-6 shadow-md">
+            <div className="mr-4">
+                <LanguageSwitcher />
+            </div>
+        </header>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">
           <div className="mx-auto h-10 w-10 bg-gray-800 rounded-full flex items-center justify-center mt-4">

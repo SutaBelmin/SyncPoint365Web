@@ -4,26 +4,26 @@ import Backend from 'i18next-fetch-backend';
 
 
 i18n
-.use(Backend)
-.use(initReactI18next)
-.init({
-  backend:{
-    loadPath: '/locales/{{lng}}/{{ns}}.json'
-  },
-  defaultNS:'translation',
-  lng: 'bs',
-  fallbackLng:'en',
-  whitelist: ['en', 'ba'],
-  debug:false,
-  load: currentOnly,
-  react: {
-    useSuspense: true,
-  },
-  interpolation:{
-    escapeValue: false,
-  },
-  load:'currentOnly',
-});
+  .use(Backend)
+  .use(initReactI18next)
+  .init({
+    defaultNS: "translation",
+    lng: "en-US",
+    fallbackLng: "en-US",
+    debug: false,
+    load: "currentOnly",
+    react: {
+      useSuspense: true,
+    },
+    preload: ["en-US", "bs"],
+    backend: {
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
+    },
+    whitelist: ["en-US", "bs"],
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export default i18n;
 
