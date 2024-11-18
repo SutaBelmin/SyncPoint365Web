@@ -15,8 +15,7 @@ class UserService extends BaseService {
             });
             return response; 
         } catch (error) {
-            console.error("Error fetching paged users:", error);
-            throw error;
+            
         }
     }
 }
