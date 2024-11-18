@@ -2,6 +2,7 @@ import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
+import { toast } from 'react-toastify';
 
 export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
 
@@ -16,7 +17,9 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
             await absenceRequestTypesService.add(values);
             fetchData();
             closeModal(); 
+            toast.success("New request type added successfully."); 
         } catch (error) {
+            toast.error("There was an error. Please contact administrator.");
         }
         finally{
             setSubmitting(false);
@@ -58,17 +61,17 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             Active
                         </label>
                     </div>
-                    <div className="flex justify-end space-x-2">
+                    <div className="flex justify-end gap-4">
                         <button
                             type="button"
                             onClick={closeModal}
-                            className="rounded bg-gray-500 text-white px-4 py-2 hover:bg-gray-400 mr-2"
+                              className="btn-cancel"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
+                            className="btn-save"
                         >
                             Add 
                         </button>

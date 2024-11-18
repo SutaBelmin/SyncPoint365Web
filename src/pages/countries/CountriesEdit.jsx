@@ -2,6 +2,7 @@ import React from "react";
 import * as Yup from "yup";
 import { countriesService } from "../../services";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { toast } from "react-toastify";
 
 export const CountriesEdit = ({ country, closeModal, fetchData }) => {
   const validationSchema = Yup.object({
@@ -28,8 +29,9 @@ export const CountriesEdit = ({ country, closeModal, fetchData }) => {
             });
             fetchData();
             closeModal();
+            toast.success("Country updated successfully!"); 
           } catch (error) {
-            
+            toast.error("Failed to update country. Please try again.");
           } finally {
             setSubmitting(false);
           }
@@ -79,18 +81,18 @@ export const CountriesEdit = ({ country, closeModal, fetchData }) => {
               />
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-4">
               <button
                 type="button"
                 onClick={closeModal}
-                className="rounded bg-gray-500 text-white px-4 py-2 hover:bg-gray-400 mr-2"
+                    className="btn-cancel"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
+                    className="btn-save"
               >
                 Save 
               </button>

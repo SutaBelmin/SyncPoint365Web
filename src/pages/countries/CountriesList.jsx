@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 export const CountriesList = () => {
     const {openModal, closeModal} = useModal();
@@ -18,7 +19,7 @@ export const CountriesList = () => {
             const response = await countriesService.getList();
             setData(response.data);
         }catch (error){
-            console.error("Error fetching countries:", error);
+            toast.error("There was an error. Please contact administrator.")
         }
     };
 
@@ -44,8 +45,9 @@ export const CountriesList = () => {
             await countriesService.delete(countryId);
             fetchData();
             closeModal();
+            toast.success("Country deleted successfully!");
         } catch (error) {
-           
+            toast.error("Failed to delete country. Please try again.");
         }
     };
 
@@ -90,7 +92,7 @@ export const CountriesList = () => {
             <button
                 type='button'
                 onClick={onAddCountriesClick}
-                className="rounded bg-gray-700 text-white px-4 py-2 hover:bg-gray-600"
+                className="btn-new"
             >
                 Add Country
             </button>
@@ -102,6 +104,7 @@ export const CountriesList = () => {
             data={data}
             pagination
             highlightOnHover
+            persistTableHead={true}
             noDataComponent="No countries available." />
 
     </div>

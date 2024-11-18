@@ -36,13 +36,13 @@ export const DeleteConfirmationModal = ({ onDelete, onCancel, entityName }) => {
               <button
                 type="button"
                 onClick={onCancel}
-                className="bg-gray-500 text-white px-4 py-3 rounded hover:bg-gray-400"
+                className="btn-no"
               >
                 No
               </button>
               <button
                 type="submit"
-                className="bg-red-600 text-white px-4 py-3 rounded hover:bg-red-500"
+                 className="btn-yes"
               >
                 Yes
               </button>

@@ -6,6 +6,7 @@ import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-requ
 import { useModal } from "../../context";
 import { BaseModal, DeleteConfirmationModal } from '../../components/modal';
 import './AbsenceRequestTypesList.css';
+import { toast } from "react-toastify";
 
 export const AbsenceRequestTypesList = () => {
     const [data, setData] = useState([]);
@@ -17,6 +18,7 @@ export const AbsenceRequestTypesList = () => {
             const response = await absenceRequestTypesService.getList();
             setData(response.data);
         } catch (error) {
+            toast.error("There was an error. Please contact administrator.");
         } finally {
             setLoading(false);
         }
@@ -90,7 +92,7 @@ export const AbsenceRequestTypesList = () => {
                 <button
                     type="button"
                     onClick={addNewRequestClick}
-                    className="rounded bg-gray-700 text-white px-4 py-2 hover:bg-gray-600"
+                    className="btn-new"
                 >
                     New Request
                 </button>
@@ -101,6 +103,7 @@ export const AbsenceRequestTypesList = () => {
                 data={data}
                 highlightOnHover
                 progressPending={loading}  
+                persistTableHead={true}
                 noDataComponent="No requests available." 
             />
         </div>
