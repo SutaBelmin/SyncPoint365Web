@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import {citiesService} from "../../services";
+import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
 import './CitiesList.css';
-import { BaseModal } from "../../components/modal";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CitiesAdd, CitiesEdit } from "../cities";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const CitiesList = () => {
     const [data, setData] = useState([]);
@@ -50,17 +50,20 @@ export const CitiesList = () => {
         {
             name: 'Actions',
             cell: row => (
-
-                <button
-                    onClick={() => onEditCityClick(row)}
-                    className="text-blue-500 hover:underline">
-                    <FontAwesomeIcon icon={faEdit} className="mr-3" />
-                </button>
-
-
+                <div className="flex space-x-2">
+                    <button
+                        onClick={() => onEditCityClick(row)}
+                        className="text-blue-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faEdit} className="mr-3" />
+                    </button>
+                    <button
+                        onClick={() => onDeleteCityClick(row)}
+                        className="text-red-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faTrash} className="mr-3" />
+                    </button>
+                </div>
             ),
             ignoreRowClick: true,
-            //allowOverflow: true,
             button: 'true',
         }
 
@@ -72,6 +75,20 @@ export const CitiesList = () => {
 
     const onEditCityClick = (city) => {
         openModal(<CitiesEdit city={city} closeModal={closeModal} fetchData={fetchData} />)
+    }
+
+    const onDeleteCityClick = (city) => {
+        openModal(<DeleteConfirmationModal entityName={city.name} onDelete={()=>handleDelete(city.id)} onCancel={closeModal}/>);
+    }
+
+    const handleDelete = async (cityId) => {
+        try {
+            await citiesService.delete(cityId);
+            fetchData();
+            closeModal();
+        } catch (error) {
+            
+        }
     }
 
     return (

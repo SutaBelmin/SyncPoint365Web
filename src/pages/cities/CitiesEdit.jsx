@@ -123,7 +123,7 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
                                 }
                                 value={countries.find((option) => option.value === values.countryId) || null}
                                 placeholder="Select a Country"
-                                className="shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                className="input-select-border"
                             />
                             <ErrorMessage name="countryId" component="div" className="text-red-500 text-sm" />
                         </div>

@@ -5,6 +5,8 @@ import { citiesService, countriesService } from "../../services";
 import { useState } from "react";
 import Select from "react-select";
 import { toast } from 'react-toastify';
+import './CitiesAdd.css';
+
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
@@ -114,10 +116,10 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                 }
                                 value={countries.find((option) => option.value === values.countryId) || null}
                                 placeholder="Select a Country"
-                                className="shadow-sm focus:outline-none focus:ring-0 focus:ring-indigo-500"
+                                className="input-select-border"
                             />
                             <ErrorMessage name="countryId" component="div" className="text-red-500 text-sm" />
-                        </div> 
+                        </div>
 
                         <div className="flex justify-end space-x-2">
                             <button
