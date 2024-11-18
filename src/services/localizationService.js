@@ -1,19 +1,12 @@
 import i18n from 'i18next';
 import { initReactI18next, Translation } from 'react-i18next';
 
+import bs from '../../public/locales/bs'
+import en from '../../public/locales/en-US'
+
 const resources = {
-    bs:{
-        translation:{
-            WELCOME:"Dobrodosli na SyncPoint365!",
-            TITLE:"SyncPoint365",
-        },
-    },
-    en:{
-        translation:{
-            WELCOME:"Welcome to SyncPoint365!",
-            TITLE:"SyncPoint365",
-        },
-    },
+    bs: {translation: bs},
+    en: {translation: en},
 };
 
 i18n.use(initReactI18next).init({
