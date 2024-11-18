@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { authService } from '../../services';
-import Header from '../../components/header';
+import { Header } from '../login';
 
 const validationSchema = Yup.object({
   email: Yup.string().required('Email is required'),
