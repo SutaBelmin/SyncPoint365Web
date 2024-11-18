@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import { BaseModal } from '../../components/modal';
 import { useModal } from '../../context/ModalProvider';
 import { UsersAdd } from '../users'
@@ -14,24 +14,24 @@ export const UsersList = () => {
     const [page, setPage] = useState(1);
     const [totalItemCount, setTotalItemCount] = useState(0);
 
-    const fetchData = async () => {
+
+    const fetchData = useCallback(async () => {
         try {
             const response = await userService.getPagedUsers(page);
             console.log("API Response:", response);
-
+    
             setData(response.data.items);
             setTotalItemCount(response.data.totalItemCount);
             console.log("Set data:", response.data);
-
+    
         } catch (error) {
-            
+            console.error("Error fetching data:", error);
         }
-    };
-
+    }, [page]); 
+    
     useEffect(() => {
         fetchData();
-        // eslint-disable-next-line
-    }, [page]);
+    }, [fetchData]);
     
 
     const onAddUserClick = () => {
