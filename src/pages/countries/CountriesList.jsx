@@ -18,9 +18,7 @@ export const CountriesList = () => {
 
     const fetchData = useCallback (async () => {
         try{
-            console.log(rowsPerPage);
             const response = await countriesService.getPagedList(page, rowsPerPage);
-            console.log(response.data)
             setData(response.data.items);
             setTotalItemCount(response.data.totalItemCount);
         }catch (error){
@@ -38,7 +36,6 @@ export const CountriesList = () => {
 
     const handleRowsPerChange = (newRowsPerPage) => {
         setRowsPerPage(newRowsPerPage);
-        console.log(newRowsPerPage);
         setPage(1);
     };
 
