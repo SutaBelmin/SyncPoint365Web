@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { MainLayout } from '../components/layout';
 
 import Home from '../pages/home';
-import Login from '../pages/login';
+import { Login } from '../pages/login';
 import { UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
