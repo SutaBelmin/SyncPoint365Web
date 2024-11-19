@@ -7,6 +7,17 @@ class UserService extends BaseService {
         });
         return response;
     }
+
+    async getPagedUsers(page = 1, cancelToken = null) {
+        try {
+            const response = await this.api.get(`/users/paged/${page}`, {
+                cancelToken: cancelToken,
+            });
+            return response; 
+        } catch (error) {
+            
+        }
+    }
 }
 
 const userService = new UserService();

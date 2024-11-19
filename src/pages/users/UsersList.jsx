@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import { BaseModal } from '../../components/modal';
 import { useModal } from '../../context/ModalProvider';
 import { UsersAdd } from '../users'
@@ -8,23 +8,29 @@ import DataTable from 'react-data-table-component';
 import './UsersList.css';
 import { toast } from 'react-toastify';
 
-const UsersList = () => {
+export const UsersList = () => {
     const { openModal } = useModal();
 
     const [data, setData] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalItemCount, setTotalItemCount] = useState(0);
 
-    const fetchData = async () => {
+
+    const fetchData = useCallback(async () => {
         try {
-            const response = await userService.getUsers();
-            setData(response.data);
+            const response = await userService.getPagedUsers(page);
+            setData(response.data.items);
+            setTotalItemCount(response.data.totalItemCount);
+    
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }
-    };
-
+    }, [page]); 
+    
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
+    
 
     const onAddUserClick = () => {
         openModal(<UsersAdd />);
@@ -48,6 +54,11 @@ const UsersList = () => {
         },
     ];
 
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
+
     return (
         <div className="p-4">
             <h1 className="text-xl font-bold mb-4">Users</h1>
@@ -64,13 +75,15 @@ const UsersList = () => {
 
             <DataTable
                 columns={columns}
-                data={data}
+                data={data || []}
                 pagination
+                paginationServer
+                paginationTotalRows={totalItemCount}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 persistTableHead={true}
-                noDataComponent="No users available." />
+                noDataComponent="No users available."
+            />
         </div>
     );
 };
-
-export default UsersList;
