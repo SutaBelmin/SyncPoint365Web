@@ -9,12 +9,20 @@ import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
-
+    
+    const customNoDataComponent = (
+        <div className="no-data-message">
+            No requests available.
+        </div>
+    );
+    
     const fetchData = async () => {
         try{
             const response = await absenceRequestTypesService.getPagedList(
@@ -89,19 +97,11 @@ export const AbsenceRequestTypesList = observer (() => {
             name: "Actions",
             cell: (row) => (
                 <div className="flex space-x-2">
-                    <button
-                        type="button"
-                        onClick={() => editRequestClick(row)}
-                        className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-500"
-                    >
-                        Edit
+                    <button type="button" onClick={() => editRequestClick(row)} className="text-blue-500 hover:underline p-2">
+                        <FontAwesomeIcon icon ={faEdit} className="mr-3"/>
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => deleteRequestClick(row)}
-                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500"
-                    >
-                        Delete
+                    <button type="button" onClick={() => deleteRequestClick(row)} className="text-red-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faTrash} className="mr-3"/>
                     </button>
                 </div>
             ),
@@ -134,7 +134,7 @@ export const AbsenceRequestTypesList = observer (() => {
                 onChangeRowsPerPage={handleRowsPerPageChange} 
                 progressPending={loading} 
                 persistTableHead={true}
-                noDataComponent="No requests available."
+                noDataComponent={customNoDataComponent} 
             />
         </div>
     );

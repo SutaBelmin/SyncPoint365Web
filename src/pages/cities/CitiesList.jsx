@@ -17,6 +17,12 @@ export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
 
+    const customNoDataComponent = (
+        <div className="no-data-message">
+            No requests available.
+        </div>
+    );
+
     const fetchData = async () => {
 
         try {
@@ -87,7 +93,6 @@ export const CitiesList = observer(() => {
             ignoreRowClick: true,
             button: 'true',
         }
-
     ];
 
     const onAddCitiesClick = () => {
@@ -149,8 +154,8 @@ export const CitiesList = observer(() => {
                 }
                 highlightOnHover
                 persistTableHead={true}
-                noDataComponent="No cities available"
-            />
+                noDataComponent={customNoDataComponent} />
+
         </div>
     );
 }

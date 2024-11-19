@@ -32,3 +32,11 @@
 .input-select-border input[type='text']:focus {
     box-shadow: none;
 }
+
+.no-data-message {
+  text-align: center;
+  font-size: 20px;
+  color: #db2403;
+  padding: 20px;
+  font-weight: bold;
+}

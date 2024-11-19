@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCity, faEarthAmerica, faHome, faUser, faUserTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck, faCity, faEarthAmerica, faHome, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const SideNavbar = () => {
     return (
@@ -25,7 +25,7 @@ const SideNavbar = () => {
                     <a href="/cities" className="text-lg">Cities</a>
                 </li>
                 <li className="flex items-center hover:bg-gray-800 py-2 px-4 rounded">
-                    <FontAwesomeIcon icon={faUserTimes} className="mr-3" />
+                    <FontAwesomeIcon icon={faCalendarCheck} className="mr-3" />
                     <a href="/absenceRequestTypes" className="text-lg">Request Types</a>
                 </li>
             </ul>
