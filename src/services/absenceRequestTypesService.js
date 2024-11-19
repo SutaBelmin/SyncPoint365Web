@@ -8,6 +8,12 @@ class AbsenceRequestTypesService extends BaseService {
         });
         return response;
     }
+    async getPagedList(absenceRequestTypesPage, absenceRequestTypesPageSize){
+        const response = await this.api.get(`/absencerequesttypes/paged/${absenceRequestTypesPage}?pagesize=${absenceRequestTypesPageSize}`, {
+            cancelToken: null,
+        });
+        return response;
+    }
     async add(absenceRequestTypesData){
         const response = await this.api.post(`/absencerequesttypes`, absenceRequestTypesData, {
             cancelToken: null,
@@ -27,5 +33,6 @@ class AbsenceRequestTypesService extends BaseService {
         return response.data;
     }
 }
+
 const absenceRequestTypes = new AbsenceRequestTypesService();
 export default absenceRequestTypes;
