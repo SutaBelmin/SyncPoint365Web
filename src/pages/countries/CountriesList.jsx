@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import {CountriesAdd, CountriesEdit} from "../countries"
@@ -12,20 +12,32 @@ import { toast } from "react-toastify";
 export const CountriesList = () => {
     const {openModal, closeModal} = useModal();
     const [data, setData] = useState([]);
-    
+    const [page, setPage] = useState(1);
+    const [totalItemCount, setTotalItemCount] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const fetchData = async () => {
+    const fetchData = useCallback (async () => {
         try{
-            const response = await countriesService.getList();
-            setData(response.data);
+            const response = await countriesService.getPagedList(page, rowsPerPage);
+            setData(response.data.items);
+            setTotalItemCount(response.data.totalItemCount);
         }catch (error){
             toast.error("There was an error. Please contact administrator.")
         }
-    };
+    },  [page, rowsPerPage]);
 
     useEffect(()=>{
         fetchData();
-    }, []);
+    }, [fetchData, rowsPerPage, page]);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
+
+    const handleRowsPerChange = (newRowsPerPage) => {
+        setRowsPerPage(newRowsPerPage);
+        setPage(1);
+    };
 
     const onAddCountriesClick = () =>{
         openModal(<CountriesAdd closeModal={closeModal} fetchData={fetchData}/>);
@@ -101,12 +113,16 @@ export const CountriesList = () => {
 
         <DataTable
             columns={columns}
-            data={data}
+            data={data || []}
             pagination
+            paginationServer
+            paginationTotalRows={totalItemCount || 0}
+            onChangePage={handlePageChange}
+            paginationPerPage={rowsPerPage}
+            onChangeRowsPerPage={handleRowsPerChange}
             highlightOnHover
             persistTableHead={true}
             noDataComponent="No countries available." />
-
     </div>
     );
 };
