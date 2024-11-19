@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { citiesService, countriesService } from "../../services";
 import DataTable from "react-data-table-component";
-import './CitiesList.css';
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CitiesAdd, CitiesEdit } from "../cities";
@@ -148,7 +147,7 @@ export const CitiesList = () => {
                     <input
                         type="text"
                         placeholder="Search by city"
-                        className="input-search h-10 rounded-md border-gray-300"
+                        className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                         value={searchTerm}
                         onChange={(e) => handleSearch(e.target.value)}
                     />
@@ -159,7 +158,7 @@ export const CitiesList = () => {
                         options={countries}
                         placeholder="Select Country"
                         isClearable
-                        className="h-10 border-gray-300"
+                        className="h-10 border-gray-300 input-select-border w-[25rem]"
                     />
 
                     <button
