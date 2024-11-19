@@ -7,20 +7,22 @@ const LanguageSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { i18n } = useTranslation();
  
- const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
-
+  const [selectedLanguage, setSelectedLanguage] = useState(() => {
+    return localStorage.getItem("selectedLanguage") || i18n.language;
+  });
+  
   const languages = [
-    { code: "en-US", label: "English", flag: "GB" },
+    { code: "en-US", label: "English", flag: "US" },
     { code: "bs", label: "Bosnian", flag: "BA" },
   ];
   
-console.log("Selectedlanguage ", selectedLanguage);
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleLanguageChange = (code) => {
     setSelectedLanguage(code);
     setIsOpen(false);
     i18n.changeLanguage(code);
+    localStorage.setItem("selectedLanguage", code);
   };
 
   const selectedFlag = languages.find((lang) => lang.code === selectedLanguage)?.flag;
