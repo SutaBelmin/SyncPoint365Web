@@ -146,7 +146,7 @@ export const CitiesList = () => {
                 <div className="flex items-center space-x-4 mb-4">
                     <input
                         type="text"
-                        placeholder="Search by city"
+                        placeholder="Search by City"
                         className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                         value={searchTerm}
                         onChange={(e) => handleSearch(e.target.value)}
