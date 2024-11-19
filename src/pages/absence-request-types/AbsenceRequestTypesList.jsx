@@ -100,7 +100,18 @@ export const AbsenceRequestTypesList = () => {
     return (
         <div className="p-4">
             <h1 className="text-xl font-bold mb-4">Absence Request Types</h1>
-            <div className="flex justify-end mb-4">
+             <div className="flex items-center mb-4 w-[400px]">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    //onChange={(e) => onSearch(e.target.value)}
+                    className="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                    />
+                <button className="search-button">
+                    Search
+                </button>
+                </div>
+                <div className="flex justify-end mb-4">
                 <button
                     type="button"
                     onClick={addNewRequestClick}
@@ -109,6 +120,7 @@ export const AbsenceRequestTypesList = () => {
                     New Request Type
                 </button>
             </div>
+           
             <BaseModal />
             <DataTable
                 columns={columns}
