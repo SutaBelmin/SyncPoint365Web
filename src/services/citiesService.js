@@ -7,7 +7,7 @@ class CitiesService extends BaseService {
         return response;
     }
 
-    async add(cityData){
+    async add(cityData) {
         const response = await this.api.post(`/cities`, cityData, {
             cancelToken: null,
         });
@@ -21,11 +21,28 @@ class CitiesService extends BaseService {
         return response.data;
     }
 
-    async delete(cityId){
-        const response = await this.api.delete(`/cities/${cityId}`,{
+    async delete(cityId) {
+        const response = await this.api.delete(`/cities/${cityId}`, {
             cancelToken: null,
         });
         return response.data;
+    }
+
+    async getPagedCities(countryId = null, query = "",page = 1, pageSize = 10, cancelToken = null) {
+        try {
+            const response = await this.api.get(`/cities/paged`, {
+                params: {
+                    countryId,
+                    query,
+                    page,
+                    pageSize
+                },
+                cancelToken: cancelToken,
+            });
+            return response;
+        } catch (error) {
+
+        }
     }
 }
 

@@ -14,3 +14,7 @@
     color: #1F2937;
     font-family: sans-serif;
 }
+
+.input-select-border input[type='text']:focus {
+    box-shadow: none;
+}
