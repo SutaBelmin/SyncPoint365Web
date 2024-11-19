@@ -18,10 +18,11 @@ export const CountriesList = () => {
 
     const fetchData = useCallback (async () => {
         try{
+            console.log(rowsPerPage);
             const response = await countriesService.getPagedList(page, rowsPerPage);
+            console.log(response.data)
             setData(response.data.items);
             setTotalItemCount(response.data.totalItemCount);
-            console.log(response);
         }catch (error){
             toast.error("There was an error. Please contact administrator.")
         }
@@ -29,7 +30,7 @@ export const CountriesList = () => {
 
     useEffect(()=>{
         fetchData();
-    }, [fetchData]);
+    }, [fetchData, rowsPerPage, page]);
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
@@ -37,6 +38,7 @@ export const CountriesList = () => {
 
     const handleRowsPerChange = (newRowsPerPage) => {
         setRowsPerPage(newRowsPerPage);
+        console.log(newRowsPerPage);
         setPage(1);
     };
 

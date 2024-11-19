@@ -29,9 +29,8 @@ class CountriesService extends BaseService {
         return response.data;
     }
 
-    async getPagedList(page = 1, rowsPerPage = 10, cancelToken = null) {
-
-        const response = await this.api.get(`/countries/paged/${page}?rowsPerPage=${rowsPerPage}`, {
+    async getPagedList(page, rowsPerPage, cancelToken = null) {
+        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}`, {
             cancelToken: cancelToken,
         });
         return response;
