@@ -29,17 +29,11 @@ class CountriesService extends BaseService {
         return response.data;
     }
 
-    async getPagedList(page, rowsPerPage, query = '') {
-        console.log("Fetching with query:", query); // Proverite šta se šalje
-        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}${query ? `&${query}` : ''}`);
-        console.log("API Response:", response); // Proverite šta API vraća
+    async getPagedList(page, rowsPerPage, searchTerm = '') {
+        const query = searchTerm ? `&query=${searchTerm}` : '';
+        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}${query}`);
         return response;
     }
-    
-    /*async searchCountriesByName(name, page, rowsPerPage){
-        const response = await this.api.get(`/countries/search?name=${name}&page=${page}&pageSize=${rowsPerPage}`);
-        return response;
-    }*/
 }
 
 const countriesService = new CountriesService();

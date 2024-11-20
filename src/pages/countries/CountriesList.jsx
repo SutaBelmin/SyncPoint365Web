@@ -24,26 +24,24 @@ export const CountriesList = () => {
 
     const fetchData = useCallback(async () => {
         try {
-            const query = searchTerm ? `&query=${searchTerm}` : '';
-            console.log("Query being sent:", query);
-    
-            const response = await countriesService.getPagedList(page, rowsPerPage, query);
-            console.log('API Response:', response);
-    
+            const response = await countriesService.getPagedList(page, rowsPerPage, searchTerm);
             const responseData = response.data?.items || response.data;
-            console.log('Response Data:', responseData);
             setData(responseData);
             setTotalItemCount(response.data.totalItemCount || responseData.length);
-    
         } catch (error) {
-            console.error("Error in fetching data:", error); 
             toast.error("There was an error. Please contact administrator.");
         }
     }, [page, rowsPerPage, searchTerm]);
     
     
     useEffect(() => {
-        fetchData();
+        const handler = setTimeout(()=>{
+            fetchData();
+        }, 200);
+
+        return () => {
+            clearTimeout(handler);
+        };
     }, [fetchData, rowsPerPage, page, searchTerm]);
 
     const handlePageChange = (newPage) => {
