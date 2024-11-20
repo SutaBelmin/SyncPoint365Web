@@ -8,13 +8,13 @@ export const CountriesSearch = ({ searchTerm, setSearchTerm, onFilterClick, onCl
         className="p-2 border w-96"
         placeholder="Search by name..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => setSearchTerm(e.target.value)}  
       />
       <button onClick={onFilterClick} className="btn-new">
-        Apply Filter
+        Filter
       </button>
       <button onClick={onClearFilterClick} className="btn-new">
-        Clear Filter
+        Clear 
       </button>
     </div>
   );

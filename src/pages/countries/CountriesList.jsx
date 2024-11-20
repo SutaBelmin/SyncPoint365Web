@@ -9,8 +9,6 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { CountriesSearch } from "./search/CountriesSearch";
 
-
-
 export const CountriesList = () => {
   const { openModal, closeModal } = useModal();
   const [data, setData] = useState([]);
@@ -18,7 +16,7 @@ export const CountriesList = () => {
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
+  const [SearchTerm, setAppliedSearchTerm] = useState(""); 
 
   const customNoDataComponent = (
     <div className="no-data-message">
@@ -28,18 +26,18 @@ export const CountriesList = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await countriesService.getPagedList(page, rowsPerPage, appliedSearchTerm);
+      const response = await countriesService.getPagedList(page, rowsPerPage, SearchTerm); 
       const responseData = response.data?.items || response.data;
       setData(responseData);
       setTotalItemCount(response.data.totalItemCount || responseData.length);
     } catch (error) {
       toast.error("There was an error. Please contact administrator.");
     }
-  }, [page, rowsPerPage, appliedSearchTerm]);
+  }, [page, rowsPerPage, SearchTerm]); 
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, rowsPerPage, page, appliedSearchTerm]);
+  }, [fetchData, rowsPerPage, page, SearchTerm]); 
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -81,12 +79,12 @@ export const CountriesList = () => {
   };
 
   const onFilterClick = () => {
-    setAppliedSearchTerm(searchTerm); 
+    setAppliedSearchTerm(searchTerm);
   };
 
   const onClearFilterClick = () => {
     setSearchTerm(""); 
-    setAppliedSearchTerm("");
+    setAppliedSearchTerm(""); 
   };
 
   const columns = [
@@ -114,6 +112,7 @@ export const CountriesList = () => {
       ),
     },
   ];
+
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Countries</h1>
@@ -153,6 +152,4 @@ export const CountriesList = () => {
       />
     </div>
   );
-  
-  
 };
