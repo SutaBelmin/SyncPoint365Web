@@ -1,10 +1,10 @@
 import React from "react";
 import { Formik, Form } from "formik";
 
-export const DeleteConfirmationModal = ({ onDelete, onCancel, entityName }) => {
-  const handleDelete = () => {
-    onDelete();
-  };
+export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) => {
+  // const handleDelete = () => {
+  //   onDelete(id);
+  // };
 
   return (
     <div className="p-8 bg-white rounded-lg relative w-full max-w-md">
@@ -27,7 +27,7 @@ export const DeleteConfirmationModal = ({ onDelete, onCancel, entityName }) => {
           confirm: false,
         }}
         onSubmit={() => {
-          handleDelete();
+          onDelete(id);
         }}
       >
         {() => (

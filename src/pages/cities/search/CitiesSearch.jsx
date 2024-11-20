@@ -1,19 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Select from "react-select";
+import { toast } from "react-toastify";
+import { countriesService } from "../../../services";
+import { citiesListStore } from "../../cities";
+import { observer } from "mobx-react";
 
-const CitiesSearch = ({ onSearch, onClearFilters, countries, initialSearchTerm, initialSelectedCountry }) => {
-    const [searchTerm, setSearchTerm] = useState(initialSearchTerm || "");
-    const [selectedCountryId, setSelectedCountryId] = useState(initialSelectedCountry || null);
+const CitiesSearch = observer(() => {
+    const [querySearch, setQuerySearch] = useState("");
+    const [selectedCountryId, setSelectedCountryId] = useState(null);
+
+    const [countries, setCountries] = useState([]);
 
     const handleSearch = () => {
-        onSearch({ searchQuery: searchTerm, countryId: selectedCountryId?.value || null });
+        citiesListStore.setQuery(querySearch);
+        citiesListStore.setCountryId(selectedCountryId);
+        //onSearch({ searchQuery: citiesListStore.setQuery(querySearch), countryId: selectedCountryId?.value || null });
+        console.log("store",citiesListStore);
     };
 
     const handleClear = () => {
-        setSearchTerm("");
+        setQuerySearch("");
         setSelectedCountryId(null);
-        onClearFilters();
+        citiesListStore.clearFilters();
     };
+
+    const fetchCountries = useCallback(async () => {
+        try {
+            const response = await countriesService.getList();
+            const countriesOption = response.data.map(country => ({
+                value: country.id,
+                label: country.name
+            }));
+            setCountries(countriesOption);
+        } catch (error) {
+            toast.error("There was an error. Please contact administrator.");
+        }
+    }, []);
+
+    useEffect(() => { 
+        fetchCountries();
+    }, [fetchCountries]);
+
 
     return (
         <div className="flex items-center space-x-4 mb-4">
@@ -21,8 +48,8 @@ const CitiesSearch = ({ onSearch, onClearFilters, countries, initialSearchTerm, 
                 type="text"
                 placeholder="Search by City"
                 className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={querySearch}
+                onChange={(e) => setQuerySearch(e.target.value)}
             />
 
             <Select
@@ -51,6 +78,6 @@ const CitiesSearch = ({ onSearch, onClearFilters, countries, initialSearchTerm, 
             </button>
         </div>
     );
-};
-
+}
+);
 export default CitiesSearch;

@@ -5,6 +5,7 @@ import * as Yup from "yup"
 import Select from "react-select";
 
 export const CitiesEdit = ({ city, closeModal, fetchData }) => {
+    console.log("Edit",fetchData);
     const [countries, setCountries] = useState([]);
 
     const fetchCountries = async () => {
