@@ -32,7 +32,7 @@ const AbsenceRequestTypesSearch = ({ onSearch }) => {
               type="text"
               placeholder="Search..."
               className="border-gray-300 h-10 hover:text-gray-900 px-4 py-2 rounded-md text-sm"
-              
+              autoComplete="off"
             />
 
             <Select
