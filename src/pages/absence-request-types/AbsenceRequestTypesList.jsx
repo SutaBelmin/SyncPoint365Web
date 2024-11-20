@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 
 import { absenceRequestTypesService } from "../../services";
+import AbsenceRequestTypesSearch from "./search/AbsenceRequestTypesSearch";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { useModal } from "../../context";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { toast } from "react-toastify";
-import "./AbsenceRequestTypesList.css";
 
 export const AbsenceRequestTypesList = () => {
     const [data, setData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [isActive, setIsActive] = useState(null);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalItemCount, setTotalItemCount] = useState(0);
@@ -18,9 +20,9 @@ export const AbsenceRequestTypesList = () => {
 
     const fetchData = async () => {
         try{
-            const response = await absenceRequestTypesService.getPagedList(page, rowsPerPage);
-            setData(response.data.items);
-            setTotalItemCount(response.data.totalItemCount);
+            const response = await absenceRequestTypesService.getPagedList(isActive, searchQuery, page, rowsPerPage);
+            setData(response.items);
+            setTotalItemCount(response.totalItemCount);
         }catch (error){
             toast.error("There was an error. Please contact administrator.")
         } finally {
@@ -58,6 +60,22 @@ export const AbsenceRequestTypesList = () => {
         setRowsPerPage(newRowsPerPage);
         setPage(1, newRowsPerPage);
     };
+
+    const handleSearch = (query, status) => {
+        setSearchQuery(query);
+      
+        let isActiveFilter = null;
+        
+        if (status === true) {
+          isActiveFilter = true;
+        } else if (status === false) {
+          isActiveFilter = false;
+        }
+        setIsActive(isActiveFilter);
+        setPage(1);      
+        fetchData(query, isActiveFilter);
+      };
+      
 
     useEffect(()=>{
         fetchData();
@@ -98,32 +116,19 @@ export const AbsenceRequestTypesList = () => {
     ];
 
     return (
-        <div className="p-4">
+        <div className="flex flex-col  p-4">
             <h1 className="text-xl font-bold mb-4">Absence Request Types</h1>
-             <div className="flex items-center justify-between mb-4 ">
-                <div className="flex items-center gap-2 w-[400px]">
-                    <input
-                    type="text"
-                    placeholder="Search..."
-                        //onChange={(e) => onSearch(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                    />
-                <button className="btn-new rounded-r-md h-10"
-                    type="button">
-                    Search
-                </button>
-                </div>
-                
-                
+            
+            <div className="flex justify-between items-center mb-4">
+                <AbsenceRequestTypesSearch onSearch={handleSearch} />
                 <button
                     type="button"
                     onClick={addNewRequestClick}
-                    className="btn-new rounded-r-md h-10"
+                    className="btn-new h-10"
                 >
                     New Request Type
                 </button>
             </div>
-           
             <BaseModal />
             <DataTable
                 columns={columns}
