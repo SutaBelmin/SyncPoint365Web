@@ -20,7 +20,8 @@ export const CitiesList = observer(() => {
     const fetchData = useCallback(async () => {
 
         try {
-            const filter = citiesListStore.getCityFilter();
+            const filter = {...citiesListStore.cityFilter};
+
             const response = await citiesService.getPagedCities(
                 filter.countryId,
                 filter.searchQuery,

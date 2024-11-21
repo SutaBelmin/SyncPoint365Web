@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, makeObservable, observable, computed } from "mobx";
 
 class CitiesListStore {
     totalItemCount = 0;
@@ -20,6 +20,7 @@ class CitiesListStore {
             setPage: action,
             setRowsPerPage: action,
             clearFilters: action,
+            cityFilter: computed
         });
     }
 
@@ -49,7 +50,7 @@ class CitiesListStore {
         this.setPage(1);
     }
 
-    getCityFilter() {
+    get cityFilter() {
         const filter = {
             totalItemCount: this.totalItemCount,
             countryId: this.countryId,
@@ -57,7 +58,6 @@ class CitiesListStore {
             page: this.page,
             rowsPerPage: this.rowsPerPage
         };
-
         return filter;
     }
 }
