@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CountriesAdd, CountriesEdit } from "../countries";
@@ -14,7 +14,7 @@ import countriesSearchStore from "./stores/CountriesSearchStore";
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     try {
       const response = await countriesService.getPagedList(
         countriesSearchStore.page,
@@ -27,11 +27,30 @@ export const CountriesList = observer(() => {
     } catch (error) {
       toast.error("There was an error. Please contact administrator.");
     }
-  }, [countriesSearchStore.page, countriesSearchStore.rowsPerPage, countriesSearchStore.searchQuery]);
+  };
   
   useEffect(() => {
     fetchData(); 
-  }, [fetchData]);
+  });
+
+  // const fetchData = useCallback(async () => {
+  //   try {
+  //     const response = await countriesService.getPagedList(
+  //       countriesSearchStore.page,
+  //       countriesSearchStore.rowsPerPage,
+  //       countriesSearchStore.searchQuery
+  //     );
+  //     const responseData = response.data?.items || response.data;
+  //     countriesSearchStore.setData(responseData);
+  //     countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
+  //   } catch (error) {
+  //     toast.error("There was an error. Please contact administrator.");
+  //   }
+  // }, [countriesSearchStore.page, countriesSearchStore.rowsPerPage, countriesSearchStore.searchQuery]);
+  
+  // useEffect(() => {
+  //   fetchData(); 
+  // }, [fetchData]);
 
 
   const handlePageChange = (newPage) => {
