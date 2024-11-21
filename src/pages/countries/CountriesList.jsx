@@ -15,8 +15,8 @@ export const CountriesList = () => {
   const [page, setPage] = useState(1);
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [SearchTerm, setAppliedSearchTerm] = useState(""); 
+  const [searchParams, setSearchParams] = useState({searchQuery:""});
+
 
   const customNoDataComponent = (
     <div className="no-data-message">
@@ -25,19 +25,23 @@ export const CountriesList = () => {
   );
 
   const fetchData = useCallback(async () => {
-    try {
-      const response = await countriesService.getPagedList(page, rowsPerPage, SearchTerm); 
+        try {
+            const response = await countriesService.getPagedList(
+                page,
+                rowsPerPage,
+                searchParams.searchQuery,
+              );
       const responseData = response.data?.items || response.data;
       setData(responseData);
-      setTotalItemCount(response.data.totalItemCount || responseData.length);
+      setTotalItemCount(response.data.totalItemCount);
     } catch (error) {
       toast.error("There was an error. Please contact administrator.");
     }
-  }, [page, rowsPerPage, SearchTerm]); 
+  } ,[searchParams, page, rowsPerPage]); 
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, rowsPerPage, page, SearchTerm]); 
+  }, [fetchData]); 
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -47,6 +51,16 @@ export const CountriesList = () => {
     setRowsPerPage(newRowsPerPage);
     setPage(1);
   };
+
+  const onSearch = (params) =>{
+    setSearchParams(params);
+    setPage(1);
+  }
+
+  const clearFilters=()=>{
+    setSearchParams({searchQuery: ""});
+    setPage(1);
+  }
 
   const onAddCountriesClick = () => {
     openModal(<CountriesAdd closeModal={closeModal} fetchData={fetchData} />);
@@ -76,15 +90,6 @@ export const CountriesList = () => {
     } catch (error) {
       toast.error("Failed to delete country. Please try again.");
     }
-  };
-
-  const onFilterClick = () => {
-    setAppliedSearchTerm(searchTerm);
-  };
-
-  const onClearFilterClick = () => {
-    setSearchTerm(""); 
-    setAppliedSearchTerm(""); 
   };
 
   const columns = [
@@ -119,10 +124,9 @@ export const CountriesList = () => {
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-4">
           <CountriesSearch
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            onFilterClick={onFilterClick}
-            onClearFilterClick={onClearFilterClick}
+            onSearch={onSearch}
+            onClearFilters={clearFilters}
+            initialSearchTerm={searchParams.searchQuery}
           />
         </div>
         

@@ -1,6 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 
-export const CountriesSearch = ({ searchTerm, setSearchTerm, onFilterClick, onClearFilterClick }) => {
+export const CountriesSearch = ({ onSearch, onClearFilters, initialSearchTerm }) => {
+
+    const [searchTerm, setSearchTerm] = useState(initialSearchTerm || "");
+
+    const HandleSearch=()=>{
+        onSearch({searchQuery: searchTerm});
+    };
+
+    const handleClear=()=>{
+        setSearchTerm("");
+        onClearFilters();
+    }
+
   return (
     <div className="mb-4 flex items-center space-x-2">
       <input
@@ -10,10 +22,10 @@ export const CountriesSearch = ({ searchTerm, setSearchTerm, onFilterClick, onCl
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}  
       />
-      <button onClick={onFilterClick} className="btn-new">
+      <button onClick={HandleSearch} className="btn-new">
         Filter
       </button>
-      <button onClick={onClearFilterClick} className="btn-new">
+      <button onClick={handleClear} className="btn-new">
         Clear 
       </button>
     </div>

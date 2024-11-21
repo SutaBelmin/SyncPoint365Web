@@ -29,9 +29,9 @@ class CountriesService extends BaseService {
         return response.data;
     }
 
-    async getPagedList(page, rowsPerPage, searchTerm = '') {
-        const query = searchTerm ? `&query=${searchTerm}` : '';
-        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}${query}`);
+    async getPagedList(page, rowsPerPage, query = '') {
+        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}&query=${query ? `${query}` : ''}`);
+        console.log("API Response:", response);
         return response;
     }
 }
