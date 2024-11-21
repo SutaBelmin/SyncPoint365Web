@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
-//import { citiesListStore } from "../../cities";
 import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
 
