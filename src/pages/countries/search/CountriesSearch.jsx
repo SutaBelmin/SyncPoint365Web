@@ -1,33 +1,31 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import countriesSearchStore from "../stores/CountriesSearchStore";
 
-export const CountriesSearch = ({ onSearch, onClearFilters, initialSearchTerm }) => {
+export const CountriesSearch = ({ onSearch }) => {
+  const [searchQuery, setSearchQuery] = useState(countriesSearchStore.searchQuery);
 
-    const [searchTerm, setSearchTerm] = useState(initialSearchTerm || "");
+  const handleSearch = () => {
+    countriesSearchStore.setSearchQuery(searchQuery);  
+    onSearch(countriesSearchStore.filters);
+  };
 
-    const HandleSearch=()=>{
-        onSearch({searchQuery: searchTerm});
-    };
-
-    const handleClear=()=>{
-        setSearchTerm("");
-        onClearFilters();
-    }
+  const handleClearFilters = () => {
+    countriesSearchStore.resetFilters();
+    setSearchQuery(""); 
+    onSearch(countriesSearchStore.filters);  
+  };
 
   return (
-    <div className="mb-4 flex items-center space-x-2">
+    <div className="flex space-x-4">
       <input
         type="text"
-        className="p-2 border w-96"
-        placeholder="Search by name..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}  
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search countries"
+        className="input"
       />
-      <button onClick={HandleSearch} className="btn-new">
-        Filter
-      </button>
-      <button onClick={handleClear} className="btn-new">
-        Clear 
-      </button>
+      <button onClick={handleSearch} className="btn-new">Search</button>
+      <button onClick={handleClearFilters} className="btn-new">Clear Filters</button>
     </div>
   );
 };

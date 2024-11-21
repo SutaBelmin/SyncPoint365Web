@@ -10,16 +10,18 @@ import { toast } from "react-toastify";
 import { CountriesSearch } from "./search/CountriesSearch";
 import { observer } from "mobx-react";
 import countriesSearchStore from "./stores/CountriesSearchStore";
+import { reaction } from "mobx";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
 
   const fetchData = async () => {
     try {
+      const filters = countriesSearchStore.getFilterObject();  
       const response = await countriesService.getPagedList(
-        countriesSearchStore.page,
-        countriesSearchStore.rowsPerPage,
-        countriesSearchStore.searchQuery
+        filters.page,
+        filters.rowsPerPage,
+        filters.searchQuery
       );
       const responseData = response.data?.items || response.data;
       countriesSearchStore.setData(responseData);
@@ -28,30 +30,20 @@ export const CountriesList = observer(() => {
       toast.error("There was an error. Please contact administrator.");
     }
   };
-  
+
   useEffect(() => {
-    fetchData(); 
-  });
-
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     const response = await countriesService.getPagedList(
-  //       countriesSearchStore.page,
-  //       countriesSearchStore.rowsPerPage,
-  //       countriesSearchStore.searchQuery
-  //     );
-  //     const responseData = response.data?.items || response.data;
-  //     countriesSearchStore.setData(responseData);
-  //     countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
-  //   } catch (error) {
-  //     toast.error("There was an error. Please contact administrator.");
-  //   }
-  // }, [countriesSearchStore.page, countriesSearchStore.rowsPerPage, countriesSearchStore.searchQuery]);
-  
-  // useEffect(() => {
-  //   fetchData(); 
-  // }, [fetchData]);
-
+    const disposer = reaction(
+      () => [
+        countriesSearchStore.page,
+        countriesSearchStore.rowsPerPage,
+        countriesSearchStore.searchQuery,
+      ],
+      () => {
+        fetchData();
+      }
+    );
+    return () => disposer();
+  }, []);
 
   const handlePageChange = (newPage) => {
     countriesSearchStore.setPage(newPage);
@@ -59,17 +51,11 @@ export const CountriesList = observer(() => {
 
   const handleRowsPerChange = (newRowsPerPage) => {
     countriesSearchStore.setRowsPerPage(newRowsPerPage);
-    countriesSearchStore.setPage(1); 
+    countriesSearchStore.setPage(1);
   };
 
   const onSearch = (params) => {
     fetchData();
-    countriesSearchStore.setSearchQuery(params.searchQuery);
-    countriesSearchStore.setPage(1);
-  };
-
-  const clearFilters = () => {
-    countriesSearchStore.resetFilters();
   };
 
   const customNoDataComponent = (
@@ -83,7 +69,9 @@ export const CountriesList = observer(() => {
   };
 
   const onEditCountriesClick = (country) => {
-    openModal(<CountriesEdit country={country} closeModal={closeModal} fetchData={fetchData} />);
+    openModal(
+      <CountriesEdit country={country} closeModal={closeModal} fetchData={fetchData} />
+    );
   };
 
   const onDeleteCountriesClick = (country) => {
@@ -138,13 +126,8 @@ export const CountriesList = observer(() => {
       <h1 className="text-xl font-bold mb-4">Countries</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-4">
-          <CountriesSearch
-            onSearch={onSearch}
-            onClearFilters={clearFilters}
-            initialSearchTerm={countriesSearchStore.searchQuery}
-          />
+          <CountriesSearch onSearch={onSearch} />
         </div>
-        
         <button
           type="button"
           onClick={onAddCountriesClick}
