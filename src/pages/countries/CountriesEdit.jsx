@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import { countriesService } from "../../services";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
-import countriesStore from "./CountriesStore";
 
 export const CountriesEdit = ({ country, closeModal, fetchData }) => {
   const validationSchema = Yup.object({
@@ -28,7 +27,7 @@ export const CountriesEdit = ({ country, closeModal, fetchData }) => {
               name: values.name,
               displayName: values.displayName,
             });
-            countriesStore.fetchData();
+            fetchData();
             closeModal();
             toast.success("Country updated successfully!"); 
           } catch (error) {

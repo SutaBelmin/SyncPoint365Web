@@ -9,11 +9,26 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { CountriesSearch } from "./search/CountriesSearch";
 import { observer } from "mobx-react";
-import countriesStore from "./CountriesStore";
+import countriesStore from "./store/CountriesStore";
 import { reaction } from "mobx";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
+
+  const fetchData = async () => {
+    try {
+      const response = await countriesService.getPagedList(
+        countriesStore.page,
+        countriesStore.rowsPerPage,
+        countriesStore.searchQuery
+      );
+      const responseData = response.data?.items || response.data;
+      countriesStore.setData(responseData);
+      countriesStore.setTotalItemCount(response.data.totalItemCount);
+    } catch (error) {
+      toast.error("There was an error. Please contact administrator.");
+    }
+  };
 
   useEffect(() => {
     const disposer = reaction(
@@ -23,12 +38,15 @@ export const CountriesList = observer(() => {
         countriesStore.searchQuery,
       ],
       () => {
-        countriesStore.fetchData();
+        fetchData(); 
       }
     );
 
-    return () => disposer();
+    return () => {
+      disposer(); 
+    };
   }, []); 
+
 
   const handlePageChange = (newPage) => {
     countriesStore.setPage(newPage);
@@ -55,11 +73,11 @@ export const CountriesList = observer(() => {
   );
 
   const onAddCountriesClick = () => {
-    openModal(<CountriesAdd closeModal={closeModal} fetchData={countriesStore.fetchData} />);
+    openModal(<CountriesAdd closeModal={closeModal} fetchData={fetchData} />);
   };
 
   const onEditCountriesClick = (country) => {
-    openModal(<CountriesEdit country={country} closeModal={closeModal} fetchData={countriesStore.fetchData} />);
+    openModal(<CountriesEdit country={country} closeModal={closeModal} fetchData={fetchData} />);
   };
 
   const onDeleteCountriesClick = (country) => {
@@ -75,7 +93,7 @@ export const CountriesList = observer(() => {
   const handleDelete = async (countryId) => {
     try {
       await countriesService.delete(countryId);
-      countriesStore.fetchData();
+      fetchData();
       closeModal();
       toast.success("Country deleted successfully!");
     } catch (error) {

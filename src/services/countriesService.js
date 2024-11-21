@@ -31,7 +31,6 @@ class CountriesService extends BaseService {
 
     async getPagedList(page, rowsPerPage, query = '') {
         const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}&query=${query ? `${query}` : ''}`);
-        console.log("API Response:", response);
         return response;
     }
 }

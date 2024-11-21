@@ -1,6 +1,5 @@
 import {action, makeObservable, observable} from 'mobx';
-import { countriesService } from '../../services';
-import { toast } from "react-toastify";
+
 
 class CountriesStore{
     data = []
@@ -21,7 +20,6 @@ class CountriesStore{
             setRowsPerPage: action,
             setData: action,
             setTotalItemCount: action,
-            fetchData: action,
             resetFilters: action
         });
     }
@@ -45,21 +43,6 @@ class CountriesStore{
     setTotalItemCount(count){
         this.totalItemCount = count;
     }
-
-    async fetchData() {
-        try {
-            const response = await countriesService.getPagedList(
-                this.page,
-                this.rowsPerPage,
-                this.searchQuery,
-              );
-      const responseData = response.data?.items || response.data;
-      this.setData(responseData);
-      this.setTotalItemCount(response.data.totalItemCount);
-    } catch (error) {
-      toast.error("There was an error. Please contact administrator.");
-    }
-  }
 
   resetFilters() {
     this.searchQuery = "";
