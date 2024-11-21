@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-
+import absenceRequestTypesListStore from "./stores/AbsenceRequestTypesListStore";
 import { absenceRequestTypesService } from "../../services";
 import AbsenceRequestTypesSearch from "./search/AbsenceRequestTypesSearch";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { useModal } from "../../context";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { toast } from "react-toastify";
+import { observer } from "mobx-react";
 
-export const AbsenceRequestTypesList = () => {
-    const [data, setData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [isActive, setIsActive] = useState(null);
+export const AbsenceRequestTypesList = observer (() => {
     const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
-    const [totalItemCount, setTotalItemCount] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const { openModal, closeModal } = useModal();
 
     const fetchData = async () => {
         try{
-            const response = await absenceRequestTypesService.getPagedList(isActive, searchQuery, page, rowsPerPage);
-            setData(response.items);
-            setTotalItemCount(response.totalItemCount);
+            const response = await absenceRequestTypesService.getPagedList(
+                absenceRequestTypesListStore.isActive, 
+                absenceRequestTypesListStore.searchQuery, 
+                absenceRequestTypesListStore.pageNumber, 
+                absenceRequestTypesListStore.rowsPerPage
+            );
+            absenceRequestTypesListStore.setData(response.items);
+            absenceRequestTypesListStore.setTotalItemCount(response.totalItemCount);
         }catch (error){
             toast.error("There was an error. Please contact administrator.")
         } finally {
@@ -52,35 +52,28 @@ export const AbsenceRequestTypesList = () => {
         openModal(<DeleteConfirmationModal  onDelete={() => handleDelete(absenceRequestType.id)} onCancel={closeModal} name={absenceRequestType.name}/>);
     }
 
-    const handlePageChange = (newPage) => {
-        setPage(newPage);
-    }
-
-    const handleRowsPerPageChange = (newRowsPerPage) => {
-        setRowsPerPage(newRowsPerPage);
-        setPage(1, newRowsPerPage);
-    };
-
-    const handleSearch = (query, status) => {
-        setSearchQuery(query);
-      
-        let isActiveFilter = null;
-        
-        if (status === true) {
-          isActiveFilter = true;
-        } else if (status === false) {
-          isActiveFilter = false;
-        }
-        setIsActive(isActiveFilter);
-        setPage(1);      
-        fetchData(query, isActiveFilter);
-      };
-      
-
     useEffect(()=>{
         fetchData();
     });
+    
+    const handlePageChange = (newPage) => {
+        absenceRequestTypesListStore.setPageNumber(newPage);
+    }
 
+    const handleRowsPerPageChange = (newRowsPerPage) => {
+        absenceRequestTypesListStore.setRowsPerPage(newRowsPerPage);
+        absenceRequestTypesListStore.setPageNumber(1);
+    };
+
+    const handleSearch = (query, status) => {
+        absenceRequestTypesListStore.setSearchQuery(query);
+        absenceRequestTypesListStore.setIsActive(status);
+        absenceRequestTypesListStore.setPageNumber(1);      
+        fetchData();
+      };
+      
+
+    
     const columns = [
         {
             name: "Name",
@@ -132,13 +125,13 @@ export const AbsenceRequestTypesList = () => {
             <BaseModal />
             <DataTable
                 columns={columns}
-                data={data}
+                data={absenceRequestTypesListStore.data}
                 highlightOnHover
                 pagination
                 paginationServer 
-                paginationTotalRows={totalItemCount}
-                paginationDefaultPage={page} 
-                paginationPerPage={rowsPerPage} 
+                paginationTotalRows={absenceRequestTypesListStore.totalItemCount}
+                paginationDefaultPage={absenceRequestTypesListStore.pageNumber} 
+                paginationPerPage={absenceRequestTypesListStore.rowsPerPage} 
                 onChangePage={handlePageChange} 
                 onChangeRowsPerPage={handleRowsPerPageChange} 
                 progressPending={loading} 
@@ -147,4 +140,4 @@ export const AbsenceRequestTypesList = () => {
             />
         </div>
     );
-};
+});

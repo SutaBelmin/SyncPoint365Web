@@ -1,6 +1,8 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import Select from 'react-select';
+import { observer } from 'mobx-react';
+import absenceRequestTypesListStore from '../stores/AbsenceRequestTypesListStore';
 
 const dropdownOptions = [
   { value: 'All', label: 'All' },
@@ -8,17 +10,21 @@ const dropdownOptions = [
   { value: 'inactive', label: 'Inactive' },
 ];
 
-const AbsenceRequestTypesSearch = ({ onSearch }) => {
+const AbsenceRequestTypesSearch = observer (({ onSearch }) => {
   const initialValues = {
-    searchQuery: '',
-    status: { value: 'All', label: 'All' },
-  };
-
-  const handleSubmit = (values) => {
-    const query = values.searchQuery.trim();
+    searchQuery: absenceRequestTypesListStore.query || '',
+    status: dropdownOptions.find(option => option.value === 
+        (absenceRequestTypesListStore.isActive === null ? 'All' 
+            : (absenceRequestTypesListStore.isActive ? 'active' : 'inactive'))) 
+            || dropdownOptions[0],
+        }
+    const handleSubmit = (values) => {
+    const query = values.searchQuery;
     const status = values.status.value === 'active' ? true :
                    values.status.value === 'inactive' ? false :
                    null;
+    absenceRequestTypesListStore.setSearchQuery(query); 
+    absenceRequestTypesListStore.setIsActive(status);
     onSearch(query, status);
   };
 
@@ -48,7 +54,8 @@ const AbsenceRequestTypesSearch = ({ onSearch }) => {
               }}
             />
 
-            <button type="submit" className="btn-new h-10">
+            <button type="submit" className="btn-new h-10" >
+              
               Search
             </button>
           </div>
@@ -56,6 +63,6 @@ const AbsenceRequestTypesSearch = ({ onSearch }) => {
       )}
     </Formik>
   );
-};
+});
 
 export default AbsenceRequestTypesSearch;
