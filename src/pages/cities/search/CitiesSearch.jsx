@@ -6,20 +6,18 @@ import { citiesListStore } from "../../cities";
 import { observer } from "mobx-react";
 
 const CitiesSearch = observer(() => {
-    const [querySearch, setQuerySearch] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
     const [selectedCountryId, setSelectedCountryId] = useState(null);
 
     const [countries, setCountries] = useState([]);
 
     const handleSearch = () => {
-        citiesListStore.setQuery(querySearch);
-        citiesListStore.setCountryId(selectedCountryId);
-        //onSearch({ searchQuery: citiesListStore.setQuery(querySearch), countryId: selectedCountryId?.value || null });
-        console.log("store",citiesListStore);
+        citiesListStore.setQuery(searchQuery);
+        citiesListStore.setCountryId(selectedCountryId?.value || null);
     };
 
     const handleClear = () => {
-        setQuerySearch("");
+        setSearchQuery("");
         setSelectedCountryId(null);
         citiesListStore.clearFilters();
     };
@@ -48,8 +46,8 @@ const CitiesSearch = observer(() => {
                 type="text"
                 placeholder="Search by City"
                 className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
-                value={querySearch}
-                onChange={(e) => setQuerySearch(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
             />
 
             <Select

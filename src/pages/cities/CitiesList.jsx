@@ -10,40 +10,51 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import CitiesSearch from "./search/CitiesSearch";
 import { observer } from "mobx-react";
 import { citiesListStore } from "../cities";
+import { reaction } from "mobx";
 
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
-    // const [page, setPage] = useState(1);
-    // const [rowsPerPage, setRowsPerPage] = useState(10);
-    // const [totalItemCount, setTotalItemCount] = useState(0);
-    // const [countries, setCountries] = useState([]);
-    // const [searchParams, setSearchParams] = useState({ searchQuery: "", countryId: null });
 
     const fetchData = useCallback(async () => {
-        console.log("store", citiesListStore);
 
         try {
-            //const filter = { ...citiesListStore.cityFilter }
+            const filter = citiesListStore.getCityFilter();
             const response = await citiesService.getPagedCities(
-                citiesListStore.countryId,
-                citiesListStore.searchQuery,
-                citiesListStore.page,
-                citiesListStore.rowsPerPage,
+                filter.countryId,
+                filter.searchQuery,
+                filter.page, 
+                filter.rowsPerPage,
                 null
             );
-            console.log("podaci", response);
             setData(response.data.items);
             citiesListStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }
-    }, [citiesListStore.searchQuery, citiesListStore.countryId, citiesListStore.page, citiesListStore.rowsPerPage]);
+    }, []);
 
-    useEffect(() => { 
+    useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    useEffect(() => {
+        const disposeReaction = reaction(
+            () => ({
+                countryId: citiesListStore.countryId,
+                searchQuery: citiesListStore.searchQuery,
+                page: citiesListStore.page,
+                rowsPerPage: citiesListStore.rowsPerPage,
+            }),
+            () => {
+                fetchData();
+            }
+        );
+
+        return () => disposeReaction();
+    }, [fetchData]); 
+
 
     const columns = [
         {
@@ -95,7 +106,7 @@ export const CitiesList = observer(() => {
     const onEditCityClick = (city) => {
         openModal(<CitiesEdit city={city} closeModal={closeModal} fetchData={fetchData} />)
     }
-    
+
 
     const onDeleteCityClick = (city) => {
         openModal(<DeleteConfirmationModal entityName={city.name} id={city.id} onDelete={handleDelete} onCancel={closeModal} />);
@@ -121,20 +132,10 @@ export const CitiesList = observer(() => {
         citiesListStore.setPage(1);
     };
 
-    const onSearch = (params) => {
-        citiesListStore.setSearchParams(params);
-        citiesListStore.setPage(1);
-    };
-
-    const clearFilters = () => {
-        citiesListStore.clearFilters();
-    };
-
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
                 <CitiesSearch
-                   
                 />
 
                 <button

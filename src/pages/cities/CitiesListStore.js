@@ -10,6 +10,8 @@ class CitiesListStore {
     constructor() {
         makeObservable(this, {
             totalItemCount: observable,
+            countryId: observable,
+            searchQuery: observable,
             page: observable,
             rowsPerPage: observable,
             setQuery: action,
@@ -25,7 +27,7 @@ class CitiesListStore {
         this.searchQuery = query;
     }
 
-    setCountryId(countryId){
+    setCountryId(countryId) {
         this.countryId = countryId;
     }
 
@@ -42,11 +44,23 @@ class CitiesListStore {
     }
 
     clearFilters() {
-        this.setCountryId(0);
+        this.setCountryId(null);
         this.setQuery(""); 
         this.setPage(1);
     }
+
+    getCityFilter() {
+        const filter = {
+            totalItemCount: this.totalItemCount,
+            countryId: this.countryId,
+            searchQuery: this.searchQuery,
+            page: this.page,
+            rowsPerPage: this.rowsPerPage
+        };
+
+        return filter;
+    }
 }
 
-const citiesListStore= new CitiesListStore();
+const citiesListStore = new CitiesListStore();
 export default citiesListStore;
