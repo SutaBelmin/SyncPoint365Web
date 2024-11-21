@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CountriesAdd, CountriesEdit } from "../countries";
@@ -9,61 +9,48 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { CountriesSearch } from "./search/CountriesSearch";
 import { observer } from "mobx-react";
-import countriesStore from "./store/CountriesStore";
-import { reaction } from "mobx";
+import countriesSearchStore from "./stores/CountriesSearchStore";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await countriesService.getPagedList(
-        countriesStore.page,
-        countriesStore.rowsPerPage,
-        countriesStore.searchQuery
+        countriesSearchStore.page,
+        countriesSearchStore.rowsPerPage,
+        countriesSearchStore.searchQuery
       );
       const responseData = response.data?.items || response.data;
-      countriesStore.setData(responseData);
-      countriesStore.setTotalItemCount(response.data.totalItemCount);
+      countriesSearchStore.setData(responseData);
+      countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
     } catch (error) {
       toast.error("There was an error. Please contact administrator.");
     }
-  };
-
+  }, [countriesSearchStore.page, countriesSearchStore.rowsPerPage, countriesSearchStore.searchQuery]);
+  
   useEffect(() => {
-    const disposer = reaction(
-      () => [
-        countriesStore.page,
-        countriesStore.rowsPerPage,
-        countriesStore.searchQuery,
-      ],
-      () => {
-        fetchData(); 
-      }
-    );
-
-    return () => {
-      disposer(); 
-    };
-  }, []); 
+    fetchData(); 
+  }, [fetchData]);
 
 
   const handlePageChange = (newPage) => {
-    countriesStore.setPage(newPage);
+    countriesSearchStore.setPage(newPage);
   };
 
   const handleRowsPerChange = (newRowsPerPage) => {
-    countriesStore.setRowsPerPage(newRowsPerPage);
-    countriesStore.setPage(1); 
+    countriesSearchStore.setRowsPerPage(newRowsPerPage);
+    countriesSearchStore.setPage(1); 
   };
 
   const onSearch = (params) => {
-    countriesStore.setSearchQuery(params.searchQuery);
-    countriesStore.setPage(1);
+    fetchData();
+    countriesSearchStore.setSearchQuery(params.searchQuery);
+    countriesSearchStore.setPage(1);
   };
 
   const clearFilters = () => {
-    countriesStore.resetFilters();
+    countriesSearchStore.resetFilters();
   };
 
   const customNoDataComponent = (
@@ -135,7 +122,7 @@ export const CountriesList = observer(() => {
           <CountriesSearch
             onSearch={onSearch}
             onClearFilters={clearFilters}
-            initialSearchTerm={countriesStore.searchQuery}
+            initialSearchTerm={countriesSearchStore.searchQuery}
           />
         </div>
         
@@ -152,12 +139,12 @@ export const CountriesList = observer(() => {
   
       <DataTable
         columns={columns}
-        data={countriesStore.data}
+        data={countriesSearchStore.data}
         pagination
         paginationServer
-        paginationTotalRows={countriesStore.totalItemCount}
+        paginationTotalRows={countriesSearchStore.totalItemCount}
         onChangePage={handlePageChange}
-        paginationPerPage={countriesStore.rowsPerPage}
+        paginationPerPage={countriesSearchStore.rowsPerPage}
         onChangeRowsPerPage={handleRowsPerChange}
         highlightOnHover
         persistTableHead={true}

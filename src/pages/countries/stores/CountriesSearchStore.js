@@ -51,5 +51,5 @@ class CountriesStore{
   }
 }
 
-const countriesStore = new CountriesStore();
-export default countriesStore;
+const countriesSearchStore = new CountriesStore();
+export default countriesSearchStore;
