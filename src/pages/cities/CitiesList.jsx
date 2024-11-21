@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import CitiesSearch from "./search/CitiesSearch";
 import { observer } from "mobx-react";
-import { citiesListStore } from "../cities";
+import citiesSearchStore from './stores/CitiesSearchStore';
+
 import { reaction } from "mobx";
 
 
@@ -20,7 +21,7 @@ export const CitiesList = observer(() => {
     const fetchData = useCallback(async () => {
 
         try {
-            const filter = {...citiesListStore.cityFilter};
+            const filter = {...citiesSearchStore.cityFilter};
 
             const response = await citiesService.getPagedCities(
                 filter.countryId,
@@ -30,7 +31,7 @@ export const CitiesList = observer(() => {
                 null
             );
             setData(response.data.items);
-            citiesListStore.setTotalItemCount(response.data.totalItemCount);
+            citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }
@@ -43,10 +44,10 @@ export const CitiesList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                countryId: citiesListStore.countryId,
-                searchQuery: citiesListStore.searchQuery,
-                page: citiesListStore.page,
-                rowsPerPage: citiesListStore.rowsPerPage,
+                countryId: citiesSearchStore.countryId,
+                searchQuery: citiesSearchStore.searchQuery,
+                page: citiesSearchStore.page,
+                rowsPerPage: citiesSearchStore.rowsPerPage,
             }),
             () => {
                 fetchData();
@@ -125,12 +126,12 @@ export const CitiesList = observer(() => {
     }
 
     const handlePageChange = (newPage) => {
-        citiesListStore.setPage(newPage);
+        citiesSearchStore.setPage(newPage);
     }
 
     const handleRowsPerPage = (newRowsPerPage) => {
-        citiesListStore.setRowsPerPage(newRowsPerPage);
-        citiesListStore.setPage(1);
+        citiesSearchStore.setRowsPerPage(newRowsPerPage);
+        citiesSearchStore.setPage(1);
     };
 
     return (
@@ -155,9 +156,9 @@ export const CitiesList = observer(() => {
                 data={data || []}
                 pagination
                 paginationServer
-                paginationTotalRows={citiesListStore.totalItemCount}
+                paginationTotalRows={citiesSearchStore.totalItemCount}
                 onChangePage={handlePageChange}
-                paginationPerPage={citiesListStore.rowsPerPage}
+                paginationPerPage={citiesSearchStore.rowsPerPage}
                 onChangeRowsPerPage={(newRowsPerPage) =>
                     handleRowsPerPage(newRowsPerPage)
                 }

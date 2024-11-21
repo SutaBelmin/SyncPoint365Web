@@ -2,7 +2,8 @@ import React, { useState, useCallback, useEffect } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
-import { citiesListStore } from "../../cities";
+//import { citiesListStore } from "../../cities";
+import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
 
 const CitiesSearch = observer(() => {
@@ -12,14 +13,14 @@ const CitiesSearch = observer(() => {
     const [countries, setCountries] = useState([]);
 
     const handleSearch = () => {
-        citiesListStore.setQuery(searchQuery);
-        citiesListStore.setCountryId(selectedCountryId?.value || null);
+        citiesSearchStore.setQuery(searchQuery);
+        citiesSearchStore.setCountryId(selectedCountryId?.value || null);
     };
 
     const handleClear = () => {
         setSearchQuery("");
         setSelectedCountryId(null);
-        citiesListStore.clearFilters();
+        citiesSearchStore.clearFilters();
     };
 
     const fetchCountries = useCallback(async () => {

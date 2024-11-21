@@ -1,6 +1,6 @@
 import { action, makeObservable, observable, computed } from "mobx";
 
-class CitiesListStore {
+class CitiesSearchStore {
     totalItemCount = 0;
     countryId = null;
     searchQuery = "";
@@ -62,5 +62,5 @@ class CitiesListStore {
     }
 }
 
-const citiesListStore = new CitiesListStore();
-export default citiesListStore;
+const citiesSearchStore = new CitiesSearchStore();
+export default citiesSearchStore;
