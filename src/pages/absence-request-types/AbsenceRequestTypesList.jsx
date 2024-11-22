@@ -78,15 +78,6 @@ export const AbsenceRequestTypesList = observer (() => {
         absenceRequestTypesListStore.setRowsPerPage(newRowsPerPage);
         absenceRequestTypesListStore.setPageNumber(1);
     };
-
-    const handleSearch = (query, status) => {
-        absenceRequestTypesListStore.setSearchQuery(query);
-        absenceRequestTypesListStore.setIsActive(status);
-        absenceRequestTypesListStore.setPageNumber(1);      
-        fetchData();
-      };
-      
-
     
     const columns = [
         {
@@ -127,7 +118,7 @@ export const AbsenceRequestTypesList = observer (() => {
             <h1 className="text-xl font-bold mb-4">Absence Request Types</h1>
             
             <div className="flex justify-between items-center mb-4">
-                <AbsenceRequestTypesSearch onSearch={handleSearch} />
+                <AbsenceRequestTypesSearch />
                 <button
                     type="button"
                     onClick={addNewRequestClick}

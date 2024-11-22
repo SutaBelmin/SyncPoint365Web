@@ -10,7 +10,7 @@ const dropdownOptions = [
   { value: 'inactive', label: 'Inactive' },
 ];
 
-const AbsenceRequestTypesSearch = observer (({ onSearch }) => {
+const AbsenceRequestTypesSearch = observer (() => {
   const initialValues = {
     searchQuery: absenceRequestTypesListStore.query || '',
     status: dropdownOptions.find(option => option.value === 
@@ -25,7 +25,6 @@ const AbsenceRequestTypesSearch = observer (({ onSearch }) => {
                    null;
     absenceRequestTypesListStore.setSearchQuery(query); 
     absenceRequestTypesListStore.setIsActive(status);
-    onSearch(query, status);
   };
 
   return (
