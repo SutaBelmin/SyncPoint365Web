@@ -52,7 +52,14 @@ const CitiesSearch = observer(() => {
 
             <Select
                 value={selectedCountryId}
-                onChange={setSelectedCountryId}
+                onChange={(value) => {
+                    if (value === null) {
+                        setSelectedCountryId(null);
+                        citiesSearchStore.setCountryId(null);
+                    } else {
+                        setSelectedCountryId(value);
+                    }
+                }}
                 options={countries}
                 placeholder="Select Country"
                 isClearable
@@ -72,7 +79,7 @@ const CitiesSearch = observer(() => {
                 onClick={handleClear}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
-                Clear Filters
+                Clear
             </button>
         </div>
     );
