@@ -12,17 +12,12 @@ import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
+import NoDataMessage from "../../components/no-data-message/NoDataMessage";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
-
-    const customNoDataComponent = (
-        <div className="no-data-message">
-            No requests available.
-        </div>
-    );
 
     const fetchData = async () => {
 
@@ -160,9 +155,9 @@ export const CitiesList = observer(() => {
                 }
                 highlightOnHover
                 persistTableHead={true}
-                noDataComponent={customNoDataComponent} 
                 paginationComponentOptions={paginationComponentOptions}
-            />
+                noDataComponent={<NoDataMessage message="No cities available."/>} />
+
         </div>
     );
 }

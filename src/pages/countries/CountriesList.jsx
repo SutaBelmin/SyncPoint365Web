@@ -13,6 +13,7 @@ import { observer } from "mobx-react";
 import countriesSearchStore from "./stores/CountriesSearchStore";
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
+import NoDataMessage from "../../components/no-data-message/NoDataMessage";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
@@ -53,11 +54,6 @@ export const CountriesList = observer(() => {
     countriesSearchStore.setRowsPerPage(newRowsPerPage);
     countriesSearchStore.setPage(1);
   };
-
-  const customNoDataComponent = (
-    <div className="no-data-message">No requests available.</div>
-  );
-
 
   const onAddCountriesClick = () => {
     openModal(<CountriesAdd closeModal={closeModal} fetchData={fetchData} />);
@@ -157,8 +153,8 @@ export const CountriesList = observer(() => {
         onChangeRowsPerPage={handleRowsPerChange}
         highlightOnHover
         persistTableHead={true}
-        noDataComponent={customNoDataComponent}
         paginationComponentOptions={paginationComponentOptions}
+        noDataComponent={<NoDataMessage message="No countries available."/>}
       />
     </div>
   );

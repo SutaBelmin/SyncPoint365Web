@@ -11,6 +11,7 @@ import { reaction } from "mobx"
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import NoDataMessage from "../../components/no-data-message/NoDataMessage";
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
@@ -18,11 +19,6 @@ export const AbsenceRequestTypesList = observer (() => {
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     
-    const customNoDataComponent = (
-        <div className="no-data-message">
-            No requests available.
-        </div>
-    );
 
     const fetchData = async () => {
         try{
@@ -142,7 +138,7 @@ export const AbsenceRequestTypesList = observer (() => {
                 onChangeRowsPerPage={handleRowsPerPageChange} 
                 progressPending={loading} 
                 persistTableHead={true}
-                noDataComponent={customNoDataComponent} 
+                noDataComponent={<NoDataMessage message="No absence request types available."/>} 
             />
         </div>
     );
