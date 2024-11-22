@@ -17,6 +17,12 @@ export const AbsenceRequestTypesList = observer (() => {
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
+    
+    const customNoDataComponent = (
+        <div className="no-data-message">
+            No requests available.
+        </div>
+    );
 
     const fetchData = async () => {
         try{
@@ -136,7 +142,7 @@ export const AbsenceRequestTypesList = observer (() => {
                 onChangeRowsPerPage={handleRowsPerPageChange} 
                 progressPending={loading} 
                 persistTableHead={true}
-                noDataComponent="No requests available." 
+                noDataComponent={customNoDataComponent} 
             />
         </div>
     );
