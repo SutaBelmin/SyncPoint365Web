@@ -10,10 +10,13 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 
+
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
+    
+    
 
     const fetchData = async () => {
         try{
@@ -134,7 +137,7 @@ export const AbsenceRequestTypesList = observer (() => {
                 onChangeRowsPerPage={handleRowsPerPageChange} 
                 progressPending={loading} 
                 persistTableHead={true}
-                noDataComponent="No requests available."
+                noDataComponent="No requests available." 
             />
         </div>
     );

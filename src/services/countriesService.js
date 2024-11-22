@@ -29,12 +29,11 @@ class CountriesService extends BaseService {
         return response.data;
     }
 
-    async getPagedList(page, rowsPerPage, cancelToken = null) {
-        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}`, {
-            cancelToken: cancelToken,
-        });
+    async getPagedList(filters) {
+        const { page, rowsPerPage, searchQuery } = filters;  
+        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}&query=${searchQuery ? searchQuery : ''}`);
         return response;
-    }
+      }
 }
 
 const countriesService = new CountriesService();

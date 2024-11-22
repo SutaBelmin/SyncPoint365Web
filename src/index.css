@@ -32,3 +32,15 @@
 .input-select-border input[type='text']:focus {
     box-shadow: none;
 }
+
+.no-data-message {
+  text-align: center;
+  font-size: 15px;
+  color: #1b1a19;
+  padding: 20px;
+  font-weight: bold;
+}
+
+svg path[d="M7 10l5 5 5-5z"] {
+  display: none;
+}
