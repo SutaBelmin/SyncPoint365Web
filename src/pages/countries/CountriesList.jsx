@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CountriesAdd, CountriesEdit } from "../countries";
@@ -16,9 +16,9 @@ export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
   const [countriesList, setCountriesList] = useState([]);
 
-  const fetchData = useCallback (async () => {
+  const fetchData = async () => {
     try {
-      const filters = countriesSearchStore.filterObject;
+      const filters = countriesSearchStore.countriesSearchObject; 
       const response = await countriesService.getPagedList(
         filters.page,
         filters.rowsPerPage,
@@ -30,24 +30,22 @@ export const CountriesList = observer(() => {
     } catch (error) {
       toast.error("There was an error. Please contact administrator.");
     }
-  },[]);
+  };
 
   useEffect(() => {
     const disposer = reaction(
-      () => [
-        countriesSearchStore.page,
-        countriesSearchStore.rowsPerPage,
-        countriesSearchStore.searchQuery,
-      ],
+      () => ({
+        filter: countriesSearchStore.countriesSearchObject, 
+      }),
       () => {
         fetchData();
       },
       {
-        fireImmediately: true
+        fireImmediately: true,
       }
     );
     return () => disposer();
-  }, [fetchData]);
+  }, []);
 
   const handlePageChange = (newPage) => {
     countriesSearchStore.setPage(newPage);

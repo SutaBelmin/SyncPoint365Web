@@ -12,7 +12,7 @@ class CountriesStore {
       totalItemCount: observable,
       rowsPerPage: observable,
       searchQuery: observable,
-      filterObject: computed,
+      countriesSearchObject: computed,
       setSearchQuery: action,
       setPage: action,
       setRowsPerPage: action,
@@ -21,7 +21,7 @@ class CountriesStore {
     });
   }
 
-  get filterObject() {
+  get countriesSearchObject() {
     return {
       searchQuery: this.searchQuery,
       page: this.page,
