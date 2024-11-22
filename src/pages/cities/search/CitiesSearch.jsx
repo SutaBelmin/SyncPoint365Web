@@ -83,7 +83,7 @@ export const CitiesSearch = observer(() => {
             <button
                 type="submit"
                 onClick={handleSearch}
-                className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
+                className="btn-new"
             >
                 {t('SEARCH')}
             </button>
@@ -91,7 +91,7 @@ export const CitiesSearch = observer(() => {
             <button
                 type="button"
                 onClick={handleClear}
-                className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
+                className="btn-new"
             >
                 {t('CLEAR')}
             </button>

@@ -3,6 +3,7 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
 import { useTranslation } from 'react-i18next';
+import { toast } from "react-toastify";
 
 export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchData }) => {
     const { t } = useTranslation();
@@ -21,7 +22,9 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
             });
             fetchData();
             closeModal(); 
+            toast.success("Absence request type updated successfully!");
         } catch (error) {
+            toast.error("Failed to update absence request type. Please try again.");
         }
         finally{
             setSubmitting(false);

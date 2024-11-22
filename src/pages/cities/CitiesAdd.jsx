@@ -32,7 +32,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
             await citiesService.add(values);
             fetchData();
             closeModal();
-            toast.success("Added new city succesfully!");
+            toast.success("City added succesfully!");
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }

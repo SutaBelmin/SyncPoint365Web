@@ -15,7 +15,7 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
       toast.success("Country added successfully!");
       closeModal();
     } catch (error) {
-      toast.error("Error while adding country!"); 
+      toast.error("There was an error. Please contact administrator."); 
     } finally {
       setSubmitting(false); 
     }

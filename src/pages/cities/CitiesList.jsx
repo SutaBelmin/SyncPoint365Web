@@ -78,16 +78,16 @@ export const CitiesList = observer(() => {
         {
             name: t('ACTIONS'),
             cell: row => (
-                <div className="flex space-x-2">
+                <div className="flex">
                     <button
                         onClick={() => onEditCityClick(row)}
                         className="text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} className="mr-3" />
+                        <FontAwesomeIcon icon={faEdit}/>
                     </button>
                     <button
                         onClick={() => onDeleteCityClick(row)}
                         className="text-red-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faTrash} className="mr-3" />
+                        <FontAwesomeIcon icon={faTrash}/>
                     </button>
                 </div>
             ),
@@ -114,9 +114,9 @@ export const CitiesList = observer(() => {
             await citiesService.delete(cityId);
             fetchData();
             closeModal();
-            toast.success("Successfully deleted");
+            toast.success("Country deleted successfully!");
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error("Failed to delete the record. Please try again.");
         }
     }
 

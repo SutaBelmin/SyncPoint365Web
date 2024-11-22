@@ -86,7 +86,7 @@ export const CountriesList = observer(() => {
       closeModal();
       toast.success("Country deleted successfully!");
     } catch (error) {
-      toast.error("Failed to delete country. Please try again.");
+      toast.error("Failed to delete the record. Please try again.");
     }
   };
 
@@ -102,22 +102,22 @@ export const CountriesList = observer(() => {
       sortable: true,
     },
     {
-      name: t('ACTIONS'),
-      cell: row => (
-        <div className="flex space-x-2">
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex">
           <button
             type="button"
             onClick={() => onEditCountriesClick(row)}
             className="text-blue-500 hover:underline p-2"
           >
-            <FontAwesomeIcon icon={faEdit} className="mr-3" />
+            <FontAwesomeIcon icon={faEdit}/>
           </button>
           <button
             type="button"
             onClick={() => onDeleteCountriesClick(row)}
             className="text-red-500 hover:underline p-2"
           >
-            <FontAwesomeIcon icon={faTrash} className="mr-3" />
+            <FontAwesomeIcon icon={faTrash}/>
           </button>
         </div>
       )
