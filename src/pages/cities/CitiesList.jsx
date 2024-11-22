@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { citiesService, countriesService } from "../../services";
+import React, { useEffect, useState } from "react";
+import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
@@ -7,51 +7,46 @@ import { CitiesAdd, CitiesEdit } from "../cities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import CitiesSearch from "./search/CitiesSearch";
+import {CitiesSearch} from "./search/CitiesSearch";
+import { observer } from "mobx-react";
+import citiesSearchStore from './stores/CitiesSearchStore';
+import { reaction } from "mobx";
 
-export const CitiesList = () => {
+
+export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
-    const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [totalItemCount, setTotalItemCount] = useState(0);
-    const [countries, setCountries] = useState([]);
-    const [searchParams, setSearchParams] = useState({ searchQuery: "", countryId: null });
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async () => {
+
         try {
-            const response = await citiesService.getPagedCities(
-                searchParams.countryId,
-                searchParams.searchQuery,
-                page,
-                rowsPerPage,
-                null
-            );
+            const filter = {...citiesSearchStore.cityFilter};
+
+            const response = await citiesService.getPagedCities(filter);
+
             setData(response.data.items);
-            setTotalItemCount(response.data.totalItemCount);
+            citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }
-    }, [searchParams, page, rowsPerPage]);
-    
-    const fetchCountries = useCallback(async () => {
-        try {
-            const response = await countriesService.getList();
-            const countriesOption = response.data.map(country => ({
-                value: country.id,
-                label: country.name
-            }));
-            setCountries(countriesOption);
-        } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
-        }
+    };
+
+    useEffect(() => {
+        const disposeReaction = reaction(
+            () => ({
+                filter : citiesSearchStore.cityFilter
+            }),
+            () => {
+                fetchData();
+            },
+            {
+                fireImmediately: true
+            }
+        );
+
+        return () => disposeReaction();
     }, []);
-
-    useEffect(() => { 
-        fetchCountries();
-        fetchData();
-    }, [fetchCountries, fetchData]);
-
+    
     const columns = [
         {
             name: 'Name',
@@ -103,8 +98,9 @@ export const CitiesList = () => {
         openModal(<CitiesEdit city={city} closeModal={closeModal} fetchData={fetchData} />)
     }
 
+
     const onDeleteCityClick = (city) => {
-        openModal(<DeleteConfirmationModal entityName={city.name} onDelete={() => handleDelete(city.id)} onCancel={closeModal} />);
+        openModal(<DeleteConfirmationModal entityName={city.name} id={city.id} onDelete={handleDelete} onCancel={closeModal} />);
     }
 
     const handleDelete = async (cityId) => {
@@ -112,41 +108,16 @@ export const CitiesList = () => {
             await citiesService.delete(cityId);
             fetchData();
             closeModal();
+            toast.success("Successfully deleted");
         } catch (error) {
-
+            toast.error("There was an error. Please contact administrator.");
         }
     }
-
-    const handlePageChange = (newPage) => {
-        setPage(newPage);
-    }
-
-    const handleRowsPerPage = (newRowsPerPage) => {
-        setRowsPerPage(newRowsPerPage);
-        setPage(1);
-    };
-
-    const onSearch = (params) => {
-        setSearchParams(params);
-        setPage(1);
-    };
-
-    const clearFilters = () => {
-        setSearchParams({ searchQuery: "", countryId: null });
-        setPage(1);
-    };
 
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
                 <CitiesSearch
-                    onSearch={onSearch}
-                    onClearFilters={clearFilters}
-                    countries={countries}
-                    initialSearchTerm={searchParams.searchQuery}
-                    initialSelectedCountry={countries.find(
-                        (country) => country.value === searchParams.countryId
-                    )}
                 />
 
                 <button
@@ -165,11 +136,16 @@ export const CitiesList = () => {
                 data={data || []}
                 pagination
                 paginationServer
-                paginationTotalRows={totalItemCount}
-                onChangePage={handlePageChange}
-                paginationPerPage={rowsPerPage}
-                onChangeRowsPerPage={(newRowsPerPage) =>
-                    handleRowsPerPage(newRowsPerPage)
+                paginationTotalRows={citiesSearchStore.totalItemCount}
+                onChangePage={(newPage) => {
+                    citiesSearchStore.setPage(newPage);
+                }}
+                paginationPerPage={citiesSearchStore.rowsPerPage}
+                onChangeRowsPerPage={
+                    (newRowsPerPage) =>{
+                        citiesSearchStore.setRowsPerPage(newRowsPerPage);
+                        citiesSearchStore.setPage(1);
+                    }
                 }
                 highlightOnHover
                 persistTableHead={true}
@@ -177,4 +153,5 @@ export const CitiesList = () => {
             />
         </div>
     );
-};
+}
+);

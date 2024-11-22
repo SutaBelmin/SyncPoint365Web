@@ -1,19 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Select from "react-select";
+import { toast } from "react-toastify";
+import { countriesService } from "../../../services";
+import citiesSearchStore from '../stores/CitiesSearchStore';
+import { observer } from "mobx-react";
 
-const CitiesSearch = ({ onSearch, onClearFilters, countries, initialSearchTerm, initialSelectedCountry }) => {
-    const [searchTerm, setSearchTerm] = useState(initialSearchTerm || "");
-    const [selectedCountryId, setSelectedCountryId] = useState(initialSelectedCountry || null);
+export const CitiesSearch = observer(() => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCountryId, setSelectedCountryId] = useState(null);
+
+    const [countries, setCountries] = useState([]);
 
     const handleSearch = () => {
-        onSearch({ searchQuery: searchTerm, countryId: selectedCountryId?.value || null });
+        citiesSearchStore.setQuery(searchQuery);
+        citiesSearchStore.setCountryId(selectedCountryId?.value || null);
     };
 
     const handleClear = () => {
-        setSearchTerm("");
+        setSearchQuery("");
         setSelectedCountryId(null);
-        onClearFilters();
+        citiesSearchStore.clearFilters();
     };
+
+    const fetchCountries = useCallback(async () => {
+        try {
+            const response = await countriesService.getList();
+            const countriesOption = response.data.map(country => ({
+                value: country.id,
+                label: country.name
+            }));
+            setCountries(countriesOption);
+        } catch (error) {
+            toast.error("There was an error. Please contact administrator.");
+        }
+    }, []);
+
+    useEffect(() => { 
+        fetchCountries();
+    }, [fetchCountries]);
+
 
     return (
         <div className="flex items-center space-x-4 mb-4">
@@ -21,13 +46,20 @@ const CitiesSearch = ({ onSearch, onClearFilters, countries, initialSearchTerm, 
                 type="text"
                 placeholder="Search by City"
                 className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
             />
 
             <Select
                 value={selectedCountryId}
-                onChange={setSelectedCountryId}
+                onChange={(value) => {
+                    if (value === null) {
+                        setSelectedCountryId(null);
+                        citiesSearchStore.setCountryId(null);
+                    } else {
+                        setSelectedCountryId(value);
+                    }
+                }}
                 options={countries}
                 placeholder="Select Country"
                 isClearable
@@ -47,10 +79,9 @@ const CitiesSearch = ({ onSearch, onClearFilters, countries, initialSearchTerm, 
                 onClick={handleClear}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
-                Clear Filters
+                Clear
             </button>
         </div>
     );
-};
-
-export default CitiesSearch;
+}
+);
