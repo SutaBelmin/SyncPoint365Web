@@ -7,7 +7,7 @@ import { CitiesAdd, CitiesEdit } from "../cities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import CitiesSearch from "./search/CitiesSearch";
+import {CitiesSearch} from "./search/CitiesSearch";
 import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
@@ -114,15 +114,6 @@ export const CitiesList = observer(() => {
         }
     }
 
-    const handlePageChange = (newPage) => {
-        citiesSearchStore.setPage(newPage);
-    }
-
-    const handleRowsPerPage = (newRowsPerPage) => {
-        citiesSearchStore.setRowsPerPage(newRowsPerPage);
-        citiesSearchStore.setPage(1);
-    };
-
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
@@ -146,10 +137,15 @@ export const CitiesList = observer(() => {
                 pagination
                 paginationServer
                 paginationTotalRows={citiesSearchStore.totalItemCount}
-                onChangePage={handlePageChange}
+                onChangePage={(newPage) => {
+                    citiesSearchStore.setPage(newPage);
+                }}
                 paginationPerPage={citiesSearchStore.rowsPerPage}
-                onChangeRowsPerPage={(newRowsPerPage) =>
-                    handleRowsPerPage(newRowsPerPage)
+                onChangeRowsPerPage={
+                    (newRowsPerPage) =>{
+                        citiesSearchStore.setRowsPerPage(newRowsPerPage);
+                        citiesSearchStore.setPage(1);
+                    }
                 }
                 highlightOnHover
                 persistTableHead={true}

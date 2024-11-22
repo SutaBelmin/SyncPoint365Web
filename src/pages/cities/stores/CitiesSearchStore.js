@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, computed } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 class CitiesSearchStore {
     totalItemCount = 0;
@@ -8,20 +8,7 @@ class CitiesSearchStore {
     rowsPerPage = 10;
 
     constructor() {
-        makeObservable(this, {
-            totalItemCount: observable,
-            countryId: observable,
-            searchQuery: observable,
-            page: observable,
-            rowsPerPage: observable,
-            setQuery: action,
-            setCountryId: action,
-            setTotalItemCount: action,
-            setPage: action,
-            setRowsPerPage: action,
-            clearFilters: action,
-            cityFilter: computed
-        });
+        makeAutoObservable(this);
     }
 
     setQuery(query) {

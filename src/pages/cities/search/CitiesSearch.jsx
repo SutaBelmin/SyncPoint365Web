@@ -5,7 +5,7 @@ import { countriesService } from "../../../services";
 import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
 
-const CitiesSearch = observer(() => {
+export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCountryId, setSelectedCountryId] = useState(null);
 
@@ -85,4 +85,3 @@ const CitiesSearch = observer(() => {
     );
 }
 );
-export default CitiesSearch;
