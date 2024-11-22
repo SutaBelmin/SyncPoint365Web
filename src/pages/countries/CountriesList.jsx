@@ -19,11 +19,7 @@ export const CountriesList = observer(() => {
   const fetchData = async () => {
     try {
       const filters = countriesSearchStore.countriesSearchObject; 
-      const response = await countriesService.getPagedList(
-        filters.page,
-        filters.rowsPerPage,
-        filters.searchQuery
-      );
+      const response = await countriesService.getPagedList(filters);  
       const responseData = response.data?.items || response.data;
       setCountriesList(responseData);
       countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
