@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import Select from 'react-select';
 import { observer } from 'mobx-react';
-import absenceRequestTypesListStore from '../stores/AbsenceRequestTypesSearchStore';
+import absenceRequestTypesSearchStore from '../stores/AbsenceRequestTypesSearchStore';
 
 const dropdownOptions = [
   { value: 'All', label: 'All' },
@@ -20,8 +20,8 @@ const AbsenceRequestTypesSearch = observer (() => {
     const status = values.status.value === 'active' ? true :
                    values.status.value === 'inactive' ? false :
                    null;
-    absenceRequestTypesListStore.setSearchQuery(query); 
-    absenceRequestTypesListStore.setIsActive(status);
+                   absenceRequestTypesSearchStore.setSearchQuery(query); 
+                   absenceRequestTypesSearchStore.setIsActive(status);
   };
 
   return (

@@ -1,1 +1,1 @@
-export { default as absenceRequestTypesListStore } from './AbsenceRequestTypesListStore';
+export { default as absenceRequestTypesSearchStore } from './AbsenceRequestTypesSearchStore';

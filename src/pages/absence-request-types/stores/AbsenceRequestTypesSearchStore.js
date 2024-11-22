@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-class AbsenceRequestTypesListStore {
+class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
     pageNumber = 1;
@@ -48,5 +48,5 @@ class AbsenceRequestTypesListStore {
     }
 }
 
-const absenceRequestTypesListStore = new AbsenceRequestTypesListStore();
-export default absenceRequestTypesListStore;
+const absenceRequestTypesSearchStore = new AbsenceRequestTypesSearchStore();
+export default absenceRequestTypesSearchStore;

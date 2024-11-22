@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import absenceRequestTypesListStore from "./stores/AbsenceRequestTypesSearchStore";
+import absenceRequestTypesSearchStore from "./stores/AbsenceRequestTypesSearchStore";
 import { absenceRequestTypesService } from "../../services";
 import AbsenceRequestTypesSearch from "./search/AbsenceRequestTypesSearch";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
@@ -17,15 +17,11 @@ export const AbsenceRequestTypesList = observer (() => {
 
     const fetchData = async () => {
         try{
-            const { isActive, query: searchQuery, pageNumber, pageSize: rowsPerPage } = absenceRequestTypesListStore.absenceRequestFilter;
             const response = await absenceRequestTypesService.getPagedList(
-                isActive, 
-                searchQuery, 
-                pageNumber, 
-                rowsPerPage
+                absenceRequestTypesSearchStore.absenceRequestFilter
             );
             setData(response.items);
-            absenceRequestTypesListStore.setTotalItemCount(response.totalItemCount);
+            absenceRequestTypesSearchStore.setTotalItemCount(response.totalItemCount);
         }catch (error){
             toast.error("There was an error. Please contact administrator.")
         } finally {
@@ -58,10 +54,7 @@ export const AbsenceRequestTypesList = observer (() => {
     useEffect(() => {
         const disposer = reaction(
             () => [
-                absenceRequestTypesListStore.isActive,
-                absenceRequestTypesListStore.searchQuery,
-                absenceRequestTypesListStore.pageNumber,
-                absenceRequestTypesListStore.rowsPerPage,
+                absenceRequestTypesSearchStore.absenceRequestFilter
             ],
             () => {
                 fetchData();
@@ -73,12 +66,12 @@ export const AbsenceRequestTypesList = observer (() => {
     }, []);
     
     const handlePageChange = (newPage) => {
-        absenceRequestTypesListStore.setPageNumber(newPage);
+        absenceRequestTypesSearchStore.setPageNumber(newPage);
     }
 
     const handleRowsPerPageChange = (newRowsPerPage) => {
-        absenceRequestTypesListStore.setRowsPerPage(newRowsPerPage);
-        absenceRequestTypesListStore.setPageNumber(1);
+        absenceRequestTypesSearchStore.setRowsPerPage(newRowsPerPage);
+        absenceRequestTypesSearchStore.setPageNumber(1);
     };
     
     const columns = [
@@ -134,9 +127,9 @@ export const AbsenceRequestTypesList = observer (() => {
                 highlightOnHover
                 pagination
                 paginationServer 
-                paginationTotalRows={absenceRequestTypesListStore.totalItemCount}
-                paginationDefaultPage={absenceRequestTypesListStore.pageNumber} 
-                paginationPerPage={absenceRequestTypesListStore.rowsPerPage} 
+                paginationTotalRows={absenceRequestTypesSearchStore.totalItemCount}
+                paginationDefaultPage={absenceRequestTypesSearchStore.pageNumber} 
+                paginationPerPage={absenceRequestTypesSearchStore.rowsPerPage} 
                 onChangePage={handlePageChange} 
                 onChangeRowsPerPage={handleRowsPerPageChange} 
                 progressPending={loading} 
