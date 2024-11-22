@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CountriesAdd, CountriesEdit } from "../countries";
@@ -14,17 +14,18 @@ import { reaction } from "mobx";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
+  const [countriesList, setCountriesList] = useState([]);
 
   const fetchData = async () => {
     try {
-      const filters = countriesSearchStore.getFilterObject();  
+      const filters = countriesSearchStore.filterObject;
       const response = await countriesService.getPagedList(
         filters.page,
         filters.rowsPerPage,
         filters.searchQuery
       );
       const responseData = response.data?.items || response.data;
-      countriesSearchStore.setData(responseData);
+      setCountriesList(responseData);
       countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
     } catch (error) {
       toast.error("There was an error. Please contact administrator.");
@@ -32,6 +33,7 @@ export const CountriesList = observer(() => {
   };
 
   useEffect(() => {
+    fetchData();
     const disposer = reaction(
       () => [
         countriesSearchStore.page,
@@ -54,14 +56,12 @@ export const CountriesList = observer(() => {
     countriesSearchStore.setPage(1);
   };
 
-  const onSearch = (params) => {
+  const onSearch = () => {
     fetchData();
   };
 
   const customNoDataComponent = (
-    <div className="no-data-message">
-      No requests available.
-    </div>
+    <div className="no-data-message">No requests available.</div>
   );
 
   const onAddCountriesClick = () => {
@@ -97,23 +97,31 @@ export const CountriesList = observer(() => {
 
   const columns = [
     {
-      name: 'Name',
-      selector: row => row.name,
+      name: "Name",
+      selector: (row) => row.name,
       sortable: true,
     },
     {
-      name: 'Display Name',
-      selector: row => row.displayName,
+      name: "Display Name",
+      selector: (row) => row.displayName,
       sortable: true,
     },
     {
-      name: 'Actions',
-      cell: row => (
+      name: "Actions",
+      cell: (row) => (
         <div className="flex space-x-2">
-          <button type="button" onClick={() => onEditCountriesClick(row)} className="text-blue-500 hover:underline p-2">
+          <button
+            type="button"
+            onClick={() => onEditCountriesClick(row)}
+            className="text-blue-500 hover:underline p-2"
+          >
             <FontAwesomeIcon icon={faEdit} className="mr-3" />
           </button>
-          <button type="button" onClick={() => onDeleteCountriesClick(row)} className="text-red-500 hover:underline p-2">
+          <button
+            type="button"
+            onClick={() => onDeleteCountriesClick(row)}
+            className="text-red-500 hover:underline p-2"
+          >
             <FontAwesomeIcon icon={faTrash} className="mr-3" />
           </button>
         </div>
@@ -136,12 +144,12 @@ export const CountriesList = observer(() => {
           Add Country
         </button>
       </div>
-  
+
       <BaseModal />
-  
+
       <DataTable
         columns={columns}
-        data={countriesSearchStore.data}
+        data={countriesList}
         pagination
         paginationServer
         paginationTotalRows={countriesSearchStore.totalItemCount}

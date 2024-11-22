@@ -1,7 +1,6 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 
 class CountriesStore {
-  data = [];
   page = 1;
   totalItemCount = 0;
   rowsPerPage = 10;
@@ -9,19 +8,25 @@ class CountriesStore {
 
   constructor() {
     makeObservable(this, {
-      data: observable,
       page: observable,
       totalItemCount: observable,
       rowsPerPage: observable,
       searchQuery: observable,
+      filterObject: computed,
       setSearchQuery: action,
       setPage: action,
       setRowsPerPage: action,
-      setData: action,
       setTotalItemCount: action,
       resetFilters: action,
-      getFilterObject: action,  
     });
+  }
+
+  get filterObject() {
+    return {
+      searchQuery: this.searchQuery,
+      page: this.page,
+      rowsPerPage: this.rowsPerPage,
+    };
   }
 
   setSearchQuery(query) {
@@ -36,10 +41,6 @@ class CountriesStore {
     this.rowsPerPage = rows;
   }
 
-  setData(data) {
-    this.data = data;
-  }
-
   setTotalItemCount(count) {
     this.totalItemCount = count;
   }
@@ -48,14 +49,6 @@ class CountriesStore {
     this.searchQuery = "";
     this.page = 1;
     this.rowsPerPage = 10;
-  }
-
-  getFilterObject() {  
-    return {
-      searchQuery: this.searchQuery,
-      page: this.page,
-      rowsPerPage: this.rowsPerPage,
-    };
   }
 }
 

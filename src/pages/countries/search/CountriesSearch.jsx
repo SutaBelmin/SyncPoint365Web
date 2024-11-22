@@ -5,14 +5,14 @@ export const CountriesSearch = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState(countriesSearchStore.searchQuery);
 
   const handleSearch = () => {
-    countriesSearchStore.setSearchQuery(searchQuery);  
-    onSearch(countriesSearchStore.filters);
+    countriesSearchStore.setSearchQuery(searchQuery);
+    onSearch();
   };
 
   const handleClearFilters = () => {
     countriesSearchStore.resetFilters();
-    setSearchQuery(""); 
-    onSearch(countriesSearchStore.filters);  
+    setSearchQuery("");
+    onSearch();
   };
 
   return (
@@ -24,8 +24,12 @@ export const CountriesSearch = ({ onSearch }) => {
         placeholder="Search countries"
         className="input"
       />
-      <button onClick={handleSearch} className="btn-new">Search</button>
-      <button onClick={handleClearFilters} className="btn-new">Clear Filters</button>
+      <button onClick={handleSearch} className="btn-new">
+        Search
+      </button>
+      <button onClick={handleClearFilters} className="btn-new">
+        Clear Filters
+      </button>
     </div>
   );
 };
