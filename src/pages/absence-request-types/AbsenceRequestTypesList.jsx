@@ -17,11 +17,12 @@ export const AbsenceRequestTypesList = observer (() => {
 
     const fetchData = async () => {
         try{
+            const { isActive, query: searchQuery, pageNumber, pageSize: rowsPerPage } = absenceRequestTypesListStore.absenceRequestFilter;
             const response = await absenceRequestTypesService.getPagedList(
-                absenceRequestTypesListStore.isActive, 
-                absenceRequestTypesListStore.searchQuery, 
-                absenceRequestTypesListStore.pageNumber, 
-                absenceRequestTypesListStore.rowsPerPage
+                isActive, 
+                searchQuery, 
+                pageNumber, 
+                rowsPerPage
             );
             setData(response.items);
             absenceRequestTypesListStore.setTotalItemCount(response.totalItemCount);
@@ -54,7 +55,7 @@ export const AbsenceRequestTypesList = observer (() => {
         openModal(<DeleteConfirmationModal  onDelete={() => handleDelete(absenceRequestType.id)} onCancel={closeModal} name={absenceRequestType.name}/>);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchData();
         const disposer = reaction(
             () => [
@@ -67,8 +68,8 @@ export const AbsenceRequestTypesList = observer (() => {
                 fetchData();
             }
         );
-        return () => disposer;
-    },[]);
+        return () => disposer();
+    }, []);
     
     const handlePageChange = (newPage) => {
         absenceRequestTypesListStore.setPageNumber(newPage);

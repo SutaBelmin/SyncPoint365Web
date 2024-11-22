@@ -33,10 +33,10 @@ class AbsenceRequestTypesListStore {
 
     get absenceRequestFilter() {
         return {
+            isActive: this.isActive,
+            query: this.searchQuery,
             pageNumber: this.pageNumber,
             pageSize: this.rowsPerPage,
-            query: this.searchQuery,
-            isActive: this.isActive,
         };
     }
 
