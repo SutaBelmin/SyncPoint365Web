@@ -1,33 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
+import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
-
+ 
 export const CountriesSearch = () => {
-  const [searchQuery, setSearchQuery] = useState(countriesSearchStore.searchQuery);
-
-  const handleSearch = () => {
-    countriesSearchStore.setSearchQuery(searchQuery);
+  const initialValues = { searchQuery: countriesSearchStore.searchQuery };
+ 
+  const handleSearch = (values) => {
+    countriesSearchStore.setSearchQuery(values.searchQuery);
   };
-
-  const handleClearFilters = () => {
+ 
+  const handleClearFilters = (resetForm) => {
     countriesSearchStore.resetFilters();
-    setSearchQuery("");
+    resetForm();
   };
 
   return (
-    <div className="flex space-x-4">
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Search countries"
-        className="input w-96"
-      />
-      <button onClick={handleSearch} className="btn-new">
-        Search
-      </button>
-      <button onClick={handleClearFilters} className="btn-new">
-        Clear
-      </button>
-    </div>
-  );
+    <Formik
+      initialValues={initialValues}
+      onSubmit={handleSearch}
+    >
+      {({ resetForm }) => (
+        <Form className="flex space-x-4">
+          <Field
+            type="text"
+            name="searchQuery"
+            placeholder="Search countries"
+            autocomplete="off"
+            className="input w-96"
+          />
+          <button type="submit" className="btn-new">
+            Search
+          </button>
+          <button
+            type="button"
+            onClick={() => handleClearFilters(resetForm)}
+            className="btn-new"
+          >
+            Clear
+          </button>
+        </Form>
+      )}
+    </Formik>
+);
+
 };

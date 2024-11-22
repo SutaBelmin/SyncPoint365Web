@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
 import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
+import { Form, Formik, Field } from "formik";
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -16,10 +17,11 @@ export const CitiesSearch = observer(() => {
         citiesSearchStore.setCountryId(selectedCountryId?.value || null);
     };
 
-    const handleClear = () => {
+    const handleClear = (resetForm) => {
         setSearchQuery("");
         setSelectedCountryId(null);
         citiesSearchStore.clearFilters();
+        resetForm()
     };
 
     const fetchCountries = useCallback(async () => {
@@ -41,13 +43,19 @@ export const CitiesSearch = observer(() => {
 
 
     return (
-        <div className="flex items-center space-x-4 mb-4">
-            <input
+        <Formik onSubmit={handleSearch} >
+            {({ resetForm }) => (
+            <Form>
+            <div className="flex items-center space-x-4 mb-4">
+            <Field
                 type="text"
                 placeholder="Search by City"
                 className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                autoComplete="off"
+                onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                }}
             />
 
             <Select
@@ -76,12 +84,15 @@ export const CitiesSearch = observer(() => {
 
             <button
                 type="button"
-                onClick={handleClear}
+                onClick={() => handleClear(resetForm)}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
                 Clear
             </button>
         </div>
+        </Form>
+            )}
+        </Formik>
     );
 }
 );
