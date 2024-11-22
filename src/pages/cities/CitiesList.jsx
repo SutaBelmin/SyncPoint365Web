@@ -10,7 +10,6 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import CitiesSearch from "./search/CitiesSearch";
 import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
-
 import { reaction } from "mobx";
 
 
@@ -23,23 +22,14 @@ export const CitiesList = observer(() => {
         try {
             const filter = {...citiesSearchStore.cityFilter};
 
-            const response = await citiesService.getPagedCities(
-                filter.countryId,
-                filter.searchQuery,
-                filter.page, 
-                filter.rowsPerPage,
-                null
-            );
+            const response = await citiesService.getPagedCities(filter);
+
             setData(response.data.items);
             citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }
     }, []);
-
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -51,13 +41,15 @@ export const CitiesList = observer(() => {
             }),
             () => {
                 fetchData();
+            },
+            {
+                fireImmediately: true
             }
         );
 
         return () => disposeReaction();
-    }, [fetchData]); 
-
-
+    }, [fetchData]);
+    
     const columns = [
         {
             name: 'Name',
