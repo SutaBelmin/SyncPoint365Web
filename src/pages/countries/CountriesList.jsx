@@ -18,10 +18,9 @@ export const CountriesList = observer(() => {
 
   const fetchData = async () => {
     try {
-      const filters = countriesSearchStore.countriesSearchObject; 
+      const filters = countriesSearchStore.countryFilter; 
       const response = await countriesService.getPagedList(filters);  
-      const responseData = response.data?.items || response.data;
-      setCountriesList(responseData);
+      setCountriesList(response.data?.items);
       countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
     } catch (error) {
       toast.error("There was an error. Please contact administrator.");
@@ -31,7 +30,7 @@ export const CountriesList = observer(() => {
   useEffect(() => {
     const disposer = reaction(
       () => ({
-        filter: countriesSearchStore.countriesSearchObject, 
+        filter: countriesSearchStore.countryFilter, 
       }),
       () => {
         fetchData();
@@ -50,10 +49,6 @@ export const CountriesList = observer(() => {
   const handleRowsPerChange = (newRowsPerPage) => {
     countriesSearchStore.setRowsPerPage(newRowsPerPage);
     countriesSearchStore.setPage(1);
-  };
-
-  const onSearch = () => {
-    fetchData();
   };
 
   const customNoDataComponent = (
@@ -130,7 +125,7 @@ export const CountriesList = observer(() => {
       <h1 className="text-xl font-bold mb-4">Countries</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-4">
-          <CountriesSearch onSearch={onSearch} />
+          <CountriesSearch />
         </div>
         <button
           type="button"

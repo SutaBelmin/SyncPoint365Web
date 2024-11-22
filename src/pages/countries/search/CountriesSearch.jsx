@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import countriesSearchStore from "../stores/CountriesSearchStore";
 
-export const CountriesSearch = ({ onSearch }) => {
+export const CountriesSearch = () => {
   const [searchQuery, setSearchQuery] = useState(countriesSearchStore.searchQuery);
 
   const handleSearch = () => {
     countriesSearchStore.setSearchQuery(searchQuery);
-    onSearch();
   };
 
   const handleClearFilters = () => {
     countriesSearchStore.resetFilters();
     setSearchQuery("");
-    onSearch();
   };
 
   return (
