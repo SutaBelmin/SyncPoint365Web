@@ -29,15 +29,13 @@ class CitiesService extends BaseService {
     }
 
     async getPagedCities(filter, cancelToken = null) {
-        const {countryId = null, searchQuery  = "", page = 1, rowsPerPage  = 10} = filter;
-
         try {
             const response = await this.api.get(`/cities/paged`, {
                 params: {
-                    countryId,
-                    query: searchQuery,
-                    page,
-                    pageSize: rowsPerPage
+                    countryId: filter.countryId,
+                    query: filter.searchQuery,
+                    page: filter.page,
+                    pageSize: filter.rowsPerPage
                 },
                 cancelToken: cancelToken,
             });

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
@@ -17,7 +17,7 @@ export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async () => {
 
         try {
             const filter = {...citiesSearchStore.cityFilter};
@@ -29,15 +29,12 @@ export const CitiesList = observer(() => {
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }
-    }, []);
+    };
 
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                countryId: citiesSearchStore.countryId,
-                searchQuery: citiesSearchStore.searchQuery,
-                page: citiesSearchStore.page,
-                rowsPerPage: citiesSearchStore.rowsPerPage,
+                filter : citiesSearchStore.cityFilter
             }),
             () => {
                 fetchData();
@@ -48,7 +45,7 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData]);
+    }, []);
     
     const columns = [
         {
