@@ -49,9 +49,7 @@ const AbsenceRequestTypesSearch = observer (() => {
                 handleSubmit({ ...values, status: selectedOption });
               }}
             />
-
             <button type="submit" className="btn-new h-10" >
-              
               Search
             </button>
           </div>

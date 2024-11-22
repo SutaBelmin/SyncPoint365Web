@@ -31,7 +31,7 @@ export const AbsenceRequestTypesList = observer (() => {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     const handleDelete = async (absenceRequestTypeId) => {
         try {
@@ -41,7 +41,7 @@ export const AbsenceRequestTypesList = observer (() => {
         } catch (error) {
             toast.error("Failed to delete the record. Please try again.");
         }
-    };
+    }
 
     const addNewRequestClick = () => {
         openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
@@ -118,14 +118,12 @@ export const AbsenceRequestTypesList = observer (() => {
     return (
         <div className="flex flex-col  p-4">
             <h1 className="text-xl font-bold mb-4">Absence Request Types</h1>
-            
             <div className="flex justify-between items-center mb-4">
                 <AbsenceRequestTypesSearch />
                 <button
                     type="button"
                     onClick={addNewRequestClick}
-                    className="btn-new h-10"
-                >
+                    className="btn-new h-10">
                     New Request Type
                 </button>
             </div>
