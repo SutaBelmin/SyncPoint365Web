@@ -8,6 +8,7 @@ import { useModal } from "../../context";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { toast } from "react-toastify";
 import { observer } from "mobx-react";
+import { reaction } from "mobx"
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
@@ -55,7 +56,19 @@ export const AbsenceRequestTypesList = observer (() => {
 
     useEffect(()=>{
         fetchData();
-    });
+        const disposer = reaction(
+            () => [
+                absenceRequestTypesListStore.isActive,
+                absenceRequestTypesListStore.searchQuery,
+                absenceRequestTypesListStore.pageNumber,
+                absenceRequestTypesListStore.rowsPerPage,
+            ],
+            () => {
+                fetchData();
+            }
+        );
+        return () => disposer;
+    },[]);
     
     const handlePageChange = (newPage) => {
         absenceRequestTypesListStore.setPageNumber(newPage);

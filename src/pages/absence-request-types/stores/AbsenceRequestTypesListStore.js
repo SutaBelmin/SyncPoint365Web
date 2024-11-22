@@ -1,38 +1,18 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 class AbsenceRequestTypesListStore {
-    //data = []
     searchQuery = '';
     isActive = null;
     pageNumber = 1;
     rowsPerPage = 10;
-    totalItemCount = 0;     
+    totalItemCount = 0;
 
     constructor() {
-        makeObservable(this, {
-            //data: observable,
-            searchQuery: observable,
-            isActive: observable,
-            pageNumber: observable,
-            rowsPerPage: observable,
-            totalItemCount: observable,
-            //setData: action,
-            setSearchQuery: action,
-            setIsActive: action,
-            setPageNumber: action,
-            setRowsPerPage: action,
-            setTotalItemCount: action, 
-            reset: action,
-            absenceRequestFilter: computed
-        });
+        makeAutoObservable(this);
     }
 
-    // setData(value){
-    //     this.data = value;
-    // }
-
     setSearchQuery(value) {
-        this.searchQueryquery = value;
+        this.searchQuery = value;
     }
 
     setIsActive(value) {
@@ -44,7 +24,7 @@ class AbsenceRequestTypesListStore {
     }
 
     setRowsPerPage(value) {
-        this.pageSize = value;
+        this.rowsPerPage = value;
     }
 
     setTotalItemCount(value) {
@@ -52,20 +32,18 @@ class AbsenceRequestTypesListStore {
     }
 
     get absenceRequestFilter() {
-        const filter = {};
-
-        filter.pageNumber = this.pageNumber;
-        filter.pageSize = this.pageSize;
-        filter.query = this.query;
-        filter.isActive = this.isActive;
-
-        return filter;
+        return {
+            pageNumber: this.pageNumber,
+            pageSize: this.rowsPerPage,
+            query: this.searchQuery,
+            isActive: this.isActive,
+        };
     }
 
     reset() {
         this.rowsPerPage = 10;
         this.pageNumber = 1;
-        this.query = '';
+        this.searchQuery = '';
         this.isActive = null;
     }
 }
