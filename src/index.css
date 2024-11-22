@@ -41,6 +41,6 @@
   font-weight: bold;
 }
 
-/* svg path {
+svg path[d="M7 10l5 5 5-5z"] {
   display: none;
-} */
+}

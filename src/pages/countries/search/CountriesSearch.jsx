@@ -22,13 +22,13 @@ export const CountriesSearch = ({ onSearch }) => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search countries"
-        className="input"
+        className="input w-96"
       />
       <button onClick={handleSearch} className="btn-new">
         Search
       </button>
       <button onClick={handleClearFilters} className="btn-new">
-        Clear Filters
+        Clear
       </button>
     </div>
   );
