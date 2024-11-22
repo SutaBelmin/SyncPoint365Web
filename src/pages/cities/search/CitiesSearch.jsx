@@ -5,12 +5,13 @@ import { countriesService } from "../../../services";
 import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
 import { Formik, Form, Field } from "formik";
+import { useTranslation } from 'react-i18next';
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCountryId, setSelectedCountryId] = useState(null);
-
     const [countries, setCountries] = useState([]);
+    const { t } = useTranslation();
 
     const initialValues = {
         searchQuery: '',
@@ -55,7 +56,7 @@ export const CitiesSearch = observer(() => {
             <Field
                 type="text"
                 name= "searchQuery"
-                placeholder="Search by City"
+                placeholder={t('SEARCH_BY_CITY')}
                 className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -73,7 +74,7 @@ export const CitiesSearch = observer(() => {
                     }
                 }}
                 options={countries}
-                placeholder="Select Country"
+                placeholder={t('SELECT_A_COUNTRY')}
                 isClearable
                 isSearchable
                 className="h-10 border-gray-300 input-select-border w-[25rem]"
@@ -84,7 +85,7 @@ export const CitiesSearch = observer(() => {
                 onClick={handleSearch}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
-                Search
+                {t('SEARCH')}
             </button>
 
             <button
@@ -92,7 +93,7 @@ export const CitiesSearch = observer(() => {
                 onClick={handleClear}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
-                Clear
+                {t('CLEAR')}
             </button>
         </div>
         </Form>

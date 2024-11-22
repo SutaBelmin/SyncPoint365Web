@@ -2,11 +2,13 @@ import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
+import { useTranslation } from 'react-i18next';
 
 export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchData }) => {
+    const { t } = useTranslation();
 
     const validationSchema = Yup.object({
-        name: Yup.string().required("Name is required!")
+        name: Yup.string().required(t('NAME_IS_REQUIRED'))
     });
 
     const editHandling = async (values, actions) => {
@@ -29,7 +31,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
 
     return (
         <div className="p-4">
-            <h2 className="text-lg font-bold mb-4">Edit Absence Request</h2>
+            <h2 className="text-lg font-bold mb-4">{t('EDIT_ABSENCE_REQUEST')}</h2>
             <Formik
                 initialValues={{
                     id: absenceRequestType.id,
@@ -42,13 +44,13 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                 <Form>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Name
+                            {t('NAME')}
                         </label>
                         <Field
                             type="text"
                             id="name"
                             name="name"
-                            placeholder="Enter your name"
+                            placeholder={t('ENTER_YOUR_NAME')}
                             className="w-full p-2 border rounded"
                         />
                 </div>
@@ -60,7 +62,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                             className="mr-2"
                         />
                         <label htmlFor="isActive" className="text-sm font-bold text-gray-700">
-                            Active
+                            {t('ACTIVE')}
                         </label>
                     </div>
                     <div className="flex justify-end space-x-2">
@@ -69,13 +71,13 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                             onClick={closeModal}
                             className="rounded bg-gray-500 text-white px-4 py-2 hover:bg-gray-400 mr-2"
                         >
-                            Cancel
+                            {t('CANCEL')}
                         </button>
                         <button
                             type="submit"
                             className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
                         >
-                            Submit 
+                            {t('SAVE')} 
                         </button>
                     </div>
                 </Form>

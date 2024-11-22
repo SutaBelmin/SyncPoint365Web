@@ -3,8 +3,10 @@ import * as Yup from "yup";
 import { countriesService } from "../../services";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
 export const CountriesAdd = ({ closeModal, fetchData }) => {
+  const { t } = useTranslation();
 
   const addCountry = async (values, setSubmitting) => {
     try {
@@ -20,13 +22,13 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required!"),
-    displayName: Yup.string().required("Display name is required!"),
+    name: Yup.string().required(t('NAME_IS_REQUIRED')),
+    displayName: Yup.string().required(t('DISPLAY_NAME_IS_REQUIRED')),
   });
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Add Country</h1>
+      <h1 className="text-xl font-bold mb-4">{t('ADD_COUNTRY')}</h1>
       <Formik
         initialValues={{
           name: "",
@@ -44,14 +46,14 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Name
+                {t('NAME')}
               </label>
               <Field
                 type="text"
                 id="name"
                 name="name"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Name"
+                placeholder={t('NAME')}
               />
               <ErrorMessage
                 name="name"
@@ -65,14 +67,14 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
                 htmlFor="displayName"
                 className="block text-sm font-medium text-gray-700"
               >
-                Display Name
+                {t('DISPLAY_NAME')}
               </label>
               <Field
                 type="text"
                 id="displayName"
                 name="displayName"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Display Name"
+                placeholder={t('DISPLAY_NAME')}
               />
               <ErrorMessage
                 name="displayName"
@@ -87,14 +89,14 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
                 onClick={closeModal}
                 className="btn-cancel"
               >
-                Cancel
+                {t('CANCEL')}
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="btn-save"
               >
-                Save
+                {t('SAVE')}
               </button>
             </div>
           </Form>

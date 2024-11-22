@@ -7,13 +7,14 @@ import { userService } from '../../services';
 import DataTable from 'react-data-table-component';
 import './UsersList.css';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 export const UsersList = () => {
     const { openModal } = useModal();
-
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
     const [totalItemCount, setTotalItemCount] = useState(0);
+    const { t } = useTranslation();
 
 
     const fetchData = useCallback(async () => {
@@ -38,17 +39,17 @@ export const UsersList = () => {
 
     const columns = [
         {
-            name: 'First Name',
+            name: t('FIRST_NAME'),
             selector: row => row.firstName,
             sortable: true,
         },
         {
-            name: 'Last Name',
+            name: t('LAST_NAME'),
             selector: row => row.lastName,
             sortable: true,
         },
         {
-            name: 'Full Name',
+            name: t('FULL_NAME'),
             selector: row => row.fullName,
             sortable: true,
         },
@@ -59,16 +60,21 @@ export const UsersList = () => {
         setPage(newPage);
     };
 
+    const paginationComponentOptions = {
+        rowsPerPageText: t('ROWS_PER_PAGE'), 
+        rangeSeparatorText: t('OF'), 
+    };
+
     return (
         <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Users</h1>
+            <h1 className="text-xl font-bold mb-4">{t('USERS')}</h1>
             <div className="flex justify-end mb-4">
                 <button
                     type='button'
                     onClick={onAddUserClick}
                     className="btn-new"
                 >
-                    Add User
+                    {t('ADD_USER')}
                 </button>
             </div>
             <BaseModal />
@@ -83,6 +89,7 @@ export const UsersList = () => {
                 highlightOnHover
                 persistTableHead={true}
                 noDataComponent="No users available."
+                paginationComponentOptions={paginationComponentOptions}
             />
         </div>
     );

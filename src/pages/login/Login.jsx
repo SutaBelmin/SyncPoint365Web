@@ -8,15 +8,17 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { authService } from '../../services';
 import LanguageSwitcher from '../../components/localization';
-
-const validationSchema = Yup.object({
-  email: Yup.string().required('Email is required'),
-  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required')
-});
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
+
+  const validationSchema = Yup.object({
+    email: Yup.string().required(t('EMAIL_IS_REQUIRED')),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required(t('PASSWORD_IS_REQUIRED'))
+  });
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
@@ -43,7 +45,7 @@ const Login = () => {
             <FontAwesomeIcon icon={faUser} className="text-white text-2xl" />
           </div>
           <h2 className="mt-10 text-2xl font-bold tracking-tight text-gray-900">
-            Sign in to your account
+            {t('SIGN_IN_TO_YOUR_ACCOUNT')}
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -72,11 +74,11 @@ const Login = () => {
                 <div>
                   <div className="flex items-center justify-between">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-900">
-                      Password
+                      {t('PASSWORD')}
                     </label>
                     <div className="text-sm">
                       <a href="/" className="font-semibold text-black hover:text-gray-700">
-                        Forgot password?
+                        {t('FORGOT_PASSWORD?')}
                       </a>
                     </div>
                   </div>
@@ -85,7 +87,7 @@ const Login = () => {
                       id="password"
                       name="password"
                       type="password"
-                      placeholder="Password"
+                      placeholder={t('PASSWORD')}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm"
                     />
                     <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
@@ -97,7 +99,7 @@ const Login = () => {
                     disabled={isSubmitting}
                     className="flex w-full justify-center rounded-md bg-gray-800 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
                   >
-                    Sign In
+                    {t('SIGN_IN')}
                   </button>
                 </div>
               </Form>
