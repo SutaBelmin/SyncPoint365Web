@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import absenceRequestTypesListStore from "./stores/AbsenceRequestTypesListStore";
+import absenceRequestTypesListStore from "./stores/AbsenceRequestTypesSearchStore";
 import { absenceRequestTypesService } from "../../services";
 import AbsenceRequestTypesSearch from "./search/AbsenceRequestTypesSearch";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
@@ -56,7 +56,6 @@ export const AbsenceRequestTypesList = observer (() => {
     }
 
     useEffect(() => {
-        fetchData();
         const disposer = reaction(
             () => [
                 absenceRequestTypesListStore.isActive,
@@ -66,6 +65,8 @@ export const AbsenceRequestTypesList = observer (() => {
             ],
             () => {
                 fetchData();
+            }, {
+                fireImmediately: true
             }
         );
         return () => disposer();

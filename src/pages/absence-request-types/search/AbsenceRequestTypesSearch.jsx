@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import Select from 'react-select';
 import { observer } from 'mobx-react';
-import absenceRequestTypesListStore from '../stores/AbsenceRequestTypesListStore';
+import absenceRequestTypesListStore from '../stores/AbsenceRequestTypesSearchStore';
 
 const dropdownOptions = [
   { value: 'All', label: 'All' },
