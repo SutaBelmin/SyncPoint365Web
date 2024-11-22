@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
 class AbsenceRequestTypesListStore {
-    data = []
+    //data = []
     searchQuery = '';
     isActive = null;
     pageNumber = 1;
@@ -10,13 +10,13 @@ class AbsenceRequestTypesListStore {
 
     constructor() {
         makeObservable(this, {
-            data: observable,
+            //data: observable,
             searchQuery: observable,
             isActive: observable,
             pageNumber: observable,
             rowsPerPage: observable,
             totalItemCount: observable,
-            setData: action,
+            //setData: action,
             setSearchQuery: action,
             setIsActive: action,
             setPageNumber: action,
@@ -27,12 +27,12 @@ class AbsenceRequestTypesListStore {
         });
     }
 
-    setData(value){
-        this.data = value;
-    }
+    // setData(value){
+    //     this.data = value;
+    // }
 
     setSearchQuery(value) {
-        this.searchQuery = value;
+        this.searchQueryquery = value;
     }
 
     setIsActive(value) {

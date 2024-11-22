@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 
 export const AbsenceRequestTypesList = observer (() => {
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
 
@@ -21,7 +22,7 @@ export const AbsenceRequestTypesList = observer (() => {
                 absenceRequestTypesListStore.pageNumber, 
                 absenceRequestTypesListStore.rowsPerPage
             );
-            absenceRequestTypesListStore.setData(response.items);
+            setData(response.items);
             absenceRequestTypesListStore.setTotalItemCount(response.totalItemCount);
         }catch (error){
             toast.error("There was an error. Please contact administrator.")
@@ -125,7 +126,7 @@ export const AbsenceRequestTypesList = observer (() => {
             <BaseModal />
             <DataTable
                 columns={columns}
-                data={absenceRequestTypesListStore.data}
+                data={data}
                 highlightOnHover
                 pagination
                 paginationServer 
