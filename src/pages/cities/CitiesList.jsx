@@ -11,11 +11,12 @@ import {CitiesSearch} from "./search/CitiesSearch";
 import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
-
+import { useTranslation } from 'react-i18next';
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
+    const { t } = useTranslation();
 
     const customNoDataComponent = (
         <div className="no-data-message">
@@ -55,27 +56,27 @@ export const CitiesList = observer(() => {
     
     const columns = [
         {
-            name: 'Name',
+            name: t('NAME'),
             selector: row => row.name,
             sortable: true,
         },
         {
-            name: 'Display Name',
+            name: t('DISPLAY_NAME'),
             selector: row => row.displayName,
             sortable: true,
         },
         {
-            name: 'Country Name',
+            name: t('COUNTRY_NAME'),
             selector: row => row.country?.name,
             sortable: true,
         },
         {
-            name: 'Postal Code',
+            name: t('POSTAL_CODE'),
             selector: row => row.postalCode,
             sortable: true,
         },
         {
-            name: 'Actions',
+            name: t('ACTIONS'),
             cell: row => (
                 <div className="flex space-x-2">
                     <button
@@ -119,6 +120,11 @@ export const CitiesList = observer(() => {
         }
     }
 
+    const paginationComponentOptions = {
+        rowsPerPageText: t('ROWS_PER_PAGE'), 
+        rangeSeparatorText: t('OF'), 
+    };
+
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
@@ -130,7 +136,7 @@ export const CitiesList = observer(() => {
                     onClick={onAddCitiesClick}
                     className="btn-new h-10"
                 >
-                    Add City
+                    {t('ADD_CITY')}
                 </button>
             </div>
 
@@ -154,8 +160,9 @@ export const CitiesList = observer(() => {
                 }
                 highlightOnHover
                 persistTableHead={true}
-                noDataComponent={customNoDataComponent} />
-
+                noDataComponent={customNoDataComponent} 
+                paginationComponentOptions={paginationComponentOptions}
+            />
         </div>
     );
 }

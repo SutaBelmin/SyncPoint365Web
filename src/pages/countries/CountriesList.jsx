@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
-import { CountriesAdd, CountriesEdit } from "../countries";
+import { CountriesAdd, CountriesEdit } from "../countries"
 import { countriesService } from "../../services";
+import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -11,15 +12,17 @@ import { CountriesSearch } from "./search/CountriesSearch";
 import { observer } from "mobx-react";
 import countriesSearchStore from "./stores/CountriesSearchStore";
 import { reaction } from "mobx";
+import { useTranslation } from 'react-i18next';
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
   const [countriesList, setCountriesList] = useState([]);
+  const { t } = useTranslation();
 
   const fetchData = async () => {
     try {
-      const filters = countriesSearchStore.countryFilter; 
-      const response = await countriesService.getPagedList(filters);  
+      const filters = countriesSearchStore.countryFilter;
+      const response = await countriesService.getPagedList(filters);
       setCountriesList(response.data?.items);
       countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
     } catch (error) {
@@ -30,7 +33,7 @@ export const CountriesList = observer(() => {
   useEffect(() => {
     const disposer = reaction(
       () => ({
-        filter: countriesSearchStore.countryFilter, 
+        filter: countriesSearchStore.countryFilter,
       }),
       () => {
         fetchData();
@@ -54,6 +57,7 @@ export const CountriesList = observer(() => {
   const customNoDataComponent = (
     <div className="no-data-message">No requests available.</div>
   );
+
 
   const onAddCountriesClick = () => {
     openModal(<CountriesAdd closeModal={closeModal} fetchData={fetchData} />);
@@ -88,18 +92,18 @@ export const CountriesList = observer(() => {
 
   const columns = [
     {
-      name: "Name",
-      selector: (row) => row.name,
+      name: t('NAME'),
+      selector: row => row.name,
       sortable: true,
     },
     {
-      name: "Display Name",
-      selector: (row) => row.displayName,
+      name: t('DISPLAY_NAME'),
+      selector: row => row.displayName,
       sortable: true,
     },
     {
-      name: "Actions",
-      cell: (row) => (
+      name: t('ACTIONS'),
+      cell: row => (
         <div className="flex space-x-2">
           <button
             type="button"
@@ -116,26 +120,30 @@ export const CountriesList = observer(() => {
             <FontAwesomeIcon icon={faTrash} className="mr-3" />
           </button>
         </div>
-      ),
-    },
+      )
+    }
   ];
+
+  const paginationComponentOptions = {
+    rowsPerPageText: t('ROWS_PER_PAGE'),
+    rangeSeparatorText: t('OF'),
+  };
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Countries</h1>
+      <h1 className="text-xl font-bold mb-4">{t('COUNTRIES')}</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-4">
           <CountriesSearch />
         </div>
         <button
-          type="button"
+          type='button'
           onClick={onAddCountriesClick}
           className="btn-new"
         >
-          Add Country
+          {t('ADD_COUNTRY')}
         </button>
       </div>
-
       <BaseModal />
 
       <DataTable
@@ -150,7 +158,18 @@ export const CountriesList = observer(() => {
         highlightOnHover
         persistTableHead={true}
         noDataComponent={customNoDataComponent}
+        paginationComponentOptions={paginationComponentOptions}
       />
     </div>
   );
 });
+
+
+
+
+
+
+
+
+
+

@@ -3,8 +3,10 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
+    const { t } = useTranslation();
 
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -28,7 +30,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
 
     return (
         <div className="p-4">
-            <h2 className="text-lg font-bold mb-4">New Absence Request</h2>
+            <h2 className="text-lg font-bold mb-4">{t('NEW_ABSENCE_REQUEST')}</h2>
             <Formik
                 initialValues={{
                     name: "",
@@ -40,13 +42,13 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                 <Form>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                            Name
+                            {t('NAME')}
                         </label>
                         <Field
                             type="text"
                             id="name"
                             name="name"
-                            placeholder="Enter your name"
+                            placeholder={t('ENTER_YOUR_NAME')}
                             className="w-full p-2 border rounded"
                         />
                 </div>
@@ -58,7 +60,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             className="mr-2"
                         />
                         <label htmlFor="isActive" className="text-sm font-bold text-gray-700">
-                            Active
+                            {t('ACTIVE')}
                         </label>
                     </div>
                     <div className="flex justify-end gap-4">
@@ -67,13 +69,13 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             onClick={closeModal}
                               className="btn-cancel"
                         >
-                            Cancel
+                            {t('CANCEL')}
                         </button>
                         <button
                             type="submit"
                             className="btn-save"
                         >
-                            Add 
+                            {t('ADD')} 
                         </button>
                     </div>
                 </Form>

@@ -5,10 +5,11 @@ import { citiesService, countriesService } from "../../services";
 import { useState } from "react";
 import Select from "react-select";
 import { toast } from 'react-toastify';
-
+import { useTranslation } from 'react-i18next';
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
+    const { t } = useTranslation();
 
     const fetchCountries = async () => {
         try {
@@ -39,19 +40,19 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
 
     const validationSchema = Yup.object({
         name: Yup.string()
-            .required("Name is required!"),
+            .required(t('NAME_IS_REQUIRED')),
         displayName: Yup.string()
-            .required("Display name is required!"),
+            .required(t('DISPLAY_NAME_IS_REQUIRED')),
         postalCode: Yup.string()
-            .required("Postal code is required!")
-            .matches(/^\d+$/, "Postal code must be a number"),
+            .required(t('POSTAL_CODE_IS_REQUIRED'))
+            .matches(/^\d+$/, t('POSTAL_CODE_NUMBER')),
         countryId: Yup.string()
             .required("Country Id is required!")
     });
 
     return (
         <div className="flex flex-col items-center p-4">
-            <h2 className="text-xl font-semibold mb-4">Add City</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('ADD_CITY')}</h2>
             <Formik
                 initialValues={{
                     name: "",
@@ -66,39 +67,39 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                     <Form className="w-full max-w-sm">
                         <div className="mb-4">
                             <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
-                                Name
+                                {t('NAME')}
                             </label>
                             <Field
                                 type="text"
                                 id="name"
                                 name="name"
-                                placeholder="Name"
+                                placeholder={t('NAME')}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
                         </div>
                         <div className="mb-4">
                             <label htmlFor="displayName" className="block text-gray-700 text-sm font-bold mb-2">
-                                Display Name
+                            {t('DISPLAY_NAME')}
                             </label>
                             <Field
                                 type="text"
                                 id="displayName"
                                 name="displayName"
-                                placeholder="Display name"
+                                placeholder={t('DISPLAY_NAME')}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             <ErrorMessage name="displayName" component="div" className="text-red-500 text-sm" />
                         </div>
                         <div className="mb-4">
                             <label htmlFor="postalCode" className="block text-gray-700 text-sm font-bold mb-2">
-                                Postal Code
+                            {t('POSTAL_CODE')}
                             </label>
                             <Field
                                 type="text"
                                 id="postalCode"
                                 name="postalCode"
-                                placeholder="Postal code"
+                                placeholder={t('POSTAL_CODE')}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             <ErrorMessage name="postalCode" component="div" className="text-red-500 text-sm" />
@@ -106,7 +107,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
 
                         <div className="mb-4">
                             <label htmlFor="countryId" className="block text-gray-700 text-sm font-bold mb-2">
-                                Country
+                                {t('SELECT_A_COUNTRY')}
                             </label>
                             <Select
                                 options={countries}
@@ -114,7 +115,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                     setFieldValue("countryId", selectedOption ? selectedOption.value : "")
                                 }
                                 value={countries.find((option) => option.value === values.countryId) || null}
-                                placeholder="Select a Country"
+                                placeholder={t('SELECT_A_COUNTRY')}
                                 className="input-select-border"
                             />
                             <ErrorMessage name="countryId" component="div" className="text-red-500 text-sm" />
@@ -126,13 +127,13 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                 onClick={closeModal}
                                 className="btn-cancel"
                             >
-                                Cancel
+                                {t('CANCEL')}
                             </button>
                             <button
                                 type="submit"
                                 className="btn-save"
                             >
-                                Save
+                                {t('SAVE')}
                             </button>
                         </div>
                     </Form>

@@ -8,7 +8,7 @@ i18n
   .use(initReactI18next)
   .init({
     defaultNS: "translation",
-    lng: "en-US",
+    lng: localStorage.getItem("selectedLanguage") || "en-US",
     fallbackLng: "en-US",
     debug: false,
     load: "currentOnly",

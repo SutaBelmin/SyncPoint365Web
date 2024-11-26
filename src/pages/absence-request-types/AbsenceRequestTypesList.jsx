@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import absenceRequestTypesSearchStore from "./stores/AbsenceRequestTypesSearchStore";
 import { absenceRequestTypesService } from "../../services";
-import AbsenceRequestTypesSearch from "./search/AbsenceRequestTypesSearch";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { useModal } from "../../context";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
+import { useTranslation } from 'react-i18next';
 
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
-    
-    
+    const { t } = useTranslation();
 
     const fetchData = async () => {
         try{
@@ -79,32 +78,32 @@ export const AbsenceRequestTypesList = observer (() => {
     
     const columns = [
         {
-            name: "Name",
-            selector: (row) => row.name,
-            sortable: true,
+            name: t('NAME'),
+            selector: (row) => row.name, 
+            sortable: true
         },
         {
-            name: "Active",
-            selector: (row) => (row.isActive ? "Yes" : "No"),
-            sortable: true,
+            name: t('ACTIVE'),
+            selector: (row) => row.isActive ? "Yes" : "No", 
+            sortable: true
         },
         {
-            name: "Actions",
-            cell: (row) => (
+            name: t('ACTIONS'),
+            cell: row => (
                 <div className="flex space-x-2">
                     <button
                         type="button"
                         onClick={() => editRequestClick(row)}
                         className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-500"
                     >
-                        Edit
+                        {t('EDIT')}
                     </button>
                     <button
                         type="button"
                         onClick={() => deleteRequestClick(row)}
                         className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500"
                     >
-                        Delete
+                        {t('DELETE')}
                     </button>
                 </div>
             ),
@@ -112,15 +111,15 @@ export const AbsenceRequestTypesList = observer (() => {
     ];
 
     return (
-        <div className="flex flex-col  p-4">
-            <h1 className="text-xl font-bold mb-4">Absence Request Types</h1>
-            <div className="flex justify-between items-center mb-4">
-                <AbsenceRequestTypesSearch />
+        <div className="p-4">
+            <h1 className="text-xl font-bold mb-4">{t('ABSENCE_REQUEST_TYPES')}</h1>
+            <div className="flex justify-end mb-4">
                 <button
                     type="button"
                     onClick={addNewRequestClick}
-                    className="btn-new h-10">
-                    New Request Type
+                    className="btn-new"
+                >
+                    {t('NEW_REQUEST_TYPE')}
                 </button>
             </div>
             <BaseModal />
