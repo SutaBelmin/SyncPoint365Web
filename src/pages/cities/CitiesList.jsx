@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
-import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
+import { DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CitiesAdd, CitiesEdit } from "../cities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,12 +10,11 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { CitiesSearch } from "./search/CitiesSearch";
 import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
-import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import { NoDataMessage } from "../../components/common-ui";
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-
+import { useLocation } from "react-router-dom";  
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
@@ -26,9 +25,16 @@ export const CitiesList = observer(() => {
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = { ...citiesSearchStore.cityFilter };
+            const params = new URLSearchParams(location.search);
+            const searchQuery = params.get("searchQuery") || '';
+            const selectedCountryId = params.get("selectedCountryId") || null;
 
+            citiesSearchStore.setQuery(searchQuery);
+            citiesSearchStore.setCountryId(selectedCountryId);
+
+            const filter = { ...citiesSearchStore.cityFilter };
             const response = await citiesService.getPagedCities(filter, signal);
+            const location = useLocation();  
 
             setData(response.data.items);
             citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
@@ -97,16 +103,15 @@ export const CitiesList = observer(() => {
 
     const onAddCitiesClick = () => {
         openModal(<CitiesAdd closeModal={closeModal} fetchData={fetchData} />);
-    }
+    };
 
     const onEditCityClick = (city) => {
-        openModal(<CitiesEdit city={city} closeModal={closeModal} fetchData={fetchData} />)
-    }
-
+        openModal(<CitiesEdit city={city} closeModal={closeModal} fetchData={fetchData} />);
+    };
 
     const onDeleteCityClick = (city) => {
         openModal(<DeleteConfirmationModal entityName={city.name} id={city.id} onDelete={handleDelete} onCancel={closeModal} />);
-    }
+    };
 
     const handleDelete = async (cityId) => {
         try {
@@ -117,7 +122,7 @@ export const CitiesList = observer(() => {
         } catch (error) {
             toast.error(t('FAILED_TO_DELETE'));
         }
-    }
+    };
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
@@ -125,7 +130,6 @@ export const CitiesList = observer(() => {
             <div className="flex flex-col gap-4 md:flex-row">
                 <CitiesSearch />
                 <button
-                    type="button"
                     onClick={onAddCitiesClick}
                     className="btn-common h-10 md:ml-auto"
                 >
@@ -157,5 +161,4 @@ export const CitiesList = observer(() => {
             </div>
         </div>
     );
-}
-);
+});

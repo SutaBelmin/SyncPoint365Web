@@ -16,6 +16,7 @@ import { PaginationOptions } from "../../components/common-ui";
 import AbsenceRequestTypesSearch from "./search";
 import { useRequestAbort } from "../../components/hooks";
 
+
 export const AbsenceRequestTypesList = observer(() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
-import citiesSearchStore from '../stores/CitiesSearchStore';
+import { useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react";
 import { Formik, Form, Field } from "formik";
 import { useTranslation } from 'react-i18next';
@@ -14,29 +14,20 @@ export const CitiesSearch = observer(() => {
     const [countries, setCountries] = useState([]);
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const initialValues = {
         searchQuery: '',
         selectedCountryId: null,
     }
 
-    const handleSearch = () => {
-        citiesSearchStore.setQuery(searchQuery);
-        citiesSearchStore.setCountryId(selectedCountryId?.value || null);
-    };
-
-    const handleClear = () => {
-        setSearchQuery("");
-        setSelectedCountryId(null);
-        citiesSearchStore.clearFilters();
-    };
-
     const fetchCountries = useCallback(async () => {
         try {
             const response = await countriesService.getList(signal);
             const countriesOption = response.data.map(country => ({
                 value: country.id,
-                label: country.name
+                label: country.name,
             }));
             setCountries(countriesOption);
         } catch (error) {
@@ -48,6 +39,40 @@ export const CitiesSearch = observer(() => {
         fetchCountries();
     }, [fetchCountries]);
 
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const query = params.get("searchQuery") || '';
+        const countryId = params.get("selectedCountryId") || null;
+
+        setSearchQuery(query);
+
+        if (countryId) {
+            const selectedCountry = countries.find(country => country.value === countryId);
+            setSelectedCountryId(selectedCountry || null);
+        } else {
+            setSelectedCountryId(null);
+        }
+    }, [location.search, countries]);
+
+    const handleSearch = () => {
+        const queryParams = new URLSearchParams();
+        if (searchQuery) queryParams.append("searchQuery", searchQuery);
+        if (selectedCountryId) queryParams.append("selectedCountryId", selectedCountryId.value);
+
+        navigate({
+            pathname: location.pathname,
+            search: queryParams.toString(),
+        });
+    };
+
+    const handleClear = () => {
+        setSearchQuery("");
+        setSelectedCountryId(null);
+        navigate({
+            pathname: location.pathname,
+            search: "",  
+        });
+    };
 
     return (
         <Formik
@@ -100,5 +125,4 @@ export const CitiesSearch = observer(() => {
             }
         </Formik>
     );
-}
-);
+});

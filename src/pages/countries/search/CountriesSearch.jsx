@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const CountriesSearch = () => {
-  const initialValues = { searchQuery: countriesSearchStore.searchQuery };
   const { t } = useTranslation();
+ 
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const getQueryParams = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get("query") || "";
+  }
+
+  const initialValues = { searchQuery: getQueryParams() };
 
   const handleSearch = (values) => {
     countriesSearchStore.setSearchQuery(values.searchQuery);
+    navigate(`?query=${values.searchQuery}`);
   };
 
   const handleClearFilters = (resetForm) => {
     countriesSearchStore.resetFilters();
-    resetForm();
+    resetForm({ values: { searchQuery: '' } });
+    navigate('?query=');
   };
+
+  useEffect(() => {
+    if (getQueryParams()) {
+      countriesSearchStore.setSearchQuery(getQueryParams());
+    }
+  });
 
   return (
     <Formik
