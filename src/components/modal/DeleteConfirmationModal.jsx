@@ -1,15 +1,17 @@
 import React from "react";
 import { Formik, Form } from "formik";
+import { useTranslation } from 'react-i18next';
 
 export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) => {
   // const handleDelete = () => {
   //   onDelete(id);
   // };
+  const { t } = useTranslation();
 
   return (
     <div className="p-8 bg-white rounded-lg relative w-full max-w-md">
       <div className="flex justify-center items-center mb-6">
-        <h2 className="text-xl font-bold">Confirm Delete</h2>
+        <h2 className="text-xl font-bold">{t('CONFIRM_DELETE')}</h2>
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none text-3xl"
@@ -19,7 +21,7 @@ export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) 
       </div>
 
       <p className="text-gray-700 mb-12 text-center">
-        Are you sure you want to delete <strong>{entityName}</strong>?
+       {t('ARE_YOU_SURE_YOU_WANT_TO_DELETE?')} <strong>{entityName}</strong>?
       </p>
 
       <Formik
@@ -38,13 +40,13 @@ export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) 
                 onClick={onCancel}
                 className="btn-no"
               >
-                No
+                {t('NO')}
               </button>
               <button
                 type="submit"
                  className="btn-yes"
               >
-                Yes
+                {t('YES')}
               </button>
             </div>
           </Form>
