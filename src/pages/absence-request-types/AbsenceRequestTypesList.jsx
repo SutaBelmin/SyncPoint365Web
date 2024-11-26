@@ -1,34 +1,21 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
 import DataTable from "react-data-table-component";
 import absenceRequestTypesSearchStore from "./stores/AbsenceRequestTypesSearchStore";
-=======
-import DataTable from 'react-data-table-component';
->>>>>>> 4152f9a (Adding translations for every page.)
 import { absenceRequestTypesService } from "../../services";
-import AbsenceRequestTypesSearch from "./search/AbsenceRequestTypesSearch";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { useModal } from "../../context";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { toast } from "react-toastify";
-<<<<<<< HEAD
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
-=======
 import { useTranslation } from 'react-i18next';
->>>>>>> 4152f9a (Adding translations for every page.)
 
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
-<<<<<<< HEAD
-    
-    
-=======
     const { t } = useTranslation();
->>>>>>> 4152f9a (Adding translations for every page.)
 
     const fetchData = async () => {
         try{

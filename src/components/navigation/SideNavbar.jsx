@@ -1,7 +1,6 @@
 import React from 'react';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarCheck, faCity, faEarthAmerica, faUser, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faUserTimes, faCity, faEarthAmerica, faUser, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 const SideNavbar = () => {
