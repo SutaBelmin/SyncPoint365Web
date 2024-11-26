@@ -12,7 +12,7 @@ import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
-import NoDataMessage from "../../components/no-data-message/NoDataMessage";
+import NoDataMessage from "../../components/common-ui/NoDataMessage";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
@@ -122,6 +122,7 @@ export const CitiesList = observer(() => {
 
     return (
         <div>
+            <h1 className="text-xl font-bold mb-4">Cities</h1>
             <div className="flex justify-between items-center mb-4">
                 <CitiesSearch
                 />

@@ -13,7 +13,7 @@ import { observer } from "mobx-react";
 import countriesSearchStore from "./stores/CountriesSearchStore";
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
-import NoDataMessage from "../../components/no-data-message/NoDataMessage";
+import NoDataMessage from "../../components/common-ui/NoDataMessage";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();

@@ -11,7 +11,7 @@ import { reaction } from "mobx"
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import NoDataMessage from "../../components/no-data-message/NoDataMessage";
+import NoDataMessage from "../../components/common-ui/NoDataMessage";
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);

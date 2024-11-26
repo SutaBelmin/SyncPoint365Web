@@ -1,6 +1,8 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) => {
   // const handleDelete = () => {
@@ -15,17 +17,15 @@ export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) 
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none text-2xl"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button> 
+        > 
+         <FontAwesomeIcon icon = {faTimes} className="w-6 h-6"/>
+        </button>
+        </div>
+
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+            Confirm Delete
+          </h2>
         </div>
         
       <p className="text-gray-700 mb-12 text-center">
