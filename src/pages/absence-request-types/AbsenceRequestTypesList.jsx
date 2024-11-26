@@ -150,4 +150,5 @@ export const AbsenceRequestTypesList = observer(() => {
             />
         </div>
     );
+    
 });
