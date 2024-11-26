@@ -4,12 +4,18 @@ import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
 import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
+import { Formik, Form, Field } from "formik";
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCountryId, setSelectedCountryId] = useState(null);
 
     const [countries, setCountries] = useState([]);
+
+    const initialValues = {
+        searchQuery: '',
+        selectedCountryId: null,
+        }
 
     const handleSearch = () => {
         citiesSearchStore.setQuery(searchQuery);
@@ -41,13 +47,19 @@ export const CitiesSearch = observer(() => {
 
 
     return (
+        <Formik 
+        initialValues={initialValues} onSubmit={handleSearch}>
+            {
+            <Form>
         <div className="flex items-center space-x-4 mb-4">
-            <input
+            <Field
                 type="text"
+                name= "searchQuery"
                 placeholder="Search by City"
                 className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                autocomplete="off"
             />
 
             <Select
@@ -63,11 +75,12 @@ export const CitiesSearch = observer(() => {
                 options={countries}
                 placeholder="Select Country"
                 isClearable
+                isSearchable
                 className="h-10 border-gray-300 input-select-border w-[25rem]"
             />
 
             <button
-                type="button"
+                type="submit"
                 onClick={handleSearch}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
@@ -82,6 +95,9 @@ export const CitiesSearch = observer(() => {
                 Clear
             </button>
         </div>
+        </Form>
+        }
+        </Formik>
     );
 }
 );
