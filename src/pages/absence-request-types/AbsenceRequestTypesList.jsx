@@ -54,8 +54,8 @@ export const AbsenceRequestTypesList = observer (() => {
     }
 
     const deleteRequestClick = (absenceRequestType) => {
-        openModal(<DeleteConfirmationModal  onDelete={() => handleDelete(absenceRequestType.id)} onCancel={closeModal} name={absenceRequestType.name}/>);
-    }
+        openModal(<DeleteConfirmationModal entityName={absenceRequestType.name} onDelete={() => handleDelete(absenceRequestType.id)} onCancel={closeModal}/>);
+        }
 
     useEffect(() => {
         const disposer = reaction(
