@@ -12,17 +12,12 @@ import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
+import NoDataMessage from "../../components/common-ui/NoDataMessage";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
-
-    const customNoDataComponent = (
-        <div className="no-data-message">
-            No requests available.
-        </div>
-    );
 
     const fetchData = async () => {
 
@@ -78,16 +73,16 @@ export const CitiesList = observer(() => {
         {
             name: t('ACTIONS'),
             cell: row => (
-                <div className="flex space-x-2">
+                <div className="flex">
                     <button
                         onClick={() => onEditCityClick(row)}
                         className="text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} className="mr-3" />
+                        <FontAwesomeIcon icon={faEdit}/>
                     </button>
                     <button
                         onClick={() => onDeleteCityClick(row)}
                         className="text-red-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faTrash} className="mr-3" />
+                        <FontAwesomeIcon icon={faTrash}/>
                     </button>
                 </div>
             ),
@@ -114,9 +109,9 @@ export const CitiesList = observer(() => {
             await citiesService.delete(cityId);
             fetchData();
             closeModal();
-            toast.success("Successfully deleted");
+            toast.success("Country deleted successfully!");
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error("Failed to delete the record. Please try again.");
         }
     }
 
@@ -126,10 +121,12 @@ export const CitiesList = observer(() => {
     };
 
     return (
-        <div>
+        <div className="p-4">
+            <h1 className="text-xl font-bold mb-4">Cities</h1>
             <div className="flex justify-between items-center mb-4">
-                <CitiesSearch
-                />
+                <div className="flex space-x-4">
+                <CitiesSearch/>
+                </div>
 
                 <button
                     type="button"
@@ -160,9 +157,9 @@ export const CitiesList = observer(() => {
                 }
                 highlightOnHover
                 persistTableHead={true}
-                noDataComponent={customNoDataComponent} 
                 paginationComponentOptions={paginationComponentOptions}
-            />
+                noDataComponent={<NoDataMessage message="No cities available."/>} />
+
         </div>
     );
 }

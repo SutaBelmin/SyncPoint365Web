@@ -9,13 +9,16 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { useTranslation } from 'react-i18next';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import NoDataMessage from "../../components/common-ui/NoDataMessage";
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
+    
 
     const fetchData = async () => {
         try{
@@ -36,6 +39,7 @@ export const AbsenceRequestTypesList = observer (() => {
             await absenceRequestTypesService.delete(absenceRequestTypeId);
             fetchData();
             closeModal();
+            toast.success("Country deleted successfully!");
         } catch (error) {
             toast.error("Failed to delete the record. Please try again.");
         }
@@ -50,8 +54,8 @@ export const AbsenceRequestTypesList = observer (() => {
     }
 
     const deleteRequestClick = (absenceRequestType) => {
-        openModal(<DeleteConfirmationModal  onDelete={() => handleDelete(absenceRequestType.id)} onCancel={closeModal} name={absenceRequestType.name}/>);
-    }
+        openModal(<DeleteConfirmationModal entityName={absenceRequestType.name} onDelete={() => handleDelete(absenceRequestType.id)} onCancel={closeModal}/>);
+        }
 
     useEffect(() => {
         const disposer = reaction(
@@ -88,22 +92,20 @@ export const AbsenceRequestTypesList = observer (() => {
             sortable: true
         },
         {
-            name: t('ACTIONS'),
-            cell: row => (
-                <div className="flex space-x-2">
+            name: "Actions",
+            cell: (row) => (
+                <div className="flex">
                     <button
                         type="button"
                         onClick={() => editRequestClick(row)}
-                        className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-500"
-                    >
-                        {t('EDIT')}
+                        className="text-blue-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faEdit}/>
                     </button>
                     <button
                         type="button"
                         onClick={() => deleteRequestClick(row)}
-                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500"
-                    >
-                        {t('DELETE')}
+                        className="text-red-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faTrash}/>
                     </button>
                 </div>
             ),
@@ -136,7 +138,7 @@ export const AbsenceRequestTypesList = observer (() => {
                 onChangeRowsPerPage={handleRowsPerPageChange} 
                 progressPending={loading} 
                 persistTableHead={true}
-                noDataComponent="No requests available." 
+                noDataComponent={<NoDataMessage message="No absence request types available."/>} 
             />
         </div>
     );

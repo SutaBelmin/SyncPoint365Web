@@ -30,7 +30,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
 
     return (
         <div className="p-4">
-            <h2 className="text-lg font-bold mb-4">{t('NEW_ABSENCE_REQUEST')}</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('NEW_ABSENCE_REQUEST')}</h2>
             <Formik
                 initialValues={{
                     name: "",
@@ -41,7 +41,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
             >
                 <Form>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                        <label className="block text-sm font-medium text-gray-700" htmlFor="name">
                             {t('NAME')}
                         </label>
                         <Field
@@ -49,7 +49,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             id="name"
                             name="name"
                             placeholder={t('ENTER_YOUR_NAME')}
-                            className="w-full p-2 border rounded"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                 </div>
                     <div className="mb-4 flex items-center">
@@ -59,7 +59,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             name="isActive"
                             className="mr-2"
                         />
-                        <label htmlFor="isActive" className="text-sm font-bold text-gray-700">
+                        <label htmlFor="isActive" className="block text-sm font-medium text-gray-700">
                             {t('ACTIVE')}
                         </label>
                     </div>

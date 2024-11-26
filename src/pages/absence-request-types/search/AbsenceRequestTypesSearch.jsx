@@ -32,8 +32,8 @@ const AbsenceRequestTypesSearch = observer (() => {
             <Field
               name="searchQuery"
               type="text"
-              placeholder="Search..."
-              className="border-gray-300 h-10 hover:text-gray-900 px-4 py-2 rounded-md text-sm"
+              placeholder="Search absence request types"
+              className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
               autoComplete="off"
             />
 
@@ -42,7 +42,7 @@ const AbsenceRequestTypesSearch = observer (() => {
               placeholder="Select"
               options={dropdownOptions}
               isSearchable={false}
-              className="h-10 hover:bg-gray-100 border-gray-200 w-40 text-sm"
+              className="h-10 border-gray-300 input-select-border w-[25rem]"
               value={values.status}
               onChange={(selectedOption) => {
                 setFieldValue('status', selectedOption);

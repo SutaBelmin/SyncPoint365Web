@@ -52,12 +52,11 @@ export const CitiesSearch = observer(() => {
         initialValues={initialValues} onSubmit={handleSearch}>
             {
             <Form>
-        <div className="flex items-center space-x-4 mb-4">
+        <div className="flex items-center space-x-4">
             <Field
                 type="text"
                 name= "searchQuery"
                 placeholder={t('SEARCH_BY_CITY')}
-                className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autocomplete="off"
@@ -83,7 +82,7 @@ export const CitiesSearch = observer(() => {
             <button
                 type="submit"
                 onClick={handleSearch}
-                className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
+                className="btn-new"
             >
                 {t('SEARCH')}
             </button>
@@ -91,7 +90,7 @@ export const CitiesSearch = observer(() => {
             <button
                 type="button"
                 onClick={handleClear}
-                className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
+                className="btn-new"
             >
                 {t('CLEAR')}
             </button>

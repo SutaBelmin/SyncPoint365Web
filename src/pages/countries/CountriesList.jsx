@@ -13,6 +13,7 @@ import { observer } from "mobx-react";
 import countriesSearchStore from "./stores/CountriesSearchStore";
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
+import NoDataMessage from "../../components/common-ui/NoDataMessage";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
@@ -54,11 +55,6 @@ export const CountriesList = observer(() => {
     countriesSearchStore.setPage(1);
   };
 
-  const customNoDataComponent = (
-    <div className="no-data-message">No requests available.</div>
-  );
-
-
   const onAddCountriesClick = () => {
     openModal(<CountriesAdd closeModal={closeModal} fetchData={fetchData} />);
   };
@@ -86,7 +82,7 @@ export const CountriesList = observer(() => {
       closeModal();
       toast.success("Country deleted successfully!");
     } catch (error) {
-      toast.error("Failed to delete country. Please try again.");
+      toast.error("Failed to delete the record. Please try again.");
     }
   };
 
@@ -102,22 +98,22 @@ export const CountriesList = observer(() => {
       sortable: true,
     },
     {
-      name: t('ACTIONS'),
-      cell: row => (
-        <div className="flex space-x-2">
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex">
           <button
             type="button"
             onClick={() => onEditCountriesClick(row)}
             className="text-blue-500 hover:underline p-2"
           >
-            <FontAwesomeIcon icon={faEdit} className="mr-3" />
+            <FontAwesomeIcon icon={faEdit}/>
           </button>
           <button
             type="button"
             onClick={() => onDeleteCountriesClick(row)}
             className="text-red-500 hover:underline p-2"
           >
-            <FontAwesomeIcon icon={faTrash} className="mr-3" />
+            <FontAwesomeIcon icon={faTrash}/>
           </button>
         </div>
       )
@@ -157,8 +153,8 @@ export const CountriesList = observer(() => {
         onChangeRowsPerPage={handleRowsPerChange}
         highlightOnHover
         persistTableHead={true}
-        noDataComponent={customNoDataComponent}
         paginationComponentOptions={paginationComponentOptions}
+        noDataComponent={<NoDataMessage message="No countries available."/>}
       />
     </div>
   );
