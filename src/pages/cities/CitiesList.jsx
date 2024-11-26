@@ -121,11 +121,12 @@ export const CitiesList = observer(() => {
     };
 
     return (
-        <div>
+        <div className="p-4">
             <h1 className="text-xl font-bold mb-4">Cities</h1>
             <div className="flex justify-between items-center mb-4">
-                <CitiesSearch
-                />
+                <div className="flex space-x-4">
+                <CitiesSearch/>
+                </div>
 
                 <button
                     type="button"

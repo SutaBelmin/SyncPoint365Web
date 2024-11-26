@@ -32,7 +32,7 @@ const AbsenceRequestTypesSearch = observer (() => {
             <Field
               name="searchQuery"
               type="text"
-              placeholder="Search..."
+              placeholder="Search absence request types"
               className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
               autoComplete="off"
             />

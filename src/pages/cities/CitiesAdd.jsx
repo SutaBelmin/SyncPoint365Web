@@ -51,7 +51,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
     });
 
     return (
-        <div className="flex flex-col items-center p-4">
+        <div className="p-4">
             <h2 className="text-xl font-semibold mb-4">{t('ADD_CITY')}</h2>
             <Formik
                 initialValues={{
@@ -66,7 +66,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                 {({ values, setFieldValue }) => (
                     <Form className="w-full max-w-sm">
                         <div className="mb-4">
-                            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                 {t('NAME')}
                             </label>
                             <Field
@@ -74,12 +74,12 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                 id="name"
                                 name="name"
                                 placeholder={t('NAME')}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                             <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="displayName" className="block text-gray-700 text-sm font-bold mb-2">
+                            <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
                             {t('DISPLAY_NAME')}
                             </label>
                             <Field
@@ -87,12 +87,12 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                 id="displayName"
                                 name="displayName"
                                 placeholder={t('DISPLAY_NAME')}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                             <ErrorMessage name="displayName" component="div" className="text-red-500 text-sm" />
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="postalCode" className="block text-gray-700 text-sm font-bold mb-2">
+                            <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
                             {t('POSTAL_CODE')}
                             </label>
                             <Field
@@ -100,13 +100,13 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                                 id="postalCode"
                                 name="postalCode"
                                 placeholder={t('POSTAL_CODE')}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                             <ErrorMessage name="postalCode" component="div" className="text-red-500 text-sm" />
                         </div>
 
                         <div className="mb-4">
-                            <label htmlFor="countryId" className="block text-gray-700 text-sm font-bold mb-2">
+                            <label htmlFor="countryId" className="block text-sm font-medium text-gray-700">
                                 {t('SELECT_A_COUNTRY')}
                             </label>
                             <Select

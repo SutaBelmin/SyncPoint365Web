@@ -51,7 +51,7 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
 
     return (
         <div className="p-4">
-            <h1 className="text-xl font-bold flex flex-col items-center">{t('EDIT_CITY')}</h1>
+            <h1 className="text-xl font-bold mb-4">{t('EDIT_CITY')}</h1>
             <Formik
                 initialValues={{
                     id: city.id,
@@ -117,7 +117,7 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
                         </div>
 
                         <div className="mb-4">
-                            <label htmlFor="countryId" className="block text-gray-700 text-sm font-bold mb-2">
+                            <label htmlFor="countryId" className="block text-sm font-medium text-gray-700">
                                 {t('SELECT_A_COUNTRY')}
                             </label>
                             <Select

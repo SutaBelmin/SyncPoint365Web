@@ -15,7 +15,7 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
       toast.success("Country added successfully!");
       closeModal();
     } catch (error) {
-      toast.error("There was an error. Please contact administrator."); 
+       toast.error("There was an error. Please contact administrator."); 
     } finally {
       setSubmitting(false); 
     }
@@ -28,7 +28,7 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">{t('ADD_COUNTRY')}</h1>
+      <h1 className="text-xl font-semibold mb-4">{t('ADD_COUNTRY')}</h1>
       <Formik
         initialValues={{
           name: "",

@@ -1,17 +1,25 @@
 .rdt_TableHead .rdt_TableCol {
-    text-align: center;
     font-size: 14px;
     font-weight: 600;
-    color: #1F2937;
+    color: #1F2937; 
     font-family: sans-serif;
-    background-color: #F9FAFB;
 }
 
-.rdt_TableBody .rdt_TableCell {
-    text-align: center;
+.rdt_TableBody .rdt_TableRow {
     font-size: 14px;
     font-weight: 500;
     color: #1F2937;
     font-family: sans-serif;
 }
 
+.rdt_Pagination {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1F2937;
+    font-family: sans-serif;
+}
+.rdt_Pagination select {
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none; 
+}

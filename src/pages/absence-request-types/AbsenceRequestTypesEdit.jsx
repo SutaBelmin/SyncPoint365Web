@@ -34,7 +34,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
 
     return (
         <div className="p-4">
-            <h2 className="text-lg font-bold mb-4">{t('EDIT_ABSENCE_REQUEST')}</h2>
+            <h2 className="text-xl font-bold mb-4">{t('EDIT_ABSENCE_REQUEST')}</h2>
             <Formik
                 initialValues={{
                     id: absenceRequestType.id,
@@ -46,7 +46,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
             >
                 <Form>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                        <label className="block text-sm font-medium text-gray-700" htmlFor="name">
                             {t('NAME')}
                         </label>
                         <Field
@@ -64,7 +64,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                             name="isActive"
                             className="mr-2"
                         />
-                        <label htmlFor="isActive" className="text-sm font-bold text-gray-700">
+                        <label htmlFor="isActive" className="block text-sm font-medium text-gray-700">
                             {t('ACTIVE')}
                         </label>
                     </div>

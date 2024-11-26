@@ -52,12 +52,11 @@ export const CitiesSearch = observer(() => {
         initialValues={initialValues} onSubmit={handleSearch}>
             {
             <Form>
-        <div className="flex items-center space-x-4 mb-4">
+        <div className="flex items-center space-x-4">
             <Field
                 type="text"
                 name= "searchQuery"
                 placeholder={t('SEARCH_BY_CITY')}
-                className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autocomplete="off"
