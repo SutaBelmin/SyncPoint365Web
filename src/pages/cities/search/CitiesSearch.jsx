@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
-import { useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react";
 import { Formik, Form, Field } from "formik";
 import { useTranslation } from 'react-i18next';
 import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
+import { useSearchParams } from "react-router-dom";
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -16,11 +16,12 @@ export const CitiesSearch = observer(() => {
     const { signal } = useRequestAbort();
     const location = useLocation();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams(); 
 
     const initialValues = {
-        searchQuery: '',
-        selectedCountryId: null,
-    }
+        searchQuery: searchParams.get("searchQuery") || '',
+        selectedCountryId: searchParams.get("selectedCountryId") || null,
+    };
 
     const fetchCountries = useCallback(async () => {
         try {
@@ -40,9 +41,8 @@ export const CitiesSearch = observer(() => {
     }, [fetchCountries]);
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const query = params.get("searchQuery") || '';
-        const countryId = params.get("selectedCountryId") || null;
+        const query = searchParams.get("searchQuery") || '';
+        const countryId = searchParams.get("selectedCountryId") || null;
 
         setSearchQuery(query);
 
@@ -52,26 +52,19 @@ export const CitiesSearch = observer(() => {
         } else {
             setSelectedCountryId(null);
         }
-    }, [location.search, countries]);
+    }, [searchParams, countries]);
 
     const handleSearch = () => {
         const queryParams = new URLSearchParams();
         if (searchQuery) queryParams.append("searchQuery", searchQuery);
         if (selectedCountryId) queryParams.append("selectedCountryId", selectedCountryId.value);
-
-        navigate({
-            pathname: location.pathname,
-            search: queryParams.toString(),
-        });
+        setSearchParams(queryParams);
     };
 
     const handleClear = () => {
         setSearchQuery("");
         setSelectedCountryId(null);
-        navigate({
-            pathname: location.pathname,
-            search: "",  
-        });
+        setSearchParams({});
     };
 
     return (
