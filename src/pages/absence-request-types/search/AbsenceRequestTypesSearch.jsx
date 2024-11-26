@@ -7,49 +7,46 @@ import { useSearchParams } from 'react-router-dom';
 import absenceRequestTypesSearchStore from '../stores/AbsenceRequestTypesSearchStore';
 import { useTranslation } from 'react-i18next';
 
+const dropdownOptions = [
+    { value: 'All', label: 'All' },
+    { value: 'active', label: 'Active' },
+    { value: 'inactive', label: 'Inactive' }
+];
+
 const AbsenceRequestTypesSearch = observer(() => {
     const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState({ value: 'All', label: 'All' });
-  const [searchParams, setSearchParams] = useSearchParams(); 
-  const location = useLocation();
-  const navigate = useNavigate();
- 
-  const dropdownOptions = [
-    { value: 'All', label: t('ALL') },
-    { value: 'active', label: t('ACTIVE') },
-    { value: 'inactive', label: t('INACTIVE') },
-];
-const initialValues = {
-    searchQuery: '',
-    status: { value: 'All', label: t('ALL') },
-}
-const handleSubmit = (values) => {
-        const queryParams = new URLSearchParams();
-        if (values.searchQuery) queryParams.append('searchQuery', values.searchQuery);
-        if (values.status.value !== 'All') queryParams.append('status', values.status.value);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState({ value: 'All', label: 'All' });
+    const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
+    const navigate = useNavigate();
 
-        absenceRequestTypesSearchStore.setSearchQuery(values.searchQuery);
-        absenceRequestTypesSearchStore.setIsActive(values.status.value === 'active' ? true : values.status.value === 'inactive' ? false : null);
 
-        setSearchParams(queryParams);
-        navigate({
-            pathname: location.pathname,
-            search: queryParams.toString(),
-        });
-    };
+    const initialValues = {
+        searchQuery: '',
+        status: { value: 'All', label: t('ALL') },
+    }
+
     useEffect(() => {
-        const query = searchParams.get('searchQuery') || '';
-        const status = searchParams.get('status') || 'All';
-        absenceRequestTypesSearchStore.setSearchQuery(query);
-        absenceRequestTypesSearchStore.setIsActive(status === 'active' ? true : status === 'inactive' ? false : null);
+        absenceRequestTypesSearchStore.initializeQueryParams(searchParams);
     }, [searchParams]);
 
+
+    const handleSubmit = (values) => {
+        absenceRequestTypesSearchStore.setSearchQuery(values.searchQuery);
+        absenceRequestTypesSearchStore.setIsActive(values.status.value === null ? null : (values.status.value === 'active'));
+        setSearchParams(absenceRequestTypesSearchStore.syncWithQueryParams());
+    };
 
 
 
     return (
-        <Formik initialValues={{ initialValues }}
+        <Formik initialValues={{
+            searchQuery: searchParams.get('searchQuery') || '',
+            status: dropdownOptions.find(
+                (option) => option.value === searchParams.get('status')
+            ) || dropdownOptions[0],
+        }}
             enableReinitialize
             onSubmit={handleSubmit}>
             {({ setFieldValue, values }) => (
@@ -63,7 +60,6 @@ const handleSubmit = (values) => {
                         value={values.searchQuery}
                         onChange={(e) => {
                             setFieldValue('searchQuery', e.target.value);
-                            setSearchQuery(e.target.value);
                         }}
                     />
                     <Select
@@ -75,7 +71,6 @@ const handleSubmit = (values) => {
                         value={values.status}
                         onChange={(selectedOption) => {
                             setFieldValue('status', selectedOption);
-                            handleSubmit({ ...values, status: selectedOption });
                         }}
                     />
                     <button type="submit" className="btn-common h-10">
