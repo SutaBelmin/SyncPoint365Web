@@ -126,7 +126,7 @@ export const CountriesList = observer(() => {
   ];
 
   return (
-    <div className="p-4">
+    <div className="pt-16">
       <h1 className="text-xl font-bold mb-4">{t('COUNTRIES')}</h1>
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-4">
