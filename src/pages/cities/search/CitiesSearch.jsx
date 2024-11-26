@@ -74,6 +74,7 @@ export const CitiesSearch = observer(() => {
                 options={countries}
                 placeholder="Select Country"
                 isClearable
+                isSearchable
                 className="h-10 border-gray-300 input-select-border w-[25rem]"
             />
 
