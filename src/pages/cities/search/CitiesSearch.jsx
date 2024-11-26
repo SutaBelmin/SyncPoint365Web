@@ -12,6 +12,11 @@ export const CitiesSearch = observer(() => {
 
     const [countries, setCountries] = useState([]);
 
+    const initialValues = {
+        searchQuery: '',
+        selectedCountryId: null,
+        }
+
     const handleSearch = () => {
         citiesSearchStore.setQuery(searchQuery);
         citiesSearchStore.setCountryId(selectedCountryId?.value || null);
@@ -43,11 +48,7 @@ export const CitiesSearch = observer(() => {
 
     return (
         <Formik 
-        initialValues={{
-            searchQuery: "", 
-            selectedCountryId: null,
-            }}
-            onSubmit={handleSearch}>
+        initialValues={initialValues} onSubmit={handleSearch}>
             {
             <Form>
         <div className="flex items-center space-x-4 mb-4">
