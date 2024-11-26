@@ -8,35 +8,23 @@ import absenceRequestTypesSearchStore from '../stores/AbsenceRequestTypesSearchS
 import { useTranslation } from 'react-i18next';
 
 const AbsenceRequestTypesSearch = observer(() => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedStatus, setSelectedStatus] = useState({ value: 'All', label: 'All' });
-    const [searchParams, setSearchParams] = useSearchParams();
-    const location = useLocation();
-    const navigate = useNavigate();
     const { t } = useTranslation();
-
-    const dropdownOptions = [
-        { value: 'All', label: t('ALL') },
-        { value: 'active', label: t('ACTIVE') },
-        { value: 'inactive', label: t('INACTIVE') },
-    ];
-
-    const initialValues = {
-        searchQuery: '',
-        status: { value: 'All', label: t('ALL') },
-    }
-
-    useEffect(() => {
-        const query = searchParams.get('searchQuery') || '';
-        const status = searchParams.get('status') || 'All';
-        absenceRequestTypesSearchStore.setSearchQuery(query);
-        absenceRequestTypesSearchStore.setIsActive(status === 'active' ? true : status === 'inactive' ? false : null);
-    }, [searchParams]);
-
-
-
-
-    const handleSubmit = (values) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState({ value: 'All', label: 'All' });
+  const [searchParams, setSearchParams] = useSearchParams(); 
+  const location = useLocation();
+  const navigate = useNavigate();
+ 
+  const dropdownOptions = [
+    { value: 'All', label: t('ALL') },
+    { value: 'active', label: t('ACTIVE') },
+    { value: 'inactive', label: t('INACTIVE') },
+];
+const initialValues = {
+    searchQuery: '',
+    status: { value: 'All', label: t('ALL') },
+}
+const handleSubmit = (values) => {
         const queryParams = new URLSearchParams();
         if (values.searchQuery) queryParams.append('searchQuery', values.searchQuery);
         if (values.status.value !== 'All') queryParams.append('status', values.status.value);
@@ -50,9 +38,18 @@ const AbsenceRequestTypesSearch = observer(() => {
             search: queryParams.toString(),
         });
     };
+    useEffect(() => {
+        const query = searchParams.get('searchQuery') || '';
+        const status = searchParams.get('status') || 'All';
+        absenceRequestTypesSearchStore.setSearchQuery(query);
+        absenceRequestTypesSearchStore.setIsActive(status === 'active' ? true : status === 'inactive' ? false : null);
+    }, [searchParams]);
+
+
+
 
     return (
-        <Formik initialValues={{ searchQuery, status: selectedStatus }}
+        <Formik initialValues={{ initialValues }}
             enableReinitialize
             onSubmit={handleSubmit}>
             {({ setFieldValue, values }) => (

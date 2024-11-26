@@ -9,6 +9,8 @@ export const CountriesSearch = () => {
   const { t } = useTranslation();
    const location = useLocation();
   const navigate = useNavigate();
+
+export const CountriesSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("query") || "";
 
