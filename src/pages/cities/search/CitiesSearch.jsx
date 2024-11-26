@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
 import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
-import { Form, Formik, Field } from "formik";
+import { Formik, Form, Field } from "formik";
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -17,11 +17,10 @@ export const CitiesSearch = observer(() => {
         citiesSearchStore.setCountryId(selectedCountryId?.value || null);
     };
 
-    const handleClear = (resetForm) => {
+    const handleClear = () => {
         setSearchQuery("");
         setSelectedCountryId(null);
         citiesSearchStore.clearFilters();
-        resetForm()
     };
 
     const fetchCountries = useCallback(async () => {
@@ -43,19 +42,23 @@ export const CitiesSearch = observer(() => {
 
 
     return (
-        <Formik onSubmit={handleSearch} >
-            {({ resetForm }) => (
+        <Formik 
+        initialValues={{
+            searchQuery: "", 
+            selectedCountryId: null,
+            }}
+            onSubmit={handleSearch}>
+            {
             <Form>
-            <div className="flex items-center space-x-4 mb-4">
+        <div className="flex items-center space-x-4 mb-4">
             <Field
                 type="text"
+                name= "searchQuery"
                 placeholder="Search by City"
                 className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
                 value={searchQuery}
-                autoComplete="off"
-                onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                }}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autocomplete="off"
             />
 
             <Select
@@ -75,7 +78,7 @@ export const CitiesSearch = observer(() => {
             />
 
             <button
-                type="button"
+                type="submit"
                 onClick={handleSearch}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
@@ -84,14 +87,14 @@ export const CitiesSearch = observer(() => {
 
             <button
                 type="button"
-                onClick={() => handleClear(resetForm)}
+                onClick={handleClear}
                 className="btn-clear h-10 bg-gray-700 text-white hover:bg-gray-300 hover:text-gray-900 py-2 px-4 rounded-md border border-gray-300 font-bold text-sm"
             >
                 Clear
             </button>
         </div>
         </Form>
-            )}
+        }
         </Formik>
     );
 }
