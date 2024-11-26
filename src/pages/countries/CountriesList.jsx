@@ -14,11 +14,13 @@ import countriesSearchStore from "./stores/CountriesSearchStore";
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
   const [countriesList, setCountriesList] = useState([]);
   const { t } = useTranslation();
+  const paginationComponentOptions = PaginationOptions();
 
   const fetchData = async () => {
     try {
@@ -119,11 +121,6 @@ export const CountriesList = observer(() => {
       )
     }
   ];
-
-  const paginationComponentOptions = {
-    rowsPerPageText: t('ROWS_PER_PAGE'),
-    rangeSeparatorText: t('OF'),
-  };
 
   return (
     <div className="p-4">

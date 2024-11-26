@@ -8,6 +8,7 @@ import DataTable from 'react-data-table-component';
 import './UsersList.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
 
 export const UsersList = () => {
     const { openModal } = useModal();
@@ -15,7 +16,7 @@ export const UsersList = () => {
     const [page, setPage] = useState(1);
     const [totalItemCount, setTotalItemCount] = useState(0);
     const { t } = useTranslation();
-
+    const paginationComponentOptions = PaginationOptions();
 
     const fetchData = useCallback(async () => {
         try {
@@ -58,11 +59,6 @@ export const UsersList = () => {
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
-    };
-
-    const paginationComponentOptions = {
-        rowsPerPageText: t('ROWS_PER_PAGE'), 
-        rangeSeparatorText: t('OF'), 
     };
 
     return (

@@ -13,11 +13,13 @@ import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
+    const paginationComponentOptions = PaginationOptions();
 
     const fetchData = async () => {
 
@@ -114,11 +116,6 @@ export const CitiesList = observer(() => {
             toast.error("Failed to delete the record. Please try again.");
         }
     }
-
-    const paginationComponentOptions = {
-        rowsPerPageText: t('ROWS_PER_PAGE'), 
-        rangeSeparatorText: t('OF'), 
-    };
 
     return (
         <div className="p-4">

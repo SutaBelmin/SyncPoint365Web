@@ -1,1 +1,2 @@
-export {noDataMessage} from "./NoDataMessage"
+export {noDataMessage} from "./NoDataMessage";
+export {PaginationOptions} from "./PaginationOptions";

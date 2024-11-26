@@ -12,13 +12,14 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
 
 export const AbsenceRequestTypesList = observer (() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
-    
+    const paginationComponentOptions = PaginationOptions();
 
     const fetchData = async () => {
         try{
@@ -139,6 +140,7 @@ export const AbsenceRequestTypesList = observer (() => {
                 progressPending={loading} 
                 persistTableHead={true}
                 noDataComponent={<NoDataMessage message="No absence request types available."/>} 
+                paginationComponentOptions={paginationComponentOptions}
             />
         </div>
     );
