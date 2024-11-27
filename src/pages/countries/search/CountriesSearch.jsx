@@ -1,9 +1,11 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
+import { useTranslation } from 'react-i18next';
  
 export const CountriesSearch = () => {
   const initialValues = { searchQuery: countriesSearchStore.searchQuery };
+  const { t } = useTranslation();
  
   const handleSearch = (values) => {
     countriesSearchStore.setSearchQuery(values.searchQuery);
@@ -24,19 +26,19 @@ export const CountriesSearch = () => {
           <Field
             type="text"
             name="searchQuery"
-            placeholder="Search countries"
-            autocomplete="off"
+            placeholder={t('SEARCH_COUNTRIES')}
+            autoComplete="off"
             className="input w-96"
           />
           <button type="submit" className="btn-new">
-            Search
+            {t('SEARCH')}
           </button>
           <button
             type="button"
             onClick={() => handleClearFilters(resetForm)}
             className="btn-new"
           >
-            Clear
+            {t('CLEAR')}
           </button>
         </Form>
       )}

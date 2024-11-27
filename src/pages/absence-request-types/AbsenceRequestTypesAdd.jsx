@@ -19,9 +19,9 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
             await absenceRequestTypesService.add(values);
             fetchData();
             closeModal(); 
-            toast.success("New request type added successfully."); 
+            toast.success(t('ADDED')); 
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
         finally{
             setSubmitting(false);

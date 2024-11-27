@@ -28,7 +28,7 @@
     "DISPLAY_NAME_IS_REQUIRED": "Obavezno ime za prikaz",
     "ACTIONS": "Radnje", 
     "ROWS_PER_PAGE:": "Broj redova po stranici:",
-    "OF": "Od",
+    "OF": "od",
     "SAVE": "Spremi",
     "CANCEL": "Poništi",
     "CONFIRM_DELETE": "Potvrdi brisanje",
@@ -46,6 +46,8 @@
     "REQUEST_TYPES": "Tipovi zahtjeva",
     "ABSENCE_REQUEST_TYPES": "Tipovi zahtjeva za odsutstvo",
     "ACTIVE": "Aktivan",
+    "ALL": "Svi",
+    "INACTIVE": "Neaktivan",
     "NEW_REQUEST_TYPE": "Novi tip zahtjeva",
     "NEW_ABSENCE_REQUEST": "Novi zahtjev za odsutstvo",
     "EDIT_ABSENCE_REQUEST": "Uredi zahtjev za odsutstvo",
@@ -56,7 +58,17 @@
     "SEARCH": "Pretraži",
     "CLEAR": "Izbriši",
     "SEARCH_BY_CITY": "Pretraži grad",
-    "ROWS_PER_PAGE": "Redova po stranici"
-
+    "ROWS_PER_PAGE": "Redova po stranici",
+    "SEARCH_COUNTRIES": "Pretraži države",
+    "SEARCH_ABSENCE_REQUEST_TYPE":"Pretraži zahtjeve za odsutstvo",
+    "ENGLISH": "Engleski",
+    "BOSNIAN": "Bosanski",
+    "NO_ITEMS_TO_DISPLAY": "Nema podataka za prikazati.",
+    "ERROR_CONTACT_ADMIN": "Došlo je do greške. Molimo kontaktirajte administratora.",
+    "DELETED": "Uspješno izbrisano!",
+    "FAILED_TO_DELETE": "Brisanje zapisa nije uspjelo.",
+    "UPDATED": "Uspješno uređeno!",
+    "FAIL_UPDATE": "Uređivanje nije uspjelo!",
+    "ADDED": "Uspješno dodano!"
     
 }

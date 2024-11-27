@@ -21,12 +21,6 @@ export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) 
          <FontAwesomeIcon icon = {faTimes} className="w-6 h-6"/>
         </button>
         </div>
-
-        <div className="mb-6 text-center">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-            Confirm Delete
-          </h2>
-        </div>
         
       <p className="text-gray-700 mb-12 text-center">
        {t('ARE_YOU_SURE_YOU_WANT_TO_DELETE?')} <strong>{entityName}</strong>?

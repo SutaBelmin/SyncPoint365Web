@@ -22,9 +22,9 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
             });
             fetchData();
             closeModal(); 
-            toast.success("Absence request type updated successfully!");
+            toast.success(t('UPDATED'));
         } catch (error) {
-            toast.error("Failed to update absence request type. Please try again.");
+            toast.error(t('FAIL_UPDATE'));
         }
         finally{
             setSubmitting(false);

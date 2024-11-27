@@ -12,10 +12,10 @@ export const CountriesAdd = ({ closeModal, fetchData }) => {
     try {
       await countriesService.add(values);
       fetchData(); 
-      toast.success("Country added successfully!");
+      toast.success(t('ADDED'));
       closeModal();
     } catch (error) {
-       toast.error("There was an error. Please contact administrator."); 
+      toast.error(t('ERROR_CONTACT_ADMIN')); 
     } finally {
       setSubmitting(false); 
     }

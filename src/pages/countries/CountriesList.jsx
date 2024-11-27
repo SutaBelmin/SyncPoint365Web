@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CountriesAdd, CountriesEdit } from "../countries"
@@ -15,23 +15,26 @@ import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import NoDataMessage from "../../components/common-ui/NoDataMessage";
 import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
   const [countriesList, setCountriesList] = useState([]);
   const { t } = useTranslation();
   const paginationComponentOptions = PaginationOptions();
+  const { signal } = useRequestAbort();
 
-  const fetchData = async () => {
-    try {
-      const filters = countriesSearchStore.countryFilter;
-      const response = await countriesService.getPagedList(filters);
-      setCountriesList(response.data?.items);
-      countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
-    } catch (error) {
-      toast.error("There was an error. Please contact administrator.");
-    }
-  };
+  const fetchData = useCallback(
+    async () => {
+      try {
+        const filters = countriesSearchStore.countryFilter;
+        const response = await countriesService.getPagedList(filters, signal);
+        setCountriesList(response.data?.items);
+        countriesSearchStore.setTotalItemCount(response.data.totalItemCount);
+      } catch (error) {
+        toast.error(t('ERROR_CONTACT_ADMIN'));
+      }
+    }, [signal, t]);
 
   useEffect(() => {
     const disposer = reaction(
@@ -46,7 +49,7 @@ export const CountriesList = observer(() => {
       }
     );
     return () => disposer();
-  }, []);
+  }, [fetchData]);
 
   const handlePageChange = (newPage) => {
     countriesSearchStore.setPage(newPage);
@@ -82,9 +85,9 @@ export const CountriesList = observer(() => {
       await countriesService.delete(countryId);
       fetchData();
       closeModal();
-      toast.success("Country deleted successfully!");
+      toast.success(t('DELETED'));
     } catch (error) {
-      toast.error("Failed to delete the record. Please try again.");
+      toast.error(t('FAILED_TO_DELETE'));
     }
   };
 
@@ -100,7 +103,7 @@ export const CountriesList = observer(() => {
       sortable: true,
     },
     {
-      name: "Actions",
+      name: t('ACTIONS'),
       cell: (row) => (
         <div className="flex">
           <button
@@ -151,7 +154,7 @@ export const CountriesList = observer(() => {
         highlightOnHover
         persistTableHead={true}
         paginationComponentOptions={paginationComponentOptions}
-        noDataComponent={<NoDataMessage message="No countries available."/>}
+        noDataComponent={<NoDataMessage />}
       />
     </div>
   );

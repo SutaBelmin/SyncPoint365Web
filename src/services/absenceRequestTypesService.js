@@ -8,7 +8,7 @@ class AbsenceRequestTypesService extends BaseService {
         });
         return response;
     }
-    async getPagedList(filter) {
+    async getPagedList(filter, signal = null) {
         const response = await this.api.get(
             `/absencerequesttypes/paged`, 
             {
@@ -18,7 +18,7 @@ class AbsenceRequestTypesService extends BaseService {
                     page: filter.pageNumber,
                     pageSize: filter.pageSize,
                 },
-                cancelToken: null,
+                cancellationToken: signal,
             }
         );
         return response.data;

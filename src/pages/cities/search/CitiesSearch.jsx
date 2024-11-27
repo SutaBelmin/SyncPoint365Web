@@ -6,12 +6,14 @@ import citiesSearchStore from '../stores/CitiesSearchStore';
 import { observer } from "mobx-react";
 import { Formik, Form, Field } from "formik";
 import { useTranslation } from 'react-i18next';
+import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCountryId, setSelectedCountryId] = useState(null);
     const [countries, setCountries] = useState([]);
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
 
     const initialValues = {
         searchQuery: '',
@@ -31,16 +33,16 @@ export const CitiesSearch = observer(() => {
 
     const fetchCountries = useCallback(async () => {
         try {
-            const response = await countriesService.getList();
+            const response = await countriesService.getList(signal);
             const countriesOption = response.data.map(country => ({
                 value: country.id,
                 label: country.name
             }));
             setCountries(countriesOption);
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, []);
+    }, [signal, t]);
 
     useEffect(() => { 
         fetchCountries();
@@ -59,7 +61,7 @@ export const CitiesSearch = observer(() => {
                 placeholder={t('SEARCH_BY_CITY')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                autocomplete="off"
+                autoComplete="off"
             />
 
             <Select

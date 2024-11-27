@@ -46,6 +46,8 @@
     "REQUEST_TYPES": "Request Types",
     "ABSENCE_REQUEST_TYPES": "Absence Request Types",
     "ACTIVE": "Active",
+    "ALL": "All",
+    "INACTIVE": "Inactive",
     "NEW_REQUEST_TYPE": "New Request Type",
     "NEW_ABSENCE_REQUEST": "New Absence Request",
     "EDIT_ABSENCE_REQUEST": "Edit Absence Request",
@@ -56,5 +58,16 @@
     "SEARCH": "Search",
     "CLEAR": "Clear",
     "SEARCH_BY_CITY": "Search by City",
-    "ROWS_PER_PAGE": "Rows per page"
+    "ROWS_PER_PAGE": "Rows per page",
+    "SEARCH_COUNTRIES": "Search Countries",
+    "SEARCH_ABSENCE_REQUEST_TYPE":"Search absence request types",
+    "ENGLISH": "English",
+    "BOSNIAN": "Bosnian",
+    "NO_ITEMS_TO_DISPLAY": "No items to display.",
+    "ERROR_CONTACT_ADMIN": "There was an error. Please contact administrator.",
+    "DELETED": "Deleted successfully!",
+    "FAILED_TO_DELETE": "Failed to delete the record.",
+    "UPDATED": "Updated successfully!",
+    "FAIL_UPDATE": "Failed to update!",
+    "ADDED": "Added successfully!"
 }

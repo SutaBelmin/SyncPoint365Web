@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
@@ -14,26 +14,27 @@ import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import NoDataMessage from "../../components/common-ui/NoDataMessage";
 import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
+    const { signal } = useRequestAbort();
 
-    const fetchData = async () => {
-
+    const fetchData = useCallback(async () => {
         try {
             const filter = {...citiesSearchStore.cityFilter};
 
-            const response = await citiesService.getPagedCities(filter);
+            const response = await citiesService.getPagedCities(filter, signal);
 
             setData(response.data.items);
             citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    };
+    }, [t, signal]);
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -49,7 +50,7 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, []);
+    }, [fetchData]);
     
     const columns = [
         {
@@ -111,15 +112,15 @@ export const CitiesList = observer(() => {
             await citiesService.delete(cityId);
             fetchData();
             closeModal();
-            toast.success("Country deleted successfully!");
+            toast.success(t('DELETED'));
         } catch (error) {
-            toast.error("Failed to delete the record. Please try again.");
+            toast.error(t('FAILED_TO_DELETE'));
         }
     }
 
     return (
         <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Cities</h1>
+            <h1 className="text-xl font-bold mb-4">{t('CITIES')}</h1>
             <div className="flex justify-between items-center mb-4">
                 <div className="flex space-x-4">
                 <CitiesSearch/>
@@ -155,7 +156,7 @@ export const CitiesList = observer(() => {
                 highlightOnHover
                 persistTableHead={true}
                 paginationComponentOptions={paginationComponentOptions}
-                noDataComponent={<NoDataMessage message="No cities available."/>} />
+                noDataComponent={<NoDataMessage />} />
 
         </div>
     );

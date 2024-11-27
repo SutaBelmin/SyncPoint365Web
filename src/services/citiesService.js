@@ -28,7 +28,7 @@ class CitiesService extends BaseService {
         return response.data;
     }
 
-    async getPagedCities(filter, cancelToken = null) {
+    async getPagedCities(filter, signal = null) {
         try {
             const response = await this.api.get(`/cities/paged`, {
                 params: {
@@ -37,7 +37,7 @@ class CitiesService extends BaseService {
                     page: filter.page,
                     pageSize: filter.rowsPerPage
                 },
-                cancelToken: cancelToken,
+                cancellationToken: signal
             });
             return response;
         } catch (error) {

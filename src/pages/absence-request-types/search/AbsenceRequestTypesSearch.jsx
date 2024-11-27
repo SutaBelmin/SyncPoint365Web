@@ -3,17 +3,20 @@ import { Formik, Form, Field } from 'formik';
 import Select from 'react-select';
 import { observer } from 'mobx-react';
 import absenceRequestTypesSearchStore from '../stores/AbsenceRequestTypesSearchStore';
-
-const dropdownOptions = [
-  { value: 'All', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-];
+import { useTranslation } from 'react-i18next';
 
 const AbsenceRequestTypesSearch = observer (() => {
+  const { t } = useTranslation();  
+  
+  const dropdownOptions = [
+  { value: 'All', label: t('ALL') },
+  { value: 'active', label: t('ACTIVE') },
+  { value: 'inactive', label: t('INACTIVE') },
+];
+
   const initialValues = {
     searchQuery: '',
-    status: { value: 'All', label: 'All' },
+    status: { value: 'All', label: t('ALL') },
     }
     const handleSubmit = (values) => {
     const query = values.searchQuery;
@@ -23,7 +26,7 @@ const AbsenceRequestTypesSearch = observer (() => {
                    absenceRequestTypesSearchStore.setSearchQuery(query); 
                    absenceRequestTypesSearchStore.setIsActive(status);
   };
-
+  
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ setFieldValue, values }) => (
@@ -32,7 +35,7 @@ const AbsenceRequestTypesSearch = observer (() => {
             <Field
               name="searchQuery"
               type="text"
-              placeholder="Search absence request types"
+              placeholder={t('SEARCH_ABSENCE_REQUEST_TYPE')}
               className="input-search h-10 rounded-md border-gray-300 w-[25rem]"
               autoComplete="off"
             />
@@ -50,7 +53,7 @@ const AbsenceRequestTypesSearch = observer (() => {
               }}
             />
             <button type="submit" className="btn-new h-10" >
-              Search
+              {t('SEARCH')}
             </button>
           </div>
         </Form>
