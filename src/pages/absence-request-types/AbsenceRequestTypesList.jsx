@@ -119,13 +119,11 @@ export const AbsenceRequestTypesList = observer(() => {
         <div className="pt-16">
             <h1 className="text-xl font-bold mb-4">{t('ABSENCE_REQUEST_TYPES')}</h1>
             <div className="flex justify-between items-center mb-4">
-                <div className="flex space-x-4">
-                    <AbsenceRequestTypesSearch />
-                </div>
+                <AbsenceRequestTypesSearch/>
                 <button
                     type="button"
                     onClick={addNewRequestClick}
-                    className="btn-new w-full sm:w-auto flex-grow sm:flex-grow-0"
+                    className="btn-new"
                 >
                     {t('NEW_REQUEST_TYPE')}
                 </button>
@@ -150,5 +148,4 @@ export const AbsenceRequestTypesList = observer(() => {
             />
         </div>
     );
-    
 });
