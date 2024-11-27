@@ -10,33 +10,48 @@ import { useSearchParams } from "react-router-dom";
 import citiesSearchStore from "../stores/CitiesSearchStore";
 
 export const CitiesSearch = observer(() => {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCountryId, setSelectedCountryId] = useState(null);
-    const [countries, setCountries] = useState([]);
-    const { t } = useTranslation();
-    const { signal } = useRequestAbort();
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [countries, setCountries] = useState([]);
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    const fetchCountries = useCallback(async () => {
-        try {
-            const response = await countriesService.getList(signal);
-            const countriesOption = response.data.map(country => ({
-                value: country.id,
-                label: country.name
-            }));
-            setCountries(countriesOption);
-        } catch (error) {
-            toast.error(t('ERROR_CONTACT_ADMIN'));
+  const fetchCountries = useCallback(async () => {
+    try {
+      const response = await countriesService.getList();
+      const countriesOption = response.data.map((country) => ({
+        value: country.id,
+        label: country.name,
+      }));
+      setCountries(countriesOption);
+    } catch (error) {
+      toast.error("There was an error. Please contact administrator.");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCountries();
+  }, [fetchCountries]);
+
+
+  useEffect(() => {
+    const { searchQuery, countryId } = citiesSearchStore.cityFilter;
+    const selectedCountryId = searchParams.get("selectedCountryId") || countryId;
+    const searchQueryFromParams = searchParams.get("searchQuery") || searchQuery;
+
+    citiesSearchStore.setQuery(searchQueryFromParams);
+    citiesSearchStore.setCountryId(selectedCountryId);
+  }, [searchParams]);
+
+  const initialValues = {
+    searchQuery: citiesSearchStore.cityFilter.searchQuery,
+    selectedCountryId: citiesSearchStore.cityFilter.countryId
+      ? {
+          value: citiesSearchStore.cityFilter.countryId,
+          label: countries.find(
+            (c) => c.value === citiesSearchStore.cityFilter.countryId
+          )?.label || citiesSearchStore.cityFilter.countryId,
         }
-    }, [signal, t]);
-
-
-    useEffect(() => {
-        fetchCountries();
-    }, [fetchCountries]);
-
+      : null,
+  };
 
     useEffect(() => {
         const { searchQuery, countryId } = citiesSearchStore.cityFilter;
@@ -44,17 +59,6 @@ export const CitiesSearch = observer(() => {
         const searchQueryFromParams = searchParams.get("searchQuery") || searchQuery;
     });
 
-    const initialValues = {
-        searchQuery: citiesSearchStore.cityFilter.searchQuery,
-        selectedCountryId: citiesSearchStore.cityFilter.countryId
-            ? {
-                value: citiesSearchStore.cityFilter.countryId,
-                label: countries.find(
-                    (c) => c.value === citiesSearchStore.cityFilter.countryId
-                )?.label || citiesSearchStore.cityFilter.countryId,
-            }
-            : null,
-    };
 
     const filteredCountries = countries.filter(
         (country) => !citiesSearchStore.cityFilter.countryId || country.value === citiesSearchStore.cityFilter.countryId

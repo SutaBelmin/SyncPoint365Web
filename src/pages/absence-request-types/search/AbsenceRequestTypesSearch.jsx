@@ -28,64 +28,60 @@ const AbsenceRequestTypesSearch = observer(() => {
 
   useEffect(() => {
     absenceRequestTypesSearchStore.initializeQueryParams(searchParams);
+    const query = searchParams.get('searchQuery') || '';
+    const status = searchParams.get('status') || 'All';
+
+    absenceRequestTypesSearchStore.setSearchQuery(query);
+    absenceRequestTypesSearchStore.setIsActive(status === 'active' ? true : status === 'inactive' ? false : null);
   }, [searchParams]);
-  absenceRequestTypesSearchStore.setSearchQuery(query);
-  absenceRequestTypesSearchStore.setIsActive(status === 'active' ? true : status === 'inactive' ? false : null);
-}, [searchParams]);
+
+  const handleSubmit = (values) => {
+    absenceRequestTypesSearchStore.setSearchQuery(values.searchQuery);
+    absenceRequestTypesSearchStore.setIsActive(values.status.value === null ? null : (values.status.value === 'active'));
+    setSearchParams(absenceRequestTypesSearchStore.syncWithQueryParams());
+  };
 
 
-const handleSubmit = (values) => {
-  absenceRequestTypesSearchStore.setSearchQuery(values.searchQuery);
-  absenceRequestTypesSearchStore.setIsActive(values.status.value === null ? null : (values.status.value === 'active'));
-  setSearchParams(absenceRequestTypesSearchStore.syncWithQueryParams());
-};
-
-setSearchParams(queryParams);
-navigate({
-  pathname: location.pathname,
-  search: queryParams.toString(),
+  return (
+    <Formik initialValues={{
+      searchQuery: searchParams.get('searchQuery') || '',
+      status: dropdownOptions.find(
+        (option) => option.value === searchParams.get('status')
+      ) || dropdownOptions[0],
+    }}
+      enableReinitialize
+      onSubmit={handleSubmit}>
+      {({ setFieldValue, values }) => (
+        <Form className="flex flex-col gap-4 md:flex-row">
+          <Field
+            name="searchQuery"
+            type="text"
+            placeholder={t('SEARCH_ABSENCE_REQUEST_TYPE')}
+            className="input-search h-10 rounded-md border-gray-300 w-full"
+            autoComplete="off"
+            value={values.searchQuery}
+            onChange={(e) => {
+              setFieldValue('searchQuery', e.target.value);
+            }}
+          />
+          <Select
+            name="status"
+            placeholder="Select"
+            options={dropdownOptions}
+            isSearchable={false}
+            className="h-10 border-gray-300 input-select-border w-full"
+            value={values.status}
+            onChange={(selectedOption) => {
+              setFieldValue('status', selectedOption);
+            }}
+          />
+          <button type="submit" className="btn-common h-10">
+            {t('SEARCH')}
+          </button>
+        </Form>
+      )}
+    </Formik>
+  );
 });
-
-
-return (
-  <Formik initialValues={{
-    searchQuery: searchParams.get('searchQuery') || '',
-    status: dropdownOptions.find(
-      (option) => option.value === searchParams.get('status')
-    ) || dropdownOptions[0],
-  }}
-    enableReinitialize
-    onSubmit={handleSubmit}>
-    {({ setFieldValue, values }) => (
-      <Form className="flex flex-col gap-4 md:flex-row">
-        <Field
-          name="searchQuery"
-          type="text"
-          placeholder={t('SEARCH_ABSENCE_REQUEST_TYPE')}
-          className="input-search h-10 rounded-md border-gray-300 w-full"
-          autoComplete="off"
-          value={values.searchQuery}
-          onChange={(e) => {
-            setFieldValue('searchQuery', e.target.value);
-          }}
-        />
-        <Select
-          name="status"
-          placeholder="Select"
-          options={dropdownOptions}
-          isSearchable={false}
-          className="h-10 border-gray-300 input-select-border w-full"
-          value={values.status}
-          onChange={(selectedOption) => {
-            setFieldValue('status', selectedOption);
-          }}
-        />
-        <button type="submit" className="btn-common h-10">
-          {t('SEARCH')}
-        </button>
-      </Form>
-    )}
-  </Formik>
-);
 
 export default AbsenceRequestTypesSearch;
