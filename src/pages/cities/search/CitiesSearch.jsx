@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
@@ -7,7 +7,7 @@ import { Formik, Form, Field } from "formik";
 import { useTranslation } from 'react-i18next';
 import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { useSearchParams } from "react-router-dom";
-import citiesSearchStore from '../stores/CitiesSearchStore';
+import citiesSearchStore from "../stores/CitiesSearchStore";
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -17,29 +17,7 @@ export const CitiesSearch = observer(() => {
     const { signal } = useRequestAbort();
     const location = useLocation();
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams(); 
-
-    const initialValues = {
-        searchQuery: searchParams.get("searchQuery") || '',
-        selectedCountryId: searchParams.get("selectedCountryId") || null,
-    };
-
-    const handleSearch = () => {
-        const queryParams = new URLSearchParams();
-        if (searchQuery) queryParams.append("searchQuery", searchQuery);
-        if (selectedCountryId) queryParams.append("selectedCountryId", selectedCountryId.value);
-        setSearchParams(queryParams);
-
-        citiesSearchStore.setQuery(searchQuery);
-        citiesSearchStore.setCountryId(selectedCountryId ? selectedCountryId.value : null);
-    };
-
-    const handleClear = () => {
-        setSearchQuery("");
-        setSelectedCountryId(null);
-        setSearchParams({});
-        citiesSearchStore.clearFilters();
-    };
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const fetchCountries = useCallback(async () => {
         try {
@@ -54,19 +32,41 @@ export const CitiesSearch = observer(() => {
         }
     }, [signal, t]);
 
+
     useEffect(() => {
         fetchCountries();
     }, [fetchCountries]);
 
-    useEffect(() => {
-        const query = searchParams.get("searchQuery") || '';
-        const countryId = searchParams.get("selectedCountryId") || null;
-        setSearchQuery(query);
-        setSelectedCountryId(countryId ? {value: countryId, label: countryId} : null);
-        citiesSearchStore.setQuery(query);
-        citiesSearchStore.setCountryId(countryId ? countryId : null);
-    }, [searchParams, countries]);
 
+    useEffect(() => {
+        const { searchQuery, countryId } = citiesSearchStore.cityFilter;
+        const selectedCountryId = searchParams.get("selectedCountryId") || countryId;
+        const searchQueryFromParams = searchParams.get("searchQuery") || searchQuery;
+    });
+
+    const initialValues = {
+        searchQuery: citiesSearchStore.cityFilter.searchQuery,
+        selectedCountryId: citiesSearchStore.cityFilter.countryId
+            ? {
+                value: citiesSearchStore.cityFilter.countryId,
+                label: countries.find(
+                    (c) => c.value === citiesSearchStore.cityFilter.countryId
+                )?.label || citiesSearchStore.cityFilter.countryId,
+            }
+            : null,
+    };
+
+    const filteredCountries = countries.filter(
+        (country) => !citiesSearchStore.cityFilter.countryId || country.value === citiesSearchStore.cityFilter.countryId
+    );
+
+    const handleSearch = (values) => {
+        const queryParams = new URLSearchParams();
+        if (values.searchQuery) queryParams.append("searchQuery", values.searchQuery);
+        if (values.selectedCountryId)
+            queryParams.append("selectedCountryId", values.selectedCountryId.value);
+        setSearchParams(queryParams);
+    }
     return (
         <Formik
             initialValues={initialValues} onSubmit={handleSearch}>
@@ -77,8 +77,8 @@ export const CitiesSearch = observer(() => {
                         className="input-search h-10 rounded-md border-gray-300 w-full"
                         name="searchQuery"
                         placeholder={t('SEARCH_BY_CITY')}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        value={values.searchQuery}
+                        onChange={(e) => setFieldValue('searchQuery', e.target.value)}
                         autoComplete="off"
                     />
 
@@ -118,4 +118,5 @@ export const CitiesSearch = observer(() => {
             }
         </Formik>
     );
+
 });
