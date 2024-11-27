@@ -38,6 +38,11 @@ const AbsenceRequestTypesSearch = observer(() => {
         setSearchParams(absenceRequestTypesSearchStore.syncWithQueryParams());
     };
 
+    setSearchParams(queryParams);
+    navigate({
+      pathname: location.pathname, 
+      search: queryParams.toString(), 
+    });
 
 
     return (
