@@ -79,7 +79,6 @@ export const CitiesSearch = observer(() => {
                     <Select
                         name="countryId"
                         value={values.countryId ? { value: values.countryId, label: countries.find(c => c.value === values.countryId)?.label } : null}
-
                         onChange={(option) => setFieldValue('countryId', option ? option.value : null)}
                         options={countries}
                         placeholder={t("SELECT_A_COUNTRY")}
