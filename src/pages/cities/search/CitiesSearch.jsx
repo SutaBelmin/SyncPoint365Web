@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
@@ -7,6 +7,7 @@ import { Formik, Form, Field } from "formik";
 import { useTranslation } from 'react-i18next';
 import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { useSearchParams } from "react-router-dom";
+import citiesSearchStore from '../stores/CitiesSearchStore';
 
 export const CitiesSearch = observer(() => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -23,12 +24,29 @@ export const CitiesSearch = observer(() => {
         selectedCountryId: searchParams.get("selectedCountryId") || null,
     };
 
+    const handleSearch = () => {
+        const queryParams = new URLSearchParams();
+        if (searchQuery) queryParams.append("searchQuery", searchQuery);
+        if (selectedCountryId) queryParams.append("selectedCountryId", selectedCountryId.value);
+        setSearchParams(queryParams);
+
+        citiesSearchStore.setQuery(searchQuery);
+        citiesSearchStore.setCountryId(selectedCountryId ? selectedCountryId.value : null);
+    };
+
+    const handleClear = () => {
+        setSearchQuery("");
+        setSelectedCountryId(null);
+        setSearchParams({});
+        citiesSearchStore.clearFilters();
+    };
+
     const fetchCountries = useCallback(async () => {
         try {
             const response = await countriesService.getList(signal);
             const countriesOption = response.data.map(country => ({
                 value: country.id,
-                label: country.name,
+                label: country.name
             }));
             setCountries(countriesOption);
         } catch (error) {
@@ -43,29 +61,11 @@ export const CitiesSearch = observer(() => {
     useEffect(() => {
         const query = searchParams.get("searchQuery") || '';
         const countryId = searchParams.get("selectedCountryId") || null;
-
         setSearchQuery(query);
-
-        if (countryId) {
-            const selectedCountry = countries.find(country => country.value === countryId);
-            setSelectedCountryId(selectedCountry || null);
-        } else {
-            setSelectedCountryId(null);
-        }
+        setSelectedCountryId(countryId ? {value: countryId, label: countryId} : null);
+        citiesSearchStore.setQuery(query);
+        citiesSearchStore.setCountryId(countryId ? countryId : null);
     }, [searchParams, countries]);
-
-    const handleSearch = () => {
-        const queryParams = new URLSearchParams();
-        if (searchQuery) queryParams.append("searchQuery", searchQuery);
-        if (selectedCountryId) queryParams.append("selectedCountryId", selectedCountryId.value);
-        setSearchParams(queryParams);
-    };
-
-    const handleClear = () => {
-        setSearchQuery("");
-        setSelectedCountryId(null);
-        setSearchParams({});
-    };
 
     return (
         <Formik

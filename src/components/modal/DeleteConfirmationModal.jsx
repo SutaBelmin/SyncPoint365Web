@@ -8,20 +8,19 @@ export const DeleteConfirmationModal = ({ id, onDelete, onCancel, entityName }) 
   const { t } = useTranslation();
 
   return (
-    <div className="p-6 bg-white rounded-2xl relative">
-      <button
-        onClick={onCancel}
-        className="absolute -top-2 -right-1 text-gray-400 hover:text-gray-600 focus:outline-none text-xl"
-      >
-        <FontAwesomeIcon icon={faTimes} />
-      </button>
-
+    <div className="p-8 bg-white rounded-lg relative w-full max-w-md">
       <div className="flex justify-center items-center mb-4">
-        <h2 className="text-2xl font-semibold text-gray-800">{t('CONFIRM_DELETE')}</h2>
-      </div>
-
-      <p className="mb-6 text-center text-gray-600">
-        {t('ARE_YOU_SURE_YOU_WANT_TO_DELETE?')} <strong className="text-gray-800">{entityName}</strong>?
+        <h2 className="text-xl font-bold">{t('CONFIRM_DELETE')}</h2>
+        <button
+          onClick={onCancel}
+          className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-700 focus:outline-none text-2xl"
+        > 
+         <FontAwesomeIcon icon = {faTimes} className="w-6 h-6"/>
+        </button>
+        </div>
+        
+      <p className="text-gray-700 mb-6 text-center">
+       {t('ARE_YOU_SURE_YOU_WANT_TO_DELETE?')} <strong>{entityName}</strong>?
       </p>
 
       <Formik
