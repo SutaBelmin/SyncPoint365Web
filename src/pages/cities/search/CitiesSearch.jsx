@@ -10,70 +10,60 @@ import { useSearchParams } from "react-router-dom";
 import citiesSearchStore from "../stores/CitiesSearchStore";
 
 export const CitiesSearch = observer(() => {
-  const [countries, setCountries] = useState([]);
-  const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
+    const [countries, setCountries] = useState([]);
+    const { t } = useTranslation();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-  const fetchCountries = useCallback(async () => {
-    try {
-      const response = await countriesService.getList();
-      const countriesOption = response.data.map((country) => ({
-        value: country.id,
-        label: country.name,
-      }));
-      setCountries(countriesOption);
-    } catch (error) {
-      toast.error("There was an error. Please contact administrator.");
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCountries();
-  }, [fetchCountries]);
-
-
-  useEffect(() => {
-    const { searchQuery, countryId } = citiesSearchStore.cityFilter;
-    const selectedCountryId = searchParams.get("selectedCountryId") || countryId;
-    const searchQueryFromParams = searchParams.get("searchQuery") || searchQuery;
-
-    citiesSearchStore.setQuery(searchQueryFromParams);
-    citiesSearchStore.setCountryId(selectedCountryId);
-  }, [searchParams]);
-
-  const initialValues = {
-    searchQuery: citiesSearchStore.cityFilter.searchQuery,
-    selectedCountryId: citiesSearchStore.cityFilter.countryId
-      ? {
-          value: citiesSearchStore.cityFilter.countryId,
-          label: countries.find(
-            (c) => c.value === citiesSearchStore.cityFilter.countryId
-          )?.label || citiesSearchStore.cityFilter.countryId,
+    const fetchCountries = useCallback(async () => {
+        try {
+            const response = await countriesService.getList();
+            const countriesOption = response.data.map((country) => ({
+                value: country.id,
+                label: country.name,
+            }));
+            setCountries(countriesOption);
+        } catch (error) {
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-      : null,
-  };
+    }, [t]);
 
     useEffect(() => {
-        const { searchQuery, countryId } = citiesSearchStore.cityFilter;
-        const selectedCountryId = searchParams.get("selectedCountryId") || countryId;
-        const searchQueryFromParams = searchParams.get("searchQuery") || searchQuery;
-    });
+        fetchCountries();
+        citiesSearchStore.initializeQueryParams();
 
+        const countryIdFromParams = searchParams.get("countryId");
+        if (countryIdFromParams) {
+            citiesSearchStore.setCountryId(parseInt(countryIdFromParams));
+        }
+    }, [searchParams, fetchCountries]);
 
-    const filteredCountries = countries.filter(
-        (country) => !citiesSearchStore.cityFilter.countryId || country.value === citiesSearchStore.cityFilter.countryId
-    );
 
     const handleSearch = (values) => {
-        const queryParams = new URLSearchParams();
-        if (values.searchQuery) queryParams.append("searchQuery", values.searchQuery);
-        if (values.selectedCountryId)
-            queryParams.append("selectedCountryId", values.selectedCountryId.value);
+        citiesSearchStore.setQuery(values.searchQuery);
+        citiesSearchStore.setCountryId(values.countryId ? values.countryId : null);
+        const queryParams = citiesSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);
+    };
+
+    const initialValues = {
+        searchQuery: citiesSearchStore.searchQuery,
+        countryId: citiesSearchStore.countryId
     }
+
+    const handleClear = (setFieldValue) => {
+        setSearchParams({});
+        citiesSearchStore.clearFilters();
+        setFieldValue("searchQuery", "");
+        setFieldValue("countryId", null);
+    };
+
+
     return (
         <Formik
-            initialValues={initialValues} onSubmit={handleSearch}>
+            enableReinitialize
+            initialValues={initialValues}
+            onSubmit={handleSearch}
+        >
             {
                 <Form className="flex flex-col gap-4 md:flex-row">
                     <Field
@@ -87,17 +77,12 @@ export const CitiesSearch = observer(() => {
                     />
 
                     <Select
-                        value={selectedCountryId}
-                        onChange={(value) => {
-                            if (value === null) {
-                                setSelectedCountryId(null);
-                                citiesSearchStore.setCountryId(null);
-                            } else {
-                                setSelectedCountryId(value);
-                            }
-                        }}
+                        name="countryId"
+                        value={values.countryId ? { value: values.countryId, label: countries.find(c => c.value === values.countryId)?.label } : null}
+
+                        onChange={(option) => setFieldValue('countryId', option ? option.value : null)}
                         options={countries}
-                        placeholder={t('SELECT_A_COUNTRY')}
+                        placeholder={t("SELECT_A_COUNTRY")}
                         isClearable
                         isSearchable
                         className="h-10 border-gray-300 input-select-border w-full"
