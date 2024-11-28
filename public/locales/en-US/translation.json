@@ -52,7 +52,7 @@
     "NEW_ABSENCE_REQUEST": "New Absence Request",
     "EDIT_ABSENCE_REQUEST": "Edit Absence Request Type",
     "ENTER_YOUR_NAME": "Enter your Name",
-    "ENTER_ABSENCE": "Enter absence request name",
+    "ENTER_ABSENCE_REQUEST_TYPE_NAME": "Enter absence request name",
     "ADD": "Add",
     "EDIT": "Edit",
     "DELETE": "Delete",
