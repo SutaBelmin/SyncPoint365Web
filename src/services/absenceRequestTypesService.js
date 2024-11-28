@@ -18,7 +18,7 @@ class AbsenceRequestTypesService extends BaseService {
                     page: filter.pageNumber,
                     pageSize: filter.pageSize,
                 },
-                cancellationToken: signal,
+                signal: signal
             }
         );
         return response.data;

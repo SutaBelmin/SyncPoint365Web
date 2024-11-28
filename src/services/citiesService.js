@@ -29,20 +29,18 @@ class CitiesService extends BaseService {
     }
 
     async getPagedCities(filter, signal = null) {
-        try {
-            const response = await this.api.get(`/cities/paged`, {
-                params: {
-                    countryId: filter.countryId,
-                    query: filter.searchQuery,
-                    page: filter.page,
-                    pageSize: filter.rowsPerPage
-                },
-                cancellationToken: signal
-            });
-            return response;
-        } catch (error) {
 
-        }
+        const response = await this.api.get(`/cities/paged`, {
+            params: {
+                countryId: filter.countryId,
+                query: filter.searchQuery,
+                page: filter.page,
+                pageSize: filter.rowsPerPage
+            },
+            //signal: new AbortController().signal
+            signal: signal
+        });
+        return response;
     }
 }
 

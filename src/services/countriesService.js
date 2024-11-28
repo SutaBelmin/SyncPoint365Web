@@ -34,7 +34,7 @@ class CountriesService extends BaseService {
         const { page, rowsPerPage, searchQuery } = filters;
         const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}&query=${searchQuery ? searchQuery : ''}`,
             {
-                cancellationToken: signal,
+                signal: signal
             }
         );
         return response;

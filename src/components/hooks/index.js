@@ -1,1 +1,1 @@
-export { UserRequestAbort } from './useRequestAbort';
+export { useRequestAbort } from './useRequestAbort';

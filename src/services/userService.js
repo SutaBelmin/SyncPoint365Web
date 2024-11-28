@@ -10,21 +10,13 @@ class UserService extends BaseService {
     }
 
     async getPagedUsers(page = 1, signal = null) {
-        try {
-            const response = await this.api.get(`/users/paged/${page}`,
-                {
-                    cancellationToken: signal,
-                }
-            );
-            return response;
-        } catch (error) {
-            if (error.name === "AbortError") {
-                console.log("Request aborted:", error.message);
-            } else {
-                console.error("Error in getPagedUsers:", error);
-                throw error;
+
+        const response = await this.api.get(`/users/paged/${page}`,
+            {
+                signal: signal
             }
-        }
+        );
+        return response;
     }
 }
 
