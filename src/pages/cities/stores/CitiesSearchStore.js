@@ -5,7 +5,7 @@ class CitiesSearchStore {
     countryId = null;
     searchQuery = "";
     page = 1;
-    rowsPerPage = 10;
+    pageSize = 10;
 
     constructor() {
         makeAutoObservable(this);
@@ -28,7 +28,7 @@ class CitiesSearchStore {
     }
 
     setRowsPerPage(rowsPerPage) {
-        this.rowsPerPage = rowsPerPage;
+        this.pageSize = rowsPerPage;
     }
 
     clearFilters() {
@@ -43,7 +43,7 @@ class CitiesSearchStore {
             countryId: this.countryId,
             searchQuery: this.searchQuery,
             page: this.page,
-            rowsPerPage: this.rowsPerPage
+            pageSize: this.pageSize
         };
         return filter;
     }

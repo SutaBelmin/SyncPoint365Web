@@ -31,8 +31,8 @@ class CountriesService extends BaseService {
 
 
     async getPagedList(filters, signal = null) {
-        const { page, rowsPerPage, searchQuery } = filters;
-        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}&query=${searchQuery ? searchQuery : ''}`,
+        const { page, pageSize, searchQuery } = filters;
+        const response = await this.api.get(`/countries/paged/${page}?pageSize=${pageSize}&query=${searchQuery ? searchQuery : ''}`,
             {
                 signal: signal
             }

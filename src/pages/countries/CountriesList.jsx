@@ -149,7 +149,7 @@ export const CountriesList = observer(() => {
         paginationServer
         paginationTotalRows={countriesSearchStore.totalItemCount}
         onChangePage={handlePageChange}
-        paginationPerPage={countriesSearchStore.rowsPerPage}
+        paginationPerPage={countriesSearchStore.pageSize}
         onChangeRowsPerPage={handleRowsPerChange}
         highlightOnHover
         persistTableHead={true}

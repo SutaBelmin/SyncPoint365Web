@@ -146,7 +146,7 @@ export const CitiesList = observer(() => {
                 onChangePage={(newPage) => {
                     citiesSearchStore.setPage(newPage);
                 }}
-                paginationPerPage={citiesSearchStore.rowsPerPage}
+                paginationPerPage={citiesSearchStore.pageSize}
                 onChangeRowsPerPage={
                     (newRowsPerPage) =>{
                         citiesSearchStore.setRowsPerPage(newRowsPerPage);

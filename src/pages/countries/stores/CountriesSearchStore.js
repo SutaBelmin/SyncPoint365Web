@@ -3,7 +3,7 @@ import { makeAutoObservable } from "mobx";
 class CountriesStore {
   page = 1;
   totalItemCount = 0;
-  rowsPerPage = 10;
+  pageSize = 10;
   searchQuery = "";
 
   constructor() {
@@ -14,7 +14,7 @@ class CountriesStore {
     return {
       searchQuery: this.searchQuery,
       page: this.page,
-      rowsPerPage: this.rowsPerPage,
+      pageSize: this.pageSize,
     };
   }
 
@@ -27,7 +27,7 @@ class CountriesStore {
   }
 
   setRowsPerPage(rows) {
-    this.rowsPerPage = rows;
+    this.pageSize = rows;
   }
 
   setTotalItemCount(count) {
@@ -37,7 +37,7 @@ class CountriesStore {
   resetFilters() {
     this.searchQuery = "";
     this.page = 1;
-    this.rowsPerPage = 10;
+    this.pageSize = 10;
   }
 }
 
