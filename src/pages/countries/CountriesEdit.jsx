@@ -96,7 +96,7 @@ export const CountriesEdit = ({ country, closeModal, fetchData }) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                    className="btn-save"
+                    className="btn-save currentColor"
               >
                 {t('SAVE')} 
               </button>
