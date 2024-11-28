@@ -11,7 +11,7 @@ import { reaction } from "mobx"
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {NoDataMessage} from "../../components/common-ui";
 import { PaginationOptions } from "../../components/common-ui";
 import AbsenceRequestTypesSearch from "./search";
 import { useRequestAbort } from "../../components/hooks";
@@ -22,7 +22,7 @@ export const AbsenceRequestTypesList = observer(() => {
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
-
+    
     const fetchData = useCallback(async () => {
         try {
             const response = await absenceRequestTypesService.getPagedList(
@@ -35,7 +35,7 @@ export const AbsenceRequestTypesList = observer(() => {
         } finally {
             setLoading(false);
         }
-    }, [t, signal]);
+    }, [signal, t]);
 
     const handleDelete = async (absenceRequestTypeId) => {
         try {
@@ -78,8 +78,8 @@ export const AbsenceRequestTypesList = observer(() => {
         absenceRequestTypesSearchStore.setPageNumber(newPage);
     }
 
-    const handleRowsPerPageChange = (newRowsPerPage) => {
-        absenceRequestTypesSearchStore.setRowsPerPage(newRowsPerPage);
+    const handleRowsPerPageChange = (newPageSize) => {
+        absenceRequestTypesSearchStore.setPageSize(newPageSize);
         absenceRequestTypesSearchStore.setPageNumber(1);
     };
 
@@ -139,7 +139,7 @@ export const AbsenceRequestTypesList = observer(() => {
                 paginationServer
                 paginationTotalRows={absenceRequestTypesSearchStore.totalItemCount}
                 paginationDefaultPage={absenceRequestTypesSearchStore.pageNumber}
-                paginationPerPage={absenceRequestTypesSearchStore.rowsPerPage}
+                paginationPerPage={absenceRequestTypesSearchStore.pageSize}
                 onChangePage={handlePageChange}
                 onChangeRowsPerPage={handleRowsPerPageChange}
                 progressPending={loading}

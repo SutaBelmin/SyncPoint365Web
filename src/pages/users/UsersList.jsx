@@ -9,7 +9,7 @@ import './UsersList.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
-import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {NoDataMessage} from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const UsersList = () => {
@@ -21,9 +21,8 @@ export const UsersList = () => {
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
 
-
     const fetchData = useCallback(async () => {
-        try {
+        try { 
             const response = await userService.getPagedUsers(page, signal);
             setData(response.data.items);
             setTotalItemCount(response.data.totalItemCount);

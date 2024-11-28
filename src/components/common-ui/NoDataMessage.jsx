@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from 'react-i18next';
 
-const NoDataMessage = () => {
+export const NoDataMessage = () => {
     const { t } = useTranslation();
 
     return (
@@ -11,4 +11,3 @@ const NoDataMessage = () => {
     );
 };
 
-export default NoDataMessage;

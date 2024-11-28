@@ -12,7 +12,7 @@ import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
-import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {NoDataMessage} from "../../components/common-ui";
 import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
@@ -34,7 +34,7 @@ export const CitiesList = observer(() => {
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, [t, signal]);
+    }, [signal, t]);
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -148,8 +148,8 @@ export const CitiesList = observer(() => {
                 }}
                 paginationPerPage={citiesSearchStore.pageSize}
                 onChangeRowsPerPage={
-                    (newRowsPerPage) =>{
-                        citiesSearchStore.setRowsPerPage(newRowsPerPage);
+                    (newPageSize) =>{
+                        citiesSearchStore.setPageSize(newPageSize);
                         citiesSearchStore.setPage(1);
                     }
                 }

@@ -26,8 +26,8 @@ class CountriesStore {
     this.page = page;
   }
 
-  setRowsPerPage(rows) {
-    this.pageSize = rows;
+  setPageSize(newPageSize) {
+    this.pageSize = newPageSize;
   }
 
   setTotalItemCount(count) {

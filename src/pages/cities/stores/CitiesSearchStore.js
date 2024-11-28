@@ -27,8 +27,8 @@ class CitiesSearchStore {
         this.page = page;
     }
 
-    setRowsPerPage(rowsPerPage) {
-        this.pageSize = rowsPerPage;
+    setPageSize(newPageSize) {
+        this.pageSize = newPageSize;
     }
 
     clearFilters() {

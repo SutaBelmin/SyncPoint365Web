@@ -13,7 +13,7 @@ import { observer } from "mobx-react";
 import countriesSearchStore from "./stores/CountriesSearchStore";
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
-import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {NoDataMessage} from "../../components/common-ui";
 import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
@@ -21,12 +21,12 @@ export const CountriesList = observer(() => {
   const { openModal, closeModal } = useModal();
   const [countriesList, setCountriesList] = useState([]);
   const { t } = useTranslation();
-  const paginationComponentOptions = PaginationOptions();
+  const paginationComponentOptions = PaginationOptions(); 
   const { signal } = useRequestAbort();
 
   const fetchData = useCallback(
     async () => {
-      try {
+      try { 
         const filters = countriesSearchStore.countryFilter;
         const response = await countriesService.getPagedList(filters, signal);
         setCountriesList(response.data?.items);
@@ -55,8 +55,8 @@ export const CountriesList = observer(() => {
     countriesSearchStore.setPage(newPage);
   };
 
-  const handleRowsPerChange = (newRowsPerPage) => {
-    countriesSearchStore.setRowsPerPage(newRowsPerPage);
+  const handleRowsPerChange = (newPageSize) => {
+    countriesSearchStore.setPageSize(newPageSize);
     countriesSearchStore.setPage(1);
   };
 
