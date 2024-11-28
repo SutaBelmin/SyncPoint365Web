@@ -11,7 +11,7 @@ import { reaction } from "mobx"
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import {NoDataMessage} from "../../components/common-ui";
+import { NoDataMessage } from "../../components/common-ui";
 import { PaginationOptions } from "../../components/common-ui";
 import AbsenceRequestTypesSearch from "./search";
 import { useRequestAbort } from "../../components/hooks";
@@ -22,7 +22,7 @@ export const AbsenceRequestTypesList = observer(() => {
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
-    
+
     const fetchData = useCallback(async () => {
         try {
             const response = await absenceRequestTypesService.getPagedList(
@@ -116,36 +116,37 @@ export const AbsenceRequestTypesList = observer(() => {
     ];
 
     return (
-        <div className="pt-16">
-            <h1 className="text-xl font-bold mb-4">{t('ABSENCE_REQUEST_TYPES')}</h1>
-            <div className="flex justify-between items-center mb-4">
-                <AbsenceRequestTypesSearch/>
+        <div className="flex-1 p-6 bg-gray-100 h-screen">
+            <h1 className="h1">{t('ABSENCE_REQUEST_TYPES')}</h1>
+            <div className="flex flex-col gap-4 sm:flex-row">
+                <AbsenceRequestTypesSearch />
                 <button
                     type="button"
                     onClick={addNewRequestClick}
-                    className="btn-new"
+                    className="btn-common h-10 lg:w-[10rem] md:w-[10rem] sm:w-full"
                 >
                     {t('NEW_REQUEST_TYPE')}
                 </button>
             </div>
             <BaseModal />
-            
-            <DataTable
-                columns={columns}
-                data={data}
-                highlightOnHover
-                pagination
-                paginationServer
-                paginationTotalRows={absenceRequestTypesSearchStore.totalItemCount}
-                paginationDefaultPage={absenceRequestTypesSearchStore.pageNumber}
-                paginationPerPage={absenceRequestTypesSearchStore.pageSize}
-                onChangePage={handlePageChange}
-                onChangeRowsPerPage={handleRowsPerPageChange}
-                progressPending={loading}
-                persistTableHead={true}
-                noDataComponent={<NoDataMessage />}
-                paginationComponentOptions={PaginationOptions()}
-            />
+
+            <div className="table max-w-full">
+                <DataTable
+                    columns={columns}
+                    data={data}
+                    highlightOnHover
+                    pagination
+                    paginationServer
+                    paginationTotalRows={absenceRequestTypesSearchStore.totalItemCount}
+                    paginationDefaultPage={absenceRequestTypesSearchStore.pageNumber}
+                    paginationPerPage={absenceRequestTypesSearchStore.rowsPerPage}
+                    onChangePage={handlePageChange}
+                    onChangeRowsPerPage={handleRowsPerPageChange}
+                    progressPending={loading}
+                    persistTableHead={true}
+                    noDataComponent={<NoDataMessage />}
+                />
+            </div>
         </div>
     );
 });

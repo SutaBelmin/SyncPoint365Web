@@ -1,3 +1,33 @@
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Medium screens (max-width: 1024px) */
+  @media (max-width: 1024px) {
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+  }
+  
+  /* Small screens (max-width: 768px) */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+  }
+  
+  /* Very small screens (max-width: 480px) */
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+  }
+
 .rdt_TableHead .rdt_TableCol {
     font-size: 14px;
     font-weight: 600;

@@ -53,10 +53,10 @@ export const CitiesSearch = observer(() => {
         <Formik 
         initialValues={initialValues} onSubmit={handleSearch}>
             {
-            <Form>
-        <div className="flex items-center space-x-4">
+            <Form className="flex flex-col gap-4 sm:flex-row">
             <Field
                 type="text"
+                className="input-search h-10 rounded-md border-gray-300 min-w-[10rem] w-full"
                 name= "searchQuery"
                 placeholder={t('SEARCH_BY_CITY')}
                 value={searchQuery}
@@ -78,13 +78,13 @@ export const CitiesSearch = observer(() => {
                 placeholder={t('SELECT_A_COUNTRY')}
                 isClearable
                 isSearchable
-                className="h-10 border-gray-300 input-select-border w-[25rem]"
+                className="h-10 border-gray-300 input-select-border min-w-[12rem] w-full"
             />
 
             <button
                 type="submit"
                 onClick={handleSearch}
-                className="btn-new"
+                className="btn-common h-10 w-full"
             >
                 {t('SEARCH')}
             </button>
@@ -92,11 +92,10 @@ export const CitiesSearch = observer(() => {
             <button
                 type="button"
                 onClick={handleClear}
-                className="btn-new"
+                className="btn-common h-10 w-full"
             >
                 {t('CLEAR')}
             </button>
-        </div>
         </Form>
         }
         </Formik>
