@@ -8,10 +8,10 @@ const MainContainer = ({ children }) => {
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 1100) {
                 setIsCollapsed(false);
             }
-            if (window.innerWidth > 768) {
+            if (window.innerWidth > 1100) {
                 setIsCollapsed(true);
             }
         };
