@@ -5,19 +5,23 @@ import LanguageSwitcher from '../localization';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ isCollapsed }) => {
     const { t } = useTranslation();
 
     return (
-        <header className="header-comp">
-        <div className="header-actions">
-            <LanguageSwitcher />
-            <a href="/" className="flex items-center text-sm hover:text-gray-500 transition-all duration-150">
-                <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-black" />
-                <span className="text-black">{t('LOG_OUT')}</span>
-            </a>
-        </div>
-    </header>
+        <header className={`header-comp ${isCollapsed ? 'header-collapsed' : ''}`}>
+            <div className="header-actions">
+                <h1 className="header-font">SyncPoint365</h1>
+                <LanguageSwitcher />
+                <a
+                    href="/"
+                    className="flex items-center text-sm hover:text-gray-500 transition-all duration-150"
+                >
+                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-black" />
+                    <span className="text-black">{t('LOG_OUT')}</span>
+                </a>
+            </div>
+        </header>
     );
 };
 

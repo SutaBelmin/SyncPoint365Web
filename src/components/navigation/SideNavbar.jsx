@@ -18,7 +18,6 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                         icon={faBars}
                         className={`text-2xl ${isCollapsed ? 'text-white' : 'text-black'}`} />
                 </button>
-                {isCollapsed && <h1 className="text-xl font-semibold">SyncPoint365</h1>}
             </div>
 
             {isCollapsed && (

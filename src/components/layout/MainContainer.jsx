@@ -3,7 +3,7 @@ import Header from '../header';
 import SideNavbar from '../navigation';
 
 const MainContainer = ({ children }) => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true);
 
 
     useEffect(() => {
@@ -21,14 +21,14 @@ const MainContainer = ({ children }) => {
 
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
-            <SideNavbar
-                isCollapsed={isCollapsed}
-                onToggle={() => setIsCollapsed(!isCollapsed)} />
-            <div
-                className={`flex flex-col w-full transition-all duration-300 ${isCollapsed ? 'ml-64' : 'ml-00'}`}
-            >
-                <Header />
+        <div className={`flex flex-col w-full transition-all duration-300 ${isCollapsed ? 'ml-64' : 'ml-0'}`}>
+            <div className="flex min-h-screen bg-gray-100">
+                <SideNavbar
+                    isCollapsed={isCollapsed}
+                    onToggle={() => setIsCollapsed(!isCollapsed)} />
+                <Header
+                    isCollapsed={isCollapsed}
+                />
                 <main className="p-8">
                     {children}
                 </main>
