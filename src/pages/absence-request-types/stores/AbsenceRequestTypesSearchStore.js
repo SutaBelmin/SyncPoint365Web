@@ -4,7 +4,7 @@ class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
     pageNumber = 1;
-    pageSize = 10;
+    rowsPerPage = 10;
     totalItemCount = 0;
 
     constructor() {
@@ -13,18 +13,22 @@ class AbsenceRequestTypesSearchStore {
 
     setSearchQuery(value) {
         this.searchQuery = value;
+        this.syncWithQueryParams();
     }
 
     setIsActive(value) {
         this.isActive = value;
+        this.syncWithQueryParams();
     }
 
-    setPageNumber(page) {
-        this.pageNumber = page;
+    setPageNumber(value) {
+        this.pageNumber = value;
+        this.syncWithQueryParams();
     }
 
-    setPageSize(newPageSize) {
-        this.pageSize = newPageSize;
+    setRowsPerPage(value) {
+        this.rowsPerPage = value;
+        this.syncWithQueryParams();
     }
 
     setTotalItemCount(value) {
@@ -36,15 +40,40 @@ class AbsenceRequestTypesSearchStore {
             isActive: this.isActive,
             query: this.searchQuery,
             pageNumber: this.pageNumber,
-            pageSize: this.pageSize,
+            pageSize: this.rowsPerPage,
         };
     }
 
     reset() {
-        this.pageSize = 10;
+        this.rowsPerPage = 10;
         this.pageNumber = 1;
         this.searchQuery = '';
         this.isActive = null;
+    }
+
+    syncWithQueryParams() {
+        const params = new URLSearchParams();
+
+        if (this.searchQuery)
+            params.set("searchQuery", this.searchQuery);
+
+        if (this.isActive !== null)
+            params.set("status", this.isActive ? 'active' : 'inactive');
+        
+        if (this.pageNumber !== 1)
+            params.set("page", this.pageNumber);
+
+        if (this.rowsPerPage !== 10)
+            params.set("rowsPerPage", this.rowsPerPage);
+
+        return params;
+    }
+
+    initializeQueryParams(searchParams) {
+        const searchQuery = searchParams.get("searchQuery") || '';
+        const status = searchParams.get("status");
+        this.setSearchQuery(searchQuery);
+        this.setIsActive(status === null ? null : (status === 'active'));
     }
 }
 

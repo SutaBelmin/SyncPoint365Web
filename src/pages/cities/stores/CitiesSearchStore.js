@@ -1,53 +1,67 @@
 import { makeAutoObservable } from "mobx";
 
-class CitiesSearchStore {
-    totalItemCount = 0;
-    countryId = null;
-    searchQuery = "";
-    page = 1;
-    pageSize = 10;
+class CountriesStore {
+  page = 1;
+  totalItemCount = 0;
+  rowsPerPage = 10;
+  searchQuery = "";
 
-    constructor() {
-        makeAutoObservable(this);
-    }
+  constructor() {
+    makeAutoObservable(this);
+  }
 
-    setQuery(query) {
-        this.searchQuery = query;
-    }
+  get countryFilter() {
+    return {
+      searchQuery: this.searchQuery,
+      page: this.page,
+      rowsPerPage: this.rowsPerPage,
+    };
+  }
 
-    setCountryId(countryId) {
-        this.countryId = countryId;
-    }
+  setSearchQuery(query) {
+    this.searchQuery = query;
+    this.syncWithQueryParams();
+  }
 
-    setTotalItemCount(count) {
-        this.totalItemCount = count;
-    }
+  setPage(page) {
+    this.page = page;
+    this.syncWithQueryParams();
+  }
 
-    setPage(page) {
-        this.page = page;
-    }
+  setRowsPerPage(rows) {
+    this.rowsPerPage = rows;
+    this.syncWithQueryParams();
+  }
 
-    setPageSize(newPageSize) {
-        this.pageSize = newPageSize;
-    }
+  setTotalItemCount(count) {
+    this.totalItemCount = count;
+  }
 
-    clearFilters() {
-        this.setCountryId(null);
-        this.setQuery(""); 
-        this.setPage(1);
-    }
+  resetFilters() {
+    this.searchQuery = "";
+    this.page = 1;
+    this.rowsPerPage = 10;
+    this.syncWithQueryParams();
+  }
 
-    get cityFilter() {
-        const filter = {
-            totalItemCount: this.totalItemCount,
-            countryId: this.countryId,
-            searchQuery: this.searchQuery,
-            page: this.page,
-            pageSize: this.pageSize
-        };
-        return filter;
-    }
+  syncWithQueryParams() {
+    const params = new URLSearchParams();
+
+    if(this.searchQuery) 
+      params.set("searchQuery", this.searchQuery);
+
+    if(this.page !== 1) 
+      params.set("page", this.page);
+
+    if(this.rowsPerPage !== 10) 
+      params.set("rowsPerPage",this.rowsPerPage);
+  }
+
+  initializeQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    const searchQuery = params.get("searchQuery") || "";
+    this.setSearchQuery(searchQuery);
+  }
 }
-
-const citiesSearchStore = new CitiesSearchStore();
-export default citiesSearchStore;
+const countriesSearchStore = new CountriesStore();
+export default countriesSearchStore;
