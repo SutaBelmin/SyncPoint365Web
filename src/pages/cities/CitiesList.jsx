@@ -132,7 +132,7 @@ export const CitiesList = observer(() => {
                     {t('ADD_CITY')}
                 </button>
             </div>
-
+            <BaseModal />
             <div className="table max-w-full">
                 <DataTable
                     columns={columns}

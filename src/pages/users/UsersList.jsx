@@ -66,34 +66,31 @@ export const UsersList = () => {
     };
 
     return (
-        <div className="flex-1 p-6 bg-gray-100 h-screen"> {/*`flex-1 p-6 bg-gray-100 h-screen transition-all duration-300 ${isOpen ? 'ml-64' : 'ml-0'}`}>
-            */}<h1 className="h1">{t('USERS')}</h1>
+        <div className="flex-1 p-6 bg-gray-100 h-screen">
+            <h1 className="h1 pt-4">{t('USERS')}</h1>
             <div>
                 <Formik>
-                    <Form>
-                        <div className="flex flex-col gap-4 w-full sm:flex-row">
-                            <Field
-                                name="searchQuery"
-                                type="text"
-                                placeholder="Search absence request types"
-                                className="input-search h-10 rounded-md border-gray-300 max-w-[25rem] w-full"
-                                autoComplete="off"
-                            />
-                            <button
-                                type='button'
-                                onClick={onAddUserClick}
-                                className="btn-common h-10 w-full max-w-[20rem]"
-                            >
-                                {t('ADD_USER')}
-                            </button>
-
-                        </div>
+                    <Form className="flex flex-col gap-4 w-full sm:flex-row">
+                        <Field
+                            name="searchQuery"
+                            type="text"
+                            placeholder="Search absence request types"
+                            className="input-search h-10 rounded-md border-gray-300 max-w-[25rem] w-full"
+                            autoComplete="off"
+                        />
+                        <button
+                            type='button'
+                            onClick={onAddUserClick}
+                            className="btn-common h-10 max-w-[25rem]"
+                        >
+                            {t('ADD_USER')}
+                        </button>
                     </Form>
                 </Formik>
             </div>
 
             <BaseModal />
-            <div className="table-container max-w-full">
+            <div className="table max-w-full">
                 <DataTable
                     columns={columns}
                     data={data || []}

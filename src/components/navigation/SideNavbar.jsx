@@ -1,28 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faUserTimes, faCity, faEarthAmerica, faUser, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-const SideNavbar = () => {
+const SideNavbar = ({ isCollapsed, onToggle }) => {
     const { t } = useTranslation();
-    const [isOpen, setIsOpen] = useState(false);
 
-    const toggleSideNav = () => setIsOpen(!isOpen);
+    
 
     return (
-        <nav className={`bg-gray-800 text-white p-4 fixed top-0 left-0 z-50 transition-all duration-300 ${isOpen ? 'w-64' : 'w-00'} ${isOpen ? '' : 'bg-transparent'}`}
-            style={{ minHeight: '100%' }}
+        <nav className={`bg-gray-800 text-white h-full p-4 fixed top-0 left-0 z-50 transition-all duration-300 
+            ${isCollapsed ? 'w-64' : 'w-00'} ${isCollapsed ? '' : 'bg-transparent'}`}
         >
             <div className="flex justify-between items-center mb-8">
-                <button className="text-white" onClick={toggleSideNav}>
+                <button className="text-white" onClick={onToggle}>
                     <FontAwesomeIcon
                         icon={faBars}
-                        className={`text-2xl ${isOpen ? 'text-white' : 'text-black'}`} />
+                        className={`text-2xl ${isCollapsed ? 'text-white' : 'text-black'}`} />
                 </button>
-                {isOpen && <h1 className="text-xl font-semibold">SyncPoint365</h1>}
+                {isCollapsed && <h1 className="text-xl font-semibold">SyncPoint365</h1>}
             </div>
 
-            {isOpen && (
+            {isCollapsed && (
                 <ul className="space-y-4">
                     {[{ icon: faHome, label: t('HOME'), link: '/home' },
                     { icon: faUser, label: t('USERS'), link: '/users' },

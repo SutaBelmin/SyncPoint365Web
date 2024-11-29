@@ -18,7 +18,7 @@ export const CitiesSearch = observer(() => {
     const initialValues = {
         searchQuery: '',
         selectedCountryId: null,
-        }
+    }
 
     const handleSearch = () => {
         citiesSearchStore.setQuery(searchQuery);
@@ -44,14 +44,14 @@ export const CitiesSearch = observer(() => {
         }
     }, [signal, t]);
 
-    useEffect(() => { 
+    useEffect(() => {
         fetchCountries();
     }, [fetchCountries]);
 
 
     return (
-        <Formik 
-        initialValues={initialValues} onSubmit={handleSearch}>
+        <Formik
+            initialValues={initialValues} onSubmit={handleSearch}>
             {
             <Form className="flex flex-col gap-4 sm:flex-row">
             <Field
@@ -64,40 +64,40 @@ export const CitiesSearch = observer(() => {
                 autoComplete="off"
             />
 
-            <Select
-                value={selectedCountryId}
-                onChange={(value) => {
-                    if (value === null) {
-                        setSelectedCountryId(null);
-                        citiesSearchStore.setCountryId(null);
-                    } else {
-                        setSelectedCountryId(value);
-                    }
-                }}
-                options={countries}
-                placeholder={t('SELECT_A_COUNTRY')}
-                isClearable
-                isSearchable
-                className="h-10 border-gray-300 input-select-border min-w-[12rem] w-full"
-            />
+                    <Select
+                        value={selectedCountryId}
+                        onChange={(value) => {
+                            if (value === null) {
+                                setSelectedCountryId(null);
+                                citiesSearchStore.setCountryId(null);
+                            } else {
+                                setSelectedCountryId(value);
+                            }
+                        }}
+                        options={countries}
+                        placeholder={t('SELECT_A_COUNTRY')}
+                        isClearable
+                        isSearchable
+                        className="h-10 border-gray-300 input-select-border min-w-[12rem] w-full"
+                    />
 
-            <button
-                type="submit"
-                onClick={handleSearch}
-                className="btn-common h-10 w-full"
-            >
-                {t('SEARCH')}
-            </button>
+                    <button
+                        type="submit"
+                        onClick={handleSearch}
+                        className="btn-common h-10"
+                    >
+                        {t('SEARCH')}
+                    </button>
 
-            <button
-                type="button"
-                onClick={handleClear}
-                className="btn-common h-10 w-full"
-            >
-                {t('CLEAR')}
-            </button>
-        </Form>
-        }
+                    <button
+                        type="button"
+                        onClick={handleClear}
+                        className="btn-common h-10"
+                    >
+                        {t('CLEAR')}
+                    </button>
+                </Form>
+            }
         </Formik>
     );
 }

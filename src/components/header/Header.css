@@ -1,0 +1,22 @@
+.header-comp {
+    background-color: rgba(232, 237, 238, 0.809);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    padding-right: 1rem;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.header-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+}
+
+.header-actions a {
+    margin-left: 1rem;
+}
