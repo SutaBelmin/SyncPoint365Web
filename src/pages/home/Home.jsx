@@ -6,7 +6,7 @@ const Home = () => {
 
     return (
         <div className="p-8">
-            <h2 className="text-2xl font-bold mb-4">{t('WELCOME_TO_HOME_SCREEN')}</h2>
+            <h2 className="h1 pt-4 text-2xl font-bold mb-4">{t('WELCOME_TO_HOME_SCREEN')}</h2>
         </div>
     );
 };
