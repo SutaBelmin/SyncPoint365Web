@@ -16,6 +16,8 @@ export const CountriesSearch = () => {
   const handleClearFilters = (setFieldValue) => {
     countriesSearchStore.resetFilters();
     setFieldValue("searchQuery", "");
+    setSearchParams({});
+    setFieldValue("searchQuery", "");
   };
             
   useEffect(() => {
