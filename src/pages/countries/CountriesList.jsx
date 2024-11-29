@@ -128,7 +128,7 @@ export const CountriesList = observer(() => {
 
 	return (
 		<div className="flex-1 p-6 bg-gray-100 h-screen">
-			<h1 className="h1 pt-4">{t('COUNTRIES')}</h1>
+			<h1 className="h1">{t('COUNTRIES')}</h1>
 			<div className="flex flex-col gap-4 sm:flex-row">
 				<CountriesSearch />
 				<button
