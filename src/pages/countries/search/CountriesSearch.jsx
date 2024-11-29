@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,6 @@ export const CountriesSearch = () => {
     countriesSearchStore.resetFilters();
     setFieldValue("searchQuery", "");
     setSearchParams({});
-    setFieldValue("searchQuery", "");
   };
             
   useEffect(() => {
