@@ -11,10 +11,12 @@ class UserService extends BaseService {
 
     async getPagedUsers(page = 1, signal = null) {
 
-        const response = await this.api.get(`/users/paged/${page}`,
-            {
-                signal: signal
-            }
+        const response = await this.api.get(`/users/paged-list`, {
+            params: {
+                page: page
+            },
+            signal: signal
+        }
         );
         return response;
     }

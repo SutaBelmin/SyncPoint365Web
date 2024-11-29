@@ -25,8 +25,7 @@ export const UsersList = () => {
         try { 
             const response = await userService.getPagedUsers(page, signal);
             setData(response.data.items);
-            setTotalItemCount(response.data.totalItemCount);
-
+            setTotalItemCount(response.data.totalItemCount); 
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
