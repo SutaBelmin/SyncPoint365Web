@@ -40,7 +40,7 @@
 }
 
 /* Small screens (max-width: 768px) */
-@media (max-width: 768px) {
+@media (max-width: 830px) {
     .header-font {
         font-size: 1.7rem;
         font-weight: bold;
