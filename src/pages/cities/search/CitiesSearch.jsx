@@ -53,16 +53,16 @@ export const CitiesSearch = observer(() => {
         <Formik
             initialValues={initialValues} onSubmit={handleSearch}>
             {
-            <Form className="flex flex-col gap-4 sm:flex-row">
-            <Field
-                type="text"
-                className="input-search h-10 rounded-md border-gray-300 min-w-[10rem] w-full"
-                name= "searchQuery"
-                placeholder={t('SEARCH_BY_CITY')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoComplete="off"
-            />
+                <Form className="flex flex-col gap-4 sm:flex-row">
+                    <Field
+                        type="text"
+                        className="input-search h-10 rounded-md border-gray-300 min-w-[10rem] w-full"
+                        name="searchQuery"
+                        placeholder={t('SEARCH_BY_CITY')}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        autoComplete="off"
+                    />
 
                     <Select
                         value={selectedCountryId}

@@ -11,6 +11,9 @@ const MainContainer = ({ children }) => {
             if (window.innerWidth <= 768) {
                 setIsCollapsed(false);
             }
+            if (window.innerWidth > 768) {
+                setIsCollapsed(true);
+            }
         };
 
         window.addEventListener('resize', handleResize);
@@ -21,7 +24,7 @@ const MainContainer = ({ children }) => {
 
 
     return (
-        <div className={`flex flex-col w-full transition-all duration-300 ${isCollapsed ? 'ml-64' : 'ml-0'}`}>
+        <div className={`flex flex-col max-w-full transition-all duration-300 ${isCollapsed ? 'ml-64' : 'ml-0'}`}>
             <div className="flex min-h-screen bg-gray-100">
                 <SideNavbar
                     isCollapsed={isCollapsed}
