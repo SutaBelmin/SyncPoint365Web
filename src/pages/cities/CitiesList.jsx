@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
@@ -12,26 +12,29 @@ import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
-import NoDataMessage from "../../components/common-ui/NoDataMessage";
+import {NoDataMessage} from "../../components/common-ui";
+import {PaginationOptions} from "../../components/common-ui/PaginationOptions";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
+    const paginationComponentOptions = PaginationOptions();
+    const { signal } = useRequestAbort();
 
-    const fetchData = async () => {
-
+    const fetchData = useCallback(async () => {
         try {
             const filter = {...citiesSearchStore.cityFilter};
 
-            const response = await citiesService.getPagedCities(filter);
+            const response = await citiesService.getPagedCities(filter, signal);
 
             setData(response.data.items);
             citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    };
+    }, [signal, t]);
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -47,7 +50,7 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, []);
+    }, [fetchData]);
     
     const columns = [
         {
@@ -109,20 +112,15 @@ export const CitiesList = observer(() => {
             await citiesService.delete(cityId);
             fetchData();
             closeModal();
-            toast.success("Country deleted successfully!");
+            toast.success(t('DELETED'));
         } catch (error) {
-            toast.error("Failed to delete the record. Please try again.");
+            toast.error(t('FAILED_TO_DELETE'));
         }
     }
 
-    const paginationComponentOptions = {
-        rowsPerPageText: t('ROWS_PER_PAGE'), 
-        rangeSeparatorText: t('OF'), 
-    };
-
     return (
         <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Cities</h1>
+            <h1 className="text-xl font-bold mb-4">{t('CITIES')}</h1>
             <div className="flex justify-between items-center mb-4">
                 <div className="flex space-x-4">
                 <CitiesSearch/>
@@ -148,17 +146,17 @@ export const CitiesList = observer(() => {
                 onChangePage={(newPage) => {
                     citiesSearchStore.setPage(newPage);
                 }}
-                paginationPerPage={citiesSearchStore.rowsPerPage}
+                paginationPerPage={citiesSearchStore.pageSize}
                 onChangeRowsPerPage={
-                    (newRowsPerPage) =>{
-                        citiesSearchStore.setRowsPerPage(newRowsPerPage);
+                    (newPageSize) =>{
+                        citiesSearchStore.setPageSize(newPageSize);
                         citiesSearchStore.setPage(1);
                     }
                 }
                 highlightOnHover
                 persistTableHead={true}
                 paginationComponentOptions={paginationComponentOptions}
-                noDataComponent={<NoDataMessage message="No cities available."/>} />
+                noDataComponent={<NoDataMessage />} />
 
         </div>
     );

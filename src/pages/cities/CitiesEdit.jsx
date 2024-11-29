@@ -31,9 +31,9 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
             await citiesService.update(values);
             fetchData();
             closeModal();
-            toast.success("City updated successfully!");
+            toast.success(t('UPDATED'));
         } catch (error) {
-            toast.error("Failed to update city. Please try again.");
+            toast.error(t('FAIL_UPDATE'));
         }
     }
 

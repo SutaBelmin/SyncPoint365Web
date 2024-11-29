@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
 import { toast } from 'react-toastify';
@@ -10,7 +10,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
 
     const validationSchema = Yup.object({
         name: Yup.string()
-        .required("Name is required!")
+        .required(t('NAME_IS_REQUIRED'))
     });
 
     const addHandling = async (values, actions) => {
@@ -19,9 +19,9 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
             await absenceRequestTypesService.add(values);
             fetchData();
             closeModal(); 
-            toast.success("New request type added successfully."); 
+            toast.success(t('ADDED')); 
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
         finally{
             setSubmitting(false);
@@ -48,9 +48,10 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             type="text"
                             id="name"
                             name="name"
-                            placeholder={t('ENTER_YOUR_NAME')}
+                            placeholder={t('ENTER_ABSENCE_REQUEST_TYPE_NAME')}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
+                        <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
                 </div>
                     <div className="mb-4 flex items-center">
                         <Field

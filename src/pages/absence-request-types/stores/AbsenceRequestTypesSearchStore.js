@@ -4,7 +4,7 @@ class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
     pageNumber = 1;
-    rowsPerPage = 10;
+    pageSize = 10;
     totalItemCount = 0;
 
     constructor() {
@@ -19,12 +19,12 @@ class AbsenceRequestTypesSearchStore {
         this.isActive = value;
     }
 
-    setPageNumber(value) {
-        this.pageNumber = value;
+    setPageNumber(page) {
+        this.pageNumber = page;
     }
 
-    setRowsPerPage(value) {
-        this.rowsPerPage = value;
+    setPageSize(newPageSize) {
+        this.pageSize = newPageSize;
     }
 
     setTotalItemCount(value) {
@@ -36,12 +36,12 @@ class AbsenceRequestTypesSearchStore {
             isActive: this.isActive,
             query: this.searchQuery,
             pageNumber: this.pageNumber,
-            pageSize: this.rowsPerPage,
+            pageSize: this.pageSize,
         };
     }
 
     reset() {
-        this.rowsPerPage = 10;
+        this.pageSize = 10;
         this.pageNumber = 1;
         this.searchQuery = '';
         this.isActive = null;

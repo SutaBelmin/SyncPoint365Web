@@ -6,14 +6,15 @@ import { useTranslation } from 'react-i18next';
 const LanguageSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { i18n } = useTranslation();
+  const { t } = useTranslation();  
  
   const [selectedLanguage, setSelectedLanguage] = useState(() => {
     return localStorage.getItem("selectedLanguage") || i18n.language;
   });
   
   const languages = [
-    { code: "en-US", label: "English", flag: "US" },
-    { code: "bs", label: "Bosnian", flag: "BA" },
+    { code: "en-US", label: t('ENGLISH'), flag: "US" },
+    { code: "bs", label: t('BOSNIAN'), flag: "BA" },
   ];
   
   const toggleDropdown = () => setIsOpen(!isOpen);

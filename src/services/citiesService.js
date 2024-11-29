@@ -28,21 +28,17 @@ class CitiesService extends BaseService {
         return response.data;
     }
 
-    async getPagedCities(filter, cancelToken = null) {
-        try {
-            const response = await this.api.get(`/cities/paged`, {
-                params: {
-                    countryId: filter.countryId,
-                    query: filter.searchQuery,
-                    page: filter.page,
-                    pageSize: filter.rowsPerPage
-                },
-                cancelToken: cancelToken,
-            });
-            return response;
-        } catch (error) {
-
-        }
+    async getPagedCities(filter, signal = null) {
+        const response = await this.api.get(`/cities/paged`, {
+            params: {
+                countryId: filter.countryId,
+                query: filter.searchQuery,
+                page: filter.page,
+                pageSize: filter.pageSize
+            },
+            signal: signal
+        });
+        return response;
     }
 }
 

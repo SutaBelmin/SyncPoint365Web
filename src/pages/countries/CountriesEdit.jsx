@@ -33,9 +33,9 @@ export const CountriesEdit = ({ country, closeModal, fetchData }) => {
             });
             fetchData();
             closeModal();
-            toast.success("Country updated successfully!"); 
+            toast.success(t('UPDATED')); 
           } catch (error) {
-            toast.error("Failed to update country. Please try again.");
+            toast.error(t('FAIL_UPDATE'));
           } finally {
             setSubmitting(false);
           }

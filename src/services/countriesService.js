@@ -1,9 +1,9 @@
 import BaseService from "./baseService"
 
 class CountriesService extends BaseService {
-    async getList() {
+    async getList(signal = null) {
         const response = await this.api.get(`/countries/list`, {
-            cancelToken: null
+            cancellationToken: signal
         });
         return response;
     }
@@ -29,11 +29,21 @@ class CountriesService extends BaseService {
         return response.data;
     }
 
-    async getPagedList(filters) {
-        const { page, rowsPerPage, searchQuery } = filters;  
-        const response = await this.api.get(`/countries/paged/${page}?pageSize=${rowsPerPage}&query=${searchQuery ? searchQuery : ''}`);
+
+    async getPagedList(filters, signal = null) {
+        const response = await this.api.get(
+            `/countries/paged-list`, 
+            {
+                params: {
+                    page: filters.page,
+                    pageSize: filters.pageSize,
+                    query: filters.searchQuery || '', 
+                },
+                signal: signal
+            }
+        );
         return response;
-      }
+    }
 }
 
 const countriesService = new CountriesService();

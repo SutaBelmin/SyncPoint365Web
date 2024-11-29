@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import * as Yup from "yup"
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { citiesService, countriesService } from "../../services";
@@ -11,7 +11,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
     const { t } = useTranslation();
 
-    const fetchCountries = async () => {
+    const fetchCountries = useCallback(async () => {
         try {
             const response = await countriesService.getList();
             setCountries(response.data.map(country => ({
@@ -19,22 +19,22 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                 label: country.name
             })));
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    };
+    }, [t]);
 
     useEffect(() => {
         fetchCountries();
-    }, []);
+    }, [fetchCountries]);
 
     const addCity = async (values) => {
         try {
             await citiesService.add(values);
             fetchData();
             closeModal();
-            toast.success("City added succesfully!");
+            toast.success(t('ADDED'));
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     }
 

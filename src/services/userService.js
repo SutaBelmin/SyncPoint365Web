@@ -1,6 +1,7 @@
 import BaseService from "./baseService";
 
 class UserService extends BaseService {
+
     async getUsers() {
         const response = await this.api.get("/users/get-users", {
             cancelToken: null
@@ -8,15 +9,16 @@ class UserService extends BaseService {
         return response;
     }
 
-    async getPagedUsers(page = 1, cancelToken = null) {
-        try {
-            const response = await this.api.get(`/users/paged/${page}`, {
-                cancelToken: cancelToken,
-            });
-            return response; 
-        } catch (error) {
-            
+    async getPagedUsers(page = 1, signal = null) {
+
+        const response = await this.api.get(`/users/paged-list`, {
+            params: {
+                page: page
+            },
+            signal: signal
         }
+        );
+        return response;
     }
 }
 

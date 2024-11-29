@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import { BaseModal } from '../../components/modal';
 import { useModal } from '../../context/ModalProvider';
 import { UsersAdd } from '../users'
@@ -8,6 +8,9 @@ import DataTable from 'react-data-table-component';
 import './UsersList.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
+import {NoDataMessage} from "../../components/common-ui";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const UsersList = () => {
     const { openModal } = useModal();
@@ -15,23 +18,24 @@ export const UsersList = () => {
     const [page, setPage] = useState(1);
     const [totalItemCount, setTotalItemCount] = useState(0);
     const { t } = useTranslation();
-
+    const paginationComponentOptions = PaginationOptions();
+    const { signal } = useRequestAbort();
 
     const fetchData = useCallback(async () => {
-        try {
-            const response = await userService.getPagedUsers(page);
+        try { 
+            const response = await userService.getPagedUsers(page, signal);
             setData(response.data.items);
-            setTotalItemCount(response.data.totalItemCount);
-    
+            setTotalItemCount(response.data.totalItemCount); 
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, [page]); 
-    
+
+    }, [page, signal, t]);
+
     useEffect(() => {
         fetchData();
     }, [fetchData]);
-    
+
 
     const onAddUserClick = () => {
         openModal(<UsersAdd />);
@@ -60,11 +64,6 @@ export const UsersList = () => {
         setPage(newPage);
     };
 
-    const paginationComponentOptions = {
-        rowsPerPageText: t('ROWS_PER_PAGE'), 
-        rangeSeparatorText: t('OF'), 
-    };
-
     return (
         <div className="p-4">
             <h1 className="text-xl font-bold mb-4">{t('USERS')}</h1>
@@ -88,7 +87,7 @@ export const UsersList = () => {
                 onChangePage={handlePageChange}
                 highlightOnHover
                 persistTableHead={true}
-                noDataComponent="No users available."
+                noDataComponent={<NoDataMessage />}
                 paginationComponentOptions={paginationComponentOptions}
             />
         </div>
