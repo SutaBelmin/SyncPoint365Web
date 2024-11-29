@@ -67,7 +67,7 @@ export const UsersList = () => {
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <h1 className="h1 pt-4">{t('USERS')}</h1>
+            <h1 className="h1">{t('USERS')}</h1>
             <div>
                 <Formik>
                     <Form className="flex flex-col gap-4 w-full sm:flex-row">
