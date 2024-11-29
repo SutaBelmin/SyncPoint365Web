@@ -81,7 +81,7 @@ export const UsersList = () => {
                         <button
                             type='button'
                             onClick={onAddUserClick}
-                            className="btn-common h-10 lg:ml-auto"
+                            className="btn-common h-10 md:ml-auto"
                         >
                             {t('ADD_USER')}
                         </button>

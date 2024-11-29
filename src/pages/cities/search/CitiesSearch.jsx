@@ -56,7 +56,7 @@ export const CitiesSearch = observer(() => {
                 <Form className="flex flex-col gap-4 md:flex-row">
                     <Field
                         type="text"
-                        className="input-search h-10 rounded-md border-gray-300 min-w-[9rem] w-full"
+                        className="input-search h-10 rounded-md border-gray-300 w-full"
                         name="searchQuery"
                         placeholder={t('SEARCH_BY_CITY')}
                         value={searchQuery}
@@ -78,7 +78,7 @@ export const CitiesSearch = observer(() => {
                         placeholder={t('SELECT_A_COUNTRY')}
                         isClearable
                         isSearchable
-                        className="h-10 border-gray-300 input-select-border min-w-[9rem] w-full"
+                        className="h-10 border-gray-300 input-select-border w-full"
                     />
 
                     <button
