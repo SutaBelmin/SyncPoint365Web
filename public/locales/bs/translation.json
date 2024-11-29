@@ -19,6 +19,7 @@
     "NO_USERS_AVAILABLE.": "Nema korisnika za prikaz.",
     "COUNTRIES": "Zemlje",
     "COUNTRY_NAME": "Ime države",
+    "CITY_NAME": "Ime grada",
     "ADD_COUNTRY": "Dodaj zemlju",
     "EDIT_COUNTRY": "Uredi državu",
     "NO_COUNTRIES_AVAILABLE.": "Nema zemalja za prikaz.",
@@ -42,6 +43,7 @@
     "POSTAL_CODE_IS_REQUIRED": "Obavezan poštanski broj!",
     "POSTAL_CODE_NUMBER": "Poštanski broj mora biti broj.",
     "SELECT_A_COUNTRY": "Odaberi zemlju",
+    "SELECT_A_CITY": "Odaberi grad",
     "EDIT_CITY": "Uredi grad",
     "REQUEST_TYPES": "Tipovi zahtjeva",
     "ABSENCE_REQUEST_TYPES": "Tipovi zahtjeva za odsutstvo",
@@ -70,8 +72,19 @@
     "FAILED_TO_DELETE": "Brisanje zapisa nije uspjelo.",
     "DEACTIVATE": "Deaktiviraj korisnika?",
     "ACTIVATE": "Aktiviraj korisnika?",
-    "UPDATED": "Uspješno uređeno.",
     "FAIL_UPDATE": "Uređivanje nije uspjelo.",
     "ADDED": "Uspješno dodano.",
-    "FAILED_LOGIN": "Provjerite svoje podatke."
+    "FAILED_LOGIN": "Provjerite svoje podatke.",
+    "UPDATED": "Uspješno uređeno!",
+    "FAIL_UPDATE": "Uređivanje nije uspjelo!",
+    "ADDED": "Uspješno dodano!",
+    "FIRST_NAME_IS_REQUIRED": "Obavezno ime!",
+    "LAST_NAME_IS_REQUIRED": "Obavezno prezime!",
+    "EMAIL_IS_NOT_VALID":"Email nije u ispravnom formatu!",
+    "CITY": "Grad",
+    "CITY_REQUIRED": "Obavezan grad!",
+    "ROLE":"Uloga",
+    "SELECT_ROLE":"Odaberi ulogu",
+    "ROLE_REQUIRED": "Obavezna uloga!"
+    
 }

@@ -25,6 +25,22 @@ class UserService extends BaseService {
         const response = await this.api.post(`/users/change-status?id=${id}`);
         return response;
     }
+    
+    async add(userData) {
+        const dataToSend = {
+            ...userData,
+            role: userData.roleId, 
+            passwordHash: "sjnosndjwid", 
+            passwordSalt: "jsaancbaocnboa"
+
+        };
+       
+        const response = await this.api.post(`/users`, dataToSend, {
+            cancelToken: null
+        });
+
+        return response.data;
+    }
 }
 
 const userService = new UserService();

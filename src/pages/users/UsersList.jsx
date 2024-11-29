@@ -1,7 +1,5 @@
 import React, { useCallback } from 'react';
 import { BaseModal } from '../../components/modal';
-import { useModal } from '../../context/ModalProvider';
-import { UsersAdd } from '../users'
 import { useEffect, useState } from "react";
 import { userService } from '../../services';
 import DataTable from 'react-data-table-component';
@@ -15,6 +13,8 @@ import { Formik, Form, Field } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
+import { useNavigate } from 'react-router-dom';
+import { useModal } from '../../context';
 
 export const UsersList = () => {
     const { openModal, closeModal } = useModal();
@@ -24,12 +24,14 @@ export const UsersList = () => {
     const { t } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
+    const navigate = useNavigate();
 
     const fetchData = useCallback(async () => {
         try { 
             const response = await userService.getPagedUsers(page, signal);
             setData(response.data.items);
             setTotalItemCount(response.data.totalItemCount); 
+            console.log("Podaci",response.data.items);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -42,7 +44,8 @@ export const UsersList = () => {
 
 
     const onAddUserClick = () => {
-        openModal(<UsersAdd />);
+        //openModal(<UsersAdd />);
+        navigate('/usersAdd');
     };
 
     const columns = [
@@ -77,6 +80,9 @@ export const UsersList = () => {
                 </button>
             </div>
         ),
+            name: t('CITY_NAME'),
+            selector: row => row.cityName,
+            sortable: true,
         },
     ];
 
