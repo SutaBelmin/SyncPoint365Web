@@ -24,17 +24,17 @@ const MainContainer = ({ children }) => {
 
 
     return (
-        <div className={`flex flex-col max-w-full transition-all duration-300 ${isCollapsed ? 'ml-64' : 'ml-0'}`}>
-            <div className="flex min-h-screen bg-gray-100">
-                <SideNavbar
-                    isCollapsed={isCollapsed}
-                    onToggle={() => setIsCollapsed(!isCollapsed)} />
-                <Header
-                    isCollapsed={isCollapsed}
-                />
-                <main className="p-8">
-                    {children}
-                </main>
+        <div className="flex flex-col h-full max-w-full">
+            <SideNavbar
+                isCollapsed={isCollapsed}
+                onToggle={() => setIsCollapsed(!isCollapsed)}
+            />
+            <div
+                className={`flex min-h-screen bg-gray-100 transition-all duration-300 ${isCollapsed ? 'ml-64' : 'ml-0'
+                    }`}
+            >
+                <Header isCollapsed={isCollapsed} />
+                <main className="flex-1 overflow-x-hidden">{children}</main>
             </div>
         </div>
     );
