@@ -1,19 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../header';
 import SideNavbar from '../navigation';
 
-const MainContainer = ({children}) => {
-  return (
-      <div className="flex min-h-screen bg-gray-100">
-            <SideNavbar />
-            <div className="flex flex-col w-full ml-64">
-                <Header />
-                <main className="p-8">
-                    {children}
-                </main>
+const MainContainer = ({ children }) => {
+    const [isCollapsed, setIsCollapsed] = useState(true);
+
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth <= 1100) {
+                setIsCollapsed(false);
+            }
+            if (window.innerWidth > 1100) {
+                setIsCollapsed(true);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+
+    return (
+        <div className="flex flex-col h-full max-w-full">
+            <SideNavbar
+                isCollapsed={isCollapsed}
+                onToggle={() => setIsCollapsed(!isCollapsed)}
+            />
+            <div
+                className={`flex min-h-screen bg-gray-100 transition-all duration-300 ${isCollapsed ? 'sm:ml-64 xs:ml-0' : 'sm:ml-0 xs:ml-0'
+                    }`}
+            >
+                <Header isCollapsed={isCollapsed} />
+                <main className="flex-1 overflow-x-hidden">{children}</main>
             </div>
         </div>
-  );
+    );
 };
 
 export default MainContainer;

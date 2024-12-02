@@ -18,7 +18,7 @@ export const CitiesSearch = observer(() => {
     const initialValues = {
         searchQuery: '',
         selectedCountryId: null,
-        }
+    }
 
     const handleSearch = () => {
         citiesSearchStore.setQuery(searchQuery);
@@ -44,61 +44,60 @@ export const CitiesSearch = observer(() => {
         }
     }, [signal, t]);
 
-    useEffect(() => { 
+    useEffect(() => {
         fetchCountries();
     }, [fetchCountries]);
 
 
     return (
-        <Formik 
-        initialValues={initialValues} onSubmit={handleSearch}>
+        <Formik
+            initialValues={initialValues} onSubmit={handleSearch}>
             {
-            <Form>
-        <div className="flex items-center space-x-4">
-            <Field
-                type="text"
-                name= "searchQuery"
-                placeholder={t('SEARCH_BY_CITY')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoComplete="off"
-            />
+                <Form className="flex flex-col gap-4 md:flex-row">
+                    <Field
+                        type="text"
+                        className="input-search h-10 rounded-md border-gray-300 w-full"
+                        name="searchQuery"
+                        placeholder={t('SEARCH_BY_CITY')}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        autoComplete="off"
+                    />
 
-            <Select
-                value={selectedCountryId}
-                onChange={(value) => {
-                    if (value === null) {
-                        setSelectedCountryId(null);
-                        citiesSearchStore.setCountryId(null);
-                    } else {
-                        setSelectedCountryId(value);
-                    }
-                }}
-                options={countries}
-                placeholder={t('SELECT_A_COUNTRY')}
-                isClearable
-                isSearchable
-                className="h-10 border-gray-300 input-select-border w-[25rem]"
-            />
+                    <Select
+                        value={selectedCountryId}
+                        onChange={(value) => {
+                            if (value === null) {
+                                setSelectedCountryId(null);
+                                citiesSearchStore.setCountryId(null);
+                            } else {
+                                setSelectedCountryId(value);
+                            }
+                        }}
+                        options={countries}
+                        placeholder={t('SELECT_A_COUNTRY')}
+                        isClearable
+                        isSearchable
+                        className="h-10 border-gray-300 input-select-border w-full"
+                    />
 
-            <button
-                type="submit"
-                onClick={handleSearch}
-                className="btn-new"
-            >
-                {t('SEARCH')}
-            </button>
+                    <button
+                        type="submit"
+                        onClick={handleSearch}
+                        className="btn-common h-10"
+                    >
+                        {t('SEARCH')}
+                    </button>
 
-            <button
-                type="button"
-                onClick={handleClear}
-                className="btn-new"
-            >
-                {t('CLEAR')}
-            </button>
-        </div>
-        </Form>
-        }
+                    <button
+                        type="button"
+                        onClick={handleClear}
+                        className="btn-common h-10"
+                    >
+                        {t('CLEAR')}
+                    </button>
+                </Form>
+            }
         </Formik>
     );
 }

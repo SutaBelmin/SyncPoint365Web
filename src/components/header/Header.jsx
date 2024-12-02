@@ -3,19 +3,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import LanguageSwitcher from '../localization';
 import { useTranslation } from 'react-i18next';
+import './Header.css';
 
-const Header = () => {
+const Header = ({ isCollapsed }) => {
     const { t } = useTranslation();
 
     return (
-        <header className="text-white flex justify-end items-center h-16 px-6 shadow-md">
-            <div className="mr-4">
+        <header className={`header-comp ${isCollapsed ? 'header-collapsed' : ''}`}>
+            <div className="header-actions">
+                <h1 className="header-font">SyncPoint365</h1>
                 <LanguageSwitcher />
+                <a
+                    href="/"
+                    className="flex items-center text-sm hover:text-gray-500"
+                >
+                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-black" />
+                    <span className="text-black">{t('LOG_OUT')}</span>
+                </a>
             </div>
-            <a href="/" className="flex items-center hover:text-gray-300">
-                <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-black" />
-                <span className="text-black">{t('LOG_OUT')}</span>
-            </a>
         </header>
     );
 };

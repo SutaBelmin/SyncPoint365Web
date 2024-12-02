@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import {NoDataMessage} from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { Formik, Form, Field } from 'formik';
 
 export const UsersList = () => {
     const { openModal } = useModal();
@@ -65,31 +66,44 @@ export const UsersList = () => {
     };
 
     return (
-        <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">{t('USERS')}</h1>
-            <div className="flex justify-end mb-4">
-                <button
-                    type='button'
-                    onClick={onAddUserClick}
-                    className="btn-new"
-                >
-                    {t('ADD_USER')}
-                </button>
+        <div className="flex-1 p-6 bg-gray-100 h-screen">
+            <h1 className="h1">{t('USERS')}</h1>
+            <div>
+                <Formik>
+                    <Form className="flex flex-col gap-4 w-full sm:flex-row">
+                        <Field
+                            name="searchQuery"
+                            type="text"
+                            placeholder="Search absence request types"
+                            className="input-search h-10 rounded-md border-gray-300 max-w-[25rem] w-full"
+                            autoComplete="off"
+                        />
+                        <button
+                            type='button'
+                            onClick={onAddUserClick}
+                            className="btn-common h-10 md:ml-auto"
+                        >
+                            {t('ADD_USER')}
+                        </button>
+                    </Form>
+                </Formik>
             </div>
-            <BaseModal />
 
-            <DataTable
-                columns={columns}
-                data={data || []}
-                pagination
-                paginationServer
-                paginationTotalRows={totalItemCount}
-                onChangePage={handlePageChange}
-                highlightOnHover
-                persistTableHead={true}
-                noDataComponent={<NoDataMessage />}
-                paginationComponentOptions={paginationComponentOptions}
-            />
+            <BaseModal />
+            <div className="table max-w-full">
+                <DataTable
+                    columns={columns}
+                    data={data || []}
+                    pagination
+                    paginationServer
+                    paginationTotalRows={totalItemCount}
+                    onChangePage={handlePageChange}
+                    highlightOnHover
+                    persistTableHead={true}
+                    noDataComponent={<NoDataMessage />}
+                    paginationComponentOptions={paginationComponentOptions}
+                />
+            </div>
         </div>
     );
 };

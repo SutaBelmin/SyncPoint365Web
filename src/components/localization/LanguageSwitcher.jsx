@@ -31,7 +31,7 @@ const LanguageSwitcher = () => {
   return (
     <div className="relative">
       <button
-        className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-md text-gray-800 hover:bg-gray-200"
+        className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-800 hover:bg-gray-200"
         onClick={toggleDropdown}
       >
         <FlagIcon code={selectedFlag} className="w-6 h-4" />
