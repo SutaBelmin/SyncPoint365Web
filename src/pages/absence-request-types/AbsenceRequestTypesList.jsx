@@ -144,6 +144,7 @@ export const AbsenceRequestTypesList = observer(() => {
                     progressPending={loading}
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
+                    paginationComponentOptions={PaginationOptions()}
                 />
             </div>
         </div>

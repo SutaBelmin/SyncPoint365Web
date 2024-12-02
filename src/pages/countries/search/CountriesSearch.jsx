@@ -22,13 +22,13 @@ export const CountriesSearch = () => {
       onSubmit={handleSearch}
     >
       {({ resetForm }) => (
-        <Form className="flex flex-col gap-4 sm:flex-row">
+        <Form className="flex flex-col gap-4 xs:flex-row">
           <Field
             type="text"
             name="searchQuery"
             placeholder={t('SEARCH_COUNTRIES')}
             autoComplete="off"
-            className="input-search h-10 rounded-md border-gray-300 w-full"
+            className="input-search h-10 rounded-md border-gray-300 min-w-[9rem] w-full"
           />
           <button type="submit" className="btn-common h-10">
             {t('SEARCH')}

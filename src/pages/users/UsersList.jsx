@@ -70,7 +70,7 @@ export const UsersList = () => {
             <h1 className="h1">{t('USERS')}</h1>
             <div>
                 <Formik>
-                    <Form className="flex flex-col gap-4 w-full sm:flex-row">
+                    <Form className="flex flex-col gap-4 w-full xs:flex-row">
                         <Field
                             name="searchQuery"
                             type="text"
