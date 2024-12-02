@@ -15,7 +15,7 @@ const Header = ({ isCollapsed }) => {
                 <LanguageSwitcher />
                 <a
                     href="/"
-                    className="flex items-center text-sm hover:text-gray-500 transition-all duration-150"
+                    className="flex items-center text-sm hover:text-gray-500"
                 >
                     <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-black" />
                     <span className="text-black">{t('LOG_OUT')}</span>

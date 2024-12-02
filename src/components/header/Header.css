@@ -48,9 +48,12 @@
 }
 
 /* Very small screens (max-width: 480px) */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .header-font {
         font-size: 1.5rem;
         font-weight: bold;
+    }
+    .header-collapsed .header-font {
+        transform: translateX(0px);
     }
 }

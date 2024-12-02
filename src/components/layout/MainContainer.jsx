@@ -30,7 +30,7 @@ const MainContainer = ({ children }) => {
                 onToggle={() => setIsCollapsed(!isCollapsed)}
             />
             <div
-                className={`flex min-h-screen bg-gray-100 transition-all duration-300 ${isCollapsed ? 'ml-64' : 'ml-0'
+                className={`flex min-h-screen bg-gray-100 transition-all duration-300 ${isCollapsed ? 'sm:ml-64 xs:ml-0' : 'sm:ml-0 xs:ml-0'
                     }`}
             >
                 <Header isCollapsed={isCollapsed} />
