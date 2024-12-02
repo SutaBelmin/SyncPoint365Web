@@ -9,11 +9,12 @@ class UserService extends BaseService {
         return response;
     }
 
-    async getPagedUsers(page = 1, signal = null) {
+    async getPagedUsers(page = 1, pageSize = 10, signal = null) {
 
         const response = await this.api.get(`/users/paged-list`, {
             params: {
-                page: page
+                page: page,
+                pageSize: pageSize
             },
             signal: signal
         }
@@ -27,12 +28,12 @@ class UserService extends BaseService {
     }
     
     async add(userData) {
+        console.log("pass:", userData.password);
         const dataToSend = {
             ...userData,
             role: userData.roleId, 
-            passwordHash: "sjnosndjwid", 
-            passwordSalt: "jsaancbaocnboa"
-
+            passwordHash: "", 
+            passwordSalt: ""
         };
        
         const response = await this.api.post(`/users`, dataToSend, {

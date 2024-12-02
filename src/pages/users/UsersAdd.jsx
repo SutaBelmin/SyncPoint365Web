@@ -30,11 +30,12 @@ export const UsersAdd = () => {
             .email(t('EMAIL_IS_NOT_VALID'))
             .required(t('EMAIL_IS_REQUIRED')),
         cityId: Yup.mixed()
-            //.nullable()
             .required(t('CITY_REQUIRED')),
         roleId: Yup.mixed()
-            //.nullable()
-            .required(t('ROLE_REQUIRED'))
+            .required(t('ROLE_REQUIRED')),
+        password: Yup.string()
+            .required(t('PASSWORD_IS_REQUIRED'))
+            .matches( /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,t('PASSWORD_RULES'))
 
     });
 
@@ -47,18 +48,22 @@ export const UsersAdd = () => {
             }));
             setCities(citiesOption);
         } catch (error) {
-
+            
         }
     }
 
     const fetchRoles = async () => {
         try {
             const response = await enumService.getEnums();
-            setRoles(response.data);
+            const rolesOptions = response.data.map(role => ({
+                value: role.id,
+                label: role.label,
+            }));
+            setRoles(rolesOptions);
         } catch (error) {
-
+            
         }
-    }
+    };
 
     useEffect(() => {
         fetchCities();
@@ -66,7 +71,7 @@ export const UsersAdd = () => {
     }, []);
 
     return (
-        <div className="flex justify-center p-4">
+        <div className="p-4">
             <div className="w-full max-w-lg">
                 <h2 className="text-xl font-semibold mb-4">{t('ADD_USER')}</h2>
                 <Formik
@@ -75,7 +80,8 @@ export const UsersAdd = () => {
                         lastName: '',
                         email: '',
                         cityId: null,
-                        roleId: null
+                        roleId: null,
+                        password: ''
                     }}
                     validationSchema={validationSchema}
                     onSubmit={addUser}
@@ -159,6 +165,21 @@ export const UsersAdd = () => {
                                 />
                                 <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
                             </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    {t('PASSWORD')}
+                                </label>
+                                <Field
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder={t('PASSWORD')}
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+                            </div>
+
 
                             <div className="flex justify-end">
                                 <button

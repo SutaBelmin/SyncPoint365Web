@@ -84,6 +84,7 @@
     "CITY": "City",
     "CITY_REQUIRED": "City is required!",
     "ROLE":"Role",
-    "SELECT_ROLE":"Select role",
-    "ROLE_REQUIRED": "Role is required!"
+    "SELECT_ROLE":"Select a Role",
+    "ROLE_REQUIRED": "Role is required!",
+    "PASSWORD_RULES":"Password must be at least 8 characters long, contain at least one letter and contain at least one number."
 }

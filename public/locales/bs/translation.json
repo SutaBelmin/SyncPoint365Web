@@ -85,6 +85,7 @@
     "CITY_REQUIRED": "Obavezan grad!",
     "ROLE":"Uloga",
     "SELECT_ROLE":"Odaberi ulogu",
-    "ROLE_REQUIRED": "Obavezna uloga!"
+    "ROLE_REQUIRED": "Obavezna uloga!",
+    "PASSWORD_RULES":"Lozinka mora imati najmanje 8 znakova, sadržavati najmanje jedno slovo i najmanje jedan broj."
     
 }
