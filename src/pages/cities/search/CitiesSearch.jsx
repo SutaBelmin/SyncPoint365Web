@@ -4,107 +4,98 @@ import { toast } from "react-toastify";
 import { countriesService } from "../../../services";
 import { observer } from "mobx-react";
 import { Formik, Form, Field } from "formik";
-import { useTranslation } from 'react-i18next';
-import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import citiesSearchStore from "../stores/CitiesSearchStore";
 
 export const CitiesSearch = observer(() => {
-    const [countries, setCountries] = useState([]);
-    const { t } = useTranslation();
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [countries, setCountries] = useState([]);
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    const fetchCountries = useCallback(async () => {
-        try {
-            const response = await countriesService.getList();
-            const countriesOption = response.data.map((country) => ({
-                value: country.id,
-                label: country.name,
-            }));
-            setCountries(countriesOption);
-        } catch (error) {
-            toast.error(t('ERROR_CONTACT_ADMIN'));
-        }
-    }, [t]);
-
-    useEffect(() => {
-        fetchCountries();
-        citiesSearchStore.initializeQueryParams();
-
-        const countryIdFromParams = searchParams.get("countryId");
-        if (countryIdFromParams) {
-            citiesSearchStore.setCountryId(parseInt(countryIdFromParams));
-        }
-    }, [searchParams, fetchCountries]);
-
-
-    const handleSearch = (values) => {
-        citiesSearchStore.setQuery(values.searchQuery);
-        citiesSearchStore.setCountryId(values.countryId ? values.countryId : null);
-        const queryParams = citiesSearchStore.syncWithQueryParams();
-        setSearchParams(queryParams);
-    };
-
-    const initialValues = {
-        searchQuery: citiesSearchStore.searchQuery,
-        countryId: citiesSearchStore.countryId
+  const fetchCountries = useCallback(async () => {
+    try {
+      const response = await countriesService.getList();
+      const countriesOption = response.data.map((country) => ({
+        value: country.id,
+        label: country.name,
+      }));
+      setCountries(countriesOption);
+    } catch (error) {
+      toast.error(t('ERROR_CONTACT_ADMIN'));
     }
+  }, [t]);
 
-    const handleClear = (setFieldValue) => {
-        setSearchParams({});
-        citiesSearchStore.clearFilters();
-        setFieldValue("searchQuery", "");
-        setFieldValue("countryId", null);
-    };
+  useEffect(() => {
+    fetchCountries();
+    citiesSearchStore.initializeQueryParams();
+  
+    const countryIdFromParams = searchParams.get("countryId");
+    if (countryIdFromParams) {
+      citiesSearchStore.setCountryId(parseInt(countryIdFromParams));
+    }
+  }, [searchParams, fetchCountries]);
+  
 
+  const handleSearch = (values) => {
+    citiesSearchStore.setQuery(values.searchQuery);
+    citiesSearchStore.setCountryId(values.countryId ? values.countryId : null);
+    const queryParams = citiesSearchStore.syncWithQueryParams();
+    setSearchParams(queryParams); 
+  };
 
-    return (
-        <Formik
-            enableReinitialize
-            initialValues={initialValues}
-            onSubmit={handleSearch}
-        >
-            {
-                <Form className="flex flex-col gap-4 md:flex-row">
-                    <Field
-                        type="text"
-                        className="input-search h-10 rounded-md border-gray-300 w-full"
-                        name="searchQuery"
-                        placeholder={t('SEARCH_BY_CITY')}
-                        value={values.searchQuery}
-                        onChange={(e) => setFieldValue('searchQuery', e.target.value)}
-                        autoComplete="off"
-                    />
+  const initialValues = {
+    searchQuery: citiesSearchStore.searchQuery,
+    countryId: citiesSearchStore.countryId
+  }
 
-                    <Select
-                        name="countryId"
-                        value={values.countryId ? { value: values.countryId, label: countries.find(c => c.value === values.countryId)?.label } : null}
-                        onChange={(option) => setFieldValue('countryId', option ? option.value : null)}
-                        options={countries}
-                        placeholder={t("SELECT_A_COUNTRY")}
-                        isClearable
-                        isSearchable
-                        className="h-10 border-gray-300 input-select-border w-full"
-                    />
+  const handleClear = (setFieldValue) => {
+    setSearchParams({});
+    citiesSearchStore.clearFilters();
+    setFieldValue("searchQuery", "");
+    setFieldValue("countryId", null);
+  };
 
-                    <button
-                        type="submit"
-                        onClick={handleSearch}
-                        className="btn-common h-10"
-                    >
-                        {t('SEARCH')}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={handleClear}
-                        className="btn-common h-10"
-                    >
-                        {t('CLEAR')}
-                    </button>
-                </Form>
-            }
-        </Formik>
-    );
-
+  return (
+    <Formik
+      enableReinitialize
+      initialValues={initialValues}
+      onSubmit={handleSearch}
+    >
+      {({ setFieldValue, values }) => (
+        <Form className="flex flex-col gap-4 md:flex-row">
+            <Field
+              type="text"
+              name="searchQuery"
+              placeholder={t("SEARCH_BY_CITY")}
+              value={values.searchQuery}
+              onChange={(e) => setFieldValue('searchQuery', e.target.value)}
+              autoComplete="off"
+               className="input-search h-10 rounded-md border-gray-300 w-full"
+            />
+            <Select
+              name="countryId"
+              value={values.countryId ? { value: values.countryId, label: countries.find(c => c.value === values.countryId)?.label } : null}
+              onChange={(option) => setFieldValue('countryId', option ? option.value : null)}
+              options={countries}
+              placeholder={t("SELECT_A_COUNTRY")}
+              isClearable 
+              isSearchable
+               className="h-10 border-gray-300 input-select-border w-full"
+            />
+            <button type="submit"    className="btn-common h-10">
+              {t("SEARCH")}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleClear(setFieldValue)}
+                  className="btn-common h-10"
+            >
+              {t("CLEAR")}
+            </button>
+        
+        </Form>
+      )}
+    </Formik>
+  );
 });

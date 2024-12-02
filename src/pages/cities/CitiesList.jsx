@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
@@ -12,41 +12,31 @@ import { observer } from "mobx-react";
 import citiesSearchStore from './stores/CitiesSearchStore';
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
-import { NoDataMessage } from "../../components/common-ui";
-import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
-import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { useLocation } from "react-router-dom";  
+import {NoDataMessage} from "../../components/common-ui";
 import { useSearchParams } from "react-router-dom";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
-    const paginationComponentOptions = PaginationOptions();
-    const { signal } = useRequestAbort();
     const [searchParams] = useSearchParams();
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async () => {
+
         try {
-            const params = new URLSearchParams(location.search);
-            const searchQuery = params.get("searchQuery") || '';
-            const selectedCountryId = params.get("selectedCountryId") || null;
-
-            citiesSearchStore.setQuery(searchQuery);
-            citiesSearchStore.setCountryId(selectedCountryId);
-
-            const filter = { ...citiesSearchStore.cityFilter };
-            const response = await citiesService.getPagedCities(filter, signal);
-            const location = useLocation();  
+            const filter = {...citiesSearchStore.cityFilter};
+            const response = await citiesService.getPagedCities(filter);
+            setData(response.data.items);
+            citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
-            toast.error(t('ERROR_CONTACT_ADMIN'));
+            toast.error("There was an error. Please contact administrator.");
         }
-    }, [signal, t]);
+    };
 
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                filter: citiesSearchStore.cityFilter
+                filter : citiesSearchStore.cityFilter
             }),
             () => {
                 fetchData();
@@ -57,7 +47,7 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData])
+    }, []);
     
     useEffect(()=>{
         fetchData();
@@ -123,17 +113,22 @@ export const CitiesList = observer(() => {
             await citiesService.delete(cityId);
             fetchData();
             closeModal();
-            toast.success(t('DELETED'));
+            toast.success("Country deleted successfully!");
         } catch (error) {
-            toast.error(t('FAILED_TO_DELETE'));
+            toast.error("Failed to delete the record. Please try again.");
         }
     }
 
+    const paginationComponentOptions = {
+        rowsPerPageText: t('ROWS_PER_PAGE'), 
+        rangeSeparatorText: t('OF'), 
+    };
+
     return (
-        <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <h1 className="h1">{t('CITIES')}</h1>
-            <div className="flex flex-col gap-4 md:flex-row">
-                <CitiesSearch />
+        <div  className="flex-1 p-6 bg-gray-100 h-screen">
+            <h1 className="h1"> {t("CITIES")}</h1>
+            <div className="flex flex-col gap-4 md:flex-row">            
+                <CitiesSearch/>
 
                 <button
                     type="button"
@@ -143,28 +138,29 @@ export const CitiesList = observer(() => {
                     {t('ADD_CITY')}
                 </button>
             </div>
+
             <BaseModal />
             <div className="table max-w-full">
-                <DataTable
-                    columns={columns}
-                    data={data || []}
-                    pagination
-                    paginationServer
-                    paginationTotalRows={citiesSearchStore.totalItemCount}
-                    onChangePage={(newPage) => {
-                        citiesSearchStore.setPage(newPage);
-                    }}
-                    paginationPerPage={citiesSearchStore.pageSize}
-                    onChangeRowsPerPage={
-                        (newPageSize) => {
-                            citiesSearchStore.setPageSize(newPageSize);
-                            citiesSearchStore.setPage(1);
-                        }
+            <DataTable
+                columns={columns}
+                data={data || []}
+                pagination
+                paginationServer
+                paginationTotalRows={citiesSearchStore.totalItemCount}
+                onChangePage={(newPage) => {
+                    citiesSearchStore.setPage(newPage);
+                }}
+                paginationPerPage={citiesSearchStore.rowsPerPage}
+                onChangeRowsPerPage={
+                    (newRowsPerPage) =>{
+                        citiesSearchStore.setRowsPerPage(newRowsPerPage);
+                        citiesSearchStore.setPage(1);
                     }
-                    highlightOnHover
-                    persistTableHead={true}
-                    paginationComponentOptions={paginationComponentOptions}
-                    noDataComponent={<NoDataMessage />} />
+                }
+                highlightOnHover
+                persistTableHead={true}
+                paginationComponentOptions={paginationComponentOptions}
+                noDataComponent={<NoDataMessage message="No cities available."/>} />
             </div>
         </div>
     );

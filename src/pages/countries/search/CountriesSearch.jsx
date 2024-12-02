@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export const CountriesSearch = () => {
   const { t } = useTranslation();

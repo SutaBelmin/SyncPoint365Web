@@ -4,14 +4,14 @@ class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
     pageNumber = 1;
-    rowsPerPage = 10;
+    pageSize = 10;
     totalItemCount = 0;
 
     constructor() {
         makeAutoObservable(this);
     }
 
-    setSearchQuery(value) {
+    setQuery(value) {
         this.searchQuery = value;
         this.syncWithQueryParams();
     }
@@ -21,13 +21,13 @@ class AbsenceRequestTypesSearchStore {
         this.syncWithQueryParams();
     }
 
-    setPageNumber(value) {
-        this.pageNumber = value;
+    setPageSize(newPageSize) {
+        this.pageSize = newPageSize;
         this.syncWithQueryParams();
     }
 
-    setRowsPerPage(value) {
-        this.rowsPerPage = value;
+    setPageNumber(value) {
+        this.pageNumber = value;
         this.syncWithQueryParams();
     }
 
@@ -40,12 +40,12 @@ class AbsenceRequestTypesSearchStore {
             isActive: this.isActive,
             query: this.searchQuery,
             pageNumber: this.pageNumber,
-            pageSize: this.rowsPerPage,
+            pageSize: this.pageSize,
         };
     }
 
     reset() {
-        this.rowsPerPage = 10;
+        this.pageSize = 10;
         this.pageNumber = 1;
         this.searchQuery = '';
         this.isActive = null;
@@ -63,8 +63,8 @@ class AbsenceRequestTypesSearchStore {
         if (this.pageNumber !== 1)
             params.set("page", this.pageNumber);
 
-        if (this.rowsPerPage !== 10)
-            params.set("rowsPerPage", this.rowsPerPage);
+        if (this.pageSize !== 10)
+            params.set("pageSize", this.pageSize);
 
         return params;
     }
@@ -72,7 +72,7 @@ class AbsenceRequestTypesSearchStore {
     initializeQueryParams(searchParams) {
         const searchQuery = searchParams.get("searchQuery") || '';
         const status = searchParams.get("status");
-        this.setSearchQuery(searchQuery);
+        this.setQuery(searchQuery);
         this.setIsActive(status === null ? null : (status === 'active'));
     }
 }

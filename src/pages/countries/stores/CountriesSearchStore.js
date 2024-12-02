@@ -28,6 +28,11 @@ class CountriesStore {
     this.syncWithQueryParams();
   }
 
+  setPageSize(newPageSize) {
+    this.pageSize = newPageSize;
+    this.syncWithQueryParams();
+  }
+
   setRowsPerPage(rows) {
     this.rowsPerPage = rows;
     this.syncWithQueryParams();

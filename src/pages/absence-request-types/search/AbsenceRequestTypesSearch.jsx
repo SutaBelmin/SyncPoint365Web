@@ -21,7 +21,7 @@ const dropdownOptions = [
     }, [searchParams]);
   
     const handleSubmit = (values) => {
-      absenceRequestTypesSearchStore.setSearchQuery(values.searchQuery);   
+      absenceRequestTypesSearchStore.setQuery(values.searchQuery);   
       absenceRequestTypesSearchStore.setIsActive(values.status.value === null ? null : (values.status.value === 'active'));
       setSearchParams(absenceRequestTypesSearchStore.syncWithQueryParams());
     };
