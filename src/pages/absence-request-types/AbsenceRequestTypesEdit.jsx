@@ -54,7 +54,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                             id="name"
                             name="name"
                             placeholder={t('ENTER_YOUR_NAME')}
-                            className="w-full p-2 border rounded"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                 </div>
                     <div className="mb-4 flex items-center">
@@ -68,17 +68,17 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                             {t('ACTIVE')}
                         </label>
                     </div>
-                    <div className="flex justify-end space-x-2">
+                    <div className="flex justify-end gap-4">
                         <button
                             type="button"
                             onClick={closeModal}
-                            className="rounded bg-gray-500 text-white px-4 py-2 hover:bg-gray-400 mr-2"
+                            className="btn-cancel"
                         >
                             {t('CANCEL')}
                         </button>
                         <button
                             type="submit"
-                            className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-500"
+                            className="btn-save"
                         >
                             {t('SAVE')} 
                         </button>

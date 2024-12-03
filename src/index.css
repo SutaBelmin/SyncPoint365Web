@@ -3,13 +3,17 @@
 @tailwind utilities;
 
 .btn-cancel {
-    @apply text-sm font-semibold text-gray-900 border border-indigo-500 rounded-md px-3 py-2 shadow-sm;
-  }
+  @apply text-sm font-semibold text-gray-900 border border-[rgb(59,130,246)] rounded-md px-3 py-2 shadow-sm hover:shadow-[0px_2px_5px_rgb(59,130,246,0.5)] transition-shadow duration-150;
+}
+
   
-  .btn-save {
-    @apply rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
-  }
-  
+.btn-save {
+  @apply rounded-md bg-[rgb(59,130,246)] px-3 py-2 text-sm font-semibold text-white shadow-sm 
+    hover:bg-[rgb(49,120,236)] hover:shadow-[0px_2px_5px_rgb(59,130,246,0.5)] 
+    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(59,130,246)] 
+    transition-shadow duration-150;
+}
+
   .btn-container {
     @apply flex justify-end gap-4;
   }
@@ -25,9 +29,10 @@
   }
   
   .btn-new {
-    @apply rounded-md bg-[#1e3a8a] px-3 py-2 text-sm font-semibold text-white shadow-sm 
-      hover:bg-[#1e3a8a]/90 focus-visible:outline focus-visible:outline-2 
-      focus-visible:outline-offset-2 focus-visible:outline-[#1e3a8a];
+    @apply rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm 
+        bg-[rgb(39,110,236)] hover:bg-gradient-to-r hover:from-[rgb(59,130,246)] hover:via-[rgb(39,110,236)] hover:to-[rgb(29,90,226)]
+        focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(39,110,236)] 
+        transition-all duration-300 ease-in-out;
   }
 
   .btn-common {
@@ -36,6 +41,7 @@
     focus-visible:outline-offset-2 focus-visible:outline-[#1e3a8a]
     lg:w-[10rem] md:w-[10rem] sm:w-full;
 }
+  
   
 .input-select-border input[type='text']:focus {
     box-shadow: none;

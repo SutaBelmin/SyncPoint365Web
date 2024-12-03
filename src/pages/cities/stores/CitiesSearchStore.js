@@ -5,7 +5,7 @@ class CitiesSearchStore {
     countryId = null;
     searchQuery = "";
     page = 1;
-    pageSize = 10;
+    rowsPerPage = 10;
 
     constructor() {
         makeAutoObservable(this);
@@ -13,10 +13,12 @@ class CitiesSearchStore {
 
     setQuery(query) {
         this.searchQuery = query;
+        this.syncWithQueryParams();
     }
 
     setCountryId(countryId) {
         this.countryId = countryId;
+        this.syncWithQueryParams();
     }
 
     setTotalItemCount(count) {
@@ -25,27 +27,56 @@ class CitiesSearchStore {
 
     setPage(page) {
         this.page = page;
+        this.syncWithQueryParams();
     }
 
-    setPageSize(newPageSize) {
-        this.pageSize = newPageSize;
+    setRowsPerPage(rowsPerPage) {
+        this.rowsPerPage = rowsPerPage;
+        this.syncWithQueryParams();
     }
 
     clearFilters() {
         this.setCountryId(null);
         this.setQuery(""); 
         this.setPage(1);
+        this.syncWithQueryParams();
+    }
+
+    syncWithQueryParams() {
+        const params = new URLSearchParams();
+
+        if (this.searchQuery)
+            params.set("searchQuery", this.searchQuery);
+        
+        if (this.countryId)
+            params.set("countryId", this.countryId);
+
+        if(this.page !== 1) 
+            params.set("page", this.page);
+      
+        if(this.rowsPerPage !== 10) 
+            params.set("rowsPerPage", this.rowsPerPage);
+
+        return params;
+    }
+
+    initializeQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const searchQuery = params.get("searchQuery") || "";
+        const countryId = params.get("countryId") || null;
+
+        this.setQuery(searchQuery);
+        this.setCountryId(countryId);
     }
 
     get cityFilter() {
-        const filter = {
+        return {
             totalItemCount: this.totalItemCount,
             countryId: this.countryId,
             searchQuery: this.searchQuery,
             page: this.page,
-            pageSize: this.pageSize
+            rowsPerPage: this.rowsPerPage
         };
-        return filter;
     }
 }
 

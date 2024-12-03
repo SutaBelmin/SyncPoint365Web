@@ -1,27 +1,35 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from "react-router-dom";
 
 export const CountriesSearch = () => {
-  const initialValues = { searchQuery: countriesSearchStore.searchQuery };
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSearch = (values) => {
     countriesSearchStore.setSearchQuery(values.searchQuery);
+    setSearchParams(countriesSearchStore.countryFilter);
   };
 
-  const handleClearFilters = (resetForm) => {
+  const handleClearFilters = (setFieldValue) => {
     countriesSearchStore.resetFilters();
-    resetForm();
+    setFieldValue("searchQuery", "");
+    setSearchParams({});
   };
+            
+  useEffect(() => {
+    countriesSearchStore.initializeQueryParams(searchParams);
+  }, [searchParams]);
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{searchQuery: countriesSearchStore.searchQuery}}
       onSubmit={handleSearch}
+      enableReinitialize
     >
-      {({ resetForm }) => (
+      {({ setFieldValue  }) => (
         <Form className="flex flex-col gap-4 xs:flex-row">
           <Field
             type="text"
@@ -29,13 +37,14 @@ export const CountriesSearch = () => {
             placeholder={t('SEARCH_COUNTRIES')}
             autoComplete="off"
             className="input-search h-10 rounded-md border-gray-300 min-w-[9rem] w-full"
+            onChange={(e) => setFieldValue('searchQuery', e.target.value)}
           />
           <button type="submit" className="btn-common h-10">
             {t('SEARCH')}
           </button>
           <button
             type="button"
-            onClick={() => handleClearFilters(resetForm)}
+            onClick={() => handleClearFilters(setFieldValue)}
             className="btn-common h-10"
           >
             {t('CLEAR')}
