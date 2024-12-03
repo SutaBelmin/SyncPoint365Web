@@ -76,8 +76,6 @@
     "ADDED": "Added successfully.",
     "FAILED_LOGIN": "Check your credentials.",
     "UPDATED": "Updated successfully!",
-    "FAIL_UPDATE": "Failed to update!",
-    "ADDED": "Added successfully!",
     "FIRST_NAME_IS_REQUIRED": "First name is required!",
     "LAST_NAME_IS_REQUIRED": "Last name is required!",
     "EMAIL_IS_NOT_VALID":"Email is not valid!",
@@ -86,5 +84,18 @@
     "ROLE":"Role",
     "SELECT_ROLE":"Select a Role",
     "ROLE_REQUIRED": "Role is required!",
-    "PASSWORD_RULES":"Password must be at least 8 characters long, contain at least one letter and contain at least one number."
+    "PASSWORD_RULES":"Password must be at least 8 characters long, contain at least one letter and contain at least one number.",
+    "EMAIL":"Email", 
+    "ADDRESS":"Address",
+    "ADDRESS_IS_REQUIRED": "Address is required!",
+    "GENDER":"Gender",
+    "GENDER_IS_REQUIRED": "Gender is required!",
+    "BIRTH_DATE":"Birth Date",
+    "BIRTH_DATE_IS_REQUIRED": "Birth Date is required!",
+    "PHONE":"Phone",
+    "PHONE_IS_REQUIRED": "Phone is required!",
+    "PHONE_IS_NOT_VALID":"Phone is not valid",
+    "MALE":"Male",
+    "FEMALE":"Female",
+    "SELECT_A_GENDER":"Select a gender"
 }

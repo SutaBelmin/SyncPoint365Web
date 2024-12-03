@@ -76,8 +76,6 @@
     "ADDED": "Uspješno dodano.",
     "FAILED_LOGIN": "Provjerite svoje podatke.",
     "UPDATED": "Uspješno uređeno!",
-    "FAIL_UPDATE": "Uređivanje nije uspjelo!",
-    "ADDED": "Uspješno dodano!",
     "FIRST_NAME_IS_REQUIRED": "Obavezno ime!",
     "LAST_NAME_IS_REQUIRED": "Obavezno prezime!",
     "EMAIL_IS_NOT_VALID":"Email nije u ispravnom formatu!",
@@ -86,6 +84,19 @@
     "ROLE":"Uloga",
     "SELECT_ROLE":"Odaberi ulogu",
     "ROLE_REQUIRED": "Obavezna uloga!",
-    "PASSWORD_RULES":"Lozinka mora imati najmanje 8 znakova, sadržavati najmanje jedno slovo i najmanje jedan broj."
+    "PASSWORD_RULES":"Lozinka mora imati najmanje 8 znakova, sadržavati najmanje jedno slovo i najmanje jedan broj.",
+    "EMAIL":"Email",
+    "ADDRESS":"Adresa",
+    "ADDRESS_IS_REQUIRED": "Obavezna adresa!",
+    "GENDER":"Spol",
+    "GENDER_IS_REQUIRED": "Obavezan spol!",
+    "BIRTH_DATE":"Datum rođenja",
+    "BIRTH_DATE_IS_REQUIRED": "Obavezan datum rođenja!",
+    "PHONE":"Telefon",
+    "PHONE_IS_REQUIRED": "Obavezan telefon!",
+    "PHONE_IS_NOT_VALID":"Telefon nije u ispravnom formatu!",
+    "MALE":"Muški",
+    "FEMALE":"Ženski",
+    "SELECT_A_GENDER":"Odaberi spol"
     
 }

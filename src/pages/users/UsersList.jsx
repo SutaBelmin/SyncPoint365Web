@@ -15,6 +15,7 @@ import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { ConfirmationModal } from '../../components/modal';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../context';
+import { format } from 'date-fns'; 
 
 export const UsersList = () => {
     const { openModal, closeModal } = useModal();
@@ -81,6 +82,26 @@ export const UsersList = () => {
             ),
             name: t('CITY_NAME'),
             selector: row => row.cityName,
+            sortable: true,
+        },
+        {
+            name: t('ADDRESS'),
+            selector: row => row.address,
+            sortable: true,
+        },
+        {
+            name: t('GENDER'),
+            selector: row => t(row.gender === 'M' ? 'MALE' : 'FEMALE'),
+            sortable: true,
+        },
+        {
+            name: t('BIRTH_DATE'),
+            selector: row => format(new Date(row.birthDate), 'yyyy-MM-dd'),
+            sortable: true,
+        },
+        {
+            name: t('PHONE'),
+            selector: row => row.phone,
             sortable: true,
         },
         {

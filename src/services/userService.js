@@ -28,17 +28,12 @@ class UserService extends BaseService {
     }
     
     async add(userData) {
-        console.log("pass:", userData.password);
         const dataToSend = {
             ...userData,
-            role: userData.roleId, 
-            passwordHash: "", 
-            passwordSalt: ""
+            role: userData.roleId
         };
        
-        const response = await this.api.post(`/users`, dataToSend, {
-            cancelToken: null
-        });
+        const response = await this.api.post(`/users`, dataToSend);
 
         return response.data;
     }

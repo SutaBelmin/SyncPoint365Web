@@ -1,7 +1,7 @@
 import BaseService from "./baseService";
 
 
-class EnumService extends BaseService {
+class EnumsService extends BaseService {
     async getEnums() {
         const response = await this.api.get("/enums/roles");
         return response;
@@ -9,5 +9,5 @@ class EnumService extends BaseService {
 
 }
 
-const enumService = new EnumService();
-export default enumService;
+const enumsService = new EnumsService();
+export default enumsService;

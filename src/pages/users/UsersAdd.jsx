@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { toast } from 'react-toastify';
-import { citiesService, enumService, userService } from '../../services';
+import { citiesService, enumsService, userService } from '../../services';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
@@ -13,11 +13,16 @@ export const UsersAdd = () => {
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
 
+    const genderOptions = [
+        { value: "M", label: t('MALE') },
+        { value: "F", label: t('FEMALE') }
+    ];
+
     const addUser = async (values) => {
         try {
             await userService.add(values);
             toast.success(t('ADDED'));
-            navigate(-1);
+            navigate('/users');
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -29,14 +34,20 @@ export const UsersAdd = () => {
         email: Yup.string()
             .email(t('EMAIL_IS_NOT_VALID'))
             .required(t('EMAIL_IS_REQUIRED')),
-        cityId: Yup.mixed()
-            .required(t('CITY_REQUIRED')),
-        roleId: Yup.mixed()
-            .required(t('ROLE_REQUIRED')),
+        gender: Yup.string().required(t('GENDER_IS_REQUIRED')),
+        birthDate: Yup.string().required(t('BIRTH_DATE_IS_REQUIRED')),
+        cityId: Yup.string().required(t('CITY_REQUIRED')),
+        address: Yup.string().required(t('ADDRESS_IS_REQUIRED')),
+        phone: Yup.string()
+            .required(t('PHONE_IS_REQUIRED'))
+            .matches(
+                /^\+?[1-9]\d{1,14}$|^(\d{3})[-\s]?(\d{3})[-\s]?(\d{4})$/,
+                t('PHONE_IS_NOT_VALID')
+            ),
+        roleId: Yup.string().required(t('ROLE_REQUIRED')),
         password: Yup.string()
             .required(t('PASSWORD_IS_REQUIRED'))
-            .matches( /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,t('PASSWORD_RULES'))
-
+            .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, t('PASSWORD_RULES'))
     });
 
     const fetchCities = async () => {
@@ -48,20 +59,20 @@ export const UsersAdd = () => {
             }));
             setCities(citiesOption);
         } catch (error) {
-            
+
         }
     }
 
     const fetchRoles = async () => {
         try {
-            const response = await enumService.getEnums();
+            const response = await enumsService.getEnums();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
                 label: role.label,
             }));
             setRoles(rolesOptions);
         } catch (error) {
-            
+
         }
     };
 
@@ -79,7 +90,11 @@ export const UsersAdd = () => {
                         firstName: '',
                         lastName: '',
                         email: '',
+                        gender: '',
+                        birthDate: '',
                         cityId: null,
+                        address: '',
+                        phone: '',
                         roleId: null,
                         password: ''
                     }}
@@ -118,16 +133,48 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    Email
+                                    {t('EMAIL')}
                                 </label>
                                 <Field
                                     type="text"
                                     id="email"
                                     name="email"
-                                    placeholder="Email"
+                                    placeholder={t('EMAIL')}
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    {t('GENDER')}
+                                </label>
+                                <Select
+                                    id="gender"
+                                    name="gender"
+                                    onChange={(option) => setFieldValue('gender', option ? option.value : null)}
+                                    options={genderOptions}
+                                    placeholder={t('SELECT_A_GENDER')}
+                                    isClearable
+                                    isSearchable
+                                    className='input-select-border mt-1'
+                                />
+                                <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
+                            </div>
+
+
+
+                            <div className="mb-4">
+                                <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
+                                    {t('BIRTH_DATE')}
+                                </label>
+                                <Field
+                                    type="date"
+                                    id="birthDate"
+                                    name="birthDate"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                             </div>
 
                             <div className="mb-4">
@@ -137,7 +184,6 @@ export const UsersAdd = () => {
                                 <Select
                                     id="cityId"
                                     name="cityId"
-                                    //value={cities.find(city => city.value === values.cityId) || null}
                                     onChange={(option) => setFieldValue('cityId', option ? option.value : null)}
                                     options={cities}
                                     placeholder={t('SELECT_A_CITY')}
@@ -150,12 +196,39 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    {t('ADDRESS')}
+                                </label>
+                                <Field
+                                    type="text"
+                                    id="address"
+                                    name="address"
+                                    placeholder={t('ADDRESS')}
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    {t('PHONE')}
+                                </label>
+                                <Field
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder={t('PHONE')}
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                     {t('ROLE')}
                                 </label>
                                 <Select
                                     id="roleId"
                                     name="roleId"
-                                    //value={roles.find(role => role.value === values.roleId) || null}
                                     onChange={(option) => setFieldValue('roleId', option ? option.value : null)}
                                     options={roles}
                                     placeholder={t('SELECT_ROLE')}
