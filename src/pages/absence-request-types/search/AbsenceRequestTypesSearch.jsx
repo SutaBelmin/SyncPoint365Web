@@ -22,7 +22,7 @@ const dropdownOptions = [
   
     const handleSubmit = (values) => {
       absenceRequestTypesSearchStore.setQuery(values.searchQuery);   
-      absenceRequestTypesSearchStore.setIsActive(values.status.value === null ? null : (values.status.value === 'active'));
+      absenceRequestTypesSearchStore.setIsActive(values.status.value === 'All' ? null : (values.status.value === 'active'));
       setSearchParams(absenceRequestTypesSearchStore.syncWithQueryParams());
     };
   

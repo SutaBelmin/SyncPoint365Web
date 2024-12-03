@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { citiesService } from "../../services";
 import DataTable from "react-data-table-component";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
@@ -14,24 +14,29 @@ import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import {NoDataMessage} from "../../components/common-ui";
 import { useSearchParams } from "react-router-dom";
+import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const CitiesList = observer(() => {
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const [searchParams] = useSearchParams();
+    const {signal} = useRequestAbort();
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
 
         try {
             const filter = {...citiesSearchStore.cityFilter};
-            const response = await citiesService.getPagedCities(filter);
+
+            const response = await citiesService.getPagedCities(filter, signal);
+
             setData(response.data.items);
             citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error("There was an error. Please contact administrator.");
         }
-    };
+    }, [signal]);
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -47,11 +52,11 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, []);
+    }, [fetchData]);
     
     useEffect(()=>{
         fetchData();
-    },[searchParams])
+    },[searchParams, fetchData])
 
     const columns = [
         {
@@ -119,11 +124,6 @@ export const CitiesList = observer(() => {
         }
     }
 
-    const paginationComponentOptions = {
-        rowsPerPageText: t('ROWS_PER_PAGE'), 
-        rangeSeparatorText: t('OF'), 
-    };
-
     return (
         <div  className="flex-1 p-6 bg-gray-100 h-screen">
             <h1 className="h1"> {t("CITIES")}</h1>
@@ -159,7 +159,7 @@ export const CitiesList = observer(() => {
                 }
                 highlightOnHover
                 persistTableHead={true}
-                paginationComponentOptions={paginationComponentOptions}
+                paginationComponentOptions={PaginationOptions}
                 noDataComponent={<NoDataMessage message="No cities available."/>} />
             </div>
         </div>

@@ -47,6 +47,7 @@ class CitiesSearchStore {
 
         if (this.searchQuery)
             params.set("searchQuery", this.searchQuery);
+        
         if (this.countryId)
             params.set("countryId", this.countryId);
 

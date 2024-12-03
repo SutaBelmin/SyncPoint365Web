@@ -7,16 +7,18 @@ import { Formik, Form, Field } from "formik";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import citiesSearchStore from "../stores/CitiesSearchStore";
+import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 
 export const CitiesSearch = observer(() => {
   const [countries, setCountries] = useState([]);
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { signal } = useRequestAbort();
 
   const fetchCountries = useCallback(async () => {
     try {
-      const response = await countriesService.getList();
-      const countriesOption = response.data.map((country) => ({
+      const response = await countriesService.getList(signal);
+      const countriesOption = response.data.map(country => ({
         value: country.id,
         label: country.name,
       }));
@@ -24,7 +26,7 @@ export const CitiesSearch = observer(() => {
     } catch (error) {
       toast.error(t('ERROR_CONTACT_ADMIN'));
     }
-  }, [t]);
+  }, [signal, t]);
 
   useEffect(() => {
     fetchCountries();
@@ -83,7 +85,9 @@ export const CitiesSearch = observer(() => {
               isSearchable
                className="h-10 border-gray-300 input-select-border w-full"
             />
-            <button type="submit"    className="btn-common h-10">
+            <button type="submit"    
+            className="btn-common h-10"
+            >
               {t("SEARCH")}
             </button>
             <button
