@@ -12,11 +12,7 @@ export const UsersAdd = () => {
     const navigate = useNavigate();
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
-
-    const genderOptions = [
-        { value: "M", label: t('MALE') },
-        { value: "F", label: t('FEMALE') }
-    ];
+    const [genders, setGenders] = useState([]);
 
     const addUser = async (values) => {
         try {
@@ -65,7 +61,7 @@ export const UsersAdd = () => {
 
     const fetchRoles = async () => {
         try {
-            const response = await enumsService.getEnums();
+            const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
                 label: role.label,
@@ -76,9 +72,23 @@ export const UsersAdd = () => {
         }
     };
 
+    const fetchGenders = async () => {
+        try {
+            const response = await enumsService.getGenders();
+            const genderOptions = response.data.map(gender => ({
+                value: gender.id,
+                label: gender.label
+            }));
+            setGenders(genderOptions);
+        } catch (error) {
+            
+        }
+    }
+
     useEffect(() => {
         fetchCities();
         fetchRoles();
+        fetchGenders();
     }, []);
 
     return (
@@ -153,7 +163,7 @@ export const UsersAdd = () => {
                                     id="gender"
                                     name="gender"
                                     onChange={(option) => setFieldValue('gender', option ? option.value : null)}
-                                    options={genderOptions}
+                                    options={genders}
                                     placeholder={t('SELECT_A_GENDER')}
                                     isClearable
                                     isSearchable
