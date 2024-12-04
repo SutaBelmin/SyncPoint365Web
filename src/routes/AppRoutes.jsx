@@ -18,7 +18,7 @@ const AppRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/users" element={<UsersList />} />
-          <Route path="/usersAdd" element={<UsersAdd />} />
+          <Route path="/users/add" element={<UsersAdd />} />
           <Route path="/absenceRequestTypes" element={<AbsenceRequestTypesList />} />
           <Route path="/countries" element={<CountriesList />} />
           <Route path="/cities" element={<CitiesList />} />

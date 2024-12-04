@@ -28,6 +28,7 @@ class UserService extends BaseService {
     }
     
     async add(userData) {
+        console.log("Podaci", userData);
         const dataToSend = {
             ...userData,
             role: userData.roleId
@@ -35,6 +36,15 @@ class UserService extends BaseService {
        
         const response = await this.api.post(`/users`, dataToSend);
 
+        return response.data;
+    }
+
+    async emailExist(email) {
+        const response = await this.api.get('/users/email-exist', {
+            params: {
+                email: email
+            }
+        });
         return response.data;
     }
 }

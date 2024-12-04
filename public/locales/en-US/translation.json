@@ -5,6 +5,9 @@
     "EMAIL_IS_REQUIRED": "Email is required.",
     "PASSWORD": "Password",
     "PASSWORD_IS_REQUIRED": "Password is required.",
+    "PASSWORD_CONFIRM": "Password Confirm",
+    "PASSWORD_CONFIRM_IS_REQUIRED": "Password Confirm is required!",
+    "PASSWORDS_MUST_MATCH": "Passwords must match!",
     "FORGOT_PASSWORD?": "Forgotten password?",
     "SIGN_IN": "Sign in",
     "LOG_OUT": "Log out",
@@ -97,5 +100,10 @@
     "PHONE_IS_NOT_VALID":"Phone is not valid",
     "MALE":"Male",
     "FEMALE":"Female",
-    "SELECT_A_GENDER":"Select a gender"
+    "SELECT_A_GENDER":"Select a gender",
+    "SUPER_ADMINISTRATOR":"Super Admin",
+    "ADMINISTRATOR":"Admin",
+    "EMPLOYEE":"Employee",
+    "SELECT_BIRTH_DATE":"Select Birth Date",
+    "EMAIL_ALREADY_EXIST": "Email already exist"
 }

@@ -5,6 +5,9 @@
     "EMAIL_IS_REQUIRED": "Obavezan email.",
     "PASSWORD": "Lozinka",
     "PASSWORD_IS_REQUIRED": "Obavezna lozinka.",
+    "PASSWORD_CONFIRM": "Potvrdi lozinku",
+    "PASSWORD_CONFIRM_IS_REQUIRED": "Obavezna potvrda lozinke!",
+    "PASSWORDS_MUST_MATCH": "Lozinke se moraju podudarati!",
     "FORGOT_PASSWORD?": "Zaboravljena lozinka?",
     "SIGN_IN": "Prijava",
     "LOG_OUT": "Odjava",
@@ -97,6 +100,11 @@
     "PHONE_IS_NOT_VALID":"Telefon nije u ispravnom formatu!",
     "MALE":"Muški",
     "FEMALE":"Ženski",
-    "SELECT_A_GENDER":"Odaberi spol"
+    "SELECT_A_GENDER":"Odaberi spol",
+    "SUPER_ADMINISTRATOR":"Super Administrator",
+    "ADMINISTRATOR":"Administrator",
+    "EMPLOYEE":"Zaposlenik",
+    "SELECT_BIRTH_DATE":"Odaberi datum rođenja",
+    "EMAIL_ALREADY_EXIST": "Email već postoji"
     
 }

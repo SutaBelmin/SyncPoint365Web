@@ -23,7 +23,7 @@ export const UsersList = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItemCount, setTotalItemCount] = useState(0);
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ export const UsersList = () => {
 
 
     const onAddUserClick = () => {
-        navigate('/usersAdd');
+        navigate('/users/add');
     };
 
     const columns = [
@@ -80,6 +80,16 @@ export const UsersList = () => {
                     </button>
                 </div>
             ),
+            name: t('BIRTH_DATE'),
+            selector: row => format(new Date(row.birthDate), i18n.language === 'en' ? 'MM/dd/yyyy' : 'dd/MM/yyyy'),
+            sortable: true,
+        },
+        {
+            name: t('GENDER'),
+            selector: row => t(row.gender === 'Male' ? 'MALE' : 'FEMALE'),
+            sortable: true,
+        },
+        {
             name: t('CITY_NAME'),
             selector: row => row.cityName,
             sortable: true,
@@ -90,23 +100,13 @@ export const UsersList = () => {
             sortable: true,
         },
         {
-            name: t('GENDER'),
-            selector: row => t(row.gender === 'M' ? 'MALE' : 'FEMALE'),
-            sortable: true,
-        },
-        {
-            name: t('BIRTH_DATE'),
-            selector: row => format(new Date(row.birthDate), 'yyyy-MM-dd'),
-            sortable: true,
-        },
-        {
             name: t('PHONE'),
             selector: row => row.phone,
             sortable: true,
         },
         {
             name: t('ROLE'),
-            selector: row => row.role,
+            selector: row => t(formatRoleKey(row.role)),
             sortable: true,
         },
     ];
@@ -130,6 +130,10 @@ export const UsersList = () => {
         } catch (error) {
             toast.error(t('FAIL_UPDATE'));
         }
+    const formatRoleKey = (role) => {
+        return role
+            .replace(/([a-z])([A-Z])/g, '$1_$2')
+            .toUpperCase(); 
     };
 
     return (
@@ -172,4 +176,5 @@ export const UsersList = () => {
             </div>
         </div>
     );
+}
 };

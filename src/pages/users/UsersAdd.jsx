@@ -6,13 +6,21 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import Select from "react-select";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { toZonedTime, fromZonedTime } from 'date-fns-tz';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 export const UsersAdd = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
 
     const addUser = async (values) => {
         try {
@@ -24,12 +32,44 @@ export const UsersAdd = () => {
         }
     }
 
+    const checkEmailExistence = async (email) => {
+        try {
+            const response = await userService.emailExist(email);
+
+            if (response === true) {
+                setEmailError(t('EMAIL_ALREADY_EXIST'));
+            } else {
+                setEmailError('');
+            }
+        } catch (error) {
+            setEmailError(t('ERROR_CONTACT_ADMIN'));
+        }
+    };
+
+    const debounce = (fn, delay) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn(...args), delay);
+        };
+    };
+
+    const debouncedEmailCheck = debounce(checkEmailExistence, 500);
+
+    useEffect(() => {
+        if (email) {
+            debouncedEmailCheck(email);
+        }
+    }, [email, debouncedEmailCheck]);
+
+
     const validationSchema = Yup.object({
         firstName: Yup.string().required(t('FIRST_NAME_IS_REQUIRED')),
         lastName: Yup.string().required(t('LAST_NAME_IS_REQUIRED')),
         email: Yup.string()
             .email(t('EMAIL_IS_NOT_VALID'))
-            .required(t('EMAIL_IS_REQUIRED')),
+            .required(t('EMAIL_IS_REQUIRED'))
+            .test('email-exists', emailError, value => !emailError),
         gender: Yup.string().required(t('GENDER_IS_REQUIRED')),
         birthDate: Yup.string().required(t('BIRTH_DATE_IS_REQUIRED')),
         cityId: Yup.string().required(t('CITY_REQUIRED')),
@@ -43,7 +83,10 @@ export const UsersAdd = () => {
         roleId: Yup.string().required(t('ROLE_REQUIRED')),
         password: Yup.string()
             .required(t('PASSWORD_IS_REQUIRED'))
-            .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, t('PASSWORD_RULES'))
+            .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, t('PASSWORD_RULES')),
+        passwordConfirm: Yup.string()
+            .required(t('PASSWORD_CONFIRM_IS_REQUIRED'))
+            .oneOf([Yup.ref('password')], t('PASSWORDS_MUST_MATCH'))
     });
 
     const fetchCities = async () => {
@@ -81,7 +124,7 @@ export const UsersAdd = () => {
             }));
             setGenders(genderOptions);
         } catch (error) {
-            
+
         }
     }
 
@@ -106,12 +149,13 @@ export const UsersAdd = () => {
                         address: '',
                         phone: '',
                         roleId: null,
-                        password: ''
+                        password: '',
+                        passwordConfirm: ''
                     }}
                     validationSchema={validationSchema}
                     onSubmit={addUser}
                 >
-                    {({ setFieldValue, values }) => (
+                    {({ setFieldValue, values, setFieldError }) => (
                         <Form className="w-full">
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -142,17 +186,31 @@ export const UsersAdd = () => {
                             </div>
 
                             <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('EMAIL')}
+                                <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
+                                    {t('BIRTH_DATE')}
                                 </label>
-                                <Field
-                                    type="text"
-                                    id="email"
-                                    name="email"
-                                    placeholder={t('EMAIL')}
+                                <DatePicker
+                                    id="birthDate"
+                                    name="birthDate"
+                                    selected={values.birthDate ? new Date(values.birthDate) : null}
+                                    onChange={(date) => {
+                                        const zonedDate = toZonedTime(date, i18n.language === 'en-US' ? 'America/New_York' : 'Europe/Sarajevo');
+
+                                        const utcDate = fromZonedTime(zonedDate, 'UTC');
+
+                                        setFieldValue('birthDate', utcDate);
+                                    }}
+                                    dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+                                    //dateFormat={"yyyy-MM-dd"}
+                                    placeholderText={t('SELECT_BIRTH_DATE')}
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    showYearDropdown
+                                    maxDate={new Date()}
+                                    yearDropdownItemNumber={100}
+                                    scrollableYearDropdown
+                                    onKeyDown={(e) => e.preventDefault()}
                                 />
-                                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                                <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                             </div>
 
                             <div className="mb-4">
@@ -170,21 +228,6 @@ export const UsersAdd = () => {
                                     className='input-select-border mt-1'
                                 />
                                 <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-
-
-                            <div className="mb-4">
-                                <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
-                                    {t('BIRTH_DATE')}
-                                </label>
-                                <Field
-                                    type="date"
-                                    id="birthDate"
-                                    name="birthDate"
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                             </div>
 
                             <div className="mb-4">
@@ -222,12 +265,17 @@ export const UsersAdd = () => {
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                     {t('PHONE')}
                                 </label>
-                                <Field
-                                    type="text"
-                                    id="phone"
-                                    name="phone"
-                                    placeholder={t('PHONE')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                <PhoneInput
+                                    inputProps={{
+                                        name: 'phone',
+                                        id: 'phone',
+                                        className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500',
+                                    }}
+                                    country={'ba'}
+                                    //value={values.phone}
+                                    onChange={(phone) => setFieldValue('phone', phone)}
+                                    countryCodeEditable={false}
+                                    international
                                 />
                                 <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
                             </div>
@@ -251,16 +299,66 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    {t('EMAIL')}
+                                </label>
+                                <Field
+                                    type="text"
+                                    id="email"
+                                    name="email"
+                                    placeholder={t('EMAIL')}
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    onChange={async (e) => {
+                                        setEmail(e.target.value);
+                                        setFieldValue('email', e.target.value);
+                                        await debouncedEmailCheck(e.target.value);
+                                        if (emailError) {
+                                            setFieldError('email', emailError);
+                                        }
+                                    }}
+                                />
+                                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                            </div>
+
+                            <div className="mb-4 relative">
+                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                     {t('PASSWORD')}
+                                </label>
+                                <div className="flex items-center mt-1">
+                                    <Field
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        placeholder={t('PASSWORD')}
+                                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    />
+                                    <div className="ml-2 relative group">
+                                        <i className="fas fa-info-circle text-gray-500 hover:text-indigo-500 cursor-pointer"></i>
+                                        <div className="hidden absolute top-7 left-0 w-max bg-gray-700 text-white text-xs rounded-md p-2 shadow-md group-hover:block">
+                                            <p>Password must:</p>
+                                            <ul className="list-disc pl-4">
+                                                <li>Be at least 8 characters long</li>
+                                                <li>Contain at least one letter</li>
+                                                <li>Contain at least one number</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+                            </div>
+
+
+                            <div className="mb-4">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    {t('PASSWORD_CONFIRM')}
                                 </label>
                                 <Field
                                     type="password"
-                                    id="password"
-                                    name="password"
-                                    placeholder={t('PASSWORD')}
+                                    id="passwordConfirm"
+                                    name="passwordConfirm"
+                                    placeholder={t('PASSWORD_CONFIRM')}
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
-                                <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+                                <ErrorMessage name="passwordConfirm" component="div" className="text-red-500 text-sm" />
                             </div>
 
 
