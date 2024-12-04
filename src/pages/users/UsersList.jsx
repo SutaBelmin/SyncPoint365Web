@@ -23,7 +23,7 @@ export const UsersList = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItemCount, setTotalItemCount] = useState(0);
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
@@ -42,7 +42,6 @@ export const UsersList = () => {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
-
 
     const onAddUserClick = () => {
         navigate('/users/add');
@@ -81,7 +80,7 @@ export const UsersList = () => {
                 </div>
             ),
             name: t('BIRTH_DATE'),
-            selector: row => format(new Date(row.birthDate), i18n.language === 'en' ? 'MM/dd/yyyy' : 'dd/MM/yyyy'),
+            selector: row => format(new Date(row.birthDate), t('DATE_FORMAT')),
             sortable: true,
         },
         {

@@ -105,5 +105,6 @@
     "ADMINISTRATOR":"Admin",
     "EMPLOYEE":"Employee",
     "SELECT_BIRTH_DATE":"Select Birth Date",
-    "EMAIL_ALREADY_EXIST": "Email already exist"
+    "EMAIL_ALREADY_EXIST": "Email already exist",
+    "DATE_FORMAT": "MM/dd/yyyy"
 }

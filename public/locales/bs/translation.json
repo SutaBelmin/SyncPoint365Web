@@ -105,6 +105,7 @@
     "ADMINISTRATOR":"Administrator",
     "EMPLOYEE":"Zaposlenik",
     "SELECT_BIRTH_DATE":"Odaberi datum rođenja",
-    "EMAIL_ALREADY_EXIST": "Email već postoji"
+    "EMAIL_ALREADY_EXIST": "Email već postoji",
+    "DATE_FORMAT": "dd/MM/yyyy"
     
 }
