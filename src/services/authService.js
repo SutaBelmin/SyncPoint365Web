@@ -5,15 +5,18 @@ class AuthService extends BaseService {
   async login(email, password) {
     try {
       const response = await this.api.post('/auth/login', { email, password });
-      //const { token, user } = response.data;
+      const { token, user } = response.data;
 
-      //localStorage.setItem('token', token);
+      localStorage.setItem('token', token);
 
-      //return { user, token };
-      return response;
+      return { user, token };
+      //return response;
     } catch (error) {
-      console.error('Login failed:', error);
-      throw new Error('Invalid credentials');
+      if (error.response && error.response.status === 401) {
+        throw new Error('Invalid credentials');
+      } else {
+        throw new Error('An error occurred, please try again later');
+      }
     }
   }
 

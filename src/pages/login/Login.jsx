@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 
 const Login = () => {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
