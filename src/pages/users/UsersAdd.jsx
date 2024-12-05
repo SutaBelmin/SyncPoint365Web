@@ -48,18 +48,29 @@ export const UsersAdd = () => {
         firstName: Yup.string().required(t('FIRST_NAME_IS_REQUIRED')),
         lastName: Yup.string().required(t('LAST_NAME_IS_REQUIRED')),
         email: Yup.string()
-            .email(t('EMAIL_IS_NOT_VALID'))
             .required(t('EMAIL_IS_REQUIRED'))
-            .test('email-exists', t('EMAIL_ALREADY_EXIST'), async value => {
-                if (value) {
+            .email(t('EMAIL_IS_NOT_VALID'))
+            .test('email-exists', t('EMAIL_ALREADY_EXIST'), async function (value) {
+                const { path, createError } = this;
+                if (!value) {
+                    return true;
+                }
+                
+                if (Yup.string().email().isValidSync(value)) {
                     try {
                         const response = await userService.emailExist(value);
-                        return response === false; 
+
+                        if (response === true) {
+                            return createError({ path, message: t('EMAIL_ALREADY_EXIST') });
+                        }
+
+                        return true;
                     } catch (error) {
-                        return false; 
+                        return createError({ path, message: t('ERROR_CONTACT_ADMIN') });
                     }
+                } else {
+                    return createError({ path, message: t('EMAIL_IS_NOT_VALID') });
                 }
-                return true; 
             }),
         gender: Yup.string().required(t('GENDER_IS_REQUIRED')),
         birthDate: Yup.string().required(t('BIRTH_DATE_IS_REQUIRED')),
@@ -192,10 +203,9 @@ export const UsersAdd = () => {
                                     selected={values.birthDate ? new Date(values.birthDate) : null}
                                     onChange={(date) => {
                                         const zonedDate = toZonedTime(date, i18n.language === 'en-US' ? 'America/New_York' : 'Europe/Sarajevo');
-
                                         const utcDate = fromZonedTime(zonedDate, 'UTC');
-
                                         setFieldValue('birthDate', utcDate);
+
                                     }}
                                     dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
                                     placeholderText={t('SELECT_BIRTH_DATE')}
