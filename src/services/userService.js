@@ -20,6 +20,14 @@ class UserService extends BaseService {
         );
         return response;
     }
+
+    async updateUserStatus(id, isActive){
+        const response = await this.api.post("users/deactivate-users", {
+            id,
+            isActive
+        });
+        return response;
+    }
 }
 
 const userService = new UserService();
