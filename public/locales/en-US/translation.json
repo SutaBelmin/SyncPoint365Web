@@ -70,5 +70,6 @@
     "FAILED_TO_DELETE": "Failed to delete the record.",
     "UPDATED": "Updated successfully!",
     "FAIL_UPDATE": "Failed to update!",
-    "ADDED": "Added successfully!"
+    "ADDED": "Added successfully!",
+    "FAILED_LOGIN": "Check your credentials!"
 }

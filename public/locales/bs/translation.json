@@ -70,6 +70,6 @@
     "FAILED_TO_DELETE": "Brisanje zapisa nije uspjelo.",
     "UPDATED": "Uspješno uređeno!",
     "FAIL_UPDATE": "Uređivanje nije uspjelo!",
-    "ADDED": "Uspješno dodano!"
-    
+    "ADDED": "Uspješno dodano!",
+    "FAILED_LOGIN": "Provjerite svoje podatke!"
 }

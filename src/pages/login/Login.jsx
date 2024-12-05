@@ -9,6 +9,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { authService } from '../../services';
 import LanguageSwitcher from '../../components/localization';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -24,8 +25,9 @@ const Login = () => {
       const response = await authService.login(values.email, values.password);
       console.log('Login successful..', response);
       navigate('/home');
+      toast.success(t('WELCOME'));
     } catch (err) {
-      setErrors({ username: 'Login failed. Please check your credentials.' });
+      toast.error(t('FAILED_LOGIN'));
     } finally {
       setSubmitting(false);
     }
@@ -49,7 +51,7 @@ const Login = () => {
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <Formik
-            initialValues={{ username: '', password: '' }}
+            initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}
             onSubmit={handleLogin}
           >
