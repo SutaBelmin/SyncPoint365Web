@@ -87,7 +87,7 @@
     "ROLE":"Role",
     "SELECT_ROLE":"Select a Role",
     "ROLE_REQUIRED": "Role is required!",
-    "PASSWORD_RULES":"Password must be at least 8 characters long, contain at least one letter and contain at least one number.",
+    "PASSWORD_RULES": "Password must\n • Be at least 8 characters long\n • Contain at least one letter\n • Contain at least one number\n • Contain at least one special character",
     "EMAIL":"Email", 
     "ADDRESS":"Address",
     "ADDRESS_IS_REQUIRED": "Address is required!",
@@ -105,6 +105,6 @@
     "ADMINISTRATOR":"Admin",
     "EMPLOYEE":"Employee",
     "SELECT_BIRTH_DATE":"Select Birth Date",
-    "EMAIL_ALREADY_EXIST": "Email already exist",
+    "EMAIL_ALREADY_EXIST": "Email already exist!",
     "DATE_FORMAT": "MM/dd/yyyy"
 }

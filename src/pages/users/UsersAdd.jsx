@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { toast } from 'react-toastify';
 import { citiesService, enumsService, userService } from '../../services';
@@ -8,10 +8,13 @@ import * as Yup from "yup";
 import Select from "react-select";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale } from "react-datepicker";
+import { enUS, bs } from "date-fns/locale";
 import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import { FaCalendarAlt } from "react-icons/fa";
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -21,6 +24,17 @@ export const UsersAdd = () => {
     const [genders, setGenders] = useState([]);
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
+
+    const localeMapping = {
+        en: enUS,
+        bs: bs
+    };
+
+    const currentLanguage = i18n.language || 'en';
+    const currentLocale = localeMapping[currentLanguage];
+
+    registerLocale(currentLanguage, currentLocale);
+
 
     const addUser = async (values) => {
         try {
@@ -83,7 +97,7 @@ export const UsersAdd = () => {
         roleId: Yup.string().required(t('ROLE_REQUIRED')),
         password: Yup.string()
             .required(t('PASSWORD_IS_REQUIRED'))
-            .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, t('PASSWORD_RULES')),
+            .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/, t('PASSWORD_RULES')),
         passwordConfirm: Yup.string()
             .required(t('PASSWORD_CONFIRM_IS_REQUIRED'))
             .oneOf([Yup.ref('password')], t('PASSWORDS_MUST_MATCH'))
@@ -102,37 +116,39 @@ export const UsersAdd = () => {
         }
     }
 
-    const fetchRoles = async () => {
+    const fetchRoles = useCallback(async () => {
         try {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label,
+                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
+                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
+                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
 
         }
-    };
+    }, [t]);
 
-    const fetchGenders = async () => {
+    const fetchGenders = useCallback(async () => {
         try {
             const response = await enumsService.getGenders();
             const genderOptions = response.data.map(gender => ({
                 value: gender.id,
-                label: gender.label
+                label: gender.label === 'Male' ? t('MALE') : t('FEMALE')
             }));
             setGenders(genderOptions);
         } catch (error) {
 
         }
-    }
+    }, [t]);
 
     useEffect(() => {
         fetchCities();
         fetchRoles();
         fetchGenders();
-    }, []);
+    }, [fetchGenders, fetchRoles]);
 
     return (
         <div className="p-4">
@@ -186,9 +202,13 @@ export const UsersAdd = () => {
                             </div>
 
                             <div className="mb-4">
-                                <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
-                                    {t('BIRTH_DATE')}
-                                </label>
+                                <div className='flex items-center space-x-2'>
+                                    <label htmlFor="birthDate" className="text-sm font-medium text-gray-700">
+                                        {t('BIRTH_DATE')}
+                                    </label>
+                                    <FaCalendarAlt className="text-gray-400" />
+                                </div>
+
                                 <DatePicker
                                     id="birthDate"
                                     name="birthDate"
@@ -201,17 +221,18 @@ export const UsersAdd = () => {
                                         setFieldValue('birthDate', utcDate);
                                     }}
                                     dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
-                                    //dateFormat={"yyyy-MM-dd"}
                                     placeholderText={t('SELECT_BIRTH_DATE')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     showYearDropdown
                                     maxDate={new Date()}
                                     yearDropdownItemNumber={100}
                                     scrollableYearDropdown
                                     onKeyDown={(e) => e.preventDefault()}
+                                    locale={currentLanguage}
+                                    className='mt-1'
                                 />
                                 <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                             </div>
+
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -272,7 +293,7 @@ export const UsersAdd = () => {
                                         className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500',
                                     }}
                                     country={'ba'}
-                                    //value={values.phone}
+                                    value={values.phone}
                                     onChange={(phone) => setFieldValue('phone', phone)}
                                     countryCodeEditable={false}
                                     international
@@ -320,32 +341,26 @@ export const UsersAdd = () => {
                             </div>
 
                             <div className="mb-4 relative">
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                    {t('PASSWORD')}
-                                </label>
-                                <div className="flex items-center mt-1">
-                                    <Field
-                                        type="password"
-                                        id="password"
-                                        name="password"
-                                        placeholder={t('PASSWORD')}
-                                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    />
+                                <div className="flex items-center">
+                                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                        {t('PASSWORD')}
+                                    </label>
                                     <div className="ml-2 relative group">
                                         <i className="fas fa-info-circle text-gray-500 hover:text-indigo-500 cursor-pointer"></i>
                                         <div className="hidden absolute top-7 left-0 w-max bg-gray-700 text-white text-xs rounded-md p-2 shadow-md group-hover:block">
-                                            <p>Password must:</p>
-                                            <ul className="list-disc pl-4">
-                                                <li>Be at least 8 characters long</li>
-                                                <li>Contain at least one letter</li>
-                                                <li>Contain at least one number</li>
-                                            </ul>
+                                            <p dangerouslySetInnerHTML={{ __html: t('PASSWORD_RULES').replace(/\n/g, '<br />') }} />
                                         </div>
                                     </div>
                                 </div>
+                                <Field
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder={t('PASSWORD')}
+                                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
                                 <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
                             </div>
-
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">

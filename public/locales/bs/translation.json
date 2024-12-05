@@ -87,7 +87,7 @@
     "ROLE":"Uloga",
     "SELECT_ROLE":"Odaberi ulogu",
     "ROLE_REQUIRED": "Obavezna uloga!",
-    "PASSWORD_RULES":"Lozinka mora imati najmanje 8 znakova, sadržavati najmanje jedno slovo i najmanje jedan broj.",
+    "PASSWORD_RULES":"Lozinka mora\n • imati najmanje 8 znakova\n • sadržavati najmanje jedno slovo\n • sadržavati najmanje jedan broj \n • sadržavati najmanje jedan specijalni znak",
     "EMAIL":"Email",
     "ADDRESS":"Adresa",
     "ADDRESS_IS_REQUIRED": "Obavezna adresa!",
@@ -105,7 +105,7 @@
     "ADMINISTRATOR":"Administrator",
     "EMPLOYEE":"Zaposlenik",
     "SELECT_BIRTH_DATE":"Odaberi datum rođenja",
-    "EMAIL_ALREADY_EXIST": "Email već postoji",
+    "EMAIL_ALREADY_EXIST": "Email već postoji!",
     "DATE_FORMAT": "dd/MM/yyyy"
     
 }
