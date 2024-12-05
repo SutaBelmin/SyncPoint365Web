@@ -22,8 +22,6 @@ export const UsersAdd = () => {
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
-    const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
 
     const localeMapping = {
         en: enUS,
@@ -46,44 +44,23 @@ export const UsersAdd = () => {
         }
     }
 
-    const checkEmailExistence = async (email) => {
-        try {
-            const response = await userService.emailExist(email);
-
-            if (response === true) {
-                setEmailError(t('EMAIL_ALREADY_EXIST'));
-            } else {
-                setEmailError('');
-            }
-        } catch (error) {
-            setEmailError(t('ERROR_CONTACT_ADMIN'));
-        }
-    };
-
-    const debounce = (fn, delay) => {
-        let timeout;
-        return (...args) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => fn(...args), delay);
-        };
-    };
-
-    const debouncedEmailCheck = debounce(checkEmailExistence, 500);
-
-    useEffect(() => {
-        if (email) {
-            debouncedEmailCheck(email);
-        }
-    }, [email, debouncedEmailCheck]);
-
-
     const validationSchema = Yup.object({
         firstName: Yup.string().required(t('FIRST_NAME_IS_REQUIRED')),
         lastName: Yup.string().required(t('LAST_NAME_IS_REQUIRED')),
         email: Yup.string()
             .email(t('EMAIL_IS_NOT_VALID'))
             .required(t('EMAIL_IS_REQUIRED'))
-            .test('email-exists', emailError, value => !emailError),
+            .test('email-exists', t('EMAIL_ALREADY_EXIST'), async value => {
+                if (value) {
+                    try {
+                        const response = await userService.emailExist(value);
+                        return response === false; 
+                    } catch (error) {
+                        return false; 
+                    }
+                }
+                return true; 
+            }),
         gender: Yup.string().required(t('GENDER_IS_REQUIRED')),
         birthDate: Yup.string().required(t('BIRTH_DATE_IS_REQUIRED')),
         cityId: Yup.string().required(t('CITY_REQUIRED')),
@@ -329,12 +306,7 @@ export const UsersAdd = () => {
                                     placeholder={t('EMAIL')}
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     onChange={async (e) => {
-                                        setEmail(e.target.value);
                                         setFieldValue('email', e.target.value);
-                                        await debouncedEmailCheck(e.target.value);
-                                        if (emailError) {
-                                            setFieldError('email', emailError);
-                                        }
                                     }}
                                 />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
