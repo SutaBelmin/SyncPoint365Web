@@ -28,7 +28,6 @@ class UserService extends BaseService {
     }
     
     async add(userData) {
-        console.log("Podaci", userData);
         const dataToSend = {
             ...userData,
             role: userData.roleId

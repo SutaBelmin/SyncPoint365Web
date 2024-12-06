@@ -10,11 +10,11 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from "react-datepicker";
 import { enUS, bs } from "date-fns/locale";
-import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { FaCalendarAlt } from "react-icons/fa";
+import { format } from 'date-fns';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -55,7 +55,7 @@ export const UsersAdd = () => {
                 if (!value) {
                     return true;
                 }
-                
+
                 if (Yup.string().email().isValidSync(value)) {
                     try {
                         const response = await userService.emailExist(value);
@@ -202,12 +202,10 @@ export const UsersAdd = () => {
                                     name="birthDate"
                                     selected={values.birthDate ? new Date(values.birthDate) : null}
                                     onChange={(date) => {
-                                        const zonedDate = toZonedTime(date, i18n.language === 'en-US' ? 'America/New_York' : 'Europe/Sarajevo');
-                                        const utcDate = fromZonedTime(zonedDate, 'UTC');
-                                        setFieldValue('birthDate', utcDate);
-
+                                        const formattedDate = format(new Date(date), 'yyyy-MM-dd'); 
+                                        setFieldValue('birthDate', formattedDate);
                                     }}
-                                    dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+                                    dateFormat={t('DATE_FORMAT')}
                                     placeholderText={t('SELECT_BIRTH_DATE')}
                                     showYearDropdown
                                     maxDate={new Date()}
@@ -215,7 +213,6 @@ export const UsersAdd = () => {
                                     scrollableYearDropdown
                                     onKeyDown={(e) => e.preventDefault()}
                                     locale={currentLanguage}
-                                    className='mt-1'
                                 />
                                 <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                             </div>
