@@ -26,7 +26,8 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                     { icon: faUser, label: t('USERS'), link: '/users' },
                     { icon: faEarthAmerica, label: t('COUNTRIES'), link: '/countries' },
                     { icon: faCity, label: t('CITIES'), link: '/cities' },
-                    { icon: faUserTimes, label: t('REQUEST_TYPES'), link: '/absenceRequestTypes' }
+                    { icon: faUserTimes, label: t('REQUEST_TYPES'), link: '/absenceRequestTypes' },
+                    { icon: faUserTimes, label: t('ABSENCE_REQUESTS'), link: '/absenceRequests' }
                     ].map(({ icon, label, link }) => (
                         <li key={label} className="flex items-center hover:bg-gray-700 py-2 px-4 rounded">
                             <FontAwesomeIcon icon={icon} className="mr-3" />

@@ -111,6 +111,7 @@
     "SELECT_STATUS":"Odaberi status",
     "STATUS":"Status",
     "SEARCH_PLACEHOLDER":"Pretraga",
-    "BACK":"Nazad"
+    "BACK":"Nazad",
+    "ABSENCE_REQUESTS": "Zahtjevi za odsustvo"
     
 }
