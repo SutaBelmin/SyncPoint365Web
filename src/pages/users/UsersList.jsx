@@ -88,22 +88,22 @@ export const UsersList = () => {
         openModal(
             <ConfirmationModal
                 title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
-                onConfirm={() => handleConfirmStatusChange(userId, !isActive)}
+                onConfirm={() => handleConfirmStatusChange(userId)}
                 onCancel={closeModal}
             />
         );
     };
     
 
-    const handleConfirmStatusChange = async (userId, newStatus) => {
+    const handleConfirmStatusChange = async (userId) => {
         setData((prevData) =>
             prevData.map((user) =>
-                user.id === userId ? { ...user, isActive: newStatus } : user
+                user.id === userId ? { ...user, isActive: !user.isActive } : user
             )
         );
     
         try {
-            await userService.updateUserStatus(userId, newStatus);
+            await userService.updateUserStatus(userId);
             toast.success(t('UPDATED'));
             closeModal();
         } catch (error) {
