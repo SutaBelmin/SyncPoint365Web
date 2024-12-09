@@ -9,24 +9,24 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { authService } from '../../services';
 import LanguageSwitcher from '../../components/localization';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     email: Yup.string().required(t('EMAIL_IS_REQUIRED')),
-    password: Yup.string().min(6, 'Password must be at least 6 characters').required(t('PASSWORD_IS_REQUIRED'))
+    password: Yup.string().required(t('PASSWORD_IS_REQUIRED'))
   });
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
-      const response = await authService.login(values.email, values.password);
-      console.log('Login successful..', response);
+      await authService.login(values.email, values.password);
       navigate('/home');
+      toast.success(t('WELCOME'));
     } catch (err) {
-      setErrors({ username: 'Login failed. Please check your credentials.' });
+      toast.error(t('FAILED_LOGIN'));
     } finally {
       setSubmitting(false);
     }
@@ -50,7 +50,7 @@ const Login = () => {
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <Formik
-            initialValues={{ username: '', password: '' }}
+            initialValues={{ email: '', password: '' }}
             validationSchema={validationSchema}
             onSubmit={handleLogin}
           >
