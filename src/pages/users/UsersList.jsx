@@ -97,13 +97,7 @@ export const UsersList = () => {
     const handleStatusChange = async (userId) => {
         try {
             await userService.updateUserStatus(userId);
-
-            setData((prevData) =>
-                prevData.map((user) =>
-                    user.id === userId ? { ...user, isActive: !user.isActive } : user
-                )
-            );
-
+            fetchData();
             toast.success(t('UPDATED'));
             closeModal();
         } catch (error) {
