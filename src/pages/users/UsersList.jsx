@@ -89,7 +89,7 @@ export const UsersList = () => {
             sortable: true,
         },
         {
-            name: t('CITY_NAME'),
+            name: t('CITY'),
             selector: row => row.cityName,
             sortable: true,
         },

@@ -38,8 +38,8 @@ class UserService extends BaseService {
         return response.data;
     }
 
-    async emailExist(email) {
-        const response = await this.api.get('/users/email-exist', {
+    async emailExists(email) {
+        const response = await this.api.get('/users/email-exists', {
             params: {
                 email: email
             }

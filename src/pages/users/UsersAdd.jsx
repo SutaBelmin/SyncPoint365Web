@@ -52,17 +52,15 @@ export const UsersAdd = () => {
             .email(t('EMAIL_IS_NOT_VALID'))
             .test('email-exists', t('EMAIL_ALREADY_EXIST'), async function (value) {
                 const { path, createError } = this;
-                if (!value) {
+                if (!value)
                     return true;
-                }
 
                 if (Yup.string().email().isValidSync(value)) {
                     try {
-                        const response = await userService.emailExist(value);
+                        const response = await userService.emailExists(value);
 
-                        if (response === true) {
+                        if (response === true) 
                             return createError({ path, message: t('EMAIL_ALREADY_EXIST') });
-                        }
 
                         return true;
                     } catch (error) {
@@ -79,7 +77,7 @@ export const UsersAdd = () => {
         phone: Yup.string()
             .required(t('PHONE_IS_REQUIRED'))
             .matches(
-                /^\+?[1-9]\d{1,14}$|^(\d{3})[-\s]?(\d{3})[-\s]?(\d{4})$/,
+                /^\+?[1-9]\d{8,14}$|^(\d{3})[-\s]?(\d{3})[-\s]?(\d{4})$/,
                 t('PHONE_IS_NOT_VALID')
             ),
         roleId: Yup.string().required(t('ROLE_REQUIRED')),
@@ -159,11 +157,11 @@ export const UsersAdd = () => {
                     validationSchema={validationSchema}
                     onSubmit={addUser}
                 >
-                    {({ setFieldValue, values, setFieldError }) => (
+                    {({ setFieldValue, values }) => (
                         <Form className="w-full">
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('FIRST_NAME')}
+                                    {t('FIRST_NAME')} {!values.firstName && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Field
                                     type="text"
@@ -177,7 +175,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('LAST_NAME')}
+                                    {t('LAST_NAME')} {!values.lastName && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Field
                                     type="text"
@@ -195,6 +193,7 @@ export const UsersAdd = () => {
                                         {t('BIRTH_DATE')}
                                     </label>
                                     <FaCalendarAlt className="text-gray-400" />
+                                    {!values.birthDate && <span className='text-red-500'>*</span>}
                                 </div>
 
                                 <DatePicker
@@ -202,7 +201,7 @@ export const UsersAdd = () => {
                                     name="birthDate"
                                     selected={values.birthDate ? new Date(values.birthDate) : null}
                                     onChange={(date) => {
-                                        const formattedDate = format(new Date(date), 'yyyy-MM-dd'); 
+                                        const formattedDate = format(new Date(date), 'yyyy-MM-dd');
                                         setFieldValue('birthDate', formattedDate);
                                     }}
                                     dateFormat={t('DATE_FORMAT')}
@@ -220,7 +219,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('GENDER')}
+                                    {t('GENDER')} {(values.gender === '' || values.gender === null) && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Select
                                     id="gender"
@@ -237,7 +236,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('CITY')}
+                                    {t('CITY')} {!values.cityId && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Select
                                     id="cityId"
@@ -254,7 +253,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('ADDRESS')}
+                                    {t('ADDRESS')} {!values.address && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Field
                                     type="text"
@@ -268,7 +267,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('PHONE')}
+                                    {t('PHONE')} {(values.phone === '' || values.phone === null) && <span className='text-red-500'>*</span>}
                                 </label>
                                 <PhoneInput
                                     inputProps={{
@@ -278,7 +277,7 @@ export const UsersAdd = () => {
                                     }}
                                     country={'ba'}
                                     value={values.phone}
-                                    onChange={(phone) => setFieldValue('phone', phone)}
+                                    onChange={(phone) => setFieldValue('phone', phone || null)}
                                     countryCodeEditable={false}
                                     international
                                 />
@@ -287,7 +286,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('ROLE')}
+                                    {t('ROLE')} {(values.roleId === '' || values.roleId === null) && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Select
                                     id="roleId"
@@ -304,7 +303,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('EMAIL')}
+                                    {t('EMAIL')} {!values.email && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Field
                                     type="text"
@@ -322,7 +321,7 @@ export const UsersAdd = () => {
                             <div className="mb-4 relative">
                                 <div className="flex items-center">
                                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                        {t('PASSWORD')}
+                                        {t('PASSWORD')} {!values.password && <span className='text-red-500'>*</span>}
                                     </label>
                                     <div className="ml-2 relative group">
                                         <i className="fas fa-info-circle text-gray-500 hover:text-indigo-500 cursor-pointer"></i>
@@ -343,7 +342,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('PASSWORD_CONFIRM')}
+                                    {t('PASSWORD_CONFIRM')} {!values.passwordConfirm && <span className='text-red-500'>*</span>}
                                 </label>
                                 <Field
                                     type="password"
