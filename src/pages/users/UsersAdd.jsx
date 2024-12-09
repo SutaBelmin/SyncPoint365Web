@@ -59,7 +59,7 @@ export const UsersAdd = () => {
                     try {
                         const response = await userService.emailExists(value);
 
-                        if (response === true) 
+                        if (response === true)
                             return createError({ path, message: t('EMAIL_ALREADY_EXIST') });
 
                         return true;
@@ -161,7 +161,7 @@ export const UsersAdd = () => {
                         <Form className="w-full">
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('FIRST_NAME')} {!values.firstName && <span className='text-red-500'>*</span>}
+                                    {t('FIRST_NAME')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Field
                                     type="text"
@@ -175,7 +175,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('LAST_NAME')} {!values.lastName && <span className='text-red-500'>*</span>}
+                                    {t('LAST_NAME')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Field
                                     type="text"
@@ -193,7 +193,7 @@ export const UsersAdd = () => {
                                         {t('BIRTH_DATE')}
                                     </label>
                                     <FaCalendarAlt className="text-gray-400" />
-                                    {!values.birthDate && <span className='text-red-500'>*</span>}
+                                    <span className='text-red-500'>*</span>
                                 </div>
 
                                 <DatePicker
@@ -219,7 +219,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('GENDER')} {(values.gender === '' || values.gender === null) && <span className='text-red-500'>*</span>}
+                                    {t('GENDER')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Select
                                     id="gender"
@@ -236,7 +236,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('CITY')} {!values.cityId && <span className='text-red-500'>*</span>}
+                                    {t('CITY')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Select
                                     id="cityId"
@@ -253,7 +253,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('ADDRESS')} {!values.address && <span className='text-red-500'>*</span>}
+                                    {t('ADDRESS')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Field
                                     type="text"
@@ -267,7 +267,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('PHONE')} {(values.phone === '' || values.phone === null) && <span className='text-red-500'>*</span>}
+                                    {t('PHONE')} <span className='text-red-500'>*</span>
                                 </label>
                                 <PhoneInput
                                     inputProps={{
@@ -277,7 +277,7 @@ export const UsersAdd = () => {
                                     }}
                                     country={'ba'}
                                     value={values.phone}
-                                    onChange={(phone) => setFieldValue('phone', phone || null)}
+                                    onChange={(phone) => setFieldValue('phone', phone)}
                                     countryCodeEditable={false}
                                     international
                                 />
@@ -286,7 +286,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('ROLE')} {(values.roleId === '' || values.roleId === null) && <span className='text-red-500'>*</span>}
+                                    {t('ROLE')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Select
                                     id="roleId"
@@ -303,7 +303,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('EMAIL')} {!values.email && <span className='text-red-500'>*</span>}
+                                    {t('EMAIL')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Field
                                     type="text"
@@ -321,7 +321,7 @@ export const UsersAdd = () => {
                             <div className="mb-4 relative">
                                 <div className="flex items-center">
                                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                        {t('PASSWORD')} {!values.password && <span className='text-red-500'>*</span>}
+                                        {t('PASSWORD')} <span className='text-red-500'>*</span>
                                     </label>
                                     <div className="ml-2 relative group">
                                         <i className="fas fa-info-circle text-gray-500 hover:text-indigo-500 cursor-pointer"></i>
@@ -342,7 +342,7 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('PASSWORD_CONFIRM')} {!values.passwordConfirm && <span className='text-red-500'>*</span>}
+                                    {t('PASSWORD_CONFIRM')} <span className='text-red-500'>*</span>
                                 </label>
                                 <Field
                                     type="password"
@@ -353,7 +353,6 @@ export const UsersAdd = () => {
                                 />
                                 <ErrorMessage name="passwordConfirm" component="div" className="text-red-500 text-sm" />
                             </div>
-
 
                             <div className="flex justify-end">
                                 <button
