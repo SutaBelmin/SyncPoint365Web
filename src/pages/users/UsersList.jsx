@@ -15,7 +15,6 @@ import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { ConfirmationModal } from '../../components/modal';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../context';
-import { format } from 'date-fns'; 
 
 export const UsersList = () => {
     const { openModal, closeModal } = useModal();
@@ -59,36 +58,6 @@ export const UsersList = () => {
             sortable: true,
         },
         {
-            name: t('FULL_NAME'),
-            selector: row => row.fullName,
-            sortable: true,
-        },
-        {
-            name: t('ACTIONS'),
-            cell: (row) => (
-                <div className="flex justify-center items-center w-10">
-                    <button
-                        onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-xl ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
-                    >
-                        {row.isActive ? (
-                            <FontAwesomeIcon icon={faCircleCheck} />
-                        ) : (
-                            <FontAwesomeIcon icon={faCircleXmark} />
-                        )}
-                    </button>
-                </div>
-            ),
-            name: t('BIRTH_DATE'),
-            selector: row => format(new Date(row.birthDate), t('DATE_FORMAT')),
-            sortable: true,
-        },
-        {
-            name: t('GENDER'),
-            selector: row => t(row.gender === 'Male' ? 'MALE' : 'FEMALE'),
-            sortable: true,
-        },
-        {
             name: t('CITY'),
             selector: row => row.cityName,
             sortable: true,
@@ -108,7 +77,30 @@ export const UsersList = () => {
             selector: row => t(formatRoleKey(row.role)),
             sortable: true,
         },
+        {
+            name: t('ACTIONS'),
+            cell: (row) => (
+                <div className="flex justify-center items-center w-10">
+                    <button
+                        onClick={() => statusChange(row.id, row.isActive)}
+                        className={`text-xl ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
+                    >
+                        {row.isActive ? (
+                            <FontAwesomeIcon icon={faCircleCheck} />
+                        ) : (
+                            <FontAwesomeIcon icon={faCircleXmark} />
+                        )}
+                    </button>
+                </div>
+            ),
+        },
     ];
+
+    const formatRoleKey = (role) => {
+        return role
+            .replace(/([a-z])([A-Z])/g, '$1_$2')
+            .toUpperCase();
+    }
 
     const statusChange = (userId, isActive) => {
         openModal(
@@ -129,11 +121,7 @@ export const UsersList = () => {
         } catch (error) {
             toast.error(t('FAIL_UPDATE'));
         }
-    const formatRoleKey = (role) => {
-        return role
-            .replace(/([a-z])([A-Z])/g, '$1_$2')
-            .toUpperCase(); 
-    };
+    }
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
@@ -175,5 +163,4 @@ export const UsersList = () => {
             </div>
         </div>
     );
-}
 };
