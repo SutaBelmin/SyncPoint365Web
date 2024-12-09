@@ -70,5 +70,7 @@
     "FAILED_TO_DELETE": "Failed to delete the record.",
     "UPDATED": "Updated successfully!",
     "FAIL_UPDATE": "Failed to update!",
-    "ADDED": "Added successfully!"
+    "ADDED": "Added successfully!",
+    "DEACTIVATE": "Deactivate user?",
+    "ACTIVATE": "Activate user?"
 }

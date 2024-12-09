@@ -20,6 +20,11 @@ class UserService extends BaseService {
         );
         return response;
     }
+
+    async updateUserStatus(id){
+        const response = await this.api.post(`/users/change-status?id=${id}`);
+        return response;
+    }
 }
 
 const userService = new UserService();

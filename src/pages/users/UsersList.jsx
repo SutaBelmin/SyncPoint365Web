@@ -12,9 +12,12 @@ import { PaginationOptions } from "../../components/common-ui/PaginationOptions"
 import {NoDataMessage} from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { Formik, Form, Field } from 'formik';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
+import { ConfirmationModal } from '../../components/modal';
 
 export const UsersList = () => {
-    const { openModal } = useModal();
+    const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
     const [totalItemCount, setTotalItemCount] = useState(0);
@@ -58,11 +61,48 @@ export const UsersList = () => {
             selector: row => row.fullName,
             sortable: true,
         },
+        {
+            name: t('ACTIONS'),
+        cell: (row) => (
+            <div className="flex justify-center items-center w-10">
+                <button
+                    onClick={() => statusChange(row.id, row.isActive)}
+                    className={`text-xl ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
+                >
+                    {row.isActive ? (
+                         <FontAwesomeIcon icon={faCircleCheck} />
+                    ) : (
+                        <FontAwesomeIcon icon={faCircleXmark} />
+                    )}
+                </button>
+            </div>
+        ),
+        },
     ];
-
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
+    };
+
+    const statusChange = (userId, isActive) => {
+        openModal(
+            <ConfirmationModal
+                title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
+                onConfirm={() => handleStatusChange(userId)}
+                onCancel={closeModal}
+            />
+        );
+    };
+
+    const handleStatusChange = async (userId) => {
+        try {
+            await userService.updateUserStatus(userId);
+            fetchData();
+            toast.success(t('UPDATED'));
+            closeModal();
+        } catch (error) {
+            toast.error(t('FAIL_UPDATE'));
+        }
     };
 
     return (
