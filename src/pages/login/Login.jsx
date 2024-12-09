@@ -17,13 +17,12 @@ const Login = () => {
 
   const validationSchema = Yup.object({
     email: Yup.string().required(t('EMAIL_IS_REQUIRED')),
-    password: Yup.string().min(6, 'Password must be at least 6 characters').required(t('PASSWORD_IS_REQUIRED'))
+    password: Yup.string().required(t('PASSWORD_IS_REQUIRED'))
   });
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
-      const response = await authService.login(values.email, values.password);
-      console.log('Login successful..', response);
+      await authService.login(values.email, values.password);
       navigate('/home');
       toast.success(t('WELCOME'));
     } catch (err) {
