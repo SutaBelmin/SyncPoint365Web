@@ -4,11 +4,9 @@ class AbsenceRequestsSearchStore {
     userId = null;
     dateFrom = null;
     dateTo = null;
-    dateReturn = null;
     absenceRequestStatus = null;
-    absenceTypeId = null;
-    comment = null;
-    pageNumber = 1;
+    absenceRequestTypeId = null;
+    page = 1;
     pageSize = 10;
     totalItemCount = 0;
 
@@ -18,36 +16,32 @@ class AbsenceRequestsSearchStore {
 
     setUserId(value) {
         this.userId = value;
+        this.syncWithQueryParams();
     }
 
     setDateFrom(value) {
         this.dateFrom = value;
+        this.syncWithQueryParams();
     }
 
     setDateTo(value) {
         this.dateTo = value;
-    }
-    setDateReturn(value) {
-        this.dateReturn = value;
+        this.syncWithQueryParams();
     }
 
-    setAbsenceRequestStatus(value) {
-        this.absenceRequestStatus = value;
-    }
     setAbsenceTypeId(value) {
-        this.absenceTypeId = value;
-    }
-    
-    setComment(value) {
-        this.comment = value;
+        this.absenceRequestTypeId = value;
+        this.syncWithQueryParams();
     }
 
-    setPageNumber(value) {
-        this.pageNumber = value;
+    setPage(value) {
+        this.page = value;
+        this.syncWithQueryParams();
     }
 
     setPageSize(value) {
         this.pageSize = value;
+        this.syncWithQueryParams();
     }
 
     setTotalItemCount(value) {
@@ -56,30 +50,58 @@ class AbsenceRequestsSearchStore {
 
     get absenceRequestsFilter() {
         return {
+            absenceRequestTypeId: this.absenceRequestTypeId, 
             userId: this.userId,
             dateFrom: this.dateFrom,
             dateTo: this.dateTo, 
-            dateReturn: this.dateReturn, 
             absenceRequestStatus: this.absenceRequestStatus, 
-            absenceTypeId: this.absenceTypeId, 
-            comment: this.comment, 
-            pageNumber: this.pageNumber, 
+            page: this.page, 
             pageSize: this.pageSize, 
-            totalItemCount: this.totalItemCount,
         };
     }
 
     reset() {
+        this.absenceRequestTypeId = null;
         this.userId = null;
         this.dateFrom = null;
         this.dateTo = null;
-        this.dateReturn = null;
-        this.absenceRequestStatus = null;
-        this.absenceTypeId = null;
-        this.comment = null;
-        this.pageNumber = 1;
+        this.page = 1;
         this.pageSize = 10;
-        this.totalItemCount = 0;
+    }
+
+    syncWithQueryParams(){
+        const params = new URLSearchParams();
+
+        if(this.absenceRequestTypeId !== null)
+            params.set("absenceRequestTypeId", this.absenceRequestTypeId);
+
+        if(this.userId !== null)
+            params.set("userId", this.userId);
+
+        if(this.dateFrom !== null)
+            params.set("dateFrom", this.dateFrom);
+
+        if(this.dateTo !== null)
+            params.set("dateTo", this.dateTo);
+
+        if(this.page !== 1)
+            params.set("page", this.page);
+
+        if(this.pageSize !== 10)
+            params.set("pageSize", this.pageSize);
+
+        return params;
+    }
+
+    initializeQueryParams(searchParams) {
+        const absenceRequestTypeId = searchParams.get("absenceRequestTypeId") || null;
+        const userId = searchParams.get("userId") || null;
+        const dateFrom = searchParams.get("dateFrom") || null;
+        const dateTo = searchParams.get("dateTo") || null;
+        this.setAbsenceTypeId(absenceRequestTypeId);
+        this.setUserId(userId);
+        this.setDateFrom(dateFrom);
+        this.setDateTo(dateTo);
     }
 }
 

@@ -1,1 +1,1 @@
-export { default } from './AbsenceRequestsSearch';
+export { AbsenceRequestsSearch } from './AbsenceRequestsSearch';

@@ -2,37 +2,19 @@ import BaseService from "./baseService";
 
 
 class AbsenceRequestsService extends BaseService {
-    // async getPagedList(filter, signal = null) {
-    //     const response = await this.api.get(
-    //         `/absencerequests/paged`, 
-    //         {
-    //             params: {
-    //                 absenceRequestTypeId: filter.absenceRequestTypeId,
-    //                 userId: filter.userId, 
-    //                 dateFrom: filter.dateFrom,
-    //                 dateTo: filter.dateTo,
-    //                 page: filter.page, 
-    //                 pageSize: filter.pageSize,
-    //             },
-    //             signal: signal
-    //         }
-    //     );
-    //     return response.data;
-    // }
-
-    async getPagedList(absenceRequestTypeId, userId, dateFrom, dateTo, page = 1, pageSize = 10) {
+    async getPagedList(filter, signal = null) {
         const response = await this.api.get(
             `/absencerequests/paged`, 
             {
                 params: {
-                    absenceRequestTypeId,
-                    userId, 
-                    dateFrom,
-                    dateTo,
-                    page, 
-                    pageSize,
+                    absenceRequestTypeId: filter.absenceRequestTypeId,
+                    userId: filter.userId, 
+                    dateFrom: filter.dateFrom,
+                    dateTo: filter.dateTo,
+                    page: filter.page, 
+                    pageSize: filter.pageSize,
                 },
-                cancelToken: null,
+                signal: signal,
             }
         );
         return response;
