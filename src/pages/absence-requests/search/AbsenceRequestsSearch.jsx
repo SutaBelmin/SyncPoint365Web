@@ -57,10 +57,11 @@ export const AbsenceRequestsSearch = observer(() => {
 
 
 	const handleSubmit = (values) => {
-		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
-		absenceRequestsSearchStore.setUserId(values.userId);
-		absenceRequestsSearchStore.setDateFrom(values.dateFrom);
-		absenceRequestsSearchStore.setDateTo(values.dateTo);
+		console.log("Test", values);
+		values.absenceRequestTypeId && absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
+		values.userId && absenceRequestsSearchStore.setUserId(values.userId);
+		values.dateFrom && absenceRequestsSearchStore.setDateFrom(values.dateFrom);
+		values.dateTo && absenceRequestsSearchStore.setDateTo(values.dateTo);
 		const queryParams = absenceRequestsSearchStore.syncWithQueryParams();
 		setSearchParams(queryParams);
 	};
@@ -110,8 +111,9 @@ export const AbsenceRequestsSearch = observer(() => {
 							name="dateFrom"
 							selected={values.dateFrom ? new Date(values.dateFrom) : null}
 							onChange={(date) => {
-								const formattedDate = format(new Date(date), 'yyyy-MM-dd');
-								setFieldValue('dateFrom', formattedDate);
+								const formattedDate = format(date, 'yyyy/MM/dd');
+								console.log('Date From Selected:', formattedDate); 
+								setFieldValue('dateFrom', formattedDate); 
 							}}
 							dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
 							placeholderText="Select date from"
@@ -127,8 +129,9 @@ export const AbsenceRequestsSearch = observer(() => {
 							name="dateTo"
 							selected={values.dateTo ? new Date(values.dateTo) : null}
 							onChange={(date) => {
-								const formattedDate = format(new Date(date), 'yyyy-MM-dd');
-								setFieldValue('dateTo', formattedDate);
+								const formattedDate = format(date, 'yyyy/MM/dd');  // Format the date
+								console.log('Date From Selected:', formattedDate);  // Log the selected date
+								setFieldValue('dateTo', formattedDate); 
 							}}
 							dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
 							placeholderText="Select date to"
