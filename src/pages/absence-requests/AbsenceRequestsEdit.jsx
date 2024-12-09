@@ -18,32 +18,20 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
 
-	const initialValues = {
-		type: absenceRequestTypes.find(type => type.value === absenceRequest?.typeId) || null,
-		dateFrom: absenceRequest?.dateFrom ? new Date(absenceRequest.dateFrom) : new Date(),
-		dateTo: absenceRequest?.dateTo ? new Date(absenceRequest.dateTo) : new Date(),
-		dateReturn: absenceRequest?.dateReturn ? new Date(absenceRequest.dateReturn) : new Date(),
-		comment: absenceRequest?.comment || ''
-	};
-
-
-
 	useEffect(() => {
 		const fetchTypeUserId = async () => {
 			try {
 				const responseAbsenceType = await absenceRequestTypesService.getList();
-				const optionsAbsenceType = responseAbsenceType.data.map(absenceRequestType => ({
-					value: absenceRequestType.id,
-					label: absenceRequestType.name
-				}));
-				setAbsenceRequestTypes(optionsAbsenceType);
+				setAbsenceRequestTypes(responseAbsenceType.data.map(type => ({
+					value: type.id,
+					label: type.name
+				})));
 
 				const responseUsers = await userService.getUsers();
-				const optionsUsers = responseUsers.data.map(user => ({
+				setUsers(responseUsers.data.map(user => ({
 					value: user.id,
-					label: user.name
-				}));
-				setUsers(optionsUsers);
+					label: user.firstname
+				})));
 			} catch (error) {
 				toast.error(t('ERROR_FETCHING_ABSENCE_TYPES'));
 			}
@@ -53,7 +41,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 
 
 	const validationSchema = Yup.object().shape({
-		type: Yup.string().required(t('NAME_IS_REQUIRED')),
+		absenceRequestTypes: Yup.string().required(t('NAME_IS_REQUIRED')),
 		dateFrom: Yup.date()
 			.required(t('NAME_IS_REQUIRED')),
 		dateTo: Yup.date()
@@ -68,15 +56,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 	const editHandling = async (values, actions) => {
 		const { setSubmitting } = actions;
 		try {
-			await absenceRequestsService.update({
-				//userId: userId.id,
-				id: absenceRequest.id,
-				type: values.type.value,
-				dateFrom: values.dateFrom,
-				dateTo: values.dateTo,
-				dateReturn: values.dateReturn,
-				comment: values.comment
-			});
+			await absenceRequestsService.update({values});
 			fetchData();
 			closeModal();
 			toast.success(t('UPDATED'));
@@ -92,7 +72,15 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 		<div className='p-4'>
 			<h2 className="text-xl font-semibold mb-4">Edit Absence Request</h2>
 			<Formik
-				initialValues={initialValues}
+				enableReinitialize
+				initialValues={{
+					absenceRequestTypeId: absenceRequest.absenceRequestTypeId,
+					dateFrom: absenceRequest.dateFrom,
+					dateTo: absenceRequest.dateTo,
+					dateReturn: absenceRequest.dateReturn,
+					comment: absenceRequest.comment || "",
+					userId: absenceRequest.userId,
+				}}
 				validationSchema={validationSchema}
 				onSubmit={editHandling}
 			>
@@ -100,11 +88,11 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 					<Form className="space-y-4">
 						<div>
 							<Select
-								name="type"
-								placeholder="Select Type"
+								name="absenceRequestTypeId"
+								id="absenceRequestTypeId"
 								options={absenceRequestTypes}
-								value={values.type}
-								onChange={(option) => setFieldValue('type', option)}
+								value={absenceRequestTypes.find((option) => option.value === values.absenceRequestTypeId)}
+								onChange={(option) => setFieldValue("absenceRequestTypeId", option ? option.value : "")}
 								isSearchable
 								className="h-10 border-gray-300 input-select-border w-full mb-2"
 							/>
@@ -190,10 +178,10 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 							</label>
 							<Field
 								type="block"
-								id="name"
+								id="comment"
 								as="textarea"
 								rows="4"
-								name="name"
+								name="comment"
 								placeholder="Comment field"
 								autoComplete="off"
 								className="mt-1 mb-4 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"

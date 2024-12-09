@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import { absenceRequestsService } from "../../services"
-import { absenceRequestsSearchStore } from "./stores"
+//import { AbsenceRequestsSearch } from "../absence-requests/search";
+//import { absenceRequestsSearchStore } from "./stores"
 import { AbsenceRequestsAdd, AbsenceRequestsEdit } from "../absence-requests";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -12,8 +13,6 @@ import { toast } from "react-toastify";
 import { NoDataMessage } from "../../components/common-ui";
 import { PaginationOptions } from "../../components/common-ui";
 import { format } from 'date-fns';
-//import AbsenceRequestsSearch from "./search";
-
 import "./AbsenceRequestsList.css";
 
 export const AbsenceRequestsList = () => {
@@ -147,6 +146,7 @@ export const AbsenceRequestsList = () => {
                 </button>
             </div>
             <BaseModal />
+            
             <div className="table max-w-full">
                 <DataTable
                     columns={columns}
