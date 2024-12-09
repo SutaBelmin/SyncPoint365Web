@@ -3,13 +3,13 @@ import AppRoutes from './routes/AppRoutes';
 import { ModalProvider } from './context/ModalProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import { localizationService } from './services';
+import { localizationsService } from './services';
 import { I18nextProvider } from 'react-i18next';
  
 
 function App() {
   return (
-    <I18nextProvider i18n={localizationService}>
+    <I18nextProvider i18n={localizationsService}>
      <ModalProvider>
        <AppRoutes />
        <ToastContainer/>

@@ -5,7 +5,7 @@ import { MainLayout } from '../components/layout';
 
 import Home from '../pages/home';
 import { Login } from '../pages/login';
-import { UsersList } from '../pages/users';
+import { UsersAdd, UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 import { CitiesList } from '../pages/cities';
@@ -18,6 +18,7 @@ const AppRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/users" element={<UsersList />} />
+          <Route path="/users/add" element={<UsersAdd />} />
           <Route path="/absenceRequestTypes" element={<AbsenceRequestTypesList />} />
           <Route path="/countries" element={<CountriesList />} />
           <Route path="/cities" element={<CitiesList />} />

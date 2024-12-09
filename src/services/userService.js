@@ -9,11 +9,12 @@ class UserService extends BaseService {
         return response;
     }
 
-    async getPagedUsers(page = 1, signal = null) {
+    async getPagedUsers(page = 1, pageSize = 10, signal = null) {
 
         const response = await this.api.get(`/users/paged-list`, {
             params: {
-                page: page
+                page: page,
+                pageSize: pageSize
             },
             signal: signal
         }
@@ -24,6 +25,26 @@ class UserService extends BaseService {
     async updateUserStatus(id){
         const response = await this.api.post(`/users/change-status?id=${id}`);
         return response;
+    }
+    
+    async add(userData) {
+        const dataToSend = {
+            ...userData,
+            role: userData.roleId
+        };
+       
+        const response = await this.api.post(`/users`, dataToSend);
+
+        return response.data;
+    }
+
+    async emailExists(email) {
+        const response = await this.api.get('/users/email-exists', {
+            params: {
+                email: email
+            }
+        });
+        return response.data;
     }
 }
 
