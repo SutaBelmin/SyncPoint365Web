@@ -22,7 +22,7 @@ class UserService extends BaseService {
     }
 
     async updateUserStatus(id){
-        const response = await this.api.post(`users/deactivate-users?id=${id}`);
+        const response = await this.api.post(`/users/change-status?id=${id}`);
         return response;
     }
 }

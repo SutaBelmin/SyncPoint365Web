@@ -66,7 +66,7 @@ export const UsersList = () => {
         cell: (row) => (
             <div className="flex justify-center items-center w-10">
                 <button
-                    onClick={() => handleStatusChange(row.id, row.isActive)}
+                    onClick={() => statusChange(row.id, row.isActive)}
                     className={`text-xl ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
                 >
                     {row.isActive ? (
@@ -84,26 +84,26 @@ export const UsersList = () => {
         setPage(newPage);
     };
 
-    const handleStatusChange = (userId, isActive) => {
+    const statusChange = (userId, isActive) => {
         openModal(
             <ConfirmationModal
                 title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
-                onConfirm={() => handleConfirmStatusChange(userId)}
+                onConfirm={() => handleStatusChange(userId)}
                 onCancel={closeModal}
             />
         );
     };
-    
 
-    const handleConfirmStatusChange = async (userId) => {
-        setData((prevData) =>
-            prevData.map((user) =>
-                user.id === userId ? { ...user, isActive: !user.isActive } : user
-            )
-        );
-    
+    const handleStatusChange = async (userId) => {
         try {
             await userService.updateUserStatus(userId);
+
+            setData((prevData) =>
+                prevData.map((user) =>
+                    user.id === userId ? { ...user, isActive: !user.isActive } : user
+                )
+            );
+
             toast.success(t('UPDATED'));
             closeModal();
         } catch (error) {
