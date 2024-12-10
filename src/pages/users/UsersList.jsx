@@ -43,7 +43,7 @@ export const UsersList = () => {
     }, [fetchData]);
 
     const onAddUserClick = () => {
-        navigate('/users/add');
+       navigate('add');
     };
 
     const columns = [
@@ -128,7 +128,7 @@ export const UsersList = () => {
             <h1 className="h1">{t('USERS')}</h1>
 
             <Formik>
-                <Form className="flex justify-end mb-4 xs:flex-row">
+                <Form className="flex flex-col md:flex-row">
                     <button
                         type='button'
                         onClick={onAddUserClick}
