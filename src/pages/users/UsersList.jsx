@@ -12,7 +12,8 @@ import { useModal } from '../../context';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck, faCircleXmark, faPen } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
@@ -118,10 +119,26 @@ export const UsersList = observer(() => {
                             <FontAwesomeIcon icon={faCircleXmark} />
                         )}
                     </button>
+                    <button 
+                    onClick={() => handleEdit(row.id)}
+                    className="text-xl text-blue-500"
+                    >
+                        <FontAwesomeIcon icon={faPen}/>
+                    </button>
                 </div>
             ),
         },
     ];
+
+    const handleEdit = (userId) => {
+        navigate(`/users/update/${userId}`);
+    }
+
+    const formatRoleKey = (role) => {
+        return role
+            .replace(/([a-z])([A-Z])/g, '$1_$2')
+            .toUpperCase();
+    }
 
     const statusChange = (userId, isActive) => {
         openModal(

@@ -5,7 +5,7 @@ import { MainLayout } from '../components/layout';
 
 import Home from '../pages/home';
 import { Login } from '../pages/login';
-import { UsersAdd, UsersList } from '../pages/users';
+import { UsersAdd, UsersList, UsersUpdate } from '../pages/users';
 import { CountriesList } from '../pages/countries';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 import { CitiesList } from '../pages/cities';
@@ -26,6 +26,7 @@ const AppRoutes = () => {
           <Route path="/absence-requests" element={<AbsenceRequestsList />} />
           <Route path="/countries" element={<CountriesList />} />
           <Route path="/cities" element={<CitiesList />} />
+          <Route path="/users/update/:userId" element={<UsersUpdate />} />
         </Route>
       </Routes>
     </Router>

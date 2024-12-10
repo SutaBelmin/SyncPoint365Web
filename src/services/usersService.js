@@ -63,6 +63,16 @@ class UsersService extends BaseService {
         });
         return response.data;
     }
+
+    async getById(userId) {
+        const response = await this.api.get(`/users/${userId}`)
+        return response;
+    }
+
+    async update(userData) {
+        const response = await this.api.put(`/users/update`, userData);
+        return response;
+    }
 }
 
 const usersService = new UsersService();
