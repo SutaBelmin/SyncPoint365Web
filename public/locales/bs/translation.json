@@ -123,6 +123,7 @@
     "SELECT": "Odaberi",
     "APPROVED": "Odobreno",
     "REJCETED": "Odbijeno",
-    "PENDING": "U obradi" 
+    "PENDING": "U obradi",
+    "STATUS": "Status"
 
 }

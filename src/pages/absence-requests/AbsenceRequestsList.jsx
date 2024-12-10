@@ -106,8 +106,17 @@ export const AbsenceRequestsList = observer(() => {
             sortable: true,
         },
         {
-            name: "Status",
-            selector: (row) => row.absenceRequestStatus,
+            name: t('STATUS'),
+            selector: (row) => {
+                switch (row.absenceRequestStatus) {
+                    case 'Approved':
+                        return t('APPROVED');
+                    case 'Rejected':
+                        return t('REJECTED'); 
+                    default:
+                        return t('PENDING');
+                }
+            },
             sortable: true,
         },
         {
