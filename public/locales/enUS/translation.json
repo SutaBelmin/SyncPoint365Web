@@ -112,5 +112,13 @@
     "STATUS":"Status", 
     "SEARCH_PLACEHOLDER":"Search",
     "BACK":"Back",
-    "ABSENCE_REQUESTS": "Absence Requests"
+    "ABSENCE_REQUESTS": "Absence requests",
+    "DATE_FROM": "Date From", 
+    "DATE_TO": "Date to",
+    "DATE_RETURN": "Return",
+    "TYPE": "Type", 
+    "NEW_REQUEST": "New Request",
+    "SELECT_USER": "Select User",
+    "SELECT_TYPE": "Select Type",
+    "SELECT": "Select"
 }

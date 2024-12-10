@@ -112,6 +112,14 @@
     "STATUS":"Status",
     "SEARCH_PLACEHOLDER":"Pretraga",
     "BACK":"Nazad",
-    "ABSENCE_REQUESTS": "Zahtjevi za odsustvo"
-    
+    "ABSENCE_REQUESTS": "Zahtjevi za odsustvo",
+    "DATE_FROM": "Datum od", 
+    "DATE_TO": "Datum do",
+    "DATE_RETURN": "Povratak",
+    "TYPE": "Tip", 
+    "NEW_REQUEST": "Novi zahtjev",
+    "SELECT_USER": "Odaberi korisnika",
+    "SELECT_TYPE": "Odaberi tip",
+    "SELECT": "Odaberi"
+
 }

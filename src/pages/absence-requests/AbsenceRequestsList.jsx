@@ -59,8 +59,9 @@ export const AbsenceRequestsList = observer(() => {
             await absenceRequestsService.delete(absenceRequestId);
             fetchData();
             closeModal();
+            toast.success(t('DELETED'));
         } catch (error) {
-            toast.error("Failed to delete the record. Please try again.");
+            toast.error(t('FAILED_TO_DELETE'));
         }
     };
 
@@ -87,22 +88,22 @@ export const AbsenceRequestsList = observer(() => {
 
     const columns = [
         {
-            name: "User",
+            name: t('USERS'),
             selector: (row) => `${row.user?.firstName || ''} ${row.user?.lastName || ''}`.trim(),
             sortable: true,
         },
         {
-            name: "Date from",
+            name: t('DATE_FROM'),
             selector: (row) => row.dateFrom ? format(new Date(row.dateFrom), 'dd.MM.yyyy') : '',
             sortable: true,
         },
         {
-            name: "Date to",
+            name: t('DATE_TO'),
             selector: (row) => row.dateTo ? format(new Date(row.dateTo), 'dd.MM.yyyy') : '',
             sortable: true,
         },
         {
-            name: "Date return",
+            name: t('DATE_RETURN'),
             selector: (row) => row.dateReturn ? format(new Date(row.dateReturn), 'dd.MM.yyyy') : '',
             sortable: true,
         },
@@ -112,7 +113,7 @@ export const AbsenceRequestsList = observer(() => {
             sortable: true,
         },
         {
-            name: "Type ",
+            name: t('TYPE'),
             selector: (row) => row.absenceRequestType?.name,
             sortable: true,
         },
@@ -140,17 +141,18 @@ export const AbsenceRequestsList = observer(() => {
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
-            <div className="flex flex-col gap-4 md:flex-row">
+            <div className="flex flex-col gap-4 max-w-full md:flex-row">
+            <AbsenceRequestsSearch />
                 <button
                     type="button"
-                    className=" btn-common h-10  md:ml-auto"
+                    className=" btn-common h-10 md:ml-auto"
                     onClick={addNewRequestClick}
                 >
-                    {t('NEW_REQUEST_TYPE')}
+                    {t('NEW_REQUEST')}
                 </button>
             </div>
             <BaseModal />
-            <AbsenceRequestsSearch />
+            
             <div className="table max-w-full">
                 <DataTable
                     columns={columns}

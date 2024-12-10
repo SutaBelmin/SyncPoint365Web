@@ -61,8 +61,8 @@ class AbsenceRequestsSearchStore {
     }
 
     reset() {
-        this.absenceRequestTypeId = null;
-        this.userId = null;
+        this.setAbsenceTypeId(null);
+        this.setUserId(null);
         this.dateFrom = null;
         this.dateTo = null;
         this.page = 1;
@@ -72,7 +72,7 @@ class AbsenceRequestsSearchStore {
     syncWithQueryParams(){
         const params = new URLSearchParams();
 
-        if(this.absenceRequestTypeId !== null)
+        if(this.absenceRequestTypeId)
             params.set("absenceRequestTypeId", this.absenceRequestTypeId);
 
         if(this.userId !== null)
@@ -93,7 +93,8 @@ class AbsenceRequestsSearchStore {
         return params;
     }
 
-    initializeQueryParams(searchParams) {
+    initializeQueryParams() {
+        const searchParams = new URLSearchParams(window.location.search);
         const absenceRequestTypeId = searchParams.get("absenceRequestTypeId") || null;
         const userId = searchParams.get("userId") || null;
         const dateFrom = searchParams.get("dateFrom") || null;

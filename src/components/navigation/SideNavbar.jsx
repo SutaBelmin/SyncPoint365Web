@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faUserTimes, faCity, faEarthAmerica, faUser, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faUserTimes, faCity, faEarthAmerica, faUser, faHome, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 const SideNavbar = ({ isCollapsed, onToggle }) => {
@@ -27,7 +27,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                     { icon: faEarthAmerica, label: t('COUNTRIES'), link: '/countries' },
                     { icon: faCity, label: t('CITIES'), link: '/cities' },
                     { icon: faUserTimes, label: t('REQUEST_TYPES'), link: '/absenceRequestTypes' },
-                    { icon: faUserTimes, label: t('ABSENCE_REQUESTS'), link: '/absenceRequests' }
+                    { icon: faCalendarCheck, label: t('ABSENCE_REQUESTS'), link: '/absenceRequests' }
                     ].map(({ icon, label, link }) => (
                         <li key={label} className="flex items-center hover:bg-gray-700 py-2 px-4 rounded">
                             <FontAwesomeIcon icon={icon} className="mr-3" />

@@ -58,7 +58,7 @@ const dropdownOptions = [
                     />
                     <Select
                         name="status"
-                        placeholder="Select"
+                        placeholder={t("SELECT")}
                         options={dropdownOptions}
                         isSearchable={false}
                         className="h-10 border-gray-300 input-select-border w-full"

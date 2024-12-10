@@ -57,7 +57,6 @@ export const AbsenceRequestsSearch = observer(() => {
 
 
 	const handleSubmit = (values) => {
-		console.log("Test", values);
 		values.absenceRequestTypeId && absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
 		values.userId && absenceRequestsSearchStore.setUserId(values.userId);
 		values.dateFrom && absenceRequestsSearchStore.setDateFrom(values.dateFrom);
@@ -87,23 +86,24 @@ export const AbsenceRequestsSearch = observer(() => {
 			onSubmit={handleSubmit}
 		>
 			{({ setFieldValue, values }) => (
-				<Form>
-					<div style={{ display: 'flex', gap: '1rem' }}>
+				<Form className="flex flex-col gap-4 max-w-full md:flex-row">
 						<Select
 							name="absenceRequestTypeId"
 							id="absenceRequestTypeId"
+							placeholder={t('SELECT_TYPE')}
 							options={absenceRequestTypes}
-							value={absenceRequestTypes.find((option) => option.value === values.absenceRequestTypeId)}
-							onChange={(option) => setFieldValue("absenceRequestTypeId", option ? option.value : "")}
-							className="h-10 border-gray-300 input-select-border mb-2"
+							value={absenceRequestTypes.find((option) => option.value === values.absenceRequestTypeId) || null}
+							onChange={(option) => setFieldValue('absenceRequestTypeId', option ? option.value : null)}
+							className="border-gray-300 input-select-border w-full min-w-[10rem]"
 						/>
 						<Select
 							name="userId"
 							id="userId"
+							placeholder={t('SELECT_USER')}
 							options={users}
-							value={users.find((option) => option.value === values.userId)}
-							onChange={(option) => setFieldValue("userId", option ? option.value : "")}
-							className="h-10 hover:bg-gray-100 border-gray-200 w-40 text-sm"
+							value={users.find((option) => option.value === values.userId) || null}
+							onChange={(option) => setFieldValue("userId", option ? option.value : null)}
+							className="border-gray-300 input-select-border w-full min-w-[12rem]"
 
 						/>
 						<DatePicker
@@ -116,38 +116,38 @@ export const AbsenceRequestsSearch = observer(() => {
 								setFieldValue('dateFrom', formattedDate); 
 							}}
 							dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
-							placeholderText="Select date from"
+							placeholderText={t('DATE_FROM')}
 							showYearDropdown
 							maxDate={maxDate}
 							autoComplete='off'
 							yearDropdownItemNumber={100}
 							scrollableYearDropdown
-							className='h-10 border-gray-300 max-w-[11rem] rounded-md'
+							className='input-search h-10 rounded-md border-gray-300 min-w-[3rem]'
 						/>
 						<DatePicker
 							id='dateTo'
 							name="dateTo"
 							selected={values.dateTo ? new Date(values.dateTo) : null}
 							onChange={(date) => {
-								const formattedDate = format(date, 'yyyy/MM/dd');  // Format the date
-								console.log('Date From Selected:', formattedDate);  // Log the selected date
+								const formattedDate = format(date, 'yyyy/MM/dd');  
+								console.log('Date From Selected:', formattedDate); 
 								setFieldValue('dateTo', formattedDate); 
 							}}
 							dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
-							placeholderText="Select date to"
+							placeholderText={t('DATE_TO')}
 							showYearDropdown
 							maxDate={maxDate}
 							autoComplete='off'
 							yearDropdownItemNumber={100}
 							scrollableYearDropdown
-							className='h-10 border-gray-300 max-w-[11rem] rounded-md'
+							className='input-search h-10 rounded-md border-gray-300 min-w-[3rem]'
 						/>
 						<button
 							type="submit"
 							className="btn-new h-10"
 							onClick={handleSubmit}
 						>
-							Search
+							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
@@ -156,7 +156,6 @@ export const AbsenceRequestsSearch = observer(() => {
 						>
 							{t("CLEAR")}
 						</button>
-					</div>
 
 
 				</Form>
