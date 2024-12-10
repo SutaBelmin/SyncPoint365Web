@@ -21,18 +21,6 @@ export const AbsenceRequestsSearch = observer(() => {
 	const maxDate = new Date(nextYear, 11, 31);
 
 
-	const fetchTypeId = useCallback ( async () => {
-		try {
-			const responseAbsenceType = await absenceRequestTypesService.getList();
-			setAbsenceRequestTypes(responseAbsenceType.data.map(type => ({
-				value: type.id,
-				label: type.name
-			})));
-		} catch (error) {
-			toast.error(t('ERROR_CONTACT_ADMIN'));
-		}
-	}, [t])
- 
 	const fetchUserId = useCallback(async () => {
 		try {
 			const responseUsers = await userService.getUsers();
@@ -46,9 +34,24 @@ export const AbsenceRequestsSearch = observer(() => {
 	}, [t]);
 
 
+	const fetchTypeId = useCallback ( async () => {
+		try {
+			const responseAbsenceType = await absenceRequestTypesService.getList();
+			setAbsenceRequestTypes(responseAbsenceType.data.map(type => ({
+				value: type.id,
+				label: type.name
+			})));
+		} catch (error) {
+			toast.error(t('ERROR_CONTACT_ADMIN'));
+		}
+	}, [t])
+ 
+	
+
+
 	useEffect(() => {
-		fetchTypeId();
 		fetchUserId();
+		fetchTypeId();
 		absenceRequestsSearchStore.initializeQueryParams(searchParams);
 
 		const typeFromParams = searchParams.get("absenceRequestTypeId");

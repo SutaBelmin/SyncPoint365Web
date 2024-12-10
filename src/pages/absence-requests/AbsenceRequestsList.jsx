@@ -22,9 +22,9 @@ export const AbsenceRequestsList = observer(() => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
+    const { signal } = useRequestAbort();
 
     const fetchData = useCallback(async () => {
-        const { signal } = useRequestAbort();
         try {
             const response = await absenceRequestsService.getPagedList(
                 absenceRequestsSearchStore.absenceRequestsFilter, signal);
@@ -36,7 +36,7 @@ export const AbsenceRequestsList = observer(() => {
             setLoading(false);
         }
 
-    }, [t]);
+    }, [signal, t]);
 
     useEffect(() => {
         const disposer = reaction(

@@ -4,7 +4,7 @@ import BaseService from "./baseService";
 class AbsenceRequestsService extends BaseService {
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
-            `/absencerequests/paged`, 
+            `/absence-requests/paged`, 
             {
                 params: {
                     absenceRequestTypeId: filter.absenceRequestTypeId,
@@ -21,19 +21,19 @@ class AbsenceRequestsService extends BaseService {
         return response;
     }
     async add(absenceRequestData){
-        const response = await this.api.post(`/absencerequests`, absenceRequestData, {
+        const response = await this.api.post(`/absence-requests`, absenceRequestData, {
             cancelToken: null,
         });
         return response.data;
     }
     async update(absenceRequestData){
-        const response = await this.api.put(`/absencerequests`, absenceRequestData, {
+        const response = await this.api.put(`/absence-requests`, absenceRequestData, {
             cancelToken: null,
         });
         return response.data;
     }
     async delete(absenceRequestId){
-        const response = await this.api.delete(`/absencerequests/${absenceRequestId}`, {
+        const response = await this.api.delete(`/absence-requests/${absenceRequestId}`, {
             cancelToken: null,
         });
         return response.data;

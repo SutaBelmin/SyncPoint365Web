@@ -5,17 +5,18 @@ import { observer } from 'mobx-react';
 import { useSearchParams } from 'react-router-dom';
 import absenceRequestTypesSearchStore from '../stores/AbsenceRequestTypesSearchStore';
 import { useTranslation } from 'react-i18next';
-
-const dropdownOptions = [
-    { value: 'All', label: 'All' },
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' }
-  ];
   
   const AbsenceRequestTypesSearch = observer(() => {
     const [searchParams, setSearchParams] = useSearchParams(); 
     const { t } = useTranslation();
   
+    const dropdownOptions = [
+        { value: 'All', label: t('ALL') },
+        { value: 'active', label: t('ACTIVE') },
+        { value: 'inactive', label: t('INACTIVE') }
+    ];
+
+    
     useEffect(() => {
       absenceRequestTypesSearchStore.initializeQueryParams(searchParams);
     }, [searchParams]);

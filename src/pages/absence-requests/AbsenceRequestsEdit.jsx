@@ -56,7 +56,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 	const editHandling = async (values, actions) => {
 		const { setSubmitting } = actions;
 		try {
-			await absenceRequestsService.update({values});
+			await absenceRequestsService.update({ values });
 			fetchData();
 			closeModal();
 			toast.success(t('UPDATED'));
@@ -99,6 +99,20 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 							<ErrorMessage name="type" component="div" className="text-red-500 text-sm" />
 
 						</div>
+						<div>
+
+							<Select
+								name="userId"
+								id="userId"
+								options={users}
+								value={users.find((option) => option.value === values.userId)}
+								onChange={(option) => setFieldValue("userId", option ? option.value : "")}
+								isSearchable
+								className="h-10 border-gray-300 input-select-border w-full mb-2"
+							/>
+							<ErrorMessage name="userId" component="div" className="text-red-500 text-sm" />
+						</div>
+
 						<div className="mb-4">
 							<div className="flex space-x-4 mb-3">
 								<div className="flex flex-col w-1/2">

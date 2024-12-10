@@ -120,6 +120,10 @@
     "NEW_REQUEST": "New Request",
     "SELECT_USER": "Select User",
     "SELECT_TYPE": "Select Type",
-    "SELECT": "Select"        
+    "SELECT": "Select",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "PENDING": "Pending"
+    
 
 }

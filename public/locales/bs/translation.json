@@ -54,7 +54,7 @@
     "ALL": "Svi",
     "INACTIVE": "Neaktivan",
     "NEW_REQUEST_TYPE": "Novi tip zahtjeva",
-    "NEW_ABSENCE_REQUEST": "Novi zahtjev za odsutstvo",
+    "NEW_ABSENCE_REQUEST": "Novi tip zahtjeva",
     "EDIT_ABSENCE_REQUEST": "Uredi tip zahtjeva za odsustvo",
     "ENTER_YOUR_NAME": "Upiši svoje ime.",
     "ENTER_ABSENCE_REQUEST_TYPE_NAME": "Upiši naziv tipa zahtjeva za odsustvo.",
@@ -120,6 +120,9 @@
     "NEW_REQUEST": "Novi zahtjev",
     "SELECT_USER": "Odaberi korisnika",
     "SELECT_TYPE": "Odaberi tip",
-    "SELECT": "Odaberi" 
+    "SELECT": "Odaberi",
+    "APPROVED": "Odobreno",
+    "REJCETED": "Odbijeno",
+    "PENDING": "U obradi" 
 
 }
