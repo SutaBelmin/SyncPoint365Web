@@ -5,7 +5,7 @@ class CitiesSearchStore {
     countryId = null;
     searchQuery = "";
     page = 1;
-    rowsPerPage = 10;
+    pageSize = 10;
 
     constructor() {
         makeAutoObservable(this);
@@ -30,8 +30,8 @@ class CitiesSearchStore {
         this.syncWithQueryParams();
     }
 
-    setRowsPerPage(rowsPerPage) {
-        this.rowsPerPage = rowsPerPage;
+    setPageSize(newPageSize) {
+        this.pageSize = newPageSize;
         this.syncWithQueryParams();
     }
 
@@ -54,8 +54,8 @@ class CitiesSearchStore {
         if(this.page !== 1) 
             params.set("page", this.page);
       
-        if(this.rowsPerPage !== 10) 
-            params.set("rowsPerPage", this.rowsPerPage);
+        if(this.pageSize !== 10) 
+            params.set("pageSize", this.pageSize);
 
         return params;
     }
@@ -75,7 +75,7 @@ class CitiesSearchStore {
             countryId: this.countryId,
             searchQuery: this.searchQuery,
             page: this.page,
-            rowsPerPage: this.rowsPerPage
+            pageSize: this.pageSize
         };
     }
 }
