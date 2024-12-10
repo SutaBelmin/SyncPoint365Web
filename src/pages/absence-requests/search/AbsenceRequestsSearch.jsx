@@ -17,20 +17,24 @@ export const AbsenceRequestsSearch = observer(() => {
 	const [users, setUsers] = useState([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { t } = useTranslation();
-	const { i18n } = useTranslation();
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
 
 
-
-	const fetchTypeUserId = useCallback(async () => {
+	const fetchTypeId = useCallback ( async () => {
 		try {
 			const responseAbsenceType = await absenceRequestTypesService.getList();
 			setAbsenceRequestTypes(responseAbsenceType.data.map(type => ({
 				value: type.id,
 				label: type.name
 			})));
-
+		} catch (error) {
+			toast.error(t('ERROR_CONTACT_ADMIN'));
+		}
+	}, [t])
+ 
+	const fetchUserId = useCallback(async () => {
+		try {
 			const responseUsers = await userService.getUsers();
 			setUsers(responseUsers.data.map(user => ({
 				value: user.id,
@@ -43,7 +47,8 @@ export const AbsenceRequestsSearch = observer(() => {
 
 
 	useEffect(() => {
-		fetchTypeUserId();
+		fetchTypeId();
+		fetchUserId();
 		absenceRequestsSearchStore.initializeQueryParams(searchParams);
 
 		const typeFromParams = searchParams.get("absenceRequestTypeId");
@@ -53,7 +58,7 @@ export const AbsenceRequestsSearch = observer(() => {
 		const userFromParams = searchParams.get("userId");
 		if (userFromParams)
 			absenceRequestsSearchStore.setUserId(parseInt(userFromParams));
-	}, [searchParams, fetchTypeUserId]);
+	}, [searchParams, fetchTypeId, fetchUserId]);
 
 
 	const handleSubmit = (values) => {
@@ -112,12 +117,10 @@ export const AbsenceRequestsSearch = observer(() => {
 							selected={values.dateFrom ? new Date(values.dateFrom) : null}
 							onChange={(date) => {
 								const formattedDate = format(date, 'yyyy/MM/dd');
-								console.log('Date From Selected:', formattedDate); 
 								setFieldValue('dateFrom', formattedDate); 
 							}}
-							dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+							dateFormat={t('DATE_FORMAT')}
 							placeholderText={t('DATE_FROM')}
-							showYearDropdown
 							maxDate={maxDate}
 							autoComplete='off'
 							yearDropdownItemNumber={100}
@@ -130,12 +133,10 @@ export const AbsenceRequestsSearch = observer(() => {
 							selected={values.dateTo ? new Date(values.dateTo) : null}
 							onChange={(date) => {
 								const formattedDate = format(date, 'yyyy/MM/dd');  
-								console.log('Date From Selected:', formattedDate); 
 								setFieldValue('dateTo', formattedDate); 
 							}}
-							dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+							dateFormat={t('DATE_FORMAT')}							
 							placeholderText={t('DATE_TO')}
-							showYearDropdown
 							maxDate={maxDate}
 							autoComplete='off'
 							yearDropdownItemNumber={100}

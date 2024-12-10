@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import { absenceRequestsService } from "../../services"
-import absenceRequestsSearchStore from "./stores/AbsenceRequestsSearchStores"
+import { absenceRequestsSearchStore } from "./stores"
 import { AbsenceRequestsAdd, AbsenceRequestsEdit } from "../absence-requests";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -11,34 +11,30 @@ import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
-import { NoDataMessage } from "../../components/common-ui";
-import { PaginationOptions } from "../../components/common-ui";
+import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
-import { useRequestAbort } from "../../components/hooks";
-
+import { AbsenceRequestsSearch } from "./search";
 import "./AbsenceRequestsList.css";
-import { AbsenceRequestsSearch } from "./search/AbsenceRequestsSearch";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { openModal, closeModal } = useModal();
-    const { signal } = useRequestAbort();
 
     const fetchData = useCallback(async () => {
         try {
             const response = await absenceRequestsService.getPagedList(
-                absenceRequestsSearchStore.absenceRequestsFilter, signal);
+                absenceRequestsSearchStore.absenceRequestsFilter);
             setData(response.data.items);
             absenceRequestsSearchStore.setTotalItemCount(response.data.totalItemCount);
-            console.log(response);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         } finally {
             setLoading(false);
         }
-    }, [signal, t]); 
+
+    }, [t]); 
 
     useEffect(() => {
         const disposer = reaction(
@@ -94,17 +90,17 @@ export const AbsenceRequestsList = observer(() => {
         },
         {
             name: t('DATE_FROM'),
-            selector: (row) => row.dateFrom ? format(new Date(row.dateFrom), 'dd.MM.yyyy') : '',
+            selector: (row) => row.dateFrom ? format(new Date(row.dateFrom), t('DATE_FORMAT')) : '',
             sortable: true,
         },
         {
             name: t('DATE_TO'),
-            selector: (row) => row.dateTo ? format(new Date(row.dateTo), 'dd.MM.yyyy') : '',
+            selector: (row) => row.dateTo ? format(new Date(row.dateTo), t('DATE_FORMAT')) : '',
             sortable: true,
         },
         {
             name: t('DATE_RETURN'),
-            selector: (row) => row.dateReturn ? format(new Date(row.dateReturn), 'dd.MM.yyyy') : '',
+            selector: (row) => row.dateReturn ? format(new Date(row.dateReturn), t('DATE_FORMAT')) : '',
             sortable: true,
         },
         {

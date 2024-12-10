@@ -11,7 +11,6 @@ import { format } from 'date-fns';
 export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
     const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
     const { t } = useTranslation();
-    const { i18n } = useTranslation();
     const nextYear = new Date().getFullYear() + 1;
     const maxDate = new Date(nextYear, 11, 31);
 
@@ -94,7 +93,7 @@ export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
                                         const formattedDate = format(new Date(date), 'yyyy-MM-dd');
                                         setFieldValue('dateFrom', formattedDate);
                                     }}
-                                    dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+                                    dateFormat={t('DATE_FORMAT')}
                                     placeholderText="Select date from"
                                     showYearDropdown
                                     maxDate={maxDate}
@@ -116,7 +115,7 @@ export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
                                         const formattedDate = format(new Date(date), 'yyyy-MM-dd');
                                         setFieldValue('dateTo', formattedDate);
                                     }}
-                                    dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+                                    dateFormat={t('DATE_FORMAT')}
                                     placeholderText="Select date to"
                                     showYearDropdown
                                     maxDate={maxDate}
@@ -140,7 +139,7 @@ export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
                                         const formattedDate = format(new Date(date), 'yyyy-MM-dd');
                                         setFieldValue('dateReturn', formattedDate);
                                     }}
-                                    dateFormat={i18n.language === 'en-US' ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+                                    dateFormat={t('DATE_FORMAT')}
                                     placeholderText="Select date of return"
                                     showYearDropdown
                                     maxDate={maxDate}

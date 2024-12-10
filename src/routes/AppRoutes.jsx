@@ -22,8 +22,8 @@ const AppRoutes = () => {
             <Route index element={<UsersList />} />
             <Route path="add" element={<UsersAdd />} />
           </Route>
-          <Route path="/absenceRequestTypes" element={<AbsenceRequestTypesList />} />
-          <Route path="/absenceRequests" element={<AbsenceRequestsList />} />
+          <Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
+          <Route path="/absence-requests" element={<AbsenceRequestsList />} />
           <Route path="/countries" element={<CountriesList />} />
           <Route path="/cities" element={<CitiesList />} />
         </Route>
