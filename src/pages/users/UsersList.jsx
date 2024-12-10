@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { BaseModal } from '../../components/modal';
 import { useEffect, useState } from "react";
-import { userService } from '../../services';
+import { usersService } from '../../services';
 import DataTable from 'react-data-table-component';
 import './UsersList.css';
 import { toast } from 'react-toastify';
@@ -9,41 +9,57 @@ import { useTranslation } from 'react-i18next';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { Formik, Form } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../context';
+import { UsersSearch } from './search/UsersSearch';
+import usersSearchStore from './stores/UsersSearchStore';
+import { observer } from "mobx-react";
+import { reaction } from "mobx";
 
-export const UsersList = () => {
+export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItemCount, setTotalItemCount] = useState(0);
+
     const { t } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
-
+    
     const fetchData = useCallback(async () => {
         try {
-            const response = await userService.getPagedUsers(page, pageSize, signal);
+            //const response = await usersService.getPagedUsers(page, pageSize, signal);
+
+            const filter = { ...usersSearchStore.userFilter };
+            const response = await usersService.getPagedUsersFilter(filter, signal);
             setData(response.data.items);
-            setTotalItemCount(response.data.totalItemCount);
+            usersSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
 
-    }, [page, pageSize, signal, t]);
+    }, [signal, t]);
 
     useEffect(() => {
-        fetchData();
+        const disposeReaction = reaction(
+            () => ({
+                filter : usersSearchStore.userFilter
+            }),
+            () => {
+                fetchData();
+            },
+            {
+                fireImmediately: true
+            }
+        );
+
+        return () => disposeReaction();
     }, [fetchData]);
 
     const onAddUserClick = () => {
-       navigate('add');
+        navigate('add');
     };
 
     const columns = [
@@ -114,7 +130,7 @@ export const UsersList = () => {
 
     const handleStatusChange = async (userId) => {
         try {
-            await userService.updateUserStatus(userId);
+            await usersService.updateUserStatus(userId);
             fetchData();
             toast.success(t('UPDATED'));
             closeModal();
@@ -124,20 +140,20 @@ export const UsersList = () => {
     }
 
     return (
-        <div className="flex-1 p-6 bg-gray-100 h-screen">
+        <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('USERS')}</h1>
 
-            <Formik>
-                <Form className="flex flex-col md:flex-row">
-                    <button
-                        type='button'
-                        onClick={onAddUserClick}
-                        className="btn-common h-10 md:ml-auto"
-                    >
-                        {t('ADD_USER')}
-                    </button>
-                </Form>
-            </Formik>
+            <div className="flex flex-col gap-4 md:flex-row">
+                <UsersSearch />
+                <button
+                    type='button'
+                    onClick={onAddUserClick}
+                    className="btn-common h-10 md:ml-auto"
+                >
+                    {t('ADD_USER')}
+                </button>
+            </div>
+
             <BaseModal />
 
             <div className="table max-w-full">
@@ -146,14 +162,14 @@ export const UsersList = () => {
                     data={data || []}
                     pagination
                     paginationServer
-                    paginationTotalRows={totalItemCount}
+                    paginationTotalRows={usersSearchStore.totalItemCount}
                     onChangePage={(newPage) => {
-                        setPage(newPage);
+                        usersSearchStore.setPage(newPage);
                     }}
-                    paginationPerPage={pageSize}
+                    paginationPerPage={usersSearchStore.pageSize}
                     onChangeRowsPerPage={(newPageSize) => {
-                        setPageSize(newPageSize);
-                        setPage(1);
+                        usersSearchStore.setPageSize(newPageSize);
+                        usersSearchStore.setPage(1);
                     }}
                     highlightOnHover
                     persistTableHead={true}
@@ -163,4 +179,4 @@ export const UsersList = () => {
             </div>
         </div>
     );
-};
+}); 

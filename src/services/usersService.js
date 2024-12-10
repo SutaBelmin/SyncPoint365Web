@@ -1,6 +1,6 @@
 import BaseService from "./baseService";
 
-class UserService extends BaseService {
+class UsersService extends BaseService {
 
     async getUsers() {
         const response = await this.api.get("/users/get-users", {
@@ -22,17 +22,33 @@ class UserService extends BaseService {
         return response;
     }
 
-    async updateUserStatus(id){
+    async getPagedUsersFilter(filterParams, signal = null) {
+        const response = await this.api.get(`/users/filter`, {
+            params: {
+                // isActive: null,
+                query: filterParams.searchQuery,
+                roleId: filterParams.roleId,
+                page: filterParams.page,
+                pageSize: filterParams.pageSize,
+            },
+            signal: signal
+        }
+        );
+        return response;
+    }
+
+
+    async updateUserStatus(id) {
         const response = await this.api.post(`/users/change-status?id=${id}`);
         return response;
     }
-    
+
     async add(userData) {
         const dataToSend = {
             ...userData,
             role: userData.roleId
         };
-       
+
         const response = await this.api.post(`/users`, dataToSend);
 
         return response.data;
@@ -48,5 +64,5 @@ class UserService extends BaseService {
     }
 }
 
-const userService = new UserService();
-export default userService;
+const usersService = new UsersService();
+export default usersService;

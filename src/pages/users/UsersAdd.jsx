@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { toast } from 'react-toastify';
-import { citiesService, enumsService, userService } from '../../services';
+import { citiesService, enumsService, usersService } from '../../services';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
@@ -36,7 +36,7 @@ export const UsersAdd = () => {
 
     const addUser = async (values) => {
         try {
-            await userService.add(values);
+            await usersService.add(values);
             toast.success(t('ADDED'));
             navigate('/users');
         } catch (error) {
@@ -57,7 +57,7 @@ export const UsersAdd = () => {
 
                 if (Yup.string().email().isValidSync(value)) {
                     try {
-                        const response = await userService.emailExists(value);
+                        const response = await usersService.emailExists(value);
 
                         if (response === true)
                             return createError({ path, message: t('EMAIL_ALREADY_EXIST') });
