@@ -17,8 +17,10 @@ const AppRoutes = () => {
         <Route path="/" element={<Login />} />
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
-          <Route path="/users" element={<UsersList />} />
-          <Route path="/users/add" element={<UsersAdd />} />
+          <Route path="/users">
+            <Route index element={<UsersList />} />
+            <Route path="add" element={<UsersAdd />} />
+          </Route>
           <Route path="/absenceRequestTypes" element={<AbsenceRequestTypesList />} />
           <Route path="/countries" element={<CountriesList />} />
           <Route path="/cities" element={<CitiesList />} />

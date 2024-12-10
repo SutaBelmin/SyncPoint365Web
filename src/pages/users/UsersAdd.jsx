@@ -137,9 +137,9 @@ export const UsersAdd = () => {
     }, [fetchGenders, fetchRoles]);
 
     return (
-        <div className="p-4">
+        <div className="flex-1 p-6 bg-gray-100 h-screen">
             <div className="w-full max-w-lg">
-                <h2 className="text-xl font-semibold mb-4">{t('ADD_USER')}</h2>
+                <h2 className="h1">{t('ADD_USER')}</h2>
                 <Formik
                     initialValues={{
                         firstName: '',
@@ -354,10 +354,10 @@ export const UsersAdd = () => {
                                 <ErrorMessage name="passwordConfirm" component="div" className="text-red-500 text-sm" />
                             </div>
 
-                            <div className="flex justify-end">
+                            <div className="flex flex-col md:flex-row pb-2">
                                 <button
                                     type="submit"
-                                    className="btn-save"
+                                    className="btn-common h-10 md:ml-auto"
                                 >
                                     {t('SAVE')}
                                 </button>
