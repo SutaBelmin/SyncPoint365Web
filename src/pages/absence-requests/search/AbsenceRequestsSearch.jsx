@@ -21,7 +21,7 @@ export const AbsenceRequestsSearch = observer(() => {
 	const maxDate = new Date(nextYear, 11, 31);
 
 
-	const fetchUserId = useCallback(async () => {
+	const fetchUsers = useCallback(async () => {
 		try {
 			const responseUsers = await userService.getUsers();
 			setUsers(responseUsers.data.map(user => ({
@@ -34,7 +34,7 @@ export const AbsenceRequestsSearch = observer(() => {
 	}, [t]);
 
 
-	const fetchTypeId = useCallback ( async () => {
+	const fetchAbsenceRequestTypes = useCallback ( async () => {
 		try {
 			const responseAbsenceType = await absenceRequestTypesService.getList();
 			setAbsenceRequestTypes(responseAbsenceType.data.map(type => ({
@@ -50,8 +50,8 @@ export const AbsenceRequestsSearch = observer(() => {
 
 
 	useEffect(() => {
-		fetchUserId();
-		fetchTypeId();
+		fetchUsers();
+		fetchAbsenceRequestTypes();
 		absenceRequestsSearchStore.initializeQueryParams(searchParams);
 
 		const typeFromParams = searchParams.get("absenceRequestTypeId");
@@ -61,7 +61,7 @@ export const AbsenceRequestsSearch = observer(() => {
 		const userFromParams = searchParams.get("userId");
 		if (userFromParams)
 			absenceRequestsSearchStore.setUserId(parseInt(userFromParams));
-	}, [searchParams, fetchTypeId, fetchUserId]);
+	}, [searchParams, fetchAbsenceRequestTypes, fetchUsers]);
 
 
 	const handleSubmit = (values) => {
