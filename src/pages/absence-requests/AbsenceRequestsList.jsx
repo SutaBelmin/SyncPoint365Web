@@ -14,6 +14,7 @@ import { reaction } from "mobx"
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
 import { AbsenceRequestsSearch } from "./search";
+import { useRequestAbort } from "../../components/hooks";
 import "./AbsenceRequestsList.css";
 
 export const AbsenceRequestsList = observer(() => {
@@ -23,9 +24,10 @@ export const AbsenceRequestsList = observer(() => {
     const { openModal, closeModal } = useModal();
 
     const fetchData = useCallback(async () => {
+        const { signal } = useRequestAbort();
         try {
             const response = await absenceRequestsService.getPagedList(
-                absenceRequestsSearchStore.absenceRequestsFilter);
+                absenceRequestsSearchStore.absenceRequestsFilter, signal);
             setData(response.data.items);
             absenceRequestsSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
@@ -34,7 +36,7 @@ export const AbsenceRequestsList = observer(() => {
             setLoading(false);
         }
 
-    }, [t]); 
+    }, [t]);
 
     useEffect(() => {
         const disposer = reaction(
@@ -138,7 +140,7 @@ export const AbsenceRequestsList = observer(() => {
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
             <div className="flex flex-col gap-4 max-w-full md:flex-row">
-            <AbsenceRequestsSearch />
+                <AbsenceRequestsSearch />
                 <button
                     type="button"
                     className=" btn-common h-10 md:ml-auto"
@@ -148,7 +150,7 @@ export const AbsenceRequestsList = observer(() => {
                 </button>
             </div>
             <BaseModal />
-            
+
             <div className="table max-w-full">
                 <DataTable
                     columns={columns}

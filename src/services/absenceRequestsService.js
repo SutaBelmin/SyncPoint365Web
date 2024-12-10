@@ -13,8 +13,8 @@ class AbsenceRequestsService extends BaseService {
                     dateTo: filter.dateTo,
                     page: filter.page, 
                     pageSize: filter.pageSize,
-                    signal: signal,
-                }
+                },
+                signal: signal,
                 
             }
         );
