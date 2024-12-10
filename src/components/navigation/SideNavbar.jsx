@@ -9,7 +9,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
     
 
     return (
-        <nav className={`bg-gray-800 text-white h-full w-64 p-4 fixed top-0 left-0 z-50 transition-all duration-300 
+        <nav className={`bg-gray-800 text-white h-full p-4 fixed top-0 left-0 z-50 transition-all duration-300 
             ${isCollapsed ? '' : 'bg-transparent'}`}
         >
             <div className="flex justify-between items-center mb-8">
