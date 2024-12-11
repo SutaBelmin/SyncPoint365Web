@@ -13,7 +13,7 @@ import { PaginationOptions } from "../../components/common-ui/PaginationOptions"
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faCircleXmark, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faCircleXmark, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
@@ -108,7 +108,13 @@ export const UsersList = observer(() => {
         {
             name: t('ACTIONS'),
             cell: (row) => (
-                <div className="flex justify-center items-center w-10">
+                <div className="flex">
+                      <button 
+                    onClick={() => handleEdit(row.id)}
+                    className="text-xl text-blue-500 hover:underline p-2"
+                    >
+                        <FontAwesomeIcon icon={faEdit}/>
+                    </button>
                     <button
                         onClick={() => statusChange(row.id, row.isActive)}
                         className={`text-xl ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
@@ -118,12 +124,6 @@ export const UsersList = observer(() => {
                         ) : (
                             <FontAwesomeIcon icon={faCircleXmark} />
                         )}
-                    </button>
-                    <button 
-                    onClick={() => handleEdit(row.id)}
-                    className="text-xl text-blue-500"
-                    >
-                        <FontAwesomeIcon icon={faPen}/>
                     </button>
                 </div>
             ),

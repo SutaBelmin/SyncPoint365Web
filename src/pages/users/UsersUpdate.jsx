@@ -11,10 +11,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import { format } from 'date-fns';
+import { registerLocale } from "react-datepicker";
+import { enUS, bs } from "date-fns/locale";
 
 
 export const UsersUpdate = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const { userId } = useParams(); 
     const [cities, setCities] = useState([]);
@@ -22,9 +25,21 @@ export const UsersUpdate = () => {
     const [genders, setGenders] = useState([]);
     const [user, setUser] = useState(null);
 
+
+    const localeMapping = {
+        en: enUS,
+        bs: bs
+    };
+
+    const currentLanguage = i18n.language || 'en';
+    const currentLocale = localeMapping[currentLanguage];
+
+    registerLocale(currentLanguage, currentLocale);
+
     const updateUser = async (values) => {
         try {
-            await userService.update(userId, values); 
+            console.log("Values: ", values);
+            await userService.update({...values, id:userId}); 
             toast.success(t('UPDATED'));
             navigate('/users');
         } catch (error) {
@@ -42,6 +57,12 @@ export const UsersUpdate = () => {
                 const { path, createError } = this;
                 if (!value)
                     return true;
+                
+                const currentUserEmail = user.email;
+
+                if(value === currentUserEmail){
+                    return true;
+                }
 
                 if (Yup.string().email().isValidSync(value)) {
                     try {
@@ -58,17 +79,11 @@ export const UsersUpdate = () => {
                     return createError({ path, message: t('EMAIL_IS_NOT_VALID') });
                 }
             }),
-        gender: Yup.string().required(t('GENDER_IS_REQUIRED')),
         birthDate: Yup.string().required(t('BIRTH_DATE_IS_REQUIRED')),
         cityId: Yup.string().required(t('CITY_REQUIRED')),
         address: Yup.string().required(t('ADDRESS_IS_REQUIRED')),
         phone: Yup.string()
             .required(t('PHONE_IS_REQUIRED'))
-            .matches(
-                /^\+?[1-9]\d{8,14}$|^(\d{3})[-\s]?(\d{3})[-\s]?(\d{4})$/,
-                t('PHONE_IS_NOT_VALID')
-            ),
-        roleId: Yup.string().required(t('ROLE_REQUIRED'))
     });
 
     const fetchUser = useCallback(async () => {
@@ -131,22 +146,21 @@ export const UsersUpdate = () => {
     if (!user) return <div>Loading...</div>;
 
     return (
-        <div className="p-4">
+        <div className="flex-1 p-6 bg-gray-100 h-screen">
             <div className="w-full max-w-lg">
-                <h2 className="text-xl font-semibold mb-4">{t('UPDATE_USER')}</h2>
+                <h1 className="h1">{t('UPDATE_USER')}</h1>
                 <Formik
                     initialValues={{
                         firstName: user.firstName || '',
                         lastName: user.lastName || '',
                         email: user.email || '',
-                        gender: genders.find(g => g.label.toLowerCase() === user.gender.toLowerCase())?.values,
+                        gender: genders.find(g => g.label.toLowerCase() === user.gender.toLowerCase())?.value,
                         birthDate: user.birthDate || '',
                         cityId: user.cityId || null,
                         address: user.address || '',
                         phone: user.phone || '',
-                        roleId: user.roleId || null
+                        role: roles.find(r => r.label.toLowerCase() === user.role.toLowerCase())?.value
                     }}
-                    
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
                 >
@@ -210,8 +224,6 @@ export const UsersUpdate = () => {
                                options={genders}
                                placeholder={t('SELECT_GENDER')}
                                value={genders.find(gender => gender.values === values.gender)} 
-                               isClearable
-                               isSearchable
                                className='input-select-border mt-1'
                            />
                            <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
@@ -219,18 +231,16 @@ export const UsersUpdate = () => {
 
                         {/* Role */}
                         <div className="mb-4">
-                           <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">
+                           <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                                {t('ROLE')} <span className='text-red-500'>*</span>
                            </label>
                            <Select
-                               id="roleId"
-                               name="roleId"
-                               onChange={(option) => setFieldValue('roleId', option ? option.value : null)}
+                               id="role"
+                               name="role"
+                               onChange={(option) => setFieldValue('role', option ? option.value : '')}
                                options={roles}
-                               value={roles.find(role => role.value === values.roleId)} 
+                               value={roles.find(role => role.values === values.role)} 
                                placeholder={t('SELECT_ROLE')}
-                               isClearable
-                               isSearchable
                                className='input-select-border mt-1'
                            />
                            <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
@@ -242,18 +252,25 @@ export const UsersUpdate = () => {
                                {t('BIRTH_DATE')} <span className='text-red-500'>*</span>
                            </label>
                            <DatePicker
+                               id="birthDate"
+                               name="birthDate"
                                selected={values.birthDate ? new Date(values.birthDate) : null} 
-                               onChange={(date) => setFieldValue("birthDate", date)}
-                               dateFormat="yyyy-MM-dd"
-                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                               placeholderText={t('SELECT_DATE')}
-                               showMonthDropdown
+                               onChange={(date) => {
+                               const formattedDate = format(new Date(date), 'yyyy-MM-dd');
+                               setFieldValue("birthDate", formattedDate)
+                               }}
+                               dateFormat={t('DATE_FORMAT')}
+                               placeholderText={t('SELECT_BIRTH_DATE')}
                                showYearDropdown
-                               dropdownMode="select"
+                               maxDate={new Date()}
+                               yearDropdownItemNumber={100}
+                               scrollableYearDropdown
+                               onKeyDown={(e) => e.preventDefault()}
+                               locale={currentLanguage}
                            />
                            <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                        </div>
-                   
+                       
                        {/* Phone */}
                        <div className="mb-4">
                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
@@ -264,7 +281,6 @@ export const UsersUpdate = () => {
                                render={({ field }) => (
                                    <PhoneInput
                                        {...field}
-                                       country={'us'}
                                        onChange={(value) => setFieldValue('phone', value)}
                                        inputClass="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                    />
@@ -313,7 +329,7 @@ export const UsersUpdate = () => {
                                type="submit"
                                className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md"
                            >
-                               {t('UPDATE')}
+                               {t('SAVE')}
                            </button>
                        </div>   
                    </Form>

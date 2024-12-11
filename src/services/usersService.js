@@ -70,7 +70,7 @@ class UsersService extends BaseService {
     }
 
     async update(userData) {
-        const response = await this.api.put(`/users/update`, userData);
+        const response = await this.api.put(`/users`, userData);
         return response;
     }
 }

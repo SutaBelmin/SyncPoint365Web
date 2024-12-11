@@ -124,7 +124,5 @@
     "APPROVED": "Odobreno",
     "REJECTED": "Odbijeno",
     "PENDING": "Obrada",
-    "STATUS": "Status", 
-    "SELECT_STATUS": "Odaberi status"
-
+    "UPDATE_USER":"Uredi korisnika"
 }

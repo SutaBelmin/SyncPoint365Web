@@ -124,8 +124,5 @@
     "APPROVED": "Approved",
     "REJECTED": "Rejected",
     "PENDING": "Pending",
-    "STATUS": "Status",
-    "SELECT_STATUS": "Select status"
-    
-
+    "UPDATE_USER":"Update user"
 }
