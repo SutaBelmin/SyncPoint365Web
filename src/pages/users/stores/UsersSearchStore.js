@@ -4,6 +4,7 @@ class UsersSearchStore {
     totalItemCount = 0;
     searchQuery = "";
     selectedRoleId = null;
+    isActive = null;
     page = 1;
     pageSize = 10;
 
@@ -31,10 +32,15 @@ class UsersSearchStore {
         this.selectedRoleId = roleId;
     }
 
+    setIsActive(isActive) {
+        this.isActive = isActive;
+    }
+
     clearFilters() {
         this.setQuery(""); 
         this.setRoleId(null);
         this.setPage(1);
+        this.setIsActive(null);
     }
 
     get userFilter() {
@@ -42,6 +48,7 @@ class UsersSearchStore {
             totalItemCount: this.totalItemCount,
             searchQuery: this.searchQuery,
             roleId: this.selectedRoleId,
+            isActive: this.isActive,
             page: this.page,
             pageSize: this.pageSize
         };

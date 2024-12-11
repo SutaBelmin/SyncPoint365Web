@@ -22,14 +22,14 @@ class UsersService extends BaseService {
         return response;
     }
 
-    async getPagedUsersFilter(filterParams, signal = null) {
-        const response = await this.api.get(`/users/filter`, {
+    async getPagedUsersFilter(filter, signal = null) {
+        const response = await this.api.get(`/users/paged`, {
             params: {
-                // isActive: null,
-                query: filterParams.searchQuery,
-                roleId: filterParams.roleId,
-                page: filterParams.page,
-                pageSize: filterParams.pageSize,
+                isActive: filter.isActive,
+                query: filter.searchQuery,
+                roleId: filter.roleId,
+                page: filter.page,
+                pageSize: filter.pageSize,
             },
             signal: signal
         }

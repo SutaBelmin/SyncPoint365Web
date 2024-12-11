@@ -107,6 +107,7 @@
     "SELECT_BIRTH_DATE":"Odaberi datum rođenja",
     "EMAIL_ALREADY_EXIST": "Email već postoji.",
     "DATE_FORMAT": "dd/MM/yyyy",
-    "SEARCH_FIRST_LAST_NAME":"Pretraži po imenu ili prezimenu"
+    "SEARCH_FIRST_LAST_NAME":"Pretraži po imenu ili prezimenu",
+    "SELECT_STATUS":"Odaberi status"
     
 }

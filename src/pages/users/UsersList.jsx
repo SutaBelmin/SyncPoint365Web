@@ -30,8 +30,6 @@ export const UsersList = observer(() => {
     
     const fetchData = useCallback(async () => {
         try {
-            //const response = await usersService.getPagedUsers(page, pageSize, signal);
-
             const filter = { ...usersSearchStore.userFilter };
             const response = await usersService.getPagedUsersFilter(filter, signal);
             setData(response.data.items);
