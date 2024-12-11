@@ -1,31 +1,31 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { citiesService } from "../../services";
-import DataTable from "react-data-table-component";
-import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
-import { useModal } from "../../context/ModalProvider";
-import { CitiesAdd, CitiesEdit } from "../cities";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import {CitiesSearch} from "./search/CitiesSearch";
-import { observer } from "mobx-react";
-import citiesSearchStore from './stores/CitiesSearchStore';
-import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
-import {NoDataMessage} from "../../components/common-ui";
-import { useSearchParams } from "react-router-dom";
-import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
+import DataTable from "react-data-table-component";
+import React, { useEffect, useState, useCallback } from "react";
+
+import { reaction } from "mobx";
+import { observer } from "mobx-react-lite";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+
+import { citiesSearchStore } from './stores';
+import { citiesService } from "../../services";
+import { CitiesAdd, CitiesEdit } from "../cities";
+import { CitiesSearch } from "./search/CitiesSearch";
+import { useModal } from "../../context/ModalProvider";
+import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
+import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 
 export const CitiesList = observer(() => {
+    const { t } = useTranslation();
+    const { signal } = useRequestAbort();
+
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
-    const { t } = useTranslation();
-    const [searchParams] = useSearchParams();
-    const {signal} = useRequestAbort();
 
     const fetchData = useCallback(async () => {
-
         try {
             const filter = {...citiesSearchStore.cityFilter};
 
@@ -41,7 +41,8 @@ export const CitiesList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                filter : citiesSearchStore.cityFilter
+                page : citiesSearchStore.page,
+                pageSize : citiesSearchStore.pageSize
             }),
             () => {
                 fetchData();
@@ -53,10 +54,6 @@ export const CitiesList = observer(() => {
 
         return () => disposeReaction();
     }, [fetchData]);
-    
-    useEffect(()=>{
-        fetchData();
-    },[searchParams, fetchData])
 
     const columns = [
         {
@@ -108,7 +105,6 @@ export const CitiesList = observer(() => {
         openModal(<CitiesEdit city={city} closeModal={closeModal} fetchData={fetchData} />)
     }
 
-
     const onDeleteCityClick = (city) => {
         openModal(<DeleteConfirmationModal entityName={city.name} id={city.id} onDelete={handleDelete} onCancel={closeModal} />);
     }
@@ -128,7 +124,7 @@ export const CitiesList = observer(() => {
         <div  className="flex-1 p-6 bg-gray-100 h-screen">
             <h1 className="h1"> {t("CITIES")}</h1>
             <div className="flex flex-col gap-4 md:flex-row">            
-                <CitiesSearch/>
+                <CitiesSearch fetchData={fetchData}/>
 
                 <button
                     type="button"
@@ -164,5 +160,4 @@ export const CitiesList = observer(() => {
             </div>
         </div>
     );
-}
-);
+});
