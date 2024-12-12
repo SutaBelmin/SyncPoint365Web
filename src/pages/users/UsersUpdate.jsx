@@ -24,8 +24,8 @@ export const UsersUpdate = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
     const [user, setUser] = useState(null);
-
-
+    const [userGender, setUserGender] = useState(null);
+    
     const localeMapping = {
         en: enUS,
         bs: bs
@@ -38,7 +38,6 @@ export const UsersUpdate = () => {
 
     const updateUser = async (values) => {
         try {
-            console.log("Values: ", values);
             await userService.update({...values, id:userId}); 
             toast.success(t('UPDATED'));
             navigate('/users');
@@ -90,6 +89,7 @@ export const UsersUpdate = () => {
         try {
             const response = await userService.getById(userId);
             setUser(response.data);
+            setUserGender(response.data.gender);
         } catch (error) {
             toast.error(t('ERROR_LOADING_USER'));
         }
@@ -137,13 +137,13 @@ export const UsersUpdate = () => {
     }, [t]);
 
     useEffect(() => {
+        fetchUser();
         fetchCities();
         fetchRoles();
         fetchGenders();
-        fetchUser();
     }, [fetchGenders, fetchRoles, fetchUser]);
 
-    if (!user) return <div>Loading...</div>;
+    if (!user || !genders.length) return <div>Loading...</div>;
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
@@ -163,8 +163,9 @@ export const UsersUpdate = () => {
                     }}
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
+                    enableReinitialize={true}
                 >
-                    {({ setFieldValue, values }) => (
+                    {({ setFieldValue, values }) => (                        
                        <Form className="w-full">
 
                        {/* First Name */}
@@ -223,7 +224,7 @@ export const UsersUpdate = () => {
                                onChange={(option) => setFieldValue('gender', option ? option.value : '')}
                                options={genders}
                                placeholder={t('SELECT_GENDER')}
-                               value={genders.find(gender => gender.values === values.gender)} 
+                               value={genders.find(g=>g.value === userGender)} 
                                className='input-select-border mt-1'
                            />
                            <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
