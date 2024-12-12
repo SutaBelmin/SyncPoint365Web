@@ -13,12 +13,6 @@ export const UsersSearch = ({ fetchData }) => {
     const [isActiveOptions, setIsActiveOptions] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const initialValues = {
-        searchQuery: usersSearchStore.searchQuery,
-        roleId: usersSearchStore.roleId,
-        isActive: usersSearchStore.isActive
-    }
-
     const fetchRoles = useCallback(async () => {
         try {
             const response = await enumsService.getRoles();
@@ -38,30 +32,17 @@ export const UsersSearch = ({ fetchData }) => {
         fetchRoles();
 
         setIsActiveOptions([
-            { value: null, label: t('ALL') },
-            { value: true, label: t('ACTIVE') },
-            { value: false, label: t('INACTIVE') },
+            { value: 'All', label: t('ALL') },
+            { value: 'active', label: t('ACTIVE') },
+            { value: 'inactive', label: t('INACTIVE') },
         ]);
-
-        const roleIdFromParams = searchParams.get("roleId");
-        if (roleIdFromParams)
-            usersSearchStore.setRoleId(parseInt(roleIdFromParams));
-
-        const isActiveFromParams = searchParams.get("isActive");
-        if (isActiveFromParams){
-            const parsedValue =
-            isActiveFromParams === "true" ? true :
-            isActiveFromParams === "false" ? false :
-            null;
-            usersSearchStore.setIsActive(parsedValue);
-        }
 
     }, [fetchRoles, t, searchParams]);
 
     const handleSearch = (values) => {
         usersSearchStore.setQuery(values.searchQuery);
         usersSearchStore.setRoleId(values.roleId);
-        usersSearchStore.setIsActive(values.isActive);
+        usersSearchStore.setIsActive(values.isActive.value === 'All' ? null : (values.isActive.value === 'active'));
 
         const queryParams = usersSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);
@@ -72,9 +53,23 @@ export const UsersSearch = ({ fetchData }) => {
         setSearchParams({});
         setFieldValue("searchQuery", "");
         setFieldValue("roleId", null);
-        setFieldValue("isActive", null);
+        setFieldValue('isActive', isActiveOptions[0]);
         usersSearchStore.clearFilters();
         fetchData();
+    };
+
+    const initialValues = {
+        searchQuery: usersSearchStore.searchQuery,
+        roleId: (() => {
+            const roleIdFromParams = searchParams.get("roleId");
+            if (roleIdFromParams) {
+                const parsedRoleId = parseInt(roleIdFromParams);
+                usersSearchStore.setRoleId(parsedRoleId)
+                return parsedRoleId;
+            }
+            return usersSearchStore.roleId;
+        })(),
+        isActive: isActiveOptions.find((option) => option.value === searchParams.get('isActive')) || isActiveOptions[0],
     };
 
     return (
@@ -97,7 +92,7 @@ export const UsersSearch = ({ fetchData }) => {
                         id="roleId"
                         name="roleId"
                         value={roles.find(role => role.value === values.roleId) || null}
-                        onChange={(option) => setFieldValue('roleId', option ? option.value : null)}
+                        onChange={(option) => setFieldValue('roleId', option && option.value)}
                         options={roles}
                         placeholder={t('SELECT_ROLE')}
                         isClearable
@@ -108,8 +103,10 @@ export const UsersSearch = ({ fetchData }) => {
                     <Select
                         id="isActive"
                         name="isActive"
-                        value={isActiveOptions.find(option => option.value === values.isActive) || null}
-                        onChange={(option) => setFieldValue('isActive', option ? option.value : null)}
+                        value={values.isActive}
+                        onChange={(selectedOption) => {
+                            setFieldValue('isActive', selectedOption);
+                        }}
                         options={isActiveOptions}
                         placeholder={t('SELECT_STATUS')}
                         isClearable

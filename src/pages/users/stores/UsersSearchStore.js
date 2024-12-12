@@ -1,4 +1,4 @@
-import { makeAutoObservable, action, observable } from "mobx";
+import { makeObservable, action, observable } from "mobx";
 
 class UsersSearchStore {
     totalItemCount = 0;
@@ -9,7 +9,7 @@ class UsersSearchStore {
     pageSize = 10;
 
     constructor() {
-        makeAutoObservable(this, {
+        makeObservable(this, {
             setPage: action, 
             setPageSize: action, 
             setTotalItemCount: action, 
@@ -65,11 +65,11 @@ class UsersSearchStore {
         if (this.searchQuery)
             params.set("searchQuery", this.searchQuery);
 
-        if (this.roleId)
+        if (this.roleId || this.roleId === 0)
             params.set("roleId", this.roleId);
 
-        if (this.isActive)
-            params.set("isActive", this.isActive);
+        if (this.isActive !== null)
+            params.set("isActive", this.isActive ? 'active' : 'inactive');
 
         if (this.page !== 1)
             params.set("page", this.page);
@@ -80,7 +80,7 @@ class UsersSearchStore {
         return params;
     }
 
-    initializeQueryParams() {
+    initializeQueryParams() { 
         const params = new URLSearchParams(window.location.search);
         const searchQuery = params.get("searchQuery") || "";
         const roleId = params.get("roleId") || null;
@@ -88,7 +88,7 @@ class UsersSearchStore {
 
         this.setQuery(searchQuery);
         this.setRoleId(roleId);
-        this.setIsActive(isActive);
+        this.setIsActive(isActive === null ? null : (isActive === 'active'));
     }
 
 

@@ -117,8 +117,6 @@ export const UsersList = observer(() => {
                     </button>
                 </div>
             ),
-            ignoreRowClick: true,
-            button: 'true',
         },
     ];
 
