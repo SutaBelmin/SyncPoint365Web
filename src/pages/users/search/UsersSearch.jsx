@@ -48,8 +48,13 @@ export const UsersSearch = ({ fetchData }) => {
             usersSearchStore.setRoleId(parseInt(roleIdFromParams));
 
         const isActiveFromParams = searchParams.get("isActive");
-        if (isActiveFromParams)
-            usersSearchStore.setIsActive(isActiveFromParams);
+        if (isActiveFromParams){
+            const parsedValue =
+            isActiveFromParams === "true" ? true :
+            isActiveFromParams === "false" ? false :
+            null;
+            usersSearchStore.setIsActive(parsedValue);
+        }
 
     }, [fetchRoles, t, searchParams]);
 
