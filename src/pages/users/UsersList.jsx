@@ -30,7 +30,6 @@ export const UsersList = observer(() => {
     
     const fetchData = useCallback(async () => {
         try {
-            console.log("pozvano fetch data");
             const filter = { ...usersSearchStore.userFilter };
 
             const response = await usersService.getPagedUsersFilter(filter, signal);
@@ -46,7 +45,6 @@ export const UsersList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                //filter : usersSearchStore.userFilter
                 page : usersSearchStore.page,
                 pageSize : usersSearchStore.pageSize
             }),
