@@ -7,40 +7,17 @@ import Select from "react-select";
 import { toast } from 'react-toastify';
 import { useSearchParams } from "react-router-dom";
 
-export const UsersSearch = () => {
+export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
     const [roles, setRoles] = useState([]);
     const [isActiveOptions, setIsActiveOptions] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // const initialValues = {
-    //     searchQuery: usersSearchStore.searchQuery,
-    //     roleId: usersSearchStore.selectedRoleId
-    // }
-
     const initialValues = {
-        searchQuery: searchParams.get("searchQuery") || usersSearchStore.searchQuery,
-        roleId: searchParams.get("roleId") || usersSearchStore.roleId,
-        isActive: searchParams.get("isActive") ? JSON.parse(searchParams.get("isActive")) : usersSearchStore.isActive
+        searchQuery: usersSearchStore.searchQuery,
+        roleId: usersSearchStore.roleId,
+        isActive: usersSearchStore.isActive
     }
-
-
-    const handleSearch = (values) => {
-        usersSearchStore.setQuery(values.searchQuery);
-        usersSearchStore.setRoleId(values.roleId);
-        usersSearchStore.setIsActive(values.isActive);
-
-        // const queryParams = usersSearchStore.syncWithQueryParams();
-        // setSearchParams(queryParams);
-    };
-
-    const handleClear = (setFieldValue) => {
-        setSearchParams({});
-        usersSearchStore.clearFilters();
-        setFieldValue("searchQuery", "");
-        setFieldValue("roleId", null);
-        setFieldValue("isActive", null);
-    };
 
     const fetchRoles = useCallback(async () => {
         try {
@@ -66,25 +43,40 @@ export const UsersSearch = () => {
             { value: false, label: t('INACTIVE') },
         ]);
 
-        usersSearchStore.initializeQueryParams();
-
         const roleIdFromParams = searchParams.get("roleId");
-        if (roleIdFromParams) {
+        if (roleIdFromParams)
             usersSearchStore.setRoleId(parseInt(roleIdFromParams));
-        }
 
         const isActiveFromParams = searchParams.get("isActive");
-        if (isActiveFromParams) {
+        if (isActiveFromParams)
             usersSearchStore.setIsActive(isActiveFromParams);
-        }
 
     }, [fetchRoles, t, searchParams]);
 
+    const handleSearch = (values) => {
+        usersSearchStore.setQuery(values.searchQuery);
+        usersSearchStore.setRoleId(values.roleId);
+        usersSearchStore.setIsActive(values.isActive);
+
+        const queryParams = usersSearchStore.syncWithQueryParams();
+        setSearchParams(queryParams);
+        fetchData();
+    };
+
+    const handleClear = (setFieldValue) => {
+        setSearchParams({});
+        setFieldValue("searchQuery", "");
+        setFieldValue("roleId", null);
+        setFieldValue("isActive", null);
+        usersSearchStore.clearFilters();
+        fetchData();
+    };
+
     return (
         <Formik
+            enableReinitialize
             initialValues={initialValues}
             onSubmit={handleSearch}
-            //enableReinitialize={true}
         >
             {({ setFieldValue, values }) => (
                 <Form className="flex flex-col gap-4 md:flex-row">

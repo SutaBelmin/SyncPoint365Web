@@ -30,8 +30,11 @@ export const UsersList = observer(() => {
     
     const fetchData = useCallback(async () => {
         try {
+            console.log("pozvano fetch data");
             const filter = { ...usersSearchStore.userFilter };
+
             const response = await usersService.getPagedUsersFilter(filter, signal);
+
             setData(response.data.items);
             usersSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
@@ -43,7 +46,9 @@ export const UsersList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                filter : usersSearchStore.userFilter
+                //filter : usersSearchStore.userFilter
+                page : usersSearchStore.page,
+                pageSize : usersSearchStore.pageSize
             }),
             () => {
                 fetchData();
@@ -112,6 +117,8 @@ export const UsersList = observer(() => {
                     </button>
                 </div>
             ),
+            ignoreRowClick: true,
+            button: 'true',
         },
     ];
 
@@ -147,7 +154,7 @@ export const UsersList = observer(() => {
             <h1 className="h1">{t('USERS')}</h1>
 
             <div className="flex flex-col gap-4 md:flex-row">
-                <UsersSearch />
+                <UsersSearch fetchData={fetchData}/>
                 <button
                     type='button'
                     onClick={onAddUserClick}

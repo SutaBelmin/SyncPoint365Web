@@ -1,5 +1,4 @@
-//import { makeAutoObservable } from "mobx";
-import { action, makeObservable } from "mobx";
+import { makeAutoObservable, action, observable } from "mobx";
 
 class UsersSearchStore {
     totalItemCount = 0;
@@ -10,12 +9,16 @@ class UsersSearchStore {
     pageSize = 10;
 
     constructor() {
-        //makeAutoObservable(this);
-        this.initializeQueryParams();
-
-        makeObservable(this, {
-            setFilter: action, 
+        makeAutoObservable(this, {
+            setPage: action, 
+            setPageSize: action, 
+            setTotalItemCount: action, 
+            page: observable,
+            pageSize: observable,
+            totalItemCount: observable
         });
+
+        this.initializeQueryParams();
     }
 
     setTotalItemCount(count) {
@@ -50,8 +53,8 @@ class UsersSearchStore {
     clearFilters() {
         this.setQuery("");
         this.setRoleId(null);
-        this.setPage(1);
         this.setIsActive(null);
+        this.setPage(1);
         this.syncWithQueryParams();
     }
 
@@ -79,49 +82,25 @@ class UsersSearchStore {
 
     initializeQueryParams() {
         const params = new URLSearchParams(window.location.search);
-        // const searchQuery = params.get("searchQuery") || "";
-        // const roleId = params.get("roleId") || null;
-        // const isActive = params.get("isActive") || null;
+        const searchQuery = params.get("searchQuery") || "";
+        const roleId = params.get("roleId") || null;
+        const isActive = params.get("isActive") || null;
 
-        // this.setQuery(searchQuery);
-        // this.setRoleId(roleId);
-        // this.setIsActive(isActive);
-
-        this.searchQuery = params.get("searchQuery") || "";
-        this.roleId = params.get("roleId") || null;
-        this.isActive = params.get("isActive") || null;
+        this.setQuery(searchQuery);
+        this.setRoleId(roleId);
+        this.setIsActive(isActive);
     }
 
 
     get userFilter() {
         return {
-            totalItemCount: this.totalItemCount,
             searchQuery: this.searchQuery,
             roleId: this.roleId,
             isActive: this.isActive,
+            totalItemCount: this.totalItemCount,
             page: this.page,
             pageSize: this.pageSize
         };
-    }
-
-    setFilter(values) {  
-        if(values.page)
-            this.page = values.page;
-
-        if(values.pageSize)
-            this.pageSize = values.pageSize;
-
-        if(values.totalItemCount)
-            this.totalItemCount = values.totalItemCount;
-
-        if(values.searchQuery)
-            this.searchQuery = values.searchQuery;
-
-        if(values.roleId)
-            this.roleId = values.roleId;
-
-        if(values.isActive)
-            this.isActive = values.isActive;
     }
 }
 

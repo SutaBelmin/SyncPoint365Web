@@ -32,9 +32,9 @@ export const CitiesList = observer(() => {
             setData(response.data.items);
             citiesSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
-            toast.error("There was an error. Please contact administrator.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, [signal]);
+    }, [signal, t]);
 
     useEffect(() => {
         const disposeReaction = reaction(
