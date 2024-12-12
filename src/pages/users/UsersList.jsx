@@ -92,6 +92,11 @@ export const UsersList = observer(() => {
             sortable: true,
         },
         {
+            name: t('STATUS'),
+            selector: row => row.isActive ? t('ACTIVE') : t('INACTIVE'),
+            sortable: true,
+        },
+        {
             name: t('ACTIONS'),
             cell: (row) => (
                 <div className="flex justify-center items-center w-10">

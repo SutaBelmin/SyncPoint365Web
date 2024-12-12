@@ -1,17 +1,15 @@
 import { toast } from "react-toastify";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {CitiesSearch} from "./search";
+import { observer } from "mobx-react";
+import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import DataTable from "react-data-table-component";
 import React, { useEffect, useState, useCallback } from "react";
-
-import { reaction } from "mobx";
-import { observer } from "mobx-react-lite";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-
 import { citiesSearchStore } from './stores';
 import { citiesService } from "../../services";
 import { CitiesAdd, CitiesEdit } from "../cities";
-import { CitiesSearch } from "./search/CitiesSearch";
 import { useModal } from "../../context/ModalProvider";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";

@@ -4,28 +4,38 @@ import { useTranslation } from "react-i18next";
 import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
 import Select from "react-select";
+import { toast } from 'react-toastify';
+import { useSearchParams } from "react-router-dom";
 
 export const UsersSearch = () => {
     const { t } = useTranslation();
     const [roles, setRoles] = useState([]);
-    const [isActiveOptions] = useState([
-        {value: "", label: t('ALL')},
-        {value: true, label: t('ACTIVE')},
-        {value: false, label: t('INACTIVE')},
-    ]);
+    const [isActiveOptions, setIsActiveOptions] = useState([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    // const initialValues = {
+    //     searchQuery: usersSearchStore.searchQuery,
+    //     roleId: usersSearchStore.selectedRoleId
+    // }
 
     const initialValues = {
-        searchQuery: usersSearchStore.searchQuery,
-        roleId: usersSearchStore.selectedRoleId
+        searchQuery: searchParams.get("searchQuery") || usersSearchStore.searchQuery,
+        roleId: searchParams.get("roleId") || usersSearchStore.roleId,
+        isActive: searchParams.get("isActive") ? JSON.parse(searchParams.get("isActive")) : usersSearchStore.isActive
     }
+
 
     const handleSearch = (values) => {
         usersSearchStore.setQuery(values.searchQuery);
         usersSearchStore.setRoleId(values.roleId);
         usersSearchStore.setIsActive(values.isActive);
+
+        // const queryParams = usersSearchStore.syncWithQueryParams();
+        // setSearchParams(queryParams);
     };
 
     const handleClear = (setFieldValue) => {
+        setSearchParams({});
         usersSearchStore.clearFilters();
         setFieldValue("searchQuery", "");
         setFieldValue("roleId", null);
@@ -43,25 +53,45 @@ export const UsersSearch = () => {
             }));
             setRoles(rolesOptions);
         } catch (error) {
-
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     }, [t]);
 
     useEffect(() => {
         fetchRoles();
-    });
+
+        setIsActiveOptions([
+            { value: null, label: t('ALL') },
+            { value: true, label: t('ACTIVE') },
+            { value: false, label: t('INACTIVE') },
+        ]);
+
+        usersSearchStore.initializeQueryParams();
+
+        const roleIdFromParams = searchParams.get("roleId");
+        if (roleIdFromParams) {
+            usersSearchStore.setRoleId(parseInt(roleIdFromParams));
+        }
+
+        const isActiveFromParams = searchParams.get("isActive");
+        if (isActiveFromParams) {
+            usersSearchStore.setIsActive(isActiveFromParams);
+        }
+
+    }, [fetchRoles, t, searchParams]);
 
     return (
         <Formik
             initialValues={initialValues}
             onSubmit={handleSearch}
+            //enableReinitialize={true}
         >
             {({ setFieldValue, values }) => (
                 <Form className="flex flex-col gap-4 md:flex-row">
                     <Field
                         type="text"
                         name="searchQuery"
-                        placeholder={t('SEARCH_FIRST_LAST_NAME')}
+                        placeholder={t('SEARCH_PLACEHOLDER')}
                         autoComplete="off"
                         className="input-search h-10 rounded-md border-gray-300 w-full"
                     />

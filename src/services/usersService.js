@@ -23,6 +23,7 @@ class UsersService extends BaseService {
     }
 
     async getPagedUsersFilter(filter, signal = null) {
+        console.log("params: ", filter);
         const response = await this.api.get(`/users/paged`, {
             params: {
                 isActive: filter.isActive,

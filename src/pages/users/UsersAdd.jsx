@@ -28,8 +28,12 @@ export const UsersAdd = () => {
         bs: bs
     };
 
-    const currentLanguage = i18n.language || 'en';
-    const currentLocale = localeMapping[currentLanguage];
+    // const currentLanguage = i18n.language || 'en';
+    // const currentLocale = localeMapping[currentLanguage];
+
+    const currentLanguage = i18n.language.split('-')[0];
+    const normalizedLanguage = currentLanguage === "bs" ? "ba" : currentLanguage;
+    const currentLocale = localeMapping[normalizedLanguage] || enUS;
 
     registerLocale(currentLanguage, currentLocale);
 
