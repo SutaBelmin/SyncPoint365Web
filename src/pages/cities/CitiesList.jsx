@@ -114,7 +114,7 @@ export const CitiesList = observer(() => {
             closeModal();
             toast.success("Country deleted successfully!");
         } catch (error) {
-            toast.error("Failed to delete the record. Please try again.");
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     }
 
