@@ -124,7 +124,8 @@
     "APPROVED": "Approved",
     "REJECTED": "Rejected",
     "PENDING": "Pending",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "SELECT_STATUS": "Select status"
     
 
 }

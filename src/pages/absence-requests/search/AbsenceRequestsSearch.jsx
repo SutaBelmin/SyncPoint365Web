@@ -1,64 +1,67 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import Select from 'react-select';
-import { observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { absenceRequestTypesService, userService } from '../../../services';
+import { absenceRequestTypesService, userService, enumsService } from '../../../services';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { useSearchParams } from "react-router-dom";
 import { absenceRequestsSearchStore } from '../stores';
-import { action } from 'mobx';
-import enumsService from '../../../services/enumsService';
+import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 
 
-export const AbsenceRequestsSearch = observer(() => {
+export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
 	const [users, setUsers] = useState([]);
-	const [statusOptions, setAbsenceRequestsStatus] = useState([]);
+	const [statuses, setAbsenceRequestsStatuses] = useState([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { t } = useTranslation();
+	const { signal } = useRequestAbort();
+
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
 
 
 	const fetchUsers = useCallback(async () => {
 		try {
-			const responseUsers = await userService.getUsers();
-			setUsers(responseUsers.data.map(user => ({
+			const response = await userService.getUsers(signal);
+			const usersOptions = response.data.map(user => ({
 				value: user.id,
 				label: user.firstName + " " + user.lastName,
-			})));
+			}));
+			setUsers(usersOptions);
 		} catch (error) {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
-	}, [t]);
+	}, [t, signal]);
 
 
 	const fetchAbsenceRequestTypes = useCallback(async () => {
 		try {
-			const responseAbsenceType = await absenceRequestTypesService.getList();
-			const activeAbsenceTypes = responseAbsenceType.data.filter(type => type.isActive === true);
-			setAbsenceRequestTypes(activeAbsenceTypes.map(type => ({
+			const response = await absenceRequestTypesService.getList(signal);
+			const activeAbsenceTypes = response.data.filter(type => type.isActive === true);
+			const typesOptions = activeAbsenceTypes.map(type => ({
 				value: type.id,
 				label: type.name
-			})));
+			}));
+			setAbsenceRequestTypes(typesOptions);
 		} catch (error) {
-			toast.error(t('ERROR_CONTACT_ADMIN'));
+			toast.error(t('ERROR_CONTACT_ADMIN')); 
 		}
-	}, [t])
+	}, [t, signal])
 
 	const fetchAbsenceRequestStatus = useCallback(async () => {
 		try {
-			const responseStatus = await enumsService.getAbsenceRequestsStatus();
-			setAbsenceRequestsStatus(responseStatus.data.map(status => ({
-				value: status.id,
-				label: status.label === 'Approved' ? t('APPROVED') :
-					   status.label === 'Rejected' ? t('REJECTED') :
-					   status.label === 'Pending' ? t('PENDING') : status.label
-			})));
+			const response = await enumsService.getAbsenceRequestsStatus();
+			const statusOptions = response.data.map(requestStatus => ({
+				value: requestStatus.id,
+				label: requestStatus.label === 'Approved' ? t('APPROVED') :
+				requestStatus.label === 'Pending' ? t('PENDING') :
+				requestStatus.label === 'Rejected' ? t('REJECTED') : requestStatus.label
+			}));
+			setAbsenceRequestsStatuses(statusOptions);
 		} catch (error) {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
@@ -78,41 +81,55 @@ export const AbsenceRequestsSearch = observer(() => {
 		const userFromParams = searchParams.get("userId");
 		if (userFromParams)
 			absenceRequestsSearchStore.setUserId(parseInt(userFromParams));
+
 	}, [searchParams, fetchAbsenceRequestTypes, fetchUsers, fetchAbsenceRequestStatus]);
 
 
-	const handleSubmit = action((values) => {
-
-		const { absenceRequestTypeId, userId, dateFrom, dateTo } = values;
-
-		absenceRequestsSearchStore.setAbsenceTypeId(absenceRequestTypeId || null);
-		absenceRequestsSearchStore.setUserId(userId || null);
-		absenceRequestsSearchStore.setDateFrom(dateFrom || null);
-		absenceRequestsSearchStore.setDateTo(dateTo || null);
+	const handleSearch = (values) => {
+		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId ? values.absenceRequestTypeId : null);
+		absenceRequestsSearchStore.setUserId(values.userId ? values.userId : null);
+		absenceRequestsSearchStore.setAbsenceRequestStatusId(values.absenceRequestStatusId);
+		absenceRequestsSearchStore.setDateFrom(values.dateFrom ? values.dateFrom : null);
+		absenceRequestsSearchStore.setDateTo(values.dateTo ? values.dateTo : null);
 
 		const queryParams = absenceRequestsSearchStore.syncWithQueryParams();
 		setSearchParams(queryParams);
-	});
+		fetchData();
+	};
 
 
 	const handleClear = (setFieldValue) => {
 		setSearchParams({});
-		absenceRequestsSearchStore.reset();
 		setFieldValue("absenceRequestTypeId", null);
 		setFieldValue("userId", null);
+		setFieldValue("absenceRequestStatusId", null);
 		setFieldValue("dateFrom", null);
 		setFieldValue("dateTo", null);
+		absenceRequestsSearchStore.clearFilters();
+		fetchData();
 	};
+
+	const initialValues = {
+		absenceRequestTypeId: absenceRequestsSearchStore.absenceRequestTypeId,
+		userId: absenceRequestsSearchStore.userId,
+		absenceRequestStatusId: (() => {
+            const statusIdFromParams = searchParams.get("absenceRequestStatusId");
+            if (statusIdFromParams) {
+                const parsedStatusId = parseInt(statusIdFromParams);
+                absenceRequestsSearchStore.setAbsenceRequestStatusId(parsedStatusId);
+                return statusIdFromParams;
+            }
+            return absenceRequestsSearchStore.absenceRequestStatusId;
+        })(),
+		dateFrom: absenceRequestsSearchStore.dateFrom,
+		dateTo: absenceRequestsSearchStore.dateTo,
+	}
 
 	return (
 		<Formik
-			initialValues={{
-				absenceRequestTypeId: null,
-				dateFrom: "",
-				dateTo: "",
-				userId: null,
-			}}
-			onSubmit={handleSubmit}
+			enableReinitialize
+			initialValues={initialValues}
+			onSubmit={handleSearch}
 		>
 			{({ setFieldValue, values }) => (
 				<Form className="flex flex-col gap-4 max-w-full md:flex-row">
@@ -121,34 +138,38 @@ export const AbsenceRequestsSearch = observer(() => {
 						id="absenceRequestTypeId"
 						placeholder={t('SELECT_TYPE')}
 						options={absenceRequestTypes}
-						value={absenceRequestTypes.find((option) => option.value === values.absenceRequestTypeId) || null}
+						//value={absenceRequestTypes.find((option) => option.value === values.absenceRequestTypeId) || null}
+						value={values.absenceRequestTypeId ? { value: values.absenceRequestTypeId, label: absenceRequestTypes.find(a => a.value === values.absenceRequestTypeId)?.label } : null}
 						onChange={(option) => setFieldValue('absenceRequestTypeId', option ? option.value : null)}
 						className="border-gray-300 input-select-border w-full min-w-[10rem]"
 						isClearable
+						isSearchable
 					/>
 					<Select
 						name="userId"
-						id="userId"
 						placeholder={t('SELECT_USER')}
 						options={users}
-						value={users.find((option) => option.value === values.userId) || null}
+						//value={users.find((option) => option.value === values.userId) || null}
+						value={values.userId ? { value: values.userId, label: users.find(u => u.value === values.userId)?.label } : null}
 						onChange={(option) => setFieldValue("userId", option ? option.value : null)}
 						className="border-gray-300 input-select-border w-full min-w-[12rem]"
 						isClearable
+						isSearchable
 
 					/>
 
 					<Select
-						name="absenceRequestStatus"
-						id="absenceRequestStatus"
-						placeholder={t('SELECT_USER')}
-						options={statusOptions}
-						value={statusOptions.find((option) => option.value === values.absenceRequestStatus) || null}
-						onChange={(option) => setFieldValue("userId", option ? option.value : null)}
+						id="absenceRequestStatusId"
+						name="absenceRequestStatusId"
+						value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatusId) || null}
+						//value={values.absenceRequestStatusId ? { value: values.absenceRequestStatusId, label: statuses.find(s => s.value === values.absenceRequestStatusId)?.label } : null}
+						onChange={(option) => setFieldValue('absenceRequestStatusId', option && option.value)}
+						options={statuses}
+						placeholder={t('SELECT_STATUS')}
 						className="border-gray-300 input-select-border w-full min-w-[12rem]"
 						isClearable
-
-					/>
+						isSearchable
+					/> 
 					<DatePicker
 						id='dateFrom'
 						name="dateFrom"
@@ -184,7 +205,6 @@ export const AbsenceRequestsSearch = observer(() => {
 					<button
 						type="submit"
 						className="btn-new h-10"
-						onClick={handleSubmit}
 					>
 						{t('SEARCH')}
 					</button>
@@ -195,12 +215,8 @@ export const AbsenceRequestsSearch = observer(() => {
 					>
 						{t("CLEAR")}
 					</button>
-
-
 				</Form>
-
 			)}
-
 		</Formik >
 	);
-});
+};

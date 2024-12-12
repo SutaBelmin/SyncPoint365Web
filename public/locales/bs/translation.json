@@ -122,8 +122,9 @@
     "SELECT_TYPE": "Odaberi tip",
     "SELECT": "Odaberi",
     "APPROVED": "Odobreno",
-    "REJCETED": "Odbijeno",
-    "PENDING": "U obradi",
-    "STATUS": "Status"
+    "REJECTED": "Odbijeno",
+    "PENDING": "Obrada",
+    "STATUS": "Status", 
+    "SELECT_STATUS": "Odaberi status"
 
 }

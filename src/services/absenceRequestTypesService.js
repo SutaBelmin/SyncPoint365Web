@@ -15,7 +15,7 @@ class AbsenceRequestTypesService extends BaseService {
                 params: {
                     isActive: filter.isActive,
                     query: filter.query,
-                    page: filter.pageNumber,
+                    page: filter.page,
                     pageSize: filter.pageSize,
                 },
                 signal: signal

@@ -1,43 +1,41 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import Select from 'react-select';
-import { observer } from 'mobx-react';
 import { useSearchParams } from 'react-router-dom';
 import absenceRequestTypesSearchStore from '../stores/AbsenceRequestTypesSearchStore';
 import { useTranslation } from 'react-i18next';
-  
-  const AbsenceRequestTypesSearch = observer(() => {
-    const [searchParams, setSearchParams] = useSearchParams(); 
+
+const AbsenceRequestTypesSearch = ({ fetchData }) => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
-  
+
     const dropdownOptions = [
-        { value: 'All', label: t('ALL') },
+        { value: 'All' , label: t('ALL') },
         { value: 'active', label: t('ACTIVE') },
         { value: 'inactive', label: t('INACTIVE') }
     ];
 
-    
-    useEffect(() => {
-      absenceRequestTypesSearchStore.initializeQueryParams(searchParams);
-    }, [searchParams]);
-  
     const handleSubmit = (values) => {
-      absenceRequestTypesSearchStore.setQuery(values.searchQuery);   
-      absenceRequestTypesSearchStore.setIsActive(values.status.value === 'All' ? null : (values.status.value === 'active'));
-      setSearchParams(absenceRequestTypesSearchStore.syncWithQueryParams());
+        absenceRequestTypesSearchStore.setQuery(values.searchQuery);
+        absenceRequestTypesSearchStore.setIsActive(values.status.value === 'All' || '' ? null : (values.status.value === 'active'));
+        const queryParams = absenceRequestTypesSearchStore.syncWithQueryParams();
+        setSearchParams(queryParams);
+
+        fetchData();
     };
-  
+
     const handleClear = (setFieldValue) => {
-      absenceRequestTypesSearchStore.reset();
-      setFieldValue('searchQuery','');
-      setFieldValue('status', dropdownOptions[0]);
-      setSearchParams({});
-    }
-  
+        setSearchParams({});
+        setFieldValue('searchQuery', "");
+        setFieldValue('status', dropdownOptions[0]);
+        absenceRequestTypesSearchStore.clearFilters();
+        fetchData();    
+    };
+
     return (
         <Formik
             initialValues={{
-                searchQuery: searchParams.get('searchQuery') || '',
+                searchQuery: absenceRequestTypesSearchStore.searchQuery,
                 status: dropdownOptions.find(
                     (option) => option.value === searchParams.get('status')
                 ) || dropdownOptions[0],
@@ -56,6 +54,7 @@ import { useTranslation } from 'react-i18next';
                         onChange={(e) => {
                             setFieldValue('searchQuery', e.target.value);
                         }}
+                        
                     />
                     <Select
                         name="status"
@@ -82,6 +81,6 @@ import { useTranslation } from 'react-i18next';
             )}
         </Formik>
     );
-});
+};
 
 export default AbsenceRequestTypesSearch;

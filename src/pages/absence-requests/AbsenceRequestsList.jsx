@@ -26,8 +26,10 @@ export const AbsenceRequestsList = observer(() => {
 
     const fetchData = useCallback(async () => {
         try {
-            const response = await absenceRequestsService.getPagedList(
-                absenceRequestsSearchStore.absenceRequestsFilter, signal);
+            const filter = {...absenceRequestsSearchStore.absenceRequestFilter};
+
+            const response = await absenceRequestsService.getPagedList(filter, signal);
+
             setData(response.data.items);
             absenceRequestsSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
@@ -39,50 +41,22 @@ export const AbsenceRequestsList = observer(() => {
     }, [signal, t]);
 
     useEffect(() => {
-        const disposer = reaction(
-            () => [
-                absenceRequestsSearchStore.absenceRequestsFilter
-            ],
+        const disposeReaction = reaction(
+            () => ({
+                page : absenceRequestsSearchStore.page,
+                pageSize : absenceRequestsSearchStore.pageSize
+            }),
             () => {
                 fetchData();
-            }, {
-            fireImmediately: true
-        }
+            },
+            {
+                fireImmediately: true
+            }
         );
-        return () => disposer();
+
+        return () => disposeReaction();
     }, [fetchData]);
 
-    const handleDelete = async (absenceRequestId) => {
-        try {
-            await absenceRequestsService.delete(absenceRequestId);
-            fetchData();
-            closeModal();
-            toast.success(t('DELETED'));
-        } catch (error) {
-            toast.error(t('FAILED_TO_DELETE'));
-        }
-    };
-
-    const addNewRequestClick = () => {
-        openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
-    }
-
-    const editRequestClick = (absenceRequest) => {
-        openModal(<AbsenceRequestsEdit absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
-    };
-
-    const deleteRequestClick = (absenceRequest) => {
-        openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
-    };
-
-    const handlePageChange = (newPage) => {
-        absenceRequestsSearchStore.setPage(newPage);
-    };
-
-    const handleRowsPerPageChange = (newPageSize) => {
-        absenceRequestsSearchStore.setPageSize(newPageSize);
-        absenceRequestsSearchStore.setPage(1);
-    };
 
     const columns = [
         {
@@ -105,18 +79,23 @@ export const AbsenceRequestsList = observer(() => {
             selector: (row) => row.dateReturn ? format(new Date(row.dateReturn), t('DATE_FORMAT')) : '',
             sortable: true,
         },
+        // {
+        //     name: t('STATUS'),
+        //     selector: row => {
+        //         switch (row.absenceRequestStatus) {
+        //             case 'Approved':
+        //                 return t('APPROVED');
+        //             case 'Rejected':
+        //                 return t('REJECTED');
+        //             default:
+        //                 return t('PENDING');
+        //         }
+        //     },
+        //     sortable: true, 
+        // },
         {
             name: t('STATUS'),
-            selector: (row) => {
-                switch (row.absenceRequestStatus) {
-                    case 'Approved':
-                        return t('APPROVED');
-                    case 'Rejected':
-                        return t('REJECTED'); 
-                    default:
-                        return t('PENDING');
-                }
-            },
+            selector: row => t(formatRoleKey(row.absenceRequestStatus)),
             sortable: true,
         },
         {
@@ -126,30 +105,59 @@ export const AbsenceRequestsList = observer(() => {
         },
         {
             name: t('ACTIONS'),
-            cell: (row) => (
+            cell: row => (
                 <div className="flex">
                     <button
-                        type="button"
                         onClick={() => editRequestClick(row)}
                         className="text-blue-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
-                        type="button"
                         onClick={() => deleteRequestClick(row)}
                         className="text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
             ),
-        },
+            ignoreRowClick: true,
+            button: 'true'
+        }
     ];
+
+    const formatRoleKey = (absenceRequestStatus) => {
+        return absenceRequestStatus
+            .replace(/([a-z])([A-Z])/g, '$1_$2')
+            .toUpperCase();
+    }
+
+    const addNewRequestClick = () => {
+        openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
+    }
+
+    const editRequestClick = (absenceRequest) => {
+        openModal(<AbsenceRequestsEdit absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
+    };
+
+    const deleteRequestClick = (absenceRequest) => {
+        openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
+    };
+
+    const handleDelete = async (absenceRequestId) => {
+        try {
+            await absenceRequestsService.delete(absenceRequestId);
+            fetchData();
+            closeModal();
+            toast.success(t('DELETED'));
+        } catch (error) {
+            toast.error(t('FAILED_TO_DELETE'));
+        }
+    }
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
             <div className="flex flex-col gap-4 max-w-full md:flex-row">
-                <AbsenceRequestsSearch />
+                <AbsenceRequestsSearch fetchData={fetchData} />
                 <button
                     type="button"
                     className=" btn-common h-10 md:ml-auto"
@@ -163,19 +171,25 @@ export const AbsenceRequestsList = observer(() => {
             <div className="table max-w-full">
                 <DataTable
                     columns={columns}
-                    data={data || []}
-                    highlightOnHover
+                    data={data}
                     pagination
                     paginationServer
                     paginationTotalRows={absenceRequestsSearchStore.totalItemCount}
-                    paginationDefaultPage={absenceRequestsSearchStore.pageNumber}
+                    onChangePage={(newPage) => {
+                        absenceRequestsSearchStore.setPage(newPage);
+                    }}
                     paginationPerPage={absenceRequestsSearchStore.pageSize}
-                    onChangePage={handlePageChange}
-                    onChangeRowsPerPage={handleRowsPerPageChange}
+                    onChangeRowsPerPage={
+                        (newPageSize) => {
+                            absenceRequestsSearchStore.setPageSize(newPageSize);
+                            absenceRequestsSearchStore.setPage(1);
+                        }
+                    }
+                    highlightOnHover
                     progressPending={loading}
                     persistTableHead={true}
-                    noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={PaginationOptions()}
+                    noDataComponent={<NoDataMessage />}
                 />
             </div>
         </div >
