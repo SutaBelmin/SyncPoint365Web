@@ -90,8 +90,6 @@ export const CitiesList = observer(() => {
                     </button>
                 </div>
             ),
-            ignoreRowClick: true,
-            button: 'true',
         }
     ];
 

@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 import { AbsenceRequestsSearch } from "./search";
 import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
-import { AbsenceRequestsAdd, AbsenceRequestsEdit } from "../absence-requests";
+import { AbsenceRequestsEdit } from "../absence-requests";
 import "./AbsenceRequestsList.css";
 
 export const AbsenceRequestsList = observer(() => {
@@ -114,14 +114,12 @@ export const AbsenceRequestsList = observer(() => {
                     </button>
                 </div>
             ),
-            ignoreRowClick: true,
-            button: 'true'
         }
     ];
 
-    const addNewRequestClick = () => {
-        openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
-    }
+    // const addNewRequestClick = () => {
+    //     openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
+    // }
 
     const editRequestClick = (absenceRequest) => {
         openModal(<AbsenceRequestsEdit absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
@@ -149,7 +147,7 @@ export const AbsenceRequestsList = observer(() => {
                 <AbsenceRequestsSearch fetchData={fetchData} />
                 </div>
 
-                <div className="flex justify-end mt-4">
+                {/* <div className="flex justify-end mt-4">
                     <button
                         type="button"
                         className="btn-common h-10 ml-auto"
@@ -157,7 +155,7 @@ export const AbsenceRequestsList = observer(() => {
                     >
                         {t('NEW_REQUEST')}
                     </button>
-                    </div>
+                    </div> */}
             <BaseModal />
 
             <div className="table max-w-full">

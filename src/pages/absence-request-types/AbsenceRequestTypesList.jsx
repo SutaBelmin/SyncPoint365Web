@@ -81,8 +81,6 @@ export const AbsenceRequestTypesList = observer(() => {
                     </button>
                 </div>
             ),
-            ignoreRowClick: true,
-            button: 'true',
         },
     ];
 

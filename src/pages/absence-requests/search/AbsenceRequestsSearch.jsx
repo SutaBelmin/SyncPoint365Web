@@ -3,11 +3,13 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from 'react-i18next';
+import { registerLocale } from "react-datepicker";
+import { enUS, bs } from "date-fns/locale";
 import { toast } from "react-toastify";
+import { useSearchParams } from "react-router-dom";
 import { Formik, Form } from 'formik';
 import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { format } from 'date-fns';
-import { useSearchParams } from "react-router-dom";
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, userService, enumsService } from '../../../services';
 
@@ -17,11 +19,21 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const [users, setUsers] = useState([]);
 	const [statuses, setAbsenceRequestsStatuses] = useState([]);
 	const [searchParams, setSearchParams] = useSearchParams();
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 	const { signal } = useRequestAbort();
 
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
+
+	const localeMapping = {
+        en: enUS,
+        bs: bs
+    };
+	
+    const currentLanguage = i18n.language.split('-')[0];
+    const normalizedLanguage = currentLanguage === "bs" ? "bs" : currentLanguage;
+    const currentLocale = localeMapping[normalizedLanguage] || enUS;
+    registerLocale(normalizedLanguage, currentLocale);
 
 
 	const fetchUsers = useCallback(async () => {
@@ -180,9 +192,9 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						placeholderText={t('DATE_FROM')}
 						maxDate={maxDate}
 						autoComplete='off'
-						scrollableYearDropdown
 						enableTabLoop={false}
 						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
+						locale={currentLanguage}
 					/>
 					<DatePicker
 						id='dateTo'
@@ -197,8 +209,8 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						scrollableYearDropdown
 						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
+						locale={currentLanguage}
 					/>
 					<div className='flex gap-4 '> 
 						<button
