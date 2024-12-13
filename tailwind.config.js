@@ -6,10 +6,11 @@ module.exports = {
   theme: {
     extend: {},
     screens: {
+      ss: '1px',
       xs: '480px',
       sm: '640px',
       md: '830px',
-      lg: '1024px',
+      lg: '1050px',
       xl: '1280px',
       '2xl': '1536px',
     },
@@ -18,4 +19,3 @@ module.exports = {
     require('@tailwindcss/forms'),
   ],
 }
-

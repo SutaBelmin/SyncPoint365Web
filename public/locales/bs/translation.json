@@ -110,6 +110,7 @@
     "SEARCH_FIRST_LAST_NAME":"Pretraži po imenu ili prezimenu",
     "SELECT_STATUS":"Odaberi status",
     "STATUS":"Status",
-    "SEARCH_PLACEHOLDER":"Pretraga"
+    "SEARCH_PLACEHOLDER":"Pretraga",
+    "BACK":"Nazad"
     
 }

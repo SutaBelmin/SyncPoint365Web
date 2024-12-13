@@ -13,7 +13,7 @@ const LanguageSwitcher = () => {
   });
   
   const languages = [
-    { code: "en-US", label: t('ENGLISH'), flag: "US" },
+    { code: "enUS", label: t('ENGLISH'), flag: "US" },
     { code: "bs", label: t('BOSNIAN'), flag: "BA" },
   ];
   

@@ -110,5 +110,6 @@
     "SEARCH_FIRST_LAST_NAME":"Search by First or Last name",
     "SELECT_STATUS":"Select a Status",
     "STATUS":"Status", 
-    "SEARCH_PLACEHOLDER":"Search"
+    "SEARCH_PLACEHOLDER":"Search",
+    "BACK":"Back"
 }

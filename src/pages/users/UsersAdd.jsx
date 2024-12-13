@@ -7,19 +7,31 @@ import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { FaCalendarAlt } from "react-icons/fa";
+import { FaArrowLeft } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { format } from 'date-fns';
+import { registerLocale } from "react-datepicker";
+import { enUS, bs } from "date-fns/locale";
 import { citiesService, enumsService, usersService } from '../../services';
 
+
 export const UsersAdd = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
+
+   const localeMapping = {
+        en: enUS,
+        bs: bs
+    };
+
+    const currentLocale = localeMapping[i18n.language];;
+    registerLocale(i18n.language, currentLocale);
 
     const addUser = async (values) => {
         try {
@@ -125,8 +137,18 @@ export const UsersAdd = () => {
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <div className="w-full max-w-lg">
-                <h2 className="h1">{t('ADD_USER')}</h2>
+            <div className="w-full ">
+                <div className='pt-16 pb-8 flex items-center justify-between'>
+                    <h2 className='text-2xl font-bold'>{t('ADD_USER')}</h2>
+                    <button
+                        type='submit'
+                        className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center"
+                        onClick={() => navigate('/users')}
+                    >
+                         <FaArrowLeft className="mr-2" />
+                        {t('BACK')}
+                    </button>
+                </div>
                 <Formik
                     initialValues={{
                         firstName: '',
@@ -145,7 +167,7 @@ export const UsersAdd = () => {
                     onSubmit={addUser}
                 >
                     {({ setFieldValue, values }) => (
-                        <Form className="w-full">
+                        <Form className="max-w-lg">
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                     {t('FIRST_NAME')} <span className='text-red-500'>*</span>
@@ -198,6 +220,7 @@ export const UsersAdd = () => {
                                     yearDropdownItemNumber={100}
                                     scrollableYearDropdown
                                     onKeyDown={(e) => e.preventDefault()}
+                                    locale={i18n.language}
                                     autoComplete='off'
                                 />
                                 <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
@@ -301,7 +324,7 @@ export const UsersAdd = () => {
                                     onChange={async (e) => {
                                         setFieldValue('email', e.target.value);
                                     }}
-                                    autoComplete= 'off'
+                                    autoComplete='off'
                                 />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
                             </div>

@@ -79,7 +79,7 @@ export const UsersSearch = ({ fetchData }) => {
             onSubmit={handleSearch}
         >
             {({ setFieldValue, values }) => (
-                <Form className="flex flex-col gap-4 md:flex-row">
+                <Form className="grid gap-4 w-full lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
                     <Field
                         type="text"
                         name="searchQuery"
@@ -113,19 +113,20 @@ export const UsersSearch = ({ fetchData }) => {
                         isSearchable
                         className='input-select-border input-select-width'
                     />
-
-                    <button type="submit"
-                        className="btn-common h-10"
-                    >
-                        {t("SEARCH")}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => handleClear(setFieldValue)}
-                        className="btn-common h-10"
-                    >
-                        {t("CLEAR")}
-                    </button>
+                    <div className='flex gap-4'> 
+                        <button type="submit"
+                            className="btn-new h-10 w-full"
+                        >
+                            {t("SEARCH")}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => handleClear(setFieldValue)}
+                            className="btn-cancel h-10 w-full"
+                        >
+                            {t("CLEAR")}
+                        </button>
+                    </div>
 
                 </Form>
             )}

@@ -27,7 +27,7 @@ export const UsersList = observer(() => {
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
-    
+
     const fetchData = useCallback(async () => {
         try {
             const filter = { ...usersSearchStore.userFilter };
@@ -35,7 +35,7 @@ export const UsersList = observer(() => {
             const response = await usersService.getPagedUsersFilter(filter, signal);
 
             setData(response.data.items);
-            usersSearchStore.setTotalItemCount(response.data.totalItemCount);
+            usersSearchStore.setTotalItemCount(response.data.totalItemCount); 
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -45,8 +45,8 @@ export const UsersList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                page : usersSearchStore.page,
-                pageSize : usersSearchStore.pageSize
+                page: usersSearchStore.page,
+                pageSize: usersSearchStore.pageSize
             }),
             () => {
                 fetchData();
@@ -143,17 +143,19 @@ export const UsersList = observer(() => {
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('USERS')}</h1>
 
-            <div className="flex flex-col gap-4 md:flex-row">
-                <UsersSearch fetchData={fetchData}/>
+            <div className="flex flex-col gap-4 xs:flex-row">
+                <UsersSearch fetchData={fetchData} />
+            </div>
+
+            <div className="flex justify-end mt-4">
                 <button
                     type='button'
                     onClick={onAddUserClick}
-                    className="btn-common h-10 md:ml-auto"
+                    className="btn-common h-10"
                 >
                     {t('ADD_USER')}
                 </button>
             </div>
-
             <BaseModal />
 
             <div className="table max-w-full">
