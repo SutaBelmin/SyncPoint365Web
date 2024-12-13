@@ -145,9 +145,11 @@ export const AbsenceRequestsList = observer(() => {
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
-            <div className="flex flex-col gap-4 sm:flexrow">
+            <div className="flex flex-col gap-4 xs:flex-row">
                 <AbsenceRequestsSearch fetchData={fetchData} />
-                
+                </div>
+
+                <div className="flex justify-end mt-4">
                     <button
                         type="button"
                         className="btn-common h-10 ml-auto"
@@ -155,7 +157,7 @@ export const AbsenceRequestsList = observer(() => {
                     >
                         {t('NEW_REQUEST')}
                     </button>
-            </div>
+                    </div>
             <BaseModal />
 
             <div className="table max-w-full">

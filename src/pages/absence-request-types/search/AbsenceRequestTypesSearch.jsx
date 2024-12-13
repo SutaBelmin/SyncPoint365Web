@@ -1,9 +1,9 @@
 import React from 'react';
-import { Formik, Form, Field } from 'formik';
 import Select from 'react-select';
 import { useSearchParams } from 'react-router-dom';
-import absenceRequestTypesSearchStore from '../stores/AbsenceRequestTypesSearchStore';
 import { useTranslation } from 'react-i18next';
+import { Formik, Form, Field } from 'formik';
+import { absenceRequestTypesSearchStore}  from '../stores';
 
 const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -74,7 +74,7 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                     <button
                         type="button"
                         onClick={() => handleClear(setFieldValue)}
-                        className="btn-cancel"
+                        className="btn-cancel lg:w-[10rem] md:w-[10rem] sm:w-full sx:w-full"
                     >
                         {t("CLEAR")}
                     </button>

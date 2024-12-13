@@ -133,7 +133,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			onSubmit={handleSearch}
 		>
 			{({ setFieldValue, values }) => (
-				<Form className="grid gap-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-1 xs:grid-cols-1 ss:grid-cols-1">
+				<Form className="grid gap-4 w-full lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
 					<Select
 						name="absenceRequestTypeId"
 						id="absenceRequestTypeId"
@@ -164,7 +164,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						onChange={(option) => setFieldValue('absenceRequestStatusId', option && option.value)}
 						options={statuses}
 						placeholder={t('SELECT_STATUS')}
-						className="border-gray-300 input-select-border w-full min-w-[12rem] md:w-auto"
+						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
 						isClearable
 						isSearchable
 					/> 
@@ -181,7 +181,8 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						scrollableYearDropdown
-						className='input-search h-10 rounded-md border-gray-300'
+						enableTabLoop={false}
+						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
 					/>
 					<DatePicker
 						id='dateTo'
@@ -195,22 +196,23 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						placeholderText={t('DATE_TO')}
 						maxDate={maxDate}
 						autoComplete='off'
+						enableTabLoop={false}
 						scrollableYearDropdown
-						className='input-search h-10 rounded-md border-gray-300'
+						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
 					/>
-					<div className='flex gap-4 ml:auto'> 
-					<button
-						type="submit"
-						className="btn-new h-10"
-					>
-						{t('SEARCH')}
-					</button>
-					<button
-						type="button"
-						onClick={() => handleClear(setFieldValue)}
-						className="btn-common h-10"
-					>
-						{t("CLEAR")}
+					<div className='flex gap-4 '> 
+						<button
+							type="submit"
+							className="btn-new h-10"
+						>
+							{t('SEARCH')}
+						</button>
+						<button
+							type="button"
+							onClick={() => handleClear(setFieldValue)}
+							className="btn-cancel h-10"
+						>
+							{t("CLEAR")}
 					</button>
 					</div>
 				</Form>
