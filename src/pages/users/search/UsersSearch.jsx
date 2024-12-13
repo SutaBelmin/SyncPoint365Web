@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Formik, Form, Field } from "formik";
+import Select from "react-select";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
+import { Formik, Form, Field } from "formik";
 import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
-import Select from "react-select";
-import { toast } from 'react-toastify';
-import { useSearchParams } from "react-router-dom";
 
 export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
@@ -18,9 +18,9 @@ export const UsersSearch = ({ fetchData }) => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
-                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
+                label: role.label === 'SuperAdministrator' ? t('SuperAdministrator') :
+                    role.label === 'Administrator' ? t('Administrator') :
+                        role.label === 'Employee' ? t('Employee') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
@@ -37,7 +37,7 @@ export const UsersSearch = ({ fetchData }) => {
             { value: 'inactive', label: t('INACTIVE') },
         ]);
 
-    }, [fetchRoles, t, searchParams]);
+    }, [fetchRoles, t]);
 
     const handleSearch = (values) => {
         usersSearchStore.setQuery(values.searchQuery);
@@ -85,7 +85,7 @@ export const UsersSearch = ({ fetchData }) => {
                         name="searchQuery"
                         placeholder={t('SEARCH_PLACEHOLDER')}
                         autoComplete="off"
-                        className="input-search h-10 rounded-md border-gray-300 w-full"
+                        className="input-search h-10 rounded-md border-gray-300 input-select-width"
                     />
 
                     <Select
@@ -97,7 +97,7 @@ export const UsersSearch = ({ fetchData }) => {
                         placeholder={t('SELECT_ROLE')}
                         isClearable
                         isSearchable
-                        className='input-select-border w-full'
+                        className='input-select-border input-select-width'
                     />
 
                     <Select
@@ -105,13 +105,13 @@ export const UsersSearch = ({ fetchData }) => {
                         name="isActive"
                         value={values.isActive}
                         onChange={(selectedOption) => {
-                            setFieldValue('isActive', selectedOption);
+                            setFieldValue('isActive', selectedOption || isActiveOptions[0]);
                         }}
                         options={isActiveOptions}
                         placeholder={t('SELECT_STATUS')}
                         isClearable
                         isSearchable
-                        className='input-select-border w-full'
+                        className='input-select-border input-select-width'
                     />
 
                     <button type="submit"

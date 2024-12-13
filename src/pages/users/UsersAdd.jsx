@@ -1,42 +1,25 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Formik, Field, Form, ErrorMessage } from "formik";
 import { toast } from 'react-toastify';
-import { citiesService, enumsService, usersService } from '../../services';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import * as Yup from "yup";
 import Select from "react-select";
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale } from "react-datepicker";
-import { enUS, bs } from "date-fns/locale";
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { FaCalendarAlt } from "react-icons/fa";
+import DatePicker from 'react-datepicker';
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { format } from 'date-fns';
+import { citiesService, enumsService, usersService } from '../../services';
 
 export const UsersAdd = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
-
-    const localeMapping = {
-        en: enUS,
-        bs: bs
-    };
-
-    // const currentLanguage = i18n.language || 'en';
-    // const currentLocale = localeMapping[currentLanguage];
-
-    const currentLanguage = i18n.language.split('-')[0];
-    const normalizedLanguage = currentLanguage === "bs" ? "ba" : currentLanguage;
-    const currentLocale = localeMapping[normalizedLanguage] || enUS;
-
-    registerLocale(currentLanguage, currentLocale);
-
 
     const addUser = async (values) => {
         try {
@@ -111,9 +94,9 @@ export const UsersAdd = () => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
-                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
+                label: role.label === 'SuperAdministrator' ? t('SuperAdministrator') :
+                    role.label === 'Administrator' ? t('Administrator') :
+                        role.label === 'Employee' ? t('Employee') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
@@ -215,7 +198,7 @@ export const UsersAdd = () => {
                                     yearDropdownItemNumber={100}
                                     scrollableYearDropdown
                                     onKeyDown={(e) => e.preventDefault()}
-                                    locale={currentLanguage}
+                                    autoComplete='off'
                                 />
                                 <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                             </div>
@@ -318,6 +301,7 @@ export const UsersAdd = () => {
                                     onChange={async (e) => {
                                         setFieldValue('email', e.target.value);
                                     }}
+                                    autoComplete= 'off'
                                 />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
                             </div>

@@ -1,23 +1,23 @@
 import React, { useCallback } from 'react';
-import { BaseModal } from '../../components/modal';
-import { useEffect, useState } from "react";
-import { usersService } from '../../services';
-import DataTable from 'react-data-table-component';
-import './UsersList.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import DataTable from 'react-data-table-component';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { BaseModal } from '../../components/modal';
+import { observer } from "mobx-react";
+import { reaction } from "mobx";
+import { useModal } from '../../context';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
-import { useNavigate } from 'react-router-dom';
-import { useModal } from '../../context';
 import { UsersSearch } from './search/UsersSearch';
-import usersSearchStore from './stores/UsersSearchStore';
-import { observer } from "mobx-react";
-import { reaction } from "mobx";
+import { usersSearchStore } from './stores';
+import { usersService } from '../../services';
+import './UsersList.css';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -91,7 +91,7 @@ export const UsersList = observer(() => {
         },
         {
             name: t('ROLE'),
-            selector: row => t(formatRoleKey(row.role)),
+            selector: row => t(row.role),
             sortable: true,
         },
         {
@@ -117,12 +117,6 @@ export const UsersList = observer(() => {
             ),
         },
     ];
-
-    const formatRoleKey = (role) => {
-        return role
-            .replace(/([a-z])([A-Z])/g, '$1_$2')
-            .toUpperCase();
-    }
 
     const statusChange = (userId, isActive) => {
         openModal(

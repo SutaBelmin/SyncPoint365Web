@@ -47,6 +47,10 @@
     box-shadow: none;
 }
 
+.input-select-width {
+  min-width: 250px !important;
+}
+
 .no-data-message {
   text-align: center;
   font-size: 15px;

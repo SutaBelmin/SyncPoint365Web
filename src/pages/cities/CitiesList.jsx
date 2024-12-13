@@ -1,20 +1,20 @@
+import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
+import DataTable from "react-data-table-component";
+import { useModal } from "../../context/ModalProvider";
+import { NoDataMessage } from "../../components/common-ui";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
+import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {CitiesSearch} from "./search";
 import { observer } from "mobx-react";
 import { reaction } from "mobx";
-import { useTranslation } from 'react-i18next';
-import DataTable from "react-data-table-component";
-import React, { useEffect, useState, useCallback } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { citiesSearchStore } from './stores';
 import { citiesService } from "../../services";
 import { CitiesAdd, CitiesEdit } from "../cities";
-import { useModal } from "../../context/ModalProvider";
-import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
-import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 
 export const CitiesList = observer(() => {
     const { t } = useTranslation();
