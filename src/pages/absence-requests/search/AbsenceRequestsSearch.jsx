@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Formik, Form } from 'formik';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { absenceRequestTypesService, userService, enumsService } from '../../../services';
-import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import { toast } from "react-toastify";
+import { Formik, Form } from 'formik';
+import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { format } from 'date-fns';
 import { useSearchParams } from "react-router-dom";
 import { absenceRequestsSearchStore } from '../stores';
-import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
+import { absenceRequestTypesService, userService, enumsService } from '../../../services';
 
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
@@ -58,14 +58,15 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			const statusOptions = response.data.map(requestStatus => ({
 				value: requestStatus.id,
 				label: requestStatus.label === 'Approved' ? t('APPROVED') :
-				requestStatus.label === 'Pending' ? t('PENDING') :
-				requestStatus.label === 'Rejected' ? t('REJECTED') : requestStatus.label
+					   requestStatus.label === 'Pending' ? t('PENDING') :
+					   requestStatus.label === 'Rejected' ? t('REJECTED') : requestStatus.label
 			}));
 			setAbsenceRequestsStatuses(statusOptions);
 		} catch (error) {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
-	}, [t])
+	}, [t]);
+	
 
 
 	useEffect(() => {
@@ -117,7 +118,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
             if (statusIdFromParams) {
                 const parsedStatusId = parseInt(statusIdFromParams);
                 absenceRequestsSearchStore.setAbsenceRequestStatusId(parsedStatusId);
-                return statusIdFromParams;
+                return parsedStatusId;
             }
             return absenceRequestsSearchStore.absenceRequestStatusId;
         })(),
@@ -132,16 +133,15 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			onSubmit={handleSearch}
 		>
 			{({ setFieldValue, values }) => (
-				<Form className="flex flex-col gap-4 max-w-full md:flex-row">
+				<Form className="grid gap-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-1 xs:grid-cols-1 ss:grid-cols-1">
 					<Select
 						name="absenceRequestTypeId"
 						id="absenceRequestTypeId"
 						placeholder={t('SELECT_TYPE')}
 						options={absenceRequestTypes}
-						//value={absenceRequestTypes.find((option) => option.value === values.absenceRequestTypeId) || null}
 						value={values.absenceRequestTypeId ? { value: values.absenceRequestTypeId, label: absenceRequestTypes.find(a => a.value === values.absenceRequestTypeId)?.label } : null}
 						onChange={(option) => setFieldValue('absenceRequestTypeId', option ? option.value : null)}
-						className="border-gray-300 input-select-border w-full min-w-[10rem]"
+						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
 						isClearable
 						isSearchable
 					/>
@@ -149,10 +149,9 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						name="userId"
 						placeholder={t('SELECT_USER')}
 						options={users}
-						//value={users.find((option) => option.value === values.userId) || null}
-						value={values.userId ? { value: values.userId, label: users.find(u => u.value === values.userId)?.label } : null}
+						value={users.find((option) => option.value === values.userId) || null}
 						onChange={(option) => setFieldValue("userId", option ? option.value : null)}
-						className="border-gray-300 input-select-border w-full min-w-[12rem]"
+						className="border-gray-300 input-select-border w-full min-w-[12rem] md:w-auto"
 						isClearable
 						isSearchable
 
@@ -162,11 +161,10 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						id="absenceRequestStatusId"
 						name="absenceRequestStatusId"
 						value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatusId) || null}
-						//value={values.absenceRequestStatusId ? { value: values.absenceRequestStatusId, label: statuses.find(s => s.value === values.absenceRequestStatusId)?.label } : null}
 						onChange={(option) => setFieldValue('absenceRequestStatusId', option && option.value)}
 						options={statuses}
 						placeholder={t('SELECT_STATUS')}
-						className="border-gray-300 input-select-border w-full min-w-[12rem]"
+						className="border-gray-300 input-select-border w-full min-w-[12rem] md:w-auto"
 						isClearable
 						isSearchable
 					/> 
@@ -175,33 +173,32 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						name="dateFrom"
 						selected={values.dateFrom ? new Date(values.dateFrom) : null}
 						onChange={(date) => {
-							const formattedDate = format(date, 'yyyy/MM/dd');
+							const formattedDate = format(date, 'yyyy-MM-dd');
 							setFieldValue('dateFrom', formattedDate);
 						}}
 						dateFormat={t('DATE_FORMAT')}
 						placeholderText={t('DATE_FROM')}
 						maxDate={maxDate}
 						autoComplete='off'
-						yearDropdownItemNumber={100}
 						scrollableYearDropdown
-						className='input-search h-10 rounded-md border-gray-300 min-w-[3rem]'
+						className='input-search h-10 rounded-md border-gray-300'
 					/>
 					<DatePicker
 						id='dateTo'
 						name="dateTo"
 						selected={values.dateTo ? new Date(values.dateTo) : null}
 						onChange={(date) => {
-							const formattedDate = format(date, 'yyyy/MM/dd');
+							const formattedDate = format(date, 'yyyy-MM-dd');
 							setFieldValue('dateTo', formattedDate);
 						}}
 						dateFormat={t('DATE_FORMAT')}
 						placeholderText={t('DATE_TO')}
 						maxDate={maxDate}
 						autoComplete='off'
-						yearDropdownItemNumber={100}
 						scrollableYearDropdown
-						className='input-search h-10 rounded-md border-gray-300 min-w-[3rem]'
+						className='input-search h-10 rounded-md border-gray-300'
 					/>
+					<div className='flex gap-4 ml:auto'> 
 					<button
 						type="submit"
 						className="btn-new h-10"
@@ -215,6 +212,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 					>
 						{t("CLEAR")}
 					</button>
+					</div>
 				</Form>
 			)}
 		</Formik >

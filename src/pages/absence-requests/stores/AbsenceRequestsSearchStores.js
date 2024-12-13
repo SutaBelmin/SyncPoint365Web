@@ -123,7 +123,9 @@ class AbsenceRequestsSearchStore {
             dateTo: this.dateTo, 
             page: this.page, 
             pageSize: this.pageSize, 
+
         };
+
     }
 }
 

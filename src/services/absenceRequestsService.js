@@ -8,6 +8,7 @@ class AbsenceRequestsService extends BaseService {
             {
                 params: {
                     absenceRequestTypeId: filter.absenceRequestTypeId,
+                    absenceRequestStatusId: filter.absenceRequestStatusId,
                     userId: filter.userId, 
                     dateFrom: filter.dateFrom,
                     dateTo: filter.dateTo,

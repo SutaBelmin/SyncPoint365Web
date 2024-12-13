@@ -10,14 +10,14 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const { t } = useTranslation();
 
     const dropdownOptions = [
-        { value: 'All' , label: t('ALL') },
+        { value: 'all' , label: t('ALL') },
         { value: 'active', label: t('ACTIVE') },
         { value: 'inactive', label: t('INACTIVE') }
     ];
 
     const handleSubmit = (values) => {
         absenceRequestTypesSearchStore.setQuery(values.searchQuery);
-        absenceRequestTypesSearchStore.setIsActive(values.status.value === 'All' || '' ? null : (values.status.value === 'active'));
+        absenceRequestTypesSearchStore.setIsActive(values.status.value === 'all' ? null : (values.status.value === 'active'));
         const queryParams = absenceRequestTypesSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);
 
@@ -48,7 +48,7 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                         name="searchQuery"
                         type="text"
                         placeholder={t('SEARCH_ABSENCE_REQUEST_TYPE')}
-                        className="input-search h-10 rounded-md border-gray-300 w-full"
+                        className="input-search h-10 rounded-md border-gray-300 w-full md:w-[13rem]"
                         autoComplete="off"
                         value={values.searchQuery}
                         onChange={(e) => {
@@ -61,10 +61,11 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                         placeholder={t("SELECT")}
                         options={dropdownOptions}
                         isSearchable={false}
-                        className="h-10 border-gray-300 input-select-border w-full"
+                        isClearable
+                        className="h-10 border-gray-300 input-select-border w-full md:min-w-[8rem] "
                         value={values.status}
                         onChange={(selectedOption) => {
-                            setFieldValue('status', selectedOption);
+                            setFieldValue('status', selectedOption || dropdownOptions[0]);
                         }}
                     />
                     <button type="submit" className="btn-common h-10">

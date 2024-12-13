@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useCallback } from "react";
 import DataTable from "react-data-table-component";
-import { absenceRequestsService } from "../../services"
-import { absenceRequestsSearchStore } from "./stores"
-import { AbsenceRequestsAdd, AbsenceRequestsEdit } from "../absence-requests";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useModal } from "../../context";
-import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useRequestAbort } from "../../components/hooks";
+import { useModal } from "../../context";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
 import { AbsenceRequestsSearch } from "./search";
-import { useRequestAbort } from "../../components/hooks";
+import { absenceRequestsService } from "../../services"
+import { absenceRequestsSearchStore } from "./stores"
+import { AbsenceRequestsAdd, AbsenceRequestsEdit } from "../absence-requests";
 import "./AbsenceRequestsList.css";
 
 export const AbsenceRequestsList = observer(() => {
@@ -26,7 +26,7 @@ export const AbsenceRequestsList = observer(() => {
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = {...absenceRequestsSearchStore.absenceRequestFilter};
+            const filter = { ...absenceRequestsSearchStore.absenceRequestFilter };
 
             const response = await absenceRequestsService.getPagedList(filter, signal);
 
@@ -43,8 +43,8 @@ export const AbsenceRequestsList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                page : absenceRequestsSearchStore.page,
-                pageSize : absenceRequestsSearchStore.pageSize
+                page: absenceRequestsSearchStore.page,
+                pageSize: absenceRequestsSearchStore.pageSize
             }),
             () => {
                 fetchData();
@@ -79,23 +79,18 @@ export const AbsenceRequestsList = observer(() => {
             selector: (row) => row.dateReturn ? format(new Date(row.dateReturn), t('DATE_FORMAT')) : '',
             sortable: true,
         },
-        // {
-        //     name: t('STATUS'),
-        //     selector: row => {
-        //         switch (row.absenceRequestStatus) {
-        //             case 'Approved':
-        //                 return t('APPROVED');
-        //             case 'Rejected':
-        //                 return t('REJECTED');
-        //             default:
-        //                 return t('PENDING');
-        //         }
-        //     },
-        //     sortable: true, 
-        // },
         {
             name: t('STATUS'),
-            selector: row => t(formatRoleKey(row.absenceRequestStatus)),
+            selector: row => {
+                switch (row.absenceRequestStatus) {
+                    case 'Approved':
+                        return t('APPROVED');
+                    case 'Rejected':
+                        return t('REJECTED');
+                    default:
+                        return t('PENDING');
+                }
+            },
             sortable: true,
         },
         {
@@ -124,12 +119,6 @@ export const AbsenceRequestsList = observer(() => {
         }
     ];
 
-    const formatRoleKey = (absenceRequestStatus) => {
-        return absenceRequestStatus
-            .replace(/([a-z])([A-Z])/g, '$1_$2')
-            .toUpperCase();
-    }
-
     const addNewRequestClick = () => {
         openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
     }
@@ -156,15 +145,16 @@ export const AbsenceRequestsList = observer(() => {
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
-            <div className="flex flex-col gap-4 max-w-full md:flex-row">
+            <div className="flex flex-col gap-4 sm:flexrow">
                 <AbsenceRequestsSearch fetchData={fetchData} />
-                <button
-                    type="button"
-                    className=" btn-common h-10 md:ml-auto"
-                    onClick={addNewRequestClick}
-                >
-                    {t('NEW_REQUEST')}
-                </button>
+                
+                    <button
+                        type="button"
+                        className="btn-common h-10 ml-auto"
+                        onClick={addNewRequestClick}
+                    >
+                        {t('NEW_REQUEST')}
+                    </button>
             </div>
             <BaseModal />
 
