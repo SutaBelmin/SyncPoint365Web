@@ -125,6 +125,6 @@
     "REJECTED": "Rejected",
     "PENDING": "Pending",
     "UPDATE_USER":"Update user",
-    "USER_PREVIEW":"Preview of user.",
+    "USER_PREVIEW":"Preview of user",
     "CLOSE":"Close"
 }

@@ -329,10 +329,10 @@ export const UsersEdit = () => {
                            <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
                        </div>
                    
-                       <div className="mb-4">
+                       <div className="mb-4 flex">
                            <button
                                type="submit"
-                               className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md"
+                               className="btn-save ml-auto"
                            >
                                {t('SAVE')}
                            </button>

@@ -125,6 +125,6 @@
     "REJECTED": "Odbijeno",
     "PENDING": "Obrada",
     "UPDATE_USER":"Uredi korisnika",
-    "USER_PREVIEW":"Pregled informacija o korisniku.",
+    "USER_PREVIEW":"Pregled informacija o korisniku",
     "CLOSE":"Zatvori"
 }
