@@ -13,13 +13,16 @@ import { PaginationOptions } from "../../components/common-ui/PaginationOptions"
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faCircleXmark, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faCircleInfo, faCircleXmark, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
 import './UsersList.css';
 import { roleConstant } from '../../constants';
+import { useNavigate } from 'react-router-dom';
+import { useModal } from '../../context';
+import { UsersPreview } from './UsersPreview';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -43,6 +46,12 @@ export const UsersList = observer(() => {
         }
 
     }, [signal, t]);
+
+    const onPreviewUserClick = (user) => {
+        openModal(
+            <UsersPreview user={user} closeModal={closeModal}/>
+        );
+    };
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -124,6 +133,13 @@ export const UsersList = observer(() => {
                         ) : (
                             <FontAwesomeIcon icon={faCircleXmark} />
                         )}
+                    </button>
+                    <button
+                    type="button"
+                    onClick={() => onPreviewUserClick(row)}
+                    className="text-blue-500 hover:underline p-2"
+                    >
+                        <FontAwesomeIcon icon={faCircleInfo}/>
                     </button>
                 </div>
             ),

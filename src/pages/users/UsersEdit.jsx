@@ -16,7 +16,7 @@ import { registerLocale } from "react-datepicker";
 import { enUS, bs } from "date-fns/locale";
 
 
-export const UsersUpdate = () => {
+export const UsersEdit = () => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const { userId } = useParams(); 
@@ -24,7 +24,6 @@ export const UsersUpdate = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
     const [user, setUser] = useState(null);
-    const [userGender, setUserGender] = useState(null);
     
     const localeMapping = {
         en: enUS,
@@ -89,7 +88,6 @@ export const UsersUpdate = () => {
         try {
             const response = await userService.getById(userId);
             setUser(response.data);
-            setUserGender(response.data.gender);
         } catch (error) {
             toast.error(t('ERROR_LOADING_USER'));
         }
@@ -113,28 +111,40 @@ export const UsersUpdate = () => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
-                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
+                label: role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
 
         }
-    }, [t]);
+    }, []);
+
+    const rolesOptionsTranslated = roles.map(role => ({
+        ...role,
+        label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
+               role.label === 'Administrator' ? t('ADMINISTRATOR') :
+               role.label === 'Employee' ? t('EMPLOYEE') : role.label
+    }));
 
     const fetchGenders = useCallback(async () => {
         try {
             const response = await enumsService.getGenders();
             const genderOptions = response.data.map(gender => ({
                 value: gender.id,
-                label: gender.label === 'Male' ? t('MALE') : t('FEMALE')
+                label: gender.label 
             }));            
             setGenders(genderOptions);
         } catch (error) {
 
         }
-    }, [t]);
+    }, []);
+    
+    const genderOptionsTranslated = genders.map(gender => ({
+        ...gender,
+        label: gender.label === 'Male' ? t('MALE') :
+               gender.label === 'Female' ? t('FEMALE') :
+               gender.label 
+    }));
 
     useEffect(() => {
         fetchUser();
@@ -143,7 +153,7 @@ export const UsersUpdate = () => {
         fetchGenders();
     }, [fetchGenders, fetchRoles, fetchUser]);
 
-    if (!user || !genders.length) return <div>Loading...</div>;
+    if (!user) return <div>Loading...</div>;
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
@@ -163,12 +173,10 @@ export const UsersUpdate = () => {
                     }}
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
-                    enableReinitialize={true}
                 >
                     {({ setFieldValue, values }) => (                        
                        <Form className="w-full">
 
-                       {/* First Name */}
                        <div className="mb-4">
                            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                                {t('FIRST_NAME')} <span className='text-red-500'>*</span>
@@ -183,7 +191,6 @@ export const UsersUpdate = () => {
                            <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
                        </div>
                    
-                       {/* Last Name */}
                        <div className="mb-4">
                            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
                                {t('LAST_NAME')} <span className='text-red-500'>*</span>
@@ -198,7 +205,6 @@ export const UsersUpdate = () => {
                            <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
                        </div>
                     
-                       {/* Email */}
                        <div className="mb-4">
                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                {t('EMAIL')} <span className='text-red-500'>*</span>
@@ -213,7 +219,6 @@ export const UsersUpdate = () => {
                            <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
                        </div>
                    
-                       {/* Gender */}
                        <div className="mb-4">
                            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
                                {t('GENDER')} <span className='text-red-500'>*</span>
@@ -222,15 +227,16 @@ export const UsersUpdate = () => {
                                id="gender"
                                name="gender"
                                onChange={(option) => setFieldValue('gender', option ? option.value : '')}
-                               options={genders}
+                               options={genderOptionsTranslated}
                                placeholder={t('SELECT_GENDER')}
-                               value={genders.find(g=>g.value === userGender)} 
+                               value={genderOptionsTranslated.find((gender) => gender.value === values.gender)} 
+                               getOptionLabel={option => option.label}
+                               getOptionValue={option => option.value}
                                className='input-select-border mt-1'
                            />
                            <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
                        </div>
 
-                        {/* Role */}
                         <div className="mb-4">
                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                                {t('ROLE')} <span className='text-red-500'>*</span>
@@ -239,15 +245,16 @@ export const UsersUpdate = () => {
                                id="role"
                                name="role"
                                onChange={(option) => setFieldValue('role', option ? option.value : '')}
-                               options={roles}
-                               value={roles.find(role => role.values === values.role)} 
+                               options={rolesOptionsTranslated}
+                               value={rolesOptionsTranslated.find((role) => role.value === values.role)} 
+                               getOptionLabel={option => option.label}
+                               getOptionValue={option => option.value}
                                placeholder={t('SELECT_ROLE')}
                                className='input-select-border mt-1'
                            />
                            <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
                        </div>
                    
-                       {/* Birth Date */}
                        <div className="mb-4">
                            <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
                                {t('BIRTH_DATE')} <span className='text-red-500'>*</span>
@@ -272,7 +279,6 @@ export const UsersUpdate = () => {
                            <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                        </div>
                        
-                       {/* Phone */}
                        <div className="mb-4">
                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                                {t('PHONE')} <span className='text-red-500'>*</span>
@@ -284,13 +290,15 @@ export const UsersUpdate = () => {
                                        {...field}
                                        onChange={(value) => setFieldValue('phone', value)}
                                        inputClass="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                       value={values.phone}
+                                       enableSearch
+                                       country={'ba'}
                                    />
                                )}
                            />
                            <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
                        </div>
                    
-                       {/* Address */}
                        <div className="mb-4">
                            <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                                {t('ADDRESS')} <span className='text-red-500'>*</span>
@@ -305,7 +313,6 @@ export const UsersUpdate = () => {
                            <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
                        </div>
                    
-                       {/* City */}
                        <div className="mb-4">
                            <label htmlFor="cityId" className="block text-sm font-medium text-gray-700">
                                {t('CITY')} <span className='text-red-500'>*</span>
@@ -317,14 +324,11 @@ export const UsersUpdate = () => {
                                options={cities}
                                value={cities.find(city => city.value === values.cityId)} 
                                placeholder={t('SELECT_CITY')}
-                               isClearable
-                               isSearchable
                                className='input-select-border mt-1'
                            />
                            <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
                        </div>
                    
-                       {/* Submit button */}
                        <div className="mb-4">
                            <button
                                type="submit"

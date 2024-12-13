@@ -1,3 +1,4 @@
 export { UsersAdd } from './UsersAdd';
 export { UsersList } from './UsersList';
-export {UsersUpdate} from './UsersUpdate'
+export {UsersEdit} from './UsersEdit'
+export {UsersPreview} from './UsersPreview'

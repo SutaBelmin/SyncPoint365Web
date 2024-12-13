@@ -124,5 +124,7 @@
     "APPROVED": "Odobreno",
     "REJECTED": "Odbijeno",
     "PENDING": "Obrada",
-    "UPDATE_USER":"Uredi korisnika"
+    "UPDATE_USER":"Uredi korisnika",
+    "USER_PREVIEW":"Pregled informacija o korisniku.",
+    "CLOSE":"Zatvori"
 }
