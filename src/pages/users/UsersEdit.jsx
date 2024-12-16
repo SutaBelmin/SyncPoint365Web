@@ -89,15 +89,15 @@ export const UsersEdit = () => {
 
     const rolesOptions = roles.map(role => ({
         ...role,
-        label: role.label === roleConstant.SUPER_ADMINISTRATOR ? t('SUPER_ADMINISTRATOR') :
-               role.label === roleConstant.ADMINISTRATOR ? t('ADMINISTRATOR') :
-               role.label === roleConstant.EMPLOYEE ? t('EMPLOYEE') : role.label
+        label: role.label === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
+               role.label === roleConstant.administrator ? t('ADMINISTRATOR') :
+               role.label === roleConstant.employee ? t('EMPLOYEE') : role.label
     }));
 
     const genderOptions = genders.map(gender => ({
         ...gender,
-        label: gender.label === genderConstant.MALE ? t('MALE') :
-               gender.label === genderConstant.FEMALE ? t('FEMALE') :
+        label: gender.label === genderConstant.male ? t('MALE') :
+               gender.label === genderConstant.female ? t('FEMALE') :
                gender.label 
     }));
 
