@@ -73,6 +73,16 @@ class UsersService extends BaseService {
         const response = await this.api.put(`/users`, userData);
         return response;
     }
+    
+    async passwordChange(id, password){
+        const response = await this.api.post('users/password-change', {
+            params: {
+                id: id,
+                password: password
+            }
+        });
+        return response.data;
+    }
 }
 
 const usersService = new UsersService();

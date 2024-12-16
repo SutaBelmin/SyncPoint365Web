@@ -135,6 +135,9 @@
     "ACCOUNT_INACTIVE":"Profil neaktivan!",
     "CONTACT_INFORMATION":"Kontakt",
     "PERSONAL_INFORMATION":"Lični podaci",
-    "CHANGE_PASSWORD": "Promijeni lozinku"
-    
+    "CHANGE_PASSWORD": "Promijeni lozinku",
+    "USER_ID": "ID korisnika",
+    "NEW_PASSWORD": "Nova lozinka",
+    "REPEAT_PASSWORD": "Ponovi lozinku",
+    "USER_ID_REQUIRED": "ID korisnika obavezan."
 }

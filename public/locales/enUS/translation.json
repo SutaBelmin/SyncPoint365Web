@@ -135,5 +135,9 @@
     "ACCOUNT_INACTIVE":"Account inactive!",
     "CONTACT_INFORMATION":"Contact",
     "PERSONAL_INFORMATION":"Personal information",
-    "CHANGE_PASSWORD": "Change Password"
+    "CHANGE_PASSWORD": "Change Password",
+    "USER_ID": "User ID",
+    "NEW_PASSWORD": "New Password",
+    "REPEAT_PASSWORD": "Repeat the Password",
+    "USER_ID_REQUIRED": "User ID is required."
 }
