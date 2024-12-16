@@ -7,19 +7,19 @@ export const localeConstant = {
 }
 
 export const roleConstant = {
-    SUPER_ADMINISTRATOR: 'SuperAdministrator',
-    ADMINISTRATOR: 'Administrator',
-    EMPLOYEE: 'Employee'
+    superAdministrator: 'SuperAdministrator',
+    administrator: 'Administrator',
+    employee: 'Employee'
 }
 
 
-export const isActiveConstant = {
-    ALL: 'all',
-    ACTIVE: 'active',
-    INACTIVE: 'inactive'
+export const userStatusConstant = {
+    all: 'all',
+    active: 'active',
+    inactive: 'inactive'
 }
 
 export const genderConstant = {
-    MALE : 'Male',
-    FEMALE : 'Female'
+    male : 'Male',
+    female : 'Female'
 }

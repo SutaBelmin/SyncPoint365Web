@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { Formik, Form, Field } from "formik";
 import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
-import { isActiveConstant, roleConstant } from '../../../constants';
+import { userStatusConstant, roleConstant } from '../../../constants';
 
 export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
@@ -19,9 +19,9 @@ export const UsersSearch = ({ fetchData }) => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === roleConstant.SUPER_ADMINISTRATOR ? t('SUPER_ADMINISTRATOR') :
-                    role.label === roleConstant.ADMINISTRATOR ? t('ADMINISTRATOR') :
-                        role.label === roleConstant.EMPLOYEE ? t('EMPLOYEE') : role.label
+                label: role.label === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
+                    role.label === roleConstant.administrator ? t('ADMINISTRATOR') :
+                        role.label === roleConstant.employee ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
@@ -32,15 +32,10 @@ export const UsersSearch = ({ fetchData }) => {
     useEffect(() => {
         fetchRoles();
 
-        // setIsActiveOptions([
-        //     { value: 'All', label: t('ALL') },
-        //     { value: 'active', label: t('ACTIVE') },
-        //     { value: 'inactive', label: t('INACTIVE') },
-        // ]);
         setIsActiveOptions([
-            { value: isActiveConstant.ALL, label: t('ALL') },
-            { value: isActiveConstant.ACTIVE, label: t('ACTIVE') },
-            { value: isActiveConstant.INACTIVE, label: t('INACTIVE') },
+            { value: userStatusConstant.all, label: t('ALL') },
+            { value: userStatusConstant.active, label: t('ACTIVE') },
+            { value: userStatusConstant.inactive, label: t('INACTIVE') },
         ]);
 
     }, [fetchRoles, t]);
@@ -48,7 +43,7 @@ export const UsersSearch = ({ fetchData }) => {
     const handleSearch = (values) => {
         usersSearchStore.setQuery(values.searchQuery);
         usersSearchStore.setRoleId(values.roleId);
-        usersSearchStore.setIsActive(values.isActive.value === isActiveConstant.ALL ? null : (values.isActive.value === isActiveConstant.ACTIVE));
+        usersSearchStore.setIsActive(values.isActive.value === userStatusConstant.all ? null : (values.isActive.value === userStatusConstant.active));
 
         const queryParams = usersSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);

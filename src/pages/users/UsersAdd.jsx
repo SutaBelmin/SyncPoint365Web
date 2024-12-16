@@ -99,9 +99,9 @@ export const UsersAdd = () => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === roleConstant.SUPER_ADMINISTRATOR ? t('SUPER_ADMINISTRATOR') :
-                    role.label === roleConstant.ADMINISTRATOR ? t('ADMINISTRATOR') :
-                        role.label === roleConstant.EMPLOYEE ? t('EMPLOYEE') : role.label
+                label: role.label === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
+                    role.label === roleConstant.administrator ? t('ADMINISTRATOR') :
+                        role.label === roleConstant.employee ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
@@ -114,7 +114,7 @@ export const UsersAdd = () => {
             const response = await enumsService.getGenders();
             const genderOptions = response.data.map(gender => ({
                 value: gender.id,
-                label: gender.label === genderConstant.MALE ? t('MALE') : t('FEMALE')
+                label: gender.label === genderConstant.male ? t('MALE') : t('FEMALE')
             }));
             setGenders(genderOptions);
         } catch (error) {
