@@ -4,7 +4,6 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from 'react-i18next';
 import { registerLocale } from "react-datepicker";
-import { enUS, bs } from "date-fns/locale";
 import { toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
 import { Formik, Form } from 'formik';
@@ -12,6 +11,7 @@ import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { format } from 'date-fns';
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, userService, enumsService } from '../../../services';
+import { localeConstant, absenceRequestStatuses } from '../../../constants';
 
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
@@ -25,15 +25,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
 
-	const localeMapping = {
-        en: enUS,
-        bs: bs
-    };
-	
-    const currentLanguage = i18n.language.split('-')[0];
-    const normalizedLanguage = currentLanguage === "bs" ? "bs" : currentLanguage;
-    const currentLocale = localeMapping[normalizedLanguage] || enUS;
-    registerLocale(normalizedLanguage, currentLocale);
+	registerLocale(i18n.language, localeConstant[i18n.language]);
 
 
 	const fetchUsers = useCallback(async () => {
@@ -52,15 +44,14 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 
 	const fetchAbsenceRequestTypes = useCallback(async () => {
 		try {
-			const response = await absenceRequestTypesService.getList(signal);
-			const activeAbsenceTypes = response.data.filter(type => type.isActive === true);
-			const typesOptions = activeAbsenceTypes.map(type => ({
+			const response = await absenceRequestTypesService.getList(true, signal);
+			const typesOptions = response.data.map(type => ({
 				value: type.id,
 				label: type.name
 			}));
 			setAbsenceRequestTypes(typesOptions);
 		} catch (error) {
-			toast.error(t('ERROR_CONTACT_ADMIN')); 
+			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [t, signal])
 
@@ -69,41 +60,32 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			const response = await enumsService.getAbsenceRequestsStatus();
 			const statusOptions = response.data.map(requestStatus => ({
 				value: requestStatus.id,
-				label: requestStatus.label === 'Approved' ? t('APPROVED') :
-					   requestStatus.label === 'Pending' ? t('PENDING') :
-					   requestStatus.label === 'Rejected' ? t('REJECTED') : requestStatus.label
+				label: requestStatus.label === absenceRequestStatuses.APPROVED ? t('APPROVED') :
+					requestStatus.label === absenceRequestStatuses.PENDING ? t('PENDING') :
+						requestStatus.label === absenceRequestStatuses.REJECTED ? t('REJECTED') :
+							requestStatus.label
 			}));
 			setAbsenceRequestsStatuses(statusOptions);
 		} catch (error) {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [t]);
-	
+
 
 
 	useEffect(() => {
 		fetchUsers();
 		fetchAbsenceRequestTypes();
 		fetchAbsenceRequestStatus();
-		absenceRequestsSearchStore.initializeQueryParams(searchParams);
-
-		const typeFromParams = searchParams.get("absenceRequestTypeId");
-		if (typeFromParams)
-			absenceRequestsSearchStore.setAbsenceTypeId(parseInt(typeFromParams));
-
-		const userFromParams = searchParams.get("userId");
-		if (userFromParams)
-			absenceRequestsSearchStore.setUserId(parseInt(userFromParams));
-
 	}, [searchParams, fetchAbsenceRequestTypes, fetchUsers, fetchAbsenceRequestStatus]);
 
 
 	const handleSearch = (values) => {
-		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId ? values.absenceRequestTypeId : null);
-		absenceRequestsSearchStore.setUserId(values.userId ? values.userId : null);
+		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
+		absenceRequestsSearchStore.setUserId(values.userId);
 		absenceRequestsSearchStore.setAbsenceRequestStatusId(values.absenceRequestStatusId);
-		absenceRequestsSearchStore.setDateFrom(values.dateFrom ? values.dateFrom : null);
-		absenceRequestsSearchStore.setDateTo(values.dateTo ? values.dateTo : null);
+		absenceRequestsSearchStore.setDateFrom(values.dateFrom);
+		absenceRequestsSearchStore.setDateTo(values.dateTo);
 
 		const queryParams = absenceRequestsSearchStore.syncWithQueryParams();
 		setSearchParams(queryParams);
@@ -122,18 +104,35 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		fetchData();
 	};
 
+
 	const initialValues = {
-		absenceRequestTypeId: absenceRequestsSearchStore.absenceRequestTypeId,
-		userId: absenceRequestsSearchStore.userId,
+		absenceRequestTypeId: (() => {
+			const typeFromParams = searchParams.get("absenceRequestTypeId");
+			if (typeFromParams) {
+				const parsedTypeId = parseInt(typeFromParams);
+				absenceRequestsSearchStore.setAbsenceTypeId(parsedTypeId);
+				return parsedTypeId;
+			}
+			return absenceRequestsSearchStore.absenceRequestTypeId;
+		})(),
+		userId: (() => {
+			const userFromParams = searchParams.get("userId");
+			if (userFromParams) {
+				const parsedUserId = parseInt(userFromParams);
+				absenceRequestsSearchStore.setUserId(parsedUserId);
+				return parsedUserId;
+			}
+			return absenceRequestsSearchStore.userId;
+		})(),
 		absenceRequestStatusId: (() => {
-            const statusIdFromParams = searchParams.get("absenceRequestStatusId");
-            if (statusIdFromParams) {
-                const parsedStatusId = parseInt(statusIdFromParams);
-                absenceRequestsSearchStore.setAbsenceRequestStatusId(parsedStatusId);
-                return parsedStatusId;
-            }
-            return absenceRequestsSearchStore.absenceRequestStatusId;
-        })(),
+			const statusIdFromParams = searchParams.get("absenceRequestStatusId");
+			if (statusIdFromParams) {
+				const parsedStatusId = parseInt(statusIdFromParams);
+				absenceRequestsSearchStore.setAbsenceRequestStatusId(parsedStatusId);
+				return parsedStatusId;
+			}
+			return absenceRequestsSearchStore.absenceRequestStatusId;
+		})(),
 		dateFrom: absenceRequestsSearchStore.dateFrom,
 		dateTo: absenceRequestsSearchStore.dateTo,
 	}
@@ -179,7 +178,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
 						isClearable
 						isSearchable
-					/> 
+					/>
 					<DatePicker
 						id='dateFrom'
 						name="dateFrom"
@@ -194,7 +193,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						autoComplete='off'
 						enableTabLoop={false}
 						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
-						locale={currentLanguage}
+						locale={i18n.language}
 					/>
 					<DatePicker
 						id='dateTo'
@@ -210,9 +209,9 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						autoComplete='off'
 						enableTabLoop={false}
 						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
-						locale={currentLanguage}
+						locale={i18n.language}
 					/>
-					<div className='flex gap-4 '> 
+					<div className='flex gap-4 '>
 						<button
 							type="submit"
 							className="btn-new h-10"
@@ -225,7 +224,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 							className="btn-cancel h-10"
 						>
 							{t("CLEAR")}
-					</button>
+						</button>
 					</div>
 				</Form>
 			)}

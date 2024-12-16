@@ -7,21 +7,20 @@ import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
-import { useModal } from "../../context";
-import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
+import { BaseModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
 import { AbsenceRequestsSearch } from "./search";
 import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
-import { AbsenceRequestsEdit } from "../absence-requests";
+//import { AbsenceRequestsEdit } from "../absence-requests";
 import "./AbsenceRequestsList.css";
+import { absenceRequestStatuses } from "../../constants/constants";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { openModal, closeModal } = useModal();
     const { signal } = useRequestAbort();
 
     const fetchData = useCallback(async () => {
@@ -83,9 +82,9 @@ export const AbsenceRequestsList = observer(() => {
             name: t('STATUS'),
             selector: row => {
                 switch (row.absenceRequestStatus) {
-                    case 'Approved':
+                    case absenceRequestStatuses.APPROVED:
                         return t('APPROVED');
-                    case 'Rejected':
+                    case absenceRequestStatuses.REJECTED:
                         return t('REJECTED');
                     default:
                         return t('PENDING');
@@ -103,12 +102,12 @@ export const AbsenceRequestsList = observer(() => {
             cell: row => (
                 <div className="flex">
                     <button
-                        onClick={() => editRequestClick(row)}
+                        //onClick={() => editRequestClick(row)}
                         className="text-blue-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
-                        onClick={() => deleteRequestClick(row)}
+                        //onClick={() => deleteRequestClick(row)}
                         className="text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
@@ -121,24 +120,24 @@ export const AbsenceRequestsList = observer(() => {
     //     openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
     // }
 
-    const editRequestClick = (absenceRequest) => {
-        openModal(<AbsenceRequestsEdit absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
-    };
+    // const editRequestClick = (absenceRequest) => {
+    //     openModal(<AbsenceRequestsEdit absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
+    // };
 
-    const deleteRequestClick = (absenceRequest) => {
-        openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
-    };
+    // const deleteRequestClick = (absenceRequest) => {
+    //     openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
+    // };
 
-    const handleDelete = async (absenceRequestId) => {
-        try {
-            await absenceRequestsService.delete(absenceRequestId);
-            fetchData();
-            closeModal();
-            toast.success(t('DELETED'));
-        } catch (error) {
-            toast.error(t('FAILED_TO_DELETE'));
-        }
-    }
+    // const handleDelete = async (absenceRequestId) => {
+    //     try {
+    //         await absenceRequestsService.delete(absenceRequestId);
+    //         fetchData();
+    //         closeModal();
+    //         toast.success(t('DELETED'));
+    //     } catch (error) {
+    //         toast.error(t('FAILED_TO_DELETE'));
+    //     }
+    // }
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">

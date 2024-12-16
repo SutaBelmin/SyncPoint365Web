@@ -3,21 +3,21 @@ import Select from 'react-select';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field } from 'formik';
-import { absenceRequestTypesSearchStore}  from '../stores';
+import { absenceRequestTypesSearchStore } from '../stores';
+import { absenceTypeConst } from '../../../constants';
 
 const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
 
-    const dropdownOptions = [
-        { value: 'all' , label: t('ALL') },
-        { value: 'active', label: t('ACTIVE') },
-        { value: 'inactive', label: t('INACTIVE') }
-    ];
+    const activityTypesOptions = absenceTypeConst.map(option => ({
+        value: option.value,
+        label: t(option.labelKey),
+    }));
 
     const handleSubmit = (values) => {
         absenceRequestTypesSearchStore.setQuery(values.searchQuery);
-        absenceRequestTypesSearchStore.setIsActive(values.status.value === 'all' ? null : (values.status.value === 'active'));
+        absenceRequestTypesSearchStore.setIsActive(values.status.value === absenceTypeConst.ALL.value ? null : (values.status.value === absenceTypeConst.ACTIVE.value));
         const queryParams = absenceRequestTypesSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);
 
@@ -27,18 +27,18 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const handleClear = (setFieldValue) => {
         setSearchParams({});
         setFieldValue('searchQuery', "");
-        setFieldValue('status', dropdownOptions[0]);
+        setFieldValue('status', activityTypesOptions[0]);
         absenceRequestTypesSearchStore.clearFilters();
-        fetchData();    
+        fetchData();
     };
 
     return (
         <Formik
             initialValues={{
                 searchQuery: absenceRequestTypesSearchStore.searchQuery,
-                status: dropdownOptions.find(
+                status: activityTypesOptions.find(
                     (option) => option.value === searchParams.get('status')
-                ) || dropdownOptions[0],
+                ) || activityTypesOptions[0],
             }}
             enableReinitialize
             onSubmit={handleSubmit}>
@@ -54,18 +54,18 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                         onChange={(e) => {
                             setFieldValue('searchQuery', e.target.value);
                         }}
-                        
+
                     />
                     <Select
                         name="status"
                         placeholder={t("SELECT")}
-                        options={dropdownOptions}
+                        options={activityTypesOptions}
                         isSearchable={false}
                         isClearable
                         className="h-10 border-gray-300 input-select-border w-full md:min-w-[8rem] "
                         value={values.status}
                         onChange={(selectedOption) => {
-                            setFieldValue('status', selectedOption || dropdownOptions[0]);
+                            setFieldValue('status', selectedOption || activityTypesOptions[0]);
                         }}
                     />
                     <button type="submit" className="btn-common h-10">

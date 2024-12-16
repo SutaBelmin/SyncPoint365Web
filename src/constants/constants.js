@@ -23,3 +23,15 @@ export const genderConstant = {
     male : 'Male',
     female : 'Female'
 }
+export const absenceRequestStatuses = {
+    APPROVED: 'Approved',
+    REJECTED: 'Rejected',
+    PENDING: 'Pending',
+};
+
+export const absenceTypeConst = {
+    ALL: { value: 'all', labelKey: 'ALL' },
+    ACTIVE: { value: 'active', labelKey: 'ACTIVE' },
+    INACTIVE: { value: 'inactive', labelKey: 'INACTIVE' },
+};
+
