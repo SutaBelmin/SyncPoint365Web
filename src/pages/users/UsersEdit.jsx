@@ -13,9 +13,8 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
-import { enUS, bs } from "date-fns/locale";
 import { FaArrowLeft } from 'react-icons/fa';
-import { roleConstant, genderConstant } from '../../constants';
+import { roleConstant, genderConstant, localeConstant } from '../../constants';
 
 
 export const UsersEdit = () => {
@@ -28,15 +27,7 @@ export const UsersEdit = () => {
     const [user, setUser] = useState(null);
     
     
-    const localeMapping = {
-        en: enUS,
-        bs: bs
-    };
-
-    const currentLanguage = i18n.language || 'en';
-    const currentLocale = localeMapping[currentLanguage];
-
-    registerLocale(currentLanguage, currentLocale);
+    registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const updateUser = async (values) => {
         try {
