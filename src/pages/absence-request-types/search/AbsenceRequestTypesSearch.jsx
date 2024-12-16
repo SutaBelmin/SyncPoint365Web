@@ -10,14 +10,15 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
 
-    const activityTypesOptions = absenceTypeConst.map(option => ({
-        value: option.value,
-        label: t(option.labelKey),
-    }));
+    const activityTypesOptions = ([
+        { value: absenceTypeConst.ALL, label: t('ALL') },
+        { value: absenceTypeConst.ACTIVE, label: t('ACTIVE') },
+        { value: absenceTypeConst.INACTIVE, label: t('INACTIVE') },
+    ])
 
     const handleSubmit = (values) => {
         absenceRequestTypesSearchStore.setQuery(values.searchQuery);
-        absenceRequestTypesSearchStore.setIsActive(values.status.value === absenceTypeConst.ALL.value ? null : (values.status.value === absenceTypeConst.ACTIVE.value));
+        absenceRequestTypesSearchStore.setIsActive(values.status.value === absenceTypeConst.ALL ? null : (values.status.value === absenceTypeConst.ACTIVE));
         const queryParams = absenceRequestTypesSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);
 

@@ -30,8 +30,8 @@ export const absenceRequestStatuses = {
 };
 
 export const absenceTypeConst = {
-    ALL: { value: 'all', labelKey: 'ALL' },
-    ACTIVE: { value: 'active', labelKey: 'ACTIVE' },
-    INACTIVE: { value: 'inactive', labelKey: 'INACTIVE' },
+    ALL: 'all',
+    ACTIVE: 'active',
+    INACTIVE: 'inactive',
 };
 
