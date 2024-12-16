@@ -14,9 +14,8 @@ import * as Yup from "yup";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
-import { enUS, bs } from "date-fns/locale";
 import { citiesService, enumsService, usersService } from '../../services';
-
+import { localeMapping } from '../../constants';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -25,13 +24,7 @@ export const UsersAdd = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
 
-   const localeMapping = {
-        en: enUS,
-        bs: bs
-    };
-
-    const currentLocale = localeMapping[i18n.language];;
-    registerLocale(i18n.language, currentLocale);
+    registerLocale(i18n.language, localeMapping[i18n.language]);
 
     const addUser = async (values) => {
         try {
@@ -106,9 +99,9 @@ export const UsersAdd = () => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SuperAdministrator') :
-                    role.label === 'Administrator' ? t('Administrator') :
-                        role.label === 'Employee' ? t('Employee') : role.label
+                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
+                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
+                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
@@ -137,7 +130,7 @@ export const UsersAdd = () => {
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <div className="w-full ">
+            <div className="w-full">
                 <div className='pt-16 pb-8 flex items-center justify-between'>
                     <h2 className='text-2xl font-bold'>{t('ADD_USER')}</h2>
                     <button
@@ -145,8 +138,8 @@ export const UsersAdd = () => {
                         className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center"
                         onClick={() => navigate('/users')}
                     >
-                         <FaArrowLeft className="mr-2" />
-                        {t('BACK')}
+                         <FaArrowLeft className="mr-auto" />
+                         <span className="flex-grow text-center">{t('BACK')}</span>
                     </button>
                 </div>
                 <Formik

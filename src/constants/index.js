@@ -1,0 +1,1 @@
+export { localeMapping } from './constants';

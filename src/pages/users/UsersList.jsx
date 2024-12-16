@@ -35,7 +35,7 @@ export const UsersList = observer(() => {
             const response = await usersService.getPagedUsersFilter(filter, signal);
 
             setData(response.data.items);
-            usersSearchStore.setTotalItemCount(response.data.totalItemCount); 
+            usersSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -91,7 +91,11 @@ export const UsersList = observer(() => {
         },
         {
             name: t('ROLE'),
-            selector: row => t(row.role),
+            selector: row => {
+                return row.role === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
+                    row.role === 'Administrator' ? t('ADMINISTRATOR') :
+                        row.role === 'Employee' ? t('EMPLOYEE') : t(row.role);
+            },
             sortable: true,
         },
         {

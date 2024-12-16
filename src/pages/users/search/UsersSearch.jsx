@@ -18,9 +18,9 @@ export const UsersSearch = ({ fetchData }) => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SuperAdministrator') :
-                    role.label === 'Administrator' ? t('Administrator') :
-                        role.label === 'Employee' ? t('Employee') : role.label
+                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
+                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
+                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
@@ -79,7 +79,7 @@ export const UsersSearch = ({ fetchData }) => {
             onSubmit={handleSearch}
         >
             {({ setFieldValue, values }) => (
-                <Form className="grid gap-4 w-full lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
+                <Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
                     <Field
                         type="text"
                         name="searchQuery"
