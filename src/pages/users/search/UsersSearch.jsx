@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { Formik, Form, Field } from "formik";
 import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
-import { roleConstant } from '../../../constants';
+import { isActiveConstant, roleConstant } from '../../../constants';
 
 export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
@@ -32,10 +32,15 @@ export const UsersSearch = ({ fetchData }) => {
     useEffect(() => {
         fetchRoles();
 
+        // setIsActiveOptions([
+        //     { value: 'All', label: t('ALL') },
+        //     { value: 'active', label: t('ACTIVE') },
+        //     { value: 'inactive', label: t('INACTIVE') },
+        // ]);
         setIsActiveOptions([
-            { value: 'All', label: t('ALL') },
-            { value: 'active', label: t('ACTIVE') },
-            { value: 'inactive', label: t('INACTIVE') },
+            { value: isActiveConstant.ALL, label: t('ALL') },
+            { value: isActiveConstant.ACTIVE, label: t('ACTIVE') },
+            { value: isActiveConstant.INACTIVE, label: t('INACTIVE') },
         ]);
 
     }, [fetchRoles, t]);
@@ -43,7 +48,7 @@ export const UsersSearch = ({ fetchData }) => {
     const handleSearch = (values) => {
         usersSearchStore.setQuery(values.searchQuery);
         usersSearchStore.setRoleId(values.roleId);
-        usersSearchStore.setIsActive(values.isActive.value === 'All' ? null : (values.isActive.value === 'active'));
+        usersSearchStore.setIsActive(values.isActive.value === isActiveConstant.ALL ? null : (values.isActive.value === isActiveConstant.ACTIVE));
 
         const queryParams = usersSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);

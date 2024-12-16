@@ -1,4 +1,5 @@
 import { makeObservable, action, observable } from "mobx";
+import { isActiveConstant } from "../../../constants";
 
 class UsersSearchStore {
     totalItemCount = 0;
@@ -69,7 +70,7 @@ class UsersSearchStore {
             params.set("roleId", this.roleId);
 
         if (this.isActive !== null)
-            params.set("isActive", this.isActive ? 'active' : 'inactive');
+            params.set("isActive", this.isActive ? isActiveConstant.ACTIVE : isActiveConstant.INACTIVE);
 
         if (this.page !== 1)
             params.set("page", this.page);

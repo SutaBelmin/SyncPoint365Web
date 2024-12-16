@@ -12,3 +12,14 @@ export const roleConstant = {
     EMPLOYEE: 'Employee'
 }
 
+
+export const isActiveConstant = {
+    ALL: 'all',
+    ACTIVE: 'active',
+    INACTIVE: 'inactive'
+}
+
+export const genderConstant = {
+    MALE : 'Male',
+    FEMALE : 'Female'
+}

@@ -15,7 +15,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
-import { localeConstant, roleConstant } from '../../constants';
+import { genderConstant, localeConstant, roleConstant } from '../../constants';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -114,7 +114,7 @@ export const UsersAdd = () => {
             const response = await enumsService.getGenders();
             const genderOptions = response.data.map(gender => ({
                 value: gender.id,
-                label: gender.label === 'Male' ? t('MALE') : t('FEMALE')
+                label: gender.label === genderConstant.MALE ? t('MALE') : t('FEMALE')
             }));
             setGenders(genderOptions);
         } catch (error) {
