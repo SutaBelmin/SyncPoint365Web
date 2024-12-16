@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { Formik, Form, Field } from "formik";
 import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
+import { roleConstant } from '../../../constants';
 
 export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
@@ -18,9 +19,9 @@ export const UsersSearch = ({ fetchData }) => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
-                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
+                label: role.label === roleConstant.SUPER_ADMINISTRATOR ? t('SUPER_ADMINISTRATOR') :
+                    role.label === roleConstant.ADMINISTRATOR ? t('ADMINISTRATOR') :
+                        role.label === roleConstant.EMPLOYEE ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {

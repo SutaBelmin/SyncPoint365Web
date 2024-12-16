@@ -15,7 +15,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
-import { localeMapping } from '../../constants';
+import { localeConstant, roleConstant } from '../../constants';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -24,7 +24,7 @@ export const UsersAdd = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
 
-    registerLocale(i18n.language, localeMapping[i18n.language]);
+    registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const addUser = async (values) => {
         try {
@@ -99,9 +99,9 @@ export const UsersAdd = () => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
-                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
+                label: role.label === roleConstant.SUPER_ADMINISTRATOR ? t('SUPER_ADMINISTRATOR') :
+                    role.label === roleConstant.ADMINISTRATOR ? t('ADMINISTRATOR') :
+                        role.label === roleConstant.EMPLOYEE ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
