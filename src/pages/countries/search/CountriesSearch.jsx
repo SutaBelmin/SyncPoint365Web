@@ -25,7 +25,7 @@ export const CountriesSearch = ({fetchData}) => {
   };
             
   useEffect(() => {
-    countriesSearchStore.initializeQueryParams(searchParams);
+    countriesSearchStore.setSearchQuery(searchParams);
   }, [searchParams]);
 
   return (

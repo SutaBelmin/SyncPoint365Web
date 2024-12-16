@@ -13,7 +13,10 @@ class AuthService extends BaseService {
     } catch (error) {
       if (error.response && error.response.status === 401) {
         throw new Error('Invalid credentials');
-      } else {
+      } else if (error.response.status === 403) {
+        throw new Error("Account inactive!")
+      } 
+      else {
         throw new Error('An error occurred, please try again later');
       }
     }

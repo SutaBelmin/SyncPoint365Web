@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { toast } from 'react-toastify';
 import { citiesService, enumsService, userService } from '../../services';
@@ -14,6 +14,8 @@ import 'react-phone-input-2/lib/style.css';
 import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
 import { enUS, bs } from "date-fns/locale";
+import { FaArrowLeft } from 'react-icons/fa';
+import { roleConstant, genderConstant } from '../../constants';
 
 
 export const UsersEdit = () => {
@@ -24,6 +26,7 @@ export const UsersEdit = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
     const [user, setUser] = useState(null);
+    
     
     const localeMapping = {
         en: enUS,
@@ -84,80 +87,93 @@ export const UsersEdit = () => {
             .required(t('PHONE_IS_REQUIRED'))
     });
 
-    const fetchUser = useCallback(async () => {
-        try {
-            const response = await userService.getById(userId);
-            setUser(response.data);
-        } catch (error) {
-            toast.error(t('ERROR_LOADING_USER'));
-        }
-    }, [userId, setUser, t]);
-
-    const fetchCities = async () => {
-        try {
-            const response = await citiesService.getList();
-            const citiesOption = response.data.map(city => ({
-                value: city.id,
-                label: city.name
-            }));
-            setCities(citiesOption);
-        } catch (error) {
-
-        }
-    }
-
-    const fetchRoles = useCallback(async () => {
-        try {
-            const response = await enumsService.getRoles();
-            const rolesOptions = response.data.map(role => ({
-                value: role.id,
-                label: role.label
-            }));
-            setRoles(rolesOptions);
-        } catch (error) {
-
-        }
-    }, []);
-
-    const rolesOptionsTranslated = roles.map(role => ({
+    const rolesOptions = roles.map(role => ({
         ...role,
-        label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-               role.label === 'Administrator' ? t('ADMINISTRATOR') :
-               role.label === 'Employee' ? t('EMPLOYEE') : role.label
+        label: role.label === roleConstant.SUPER_ADMINISTRATOR ? t('SUPER_ADMINISTRATOR') :
+               role.label === roleConstant.ADMINISTRATOR ? t('ADMINISTRATOR') :
+               role.label === roleConstant.EMPLOYEE ? t('EMPLOYEE') : role.label
     }));
 
-    const fetchGenders = useCallback(async () => {
-        try {
-            const response = await enumsService.getGenders();
-            const genderOptions = response.data.map(gender => ({
-                value: gender.id,
-                label: gender.label 
-            }));            
-            setGenders(genderOptions);
-        } catch (error) {
-
-        }
-    }, []);
-    
-    const genderOptionsTranslated = genders.map(gender => ({
+    const genderOptions = genders.map(gender => ({
         ...gender,
-        label: gender.label === 'Male' ? t('MALE') :
-               gender.label === 'Female' ? t('FEMALE') :
+        label: gender.label === genderConstant.MALE ? t('MALE') :
+               gender.label === genderConstant.FEMALE ? t('FEMALE') :
                gender.label 
     }));
 
     useEffect(() => {
-        fetchUser();
-        fetchCities();
-        fetchRoles();
-        fetchGenders();
-    }, [fetchGenders, fetchRoles, fetchUser]);
+        const fetchUser = async () => {
+            try {
+                const response = await userService.getById(userId);
+                setUser(response.data);
+            } catch (error) {
+                toast.error(t('ERROR_LOADING_USER'));
+            }
+        };
+    
+        const fetchCities = async () => {
+            try {
+                const response = await citiesService.getList();
+                const citiesOption = response.data.map(city => ({
+                    value: city.id,
+                    label: city.name
+                }));
+                setCities(citiesOption);
+            } catch (error) {
+                toast.error(t('ERROR_LOADING_CITIES'));
+            }
+        };
+    
+        const fetchRoles = async () => {
+            try {
+                const response = await enumsService.getRoles();
+                const rolesOptions = response.data.map(role => ({
+                    value: role.id,
+                    label: role.label
+                }));
+                setRoles(rolesOptions);
+            } catch (error) {
+                toast.error(t('ERROR_LOADING_ROLES'));
+            }
+        };
 
-    if (!user) return <div>Loading...</div>;
+        const fetchGenders = async () => {
+            try {
+                const response = await enumsService.getGenders();
+                const genderOptions = response.data.map(gender => ({
+                    value: gender.id,
+                    label: gender.label 
+                }));            
+                setGenders(genderOptions);
+            } catch (error) {
+                toast.error(t('ERROR_LOADING_GENDERS'))
+            }
+        };
+        
+         fetchUser();
+         fetchCities();
+         fetchRoles();
+         fetchGenders();
+    }, [userId, t]);
+
+    const handleBack = () => {
+        navigate('/users');
+    }
+
+    if (!user) return <div>{t('LOADING')}</div>;
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
             <div className="w-full max-w-lg">
+            <div className="realtive">
+            <button
+            onClick={handleBack}
+            className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center absolute top-20 right-5"
+            >
+            <FaArrowLeft className="mr-auto"/>
+            <span className="flex-grow text-center">{t('BACK')}</span>
+            </button>
+            </div>
                 <h1 className="h1">{t('UPDATE_USER')}</h1>
                 <Formik
                     initialValues={{
@@ -227,9 +243,9 @@ export const UsersEdit = () => {
                                id="gender"
                                name="gender"
                                onChange={(option) => setFieldValue('gender', option ? option.value : '')}
-                               options={genderOptionsTranslated}
+                               options={genderOptions}
                                placeholder={t('SELECT_GENDER')}
-                               value={genderOptionsTranslated.find((gender) => gender.value === values.gender)} 
+                               value={genderOptions.find((gender) => gender.value === values.gender)} 
                                getOptionLabel={option => option.label}
                                getOptionValue={option => option.value}
                                className='input-select-border mt-1'
@@ -245,8 +261,8 @@ export const UsersEdit = () => {
                                id="role"
                                name="role"
                                onChange={(option) => setFieldValue('role', option ? option.value : '')}
-                               options={rolesOptionsTranslated}
-                               value={rolesOptionsTranslated.find((role) => role.value === values.role)} 
+                               options={rolesOptions}
+                               value={rolesOptions.find((role) => role.value === values.role)} 
                                getOptionLabel={option => option.label}
                                getOptionValue={option => option.value}
                                placeholder={t('SELECT_ROLE')}
@@ -274,7 +290,8 @@ export const UsersEdit = () => {
                                yearDropdownItemNumber={100}
                                scrollableYearDropdown
                                onKeyDown={(e) => e.preventDefault()}
-                               locale={currentLanguage}
+                               locale={i18n.language}
+                               autoComplete='off'
                            />
                            <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                        </div>
@@ -287,9 +304,13 @@ export const UsersEdit = () => {
                                name="phone"
                                render={({ field }) => (
                                    <PhoneInput
+                                        inputProps={{
+                                            name: 'phone',
+                                            id: 'phone',
+                                            className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                        }}
                                        {...field}
                                        onChange={(value) => setFieldValue('phone', value)}
-                                       inputClass="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                        value={values.phone}
                                        enableSearch
                                        country={'ba'}

@@ -1,4 +1,4 @@
-import { makeAutoObservable, action, observable } from "mobx";
+import {makeObservable, action, observable } from "mobx";
 
 class CountriesStore {
   totalItemCount = 0;
@@ -7,7 +7,7 @@ class CountriesStore {
   rowsPerPage = 10;
 
   constructor() {
-    makeAutoObservable(this, {
+    makeObservable(this, {
       setPage: action,
       setPageSize: action,
       setTotalItemCount: action,

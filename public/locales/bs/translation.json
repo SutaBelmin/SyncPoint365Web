@@ -125,6 +125,11 @@
     "REJECTED": "Odbijeno",
     "PENDING": "Obrada",
     "UPDATE_USER":"Uredi korisnika",
-    "USER_PREVIEW":"Pregled informacija o korisniku",
-    "CLOSE":"Zatvori"
+    "USER_PREVIEW":"Pregled korisnika",
+    "CLOSE":"Zatvori",
+    "ERROR_LOADING_CITIES":"Greška pri učitavanju gradova.",
+    "ERROR_LOADING_ROLES":"Greška pri učitavanju uloga.",
+    "ERROR_LOADING_GENDERS":"Greška pri učitavanju spolova.",
+    "LOADING":"Učitavanje...",
+    "BACK":"Nazad"
 }

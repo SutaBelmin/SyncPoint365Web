@@ -13,7 +13,7 @@ import { PaginationOptions } from "../../components/common-ui/PaginationOptions"
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faCircleInfo, faCircleXmark, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faCircleXmark, faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
@@ -126,12 +126,12 @@ export const UsersList = observer(() => {
                     </button>
                     <button
                         onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-xl ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
+                        className={`text-xl ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
                     >
                         {row.isActive ? (
-                            <FontAwesomeIcon icon={faCircleCheck} />
-                        ) : (
                             <FontAwesomeIcon icon={faCircleXmark} />
+                        ) : (
+                            <FontAwesomeIcon icon={faCircleCheck} />
                         )}
                     </button>
                     <button
@@ -139,7 +139,7 @@ export const UsersList = observer(() => {
                     onClick={() => onPreviewUserClick(row)}
                     className="text-blue-500 hover:underline p-2"
                     >
-                        <FontAwesomeIcon icon={faCircleInfo}/>
+                        <FontAwesomeIcon icon={faEye}/>
                     </button>
                 </div>
             ),
@@ -215,6 +215,7 @@ export const UsersList = observer(() => {
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={paginationComponentOptions}
+                    onRowClicked={(row) => onPreviewUserClick(row)}
                 />
             </div>
         </div>
