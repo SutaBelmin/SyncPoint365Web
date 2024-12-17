@@ -8,18 +8,18 @@ i18n
   .use(initReactI18next)
   .init({
     defaultNS: "translation",
-    lng: localStorage.getItem("selectedLanguage") || "en-US",
-    fallbackLng: "en-US",
+    lng: localStorage.getItem("selectedLanguage") || "enUS",
+    fallbackLng: "enUS",
     debug: false,
     load: "currentOnly",
     react: {
       useSuspense: true,
     },
-    preload: ["en-US", "bs"],
+    preload: ["enUS", "bs"],
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
-    whitelist: ["en-US", "bs"],
+    whitelist: ["enUS", "bs"],
     interpolation: {
       escapeValue: false,
     },

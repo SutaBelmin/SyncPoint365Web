@@ -39,12 +39,16 @@
     @apply rounded-md bg-[#1e3a8a] px-3 py-2 text-sm font-semibold text-white shadow-sm
     hover:bg-[#1e3a8a]/90 focus-visible:outline focus-visible:outline-2
     focus-visible:outline-offset-2 focus-visible:outline-[#1e3a8a]
-    lg:w-[10rem] md:w-[10rem] sm:w-full;
+    lg:w-[10rem] md:w-[10rem] sm:w-full xs:w-full ss:w-full;
 }
   
   
 .input-select-border input[type='text']:focus {
     box-shadow: none;
+}
+
+.input-select-width {
+  min-width: 200px !important;
 }
 
 .no-data-message {

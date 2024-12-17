@@ -1,20 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Formik, Field, Form, ErrorMessage } from "formik";
 import { toast } from 'react-toastify';
-import { citiesService, enumsService, userService } from '../../services';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import * as Yup from "yup";
 import Select from "react-select";
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale } from "react-datepicker";
-import { enUS, bs } from "date-fns/locale";
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { FaCalendarAlt } from "react-icons/fa";
+import { FaArrowLeft } from 'react-icons/fa';
+import DatePicker from 'react-datepicker';
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { format } from 'date-fns';
+import { registerLocale } from "react-datepicker";
+import { citiesService, enumsService, usersService } from '../../services';
+import { genderConstant, localeConstant, roleConstant } from '../../constants';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -23,20 +24,11 @@ export const UsersAdd = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
 
-    const localeMapping = {
-        en: enUS,
-        bs: bs
-    };
-
-    const currentLanguage = i18n.language || 'en';
-    const currentLocale = localeMapping[currentLanguage];
-
-    registerLocale(currentLanguage, currentLocale);
-
+    registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const addUser = async (values) => {
         try {
-            await userService.add(values);
+            await usersService.add(values);
             toast.success(t('ADDED'));
             navigate('/users');
         } catch (error) {
@@ -57,7 +49,7 @@ export const UsersAdd = () => {
 
                 if (Yup.string().email().isValidSync(value)) {
                     try {
-                        const response = await userService.emailExists(value);
+                        const response = await usersService.emailExists(value);
 
                         if (response === true)
                             return createError({ path, message: t('EMAIL_ALREADY_EXIST') });
@@ -107,9 +99,9 @@ export const UsersAdd = () => {
             const response = await enumsService.getRoles();
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
-                label: role.label === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-                    role.label === 'Administrator' ? t('ADMINISTRATOR') :
-                        role.label === 'Employee' ? t('EMPLOYEE') : role.label
+                label: role.label === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
+                    role.label === roleConstant.administrator ? t('ADMINISTRATOR') :
+                        role.label === roleConstant.employee ? t('EMPLOYEE') : role.label
             }));
             setRoles(rolesOptions);
         } catch (error) {
@@ -122,7 +114,7 @@ export const UsersAdd = () => {
             const response = await enumsService.getGenders();
             const genderOptions = response.data.map(gender => ({
                 value: gender.id,
-                label: gender.label === 'Male' ? t('MALE') : t('FEMALE')
+                label: gender.label === genderConstant.male ? t('MALE') : t('FEMALE')
             }));
             setGenders(genderOptions);
         } catch (error) {
@@ -138,8 +130,18 @@ export const UsersAdd = () => {
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <div className="w-full max-w-lg">
-                <h2 className="h1">{t('ADD_USER')}</h2>
+            <div className="w-full">
+                <div className='pt-16 pb-8 flex items-center justify-between'>
+                    <h2 className='text-2xl font-bold'>{t('ADD_USER')}</h2>
+                    <button
+                        type='submit'
+                        className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center"
+                        onClick={() => navigate('/users')}
+                    >
+                         <FaArrowLeft className="mr-auto" />
+                         <span className="flex-grow text-center">{t('BACK')}</span>
+                    </button>
+                </div>
                 <Formik
                     initialValues={{
                         firstName: '',
@@ -158,7 +160,7 @@ export const UsersAdd = () => {
                     onSubmit={addUser}
                 >
                     {({ setFieldValue, values }) => (
-                        <Form className="w-full">
+                        <Form className="max-w-lg">
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                     {t('FIRST_NAME')} <span className='text-red-500'>*</span>
@@ -211,7 +213,8 @@ export const UsersAdd = () => {
                                     yearDropdownItemNumber={100}
                                     scrollableYearDropdown
                                     onKeyDown={(e) => e.preventDefault()}
-                                    locale={currentLanguage}
+                                    locale={i18n.language}
+                                    autoComplete='off'
                                 />
                                 <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                             </div>
@@ -314,6 +317,7 @@ export const UsersAdd = () => {
                                     onChange={async (e) => {
                                         setFieldValue('email', e.target.value);
                                     }}
+                                    autoComplete='off'
                                 />
                                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
                             </div>

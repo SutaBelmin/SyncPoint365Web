@@ -1,27 +1,29 @@
 import React, { useCallback } from 'react';
-import { BaseModal } from '../../components/modal';
-import { useEffect, useState } from "react";
-import { userService } from '../../services';
-import DataTable from 'react-data-table-component';
-import './UsersList.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import DataTable from 'react-data-table-component';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { BaseModal } from '../../components/modal';
+import { observer } from "mobx-react";
+import { reaction } from "mobx";
+import { useModal } from '../../context';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { Formik, Form } from 'formik';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
-import { useNavigate } from 'react-router-dom';
-import { useModal } from '../../context';
+import { UsersSearch } from './search/UsersSearch';
+import { usersSearchStore } from './stores';
+import { usersService } from '../../services';
+import './UsersList.css';
+import { roleConstant } from '../../constants';
 
-export const UsersList = () => {
+export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItemCount, setTotalItemCount] = useState(0);
+
     const { t } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
@@ -29,21 +31,37 @@ export const UsersList = () => {
 
     const fetchData = useCallback(async () => {
         try {
-            const response = await userService.getPagedUsers(page, pageSize, signal);
+            const filter = { ...usersSearchStore.userFilter };
+
+            const response = await usersService.getPagedUsersFilter(filter, signal);
+
             setData(response.data.items);
-            setTotalItemCount(response.data.totalItemCount);
+            usersSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
 
-    }, [page, pageSize, signal, t]);
+    }, [signal, t]);
 
     useEffect(() => {
-        fetchData();
+        const disposeReaction = reaction(
+            () => ({
+                page: usersSearchStore.page,
+                pageSize: usersSearchStore.pageSize
+            }),
+            () => {
+                fetchData();
+            },
+            {
+                fireImmediately: true
+            }
+        );
+
+        return () => disposeReaction();
     }, [fetchData]);
 
     const onAddUserClick = () => {
-       navigate('add');
+        navigate('add');
     };
 
     const columns = [
@@ -74,7 +92,16 @@ export const UsersList = () => {
         },
         {
             name: t('ROLE'),
-            selector: row => t(formatRoleKey(row.role)),
+            selector: row => {
+                return row.role === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
+                row.role === roleConstant.administrator ? t('ADMINISTRATOR') :
+                    row.role === roleConstant.employee ? t('EMPLOYEE') : t(row.role);
+            },
+            sortable: true,
+        },
+        {
+            name: t('STATUS'),
+            selector: row => row.isActive ? t('ACTIVE') : t('INACTIVE'),
             sortable: true,
         },
         {
@@ -96,12 +123,6 @@ export const UsersList = () => {
         },
     ];
 
-    const formatRoleKey = (role) => {
-        return role
-            .replace(/([a-z])([A-Z])/g, '$1_$2')
-            .toUpperCase();
-    }
-
     const statusChange = (userId, isActive) => {
         openModal(
             <ConfirmationModal
@@ -114,7 +135,7 @@ export const UsersList = () => {
 
     const handleStatusChange = async (userId) => {
         try {
-            await userService.updateUserStatus(userId);
+            await usersService.updateUserStatus(userId);
             fetchData();
             toast.success(t('UPDATED'));
             closeModal();
@@ -124,20 +145,22 @@ export const UsersList = () => {
     }
 
     return (
-        <div className="flex-1 p-6 bg-gray-100 h-screen">
+        <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('USERS')}</h1>
 
-            <Formik>
-                <Form className="flex flex-col md:flex-row">
-                    <button
-                        type='button'
-                        onClick={onAddUserClick}
-                        className="btn-common h-10 md:ml-auto"
-                    >
-                        {t('ADD_USER')}
-                    </button>
-                </Form>
-            </Formik>
+            <div className="flex flex-col gap-4 xs:flex-row">
+                <UsersSearch fetchData={fetchData} />
+            </div>
+
+            <div className="flex justify-end mt-4">
+                <button
+                    type='button'
+                    onClick={onAddUserClick}
+                    className="btn-common h-10"
+                >
+                    {t('ADD_USER')}
+                </button>
+            </div>
             <BaseModal />
 
             <div className="table max-w-full">
@@ -146,14 +169,14 @@ export const UsersList = () => {
                     data={data || []}
                     pagination
                     paginationServer
-                    paginationTotalRows={totalItemCount}
+                    paginationTotalRows={usersSearchStore.totalItemCount}
                     onChangePage={(newPage) => {
-                        setPage(newPage);
+                        usersSearchStore.setPage(newPage);
                     }}
-                    paginationPerPage={pageSize}
+                    paginationPerPage={usersSearchStore.pageSize}
                     onChangeRowsPerPage={(newPageSize) => {
-                        setPageSize(newPageSize);
-                        setPage(1);
+                        usersSearchStore.setPageSize(newPageSize);
+                        usersSearchStore.setPage(1);
                     }}
                     highlightOnHover
                     persistTableHead={true}
@@ -163,4 +186,4 @@ export const UsersList = () => {
             </div>
         </div>
     );
-};
+}); 

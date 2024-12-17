@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from "react";
-import * as Yup from "yup"
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import { citiesService, countriesService } from "../../services";
 import { useState } from "react";
 import Select from "react-select";
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import * as Yup from "yup";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import { citiesService, countriesService } from "../../services";
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
