@@ -100,7 +100,8 @@ export const CountriesList = observer(() => {
 		{
 			name: t('DISPLAY_NAME'),
 			selector: row => row.displayName,
-			sortable: false,
+			sortable: true,
+			sortField: 'displayName'
 		},
 		{
 			name: t('ACTIONS'),
