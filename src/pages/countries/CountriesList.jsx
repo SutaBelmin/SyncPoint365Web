@@ -37,21 +37,18 @@ export const CountriesList = observer(() => {
 			}
 		}, [signal, t]);
 
-	useEffect(() => {
-		const disposer = reaction(
-			() => ({
-				page: countriesSearchStore.page,
-				pageSize: countriesSearchStore.pageSize
-			}),
-			() => {
-				fetchData();
-			},
-			{
-				fireImmediately: true,
-			}
-		);
-		return () => disposer();
-	}, [fetchData]);
+		useEffect(() => {
+			const disposer = reaction(
+			  () => countriesSearchStore.countryFilter, 
+			  () => {
+				fetchData();  
+			  },
+			  { fireImmediately: true }  
+			);
+		  
+			return () => disposer();  
+		  }, [fetchData]);
+		  
 
 	const handlePageChange = (newPage) => {
 		countriesSearchStore.setPage(newPage);
@@ -98,11 +95,12 @@ export const CountriesList = observer(() => {
 			name: t('NAME'),
 			selector: row => row.name,
 			sortable: true,
+			sortField: 'name'
 		},
 		{
 			name: t('DISPLAY_NAME'),
 			selector: row => row.displayName,
-			sortable: true,
+			sortable: false,
 		},
 		{
 			name: t('ACTIONS'),
@@ -156,6 +154,24 @@ export const CountriesList = observer(() => {
 					persistTableHead={true}
 					paginationComponentOptions={paginationComponentOptions}
 					noDataComponent={<NoDataMessage />}
+					onSort={(column, sortDirection) => {
+						const sortField = column.sortField;
+						if(sortField) {
+							const orderBy = `${sortField}|${sortDirection}`;
+
+							countriesSearchStore.setOrderBy(orderBy);
+							countriesSearchStore.setPage(1);
+
+							const params = countriesSearchStore.syncWithQueryParams();
+							params.set("orderBy", orderBy);
+
+							const newUrl = `${window.location.pathname}?${params.toString()}`;
+							window.history.pushState({}, "", newUrl);
+
+							fetchData();
+						}
+					  }}
+					sortServer
 				/>
 			</div>
 		</div>

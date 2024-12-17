@@ -5,6 +5,7 @@ class CountriesStore {
   searchQuery = "";
   page = 1;
   rowsPerPage = 10;
+  orderBy = "";
 
   constructor() {
     makeObservable(this, {
@@ -46,6 +47,15 @@ class CountriesStore {
   resetFilters() {
     this.setSearchQuery("");
     this.setPage(1);
+    this.searchQuery = "";
+    this.page = 1;
+    this.rowsPerPage = 10;
+    this.orderBy = "";
+    this.syncWithQueryParams();
+  }
+
+  setOrderBy(order) {
+    this.orderBy = order;
     this.syncWithQueryParams();
   }
 
@@ -61,14 +71,18 @@ class CountriesStore {
     if(this.rowsPerPage !== 10) 
       params.set("rowsPerPage",this.rowsPerPage);
 
+    if(this.orderBy)
+      params.set("orderBy", this.orderBy);
+
     return params;
   }
 
   initializeQueryParams() {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get("searchQuery") || "";
-    
+    const orderBy = params.get("orderBy") || 'name|asc';
     this.setSearchQuery(searchQuery);
+    this.setOrderBy(orderBy);
   }
 
   get countryFilter() {
