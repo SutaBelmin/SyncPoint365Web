@@ -28,7 +28,7 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const handleClear = (setFieldValue) => {
         setSearchParams({});
         setFieldValue('searchQuery', "");
-        setFieldValue('status', absenceRequestTypeStatusOptions.filter(option => option.value === absenceRequestTypeStatusConstant.all));
+        setFieldValue('status', absenceRequestTypeStatusOptions.find(option => option.value === absenceRequestTypeStatusConstant.all));
         absenceRequestTypesSearchStore.clearFilters();
         fetchData();
     };
