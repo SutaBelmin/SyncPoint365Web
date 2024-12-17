@@ -28,23 +28,23 @@ class AbsenceRequestTypesService extends BaseService {
         return response.data;
     }
 
-    async add(absenceRequestTypesData) {
+    async add(absenceRequestTypesData, signal = null) {
         const response = await this.api.post(`/absence-request-types`, absenceRequestTypesData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
 
-    async update(absenceRequestTypesData) {
+    async update(absenceRequestTypesData, signal = null) {
         const response = await this.api.put(`/absence-request-types`, absenceRequestTypesData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
     
-    async delete(absenceRequestTypesId) {
+    async delete(absenceRequestTypesId, signal = null) {
         const response = await this.api.delete(`/absence-request-types/${absenceRequestTypesId}`, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }

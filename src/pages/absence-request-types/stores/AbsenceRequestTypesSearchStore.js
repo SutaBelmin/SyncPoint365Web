@@ -75,7 +75,7 @@ class AbsenceRequestTypesSearchStore {
         const searchQuery = params.get("searchQuery") || '';
         const status = params.get("status");
         this.setQuery(searchQuery);
-        this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.active));
+        this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.all));
     }
 
     get absenceRequestFilter() {

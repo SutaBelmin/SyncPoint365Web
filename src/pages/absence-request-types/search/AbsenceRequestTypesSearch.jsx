@@ -28,7 +28,7 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const handleClear = (setFieldValue) => {
         setSearchParams({});
         setFieldValue('searchQuery', "");
-        setFieldValue('status', absenceRequestTypeStatusOptions.filter(option => option.value === 'all'));
+        setFieldValue('status', absenceRequestTypeStatusOptions.filter(option => option.value === absenceRequestTypeStatusConstant.all));
         absenceRequestTypesSearchStore.clearFilters();
         fetchData();
     };
@@ -36,10 +36,10 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     return (
         <Formik
             initialValues={{
-                searchQuery: absenceRequestTypesSearchStore.searchQuery,
+                searchQuery: absenceRequestTypesSearchStore.searchQuery || "",
                 status: absenceRequestTypeStatusOptions.find(
                     (option) => option.value === searchParams.get('status')
-                ) || absenceRequestTypeStatusOptions.filter(option => option.value === 'all')
+                ) || absenceRequestTypeStatusOptions.find(option => option.value === absenceRequestTypeStatusConstant.all)
             }}
             enableReinitialize
             onSubmit={handleSubmit}>
@@ -66,7 +66,7 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                         className="h-10 border-gray-300 input-select-border w-full md:min-w-[8rem] "
                         value={values.status}
                         onChange={(selectedOption) => {
-                            setFieldValue('status', selectedOption || absenceRequestTypeStatusOptions.filter(option => option.value === 'all'));
+                            setFieldValue('status', selectedOption || absenceRequestTypeStatusOptions.find(option => option.value === absenceRequestTypeStatusConstant.all));
                         }}
                     />
                     <button type="submit" className="btn-common h-10">
