@@ -30,6 +30,7 @@ class UsersService extends BaseService {
                 roleId: filter.roleId,
                 page: filter.page,
                 pageSize: filter.pageSize,
+                orderBy: filter.orderBy
             },
             signal: signal
         }

@@ -77,26 +77,28 @@ export const UsersList = observer(() => {
             name: t('FIRST_NAME'),
             selector: row => row.firstName,
             sortable: true,
+            sortField: 'firstName'
         },
         {
             name: t('LAST_NAME'),
             selector: row => row.lastName,
             sortable: true,
+            sortField: 'lastName'
         },
         {
             name: t('CITY'),
             selector: row => row.cityName,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ADDRESS'),
             selector: row => row.address,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('PHONE'),
             selector: row => row.phone,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ROLE'),
@@ -105,12 +107,12 @@ export const UsersList = observer(() => {
                     row.role === roleConstant.administrator ? t('ADMINISTRATOR') :
                         row.role === roleConstant.employee ? t('EMPLOYEE') : t(row.role);
             },
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('STATUS'),
             selector: row => row.isActive ? t('ACTIVE') : t('INACTIVE'),
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ACTIONS'),
@@ -227,6 +229,15 @@ export const UsersList = observer(() => {
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={paginationComponentOptions}
                     onRowClicked={(row) => onPreviewUserClick(row)}
+                    onSort={(column, sortDirection) => {
+                        const sortField = column.sortField;
+                        if (sortField) {
+                            const orderBy = `${sortField}|${sortDirection}`;
+                            usersSearchStore.setOrderBy(orderBy);
+                            usersSearchStore.setPage(1);
+                            fetchData();
+                        }
+                    }}
                 />
             </div>
         </div>

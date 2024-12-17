@@ -8,6 +8,7 @@ class UsersSearchStore {
     isActive = null;
     page = 1;
     pageSize = 10;
+    orderBy = 'lastName|asc';
 
     constructor() {
         makeObservable(this, {
@@ -16,7 +17,8 @@ class UsersSearchStore {
             setTotalItemCount: action, 
             page: observable,
             pageSize: observable,
-            totalItemCount: observable
+            totalItemCount: observable,
+            orderBy: observable
         });
 
         this.initializeQueryParams();
@@ -51,6 +53,11 @@ class UsersSearchStore {
         this.syncWithQueryParams();
     }
 
+    setOrderBy(orderBy) {
+        this.orderBy = orderBy;  
+        this.syncWithQueryParams();
+    }
+
     clearFilters() {
         this.setQuery("");
         this.setRoleId(null);
@@ -78,6 +85,9 @@ class UsersSearchStore {
         if (this.pageSize !== 10)
             params.set("pageSize", this.pageSize);
 
+        if (this.orderBy)  
+            params.set("orderBy", this.orderBy);
+
         return params;
     }
 
@@ -86,10 +96,12 @@ class UsersSearchStore {
         const searchQuery = params.get("searchQuery") || "";
         const roleId = params.get("roleId") || null;
         const isActive = params.get("isActive") || null;
+        const orderBy = params.get("orderBy") || 'firstName|asc';
 
         this.setQuery(searchQuery);
         this.setRoleId(roleId);
         this.setIsActive(isActive === null ? null : (isActive === userStatusConstant.active));
+        this.setOrderBy(orderBy);
     }
 
 
@@ -100,7 +112,8 @@ class UsersSearchStore {
             isActive: this.isActive,
             totalItemCount: this.totalItemCount,
             page: this.page,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            orderBy: this.orderBy
         };
     }
 }
