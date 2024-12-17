@@ -8,7 +8,7 @@ class UsersSearchStore {
     isActive = null;
     page = 1;
     pageSize = 10;
-    orderBy = 'lastName|asc';
+    orderBy = "";
 
     constructor() {
         makeObservable(this, {

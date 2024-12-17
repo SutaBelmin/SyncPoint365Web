@@ -60,6 +60,7 @@ export const CitiesList = observer(() => {
             name: t('NAME'),
             selector: row => row.name,
             sortable: true,
+            sortField: 'name'
         },
         {
             name: t('DISPLAY_NAME'),
@@ -156,11 +157,21 @@ export const CitiesList = observer(() => {
                     paginationComponentOptions={PaginationOptions}
                     noDataComponent={<NoDataMessage message="No cities available." />}
                     onSort={(column, sortDirection) => {
-                        const sortField = 'name';
-                        const orderBy = `${sortField}|${sortDirection}`;
-                        citiesSearchStore.setOrderBy(orderBy);
-                        citiesSearchStore.setPage(1); 
-                        fetchData();
+                        const sortField = column.sortField;
+                        if (sortField) {
+                            const orderBy = `${sortField}|${sortDirection}`;
+
+                            citiesSearchStore.setOrderBy(orderBy);
+                            citiesSearchStore.setPage(1);
+
+                            const params = citiesSearchStore.syncWithQueryParams();
+                            params.set("orderBy", orderBy); 
+
+                            const newUrl = `${window.location.pathname}?${params.toString()}`;
+                            window.history.pushState({}, "", newUrl);
+
+                            fetchData();
+                        }
                     }}
                 />
             </div>

@@ -233,8 +233,16 @@ export const UsersList = observer(() => {
                         const sortField = column.sortField;
                         if (sortField) {
                             const orderBy = `${sortField}|${sortDirection}`;
+
                             usersSearchStore.setOrderBy(orderBy);
                             usersSearchStore.setPage(1);
+
+                            const params = usersSearchStore.syncWithQueryParams();
+                            params.set("orderBy", orderBy); 
+
+                            const newUrl = `${window.location.pathname}?${params.toString()}`;
+                            window.history.pushState({}, "", newUrl);
+
                             fetchData();
                         }
                     }}

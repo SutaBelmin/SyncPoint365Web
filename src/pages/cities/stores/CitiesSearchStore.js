@@ -5,7 +5,7 @@ class CitiesSearchStore {
     searchQuery = "";
     page = 1;
     pageSize = 10;
-    orderBy = 'name|asc';
+    orderBy = "";
 
     constructor(){
         makeObservable(this, {
