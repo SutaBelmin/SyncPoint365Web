@@ -25,8 +25,14 @@ const Login = () => {
       await authService.login(values.email, values.password);
       navigate('/home');
       toast.success(t('WELCOME'));
-    } catch (err) {
-      toast.error(t('FAILED_LOGIN'));
+    } catch (error) {
+      if(error.response && error.response.status === 401){
+        toast.error(t('INVALID_CREDENTIALS'));
+      } else if (error.response && error.response.status === 403) {
+        toast.error(t('ACCOUNT_INACTIVE'));
+      } else {
+        toast.error(t('FAILED_LOGIN'));
+      }
     } finally {
       setSubmitting(false);
     }

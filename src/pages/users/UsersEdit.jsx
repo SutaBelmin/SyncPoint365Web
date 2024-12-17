@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { toast } from 'react-toastify';
 import { citiesService, enumsService, userService } from '../../services';
@@ -92,60 +92,60 @@ export const UsersEdit = () => {
                gender.label 
     }));
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await userService.getById(userId);
-                setUser(response.data);
-            } catch (error) {
-                toast.error(t('ERROR_LOADING_USER'));
-            }
-        };
-    
-        const fetchCities = async () => {
-            try {
-                const response = await citiesService.getList();
-                const citiesOption = response.data.map(city => ({
-                    value: city.id,
-                    label: city.name
-                }));
-                setCities(citiesOption);
-            } catch (error) {
-                toast.error(t('ERROR_LOADING_CITIES'));
-            }
-        };
-    
-        const fetchRoles = async () => {
-            try {
-                const response = await enumsService.getRoles();
-                const rolesOptions = response.data.map(role => ({
-                    value: role.id,
-                    label: role.label
-                }));
-                setRoles(rolesOptions);
-            } catch (error) {
-                toast.error(t('ERROR_LOADING_ROLES'));
-            }
-        };
+    const fetchUser = useCallback(async () => {
+        try {
+            const response = await userService.getById(userId);
+            setUser(response.data);
+        } catch (error) {
+            toast.error(t('ERROR_LOADING_USER'));
+        }
+    }, [userId, t]);
 
-        const fetchGenders = async () => {
-            try {
-                const response = await enumsService.getGenders();
-                const genderOptions = response.data.map(gender => ({
-                    value: gender.id,
-                    label: gender.label 
-                }));            
-                setGenders(genderOptions);
-            } catch (error) {
-                toast.error(t('ERROR_LOADING_GENDERS'))
-            }
-        };
-        
+    const fetchCities = useCallback(async () => {
+        try {
+            const response = await citiesService.getList();
+            const citiesOption = response.data.map(city => ({
+                value: city.id,
+                label: city.name
+            }));
+            setCities(citiesOption);
+        } catch (error) {
+            toast.error(t('ERROR_LOADING_CITIES'));
+        }
+    }, [t]);
+
+    const fetchRoles = useCallback(async () => {
+        try {
+            const response = await enumsService.getRoles();
+            const rolesOptions = response.data.map(role => ({
+                value: role.id,
+                label: role.label
+            }));
+            setRoles(rolesOptions);
+        } catch (error) {
+            toast.error(t('ERROR_LOADING_ROLES'));
+        }
+    }, [t]);
+
+    const fetchGenders = useCallback(async () => {
+        try {
+            const response = await enumsService.getGenders();
+            const genderOptions = response.data.map(gender => ({
+                value: gender.id,
+                label: gender.label 
+            }));            
+            setGenders(genderOptions);
+        } catch (error) {
+            toast.error(t('ERROR_LOADING_GENDERS'))
+        }
+    }, [t]);
+
+    useEffect(() => {
          fetchUser();
          fetchCities();
          fetchRoles();
          fetchGenders();
-    }, [userId, t]);
+    }, [fetchUser, fetchCities, fetchGenders, fetchRoles]);
 
     const handleBack = () => {
         navigate('/users');
@@ -217,7 +217,7 @@ export const UsersEdit = () => {
                                {t('EMAIL')} <span className='text-red-500'>*</span>
                            </label>
                            <Field
-                               type="email"
+                               type="text"
                                id="email"
                                name="email"
                                placeholder={t('EMAIL')}
@@ -305,6 +305,7 @@ export const UsersEdit = () => {
                                        value={values.phone}
                                        enableSearch
                                        country={'ba'}
+                                       className="phone-input"
                                    />
                                )}
                            />
