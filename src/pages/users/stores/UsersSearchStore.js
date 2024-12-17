@@ -89,7 +89,7 @@ class UsersSearchStore {
 
         this.setQuery(searchQuery);
         this.setRoleId(roleId);
-        this.setIsActive(isActive === null ? null : (isActive === 'active'));
+        this.setIsActive(isActive === null ? null : (isActive === userStatusConstant.active));
     }
 
 
