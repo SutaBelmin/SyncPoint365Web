@@ -11,7 +11,7 @@ import { userStatusConstant, roleConstant } from '../../../constants';
 export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
     const [roles, setRoles] = useState([]);
-    const [isActiveOptions, setIsActiveOptions] = useState([]);
+    const [userStatusOptions, setUserStatusOptions] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const fetchRoles = useCallback(async () => {
@@ -32,7 +32,7 @@ export const UsersSearch = ({ fetchData }) => {
     useEffect(() => {
         fetchRoles();
 
-        setIsActiveOptions([
+        setUserStatusOptions([
             { value: userStatusConstant.all, label: t('ALL') },
             { value: userStatusConstant.active, label: t('ACTIVE') },
             { value: userStatusConstant.inactive, label: t('INACTIVE') },
@@ -54,7 +54,7 @@ export const UsersSearch = ({ fetchData }) => {
         setSearchParams({});
         setFieldValue("searchQuery", "");
         setFieldValue("roleId", null);
-        setFieldValue('isActive', isActiveOptions[0]);
+        setFieldValue('isActive', userStatusOptions[0]);
         usersSearchStore.clearFilters();
         fetchData();
     };
@@ -70,7 +70,7 @@ export const UsersSearch = ({ fetchData }) => {
             }
             return usersSearchStore.roleId;
         })(),
-        isActive: isActiveOptions.find((option) => option.value === searchParams.get('isActive')) || isActiveOptions[0],
+        isActive: userStatusOptions.find((option) => option.value === searchParams.get('isActive')) || userStatusOptions[0],
     };
 
     return (
@@ -106,9 +106,9 @@ export const UsersSearch = ({ fetchData }) => {
                         name="isActive"
                         value={values.isActive}
                         onChange={(selectedOption) => {
-                            setFieldValue('isActive', selectedOption || isActiveOptions[0]);
+                            setFieldValue('isActive', selectedOption || userStatusOptions[0]);
                         }}
-                        options={isActiveOptions}
+                        options={userStatusOptions}
                         placeholder={t('SELECT_STATUS')}
                         isClearable
                         isSearchable

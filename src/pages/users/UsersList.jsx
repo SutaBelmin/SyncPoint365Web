@@ -18,6 +18,7 @@ import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
 import './UsersList.css';
+import { roleConstant } from '../../constants';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -92,9 +93,9 @@ export const UsersList = observer(() => {
         {
             name: t('ROLE'),
             selector: row => {
-                return row.role === 'SuperAdministrator' ? t('SUPER_ADMINISTRATOR') :
-                    row.role === 'Administrator' ? t('ADMINISTRATOR') :
-                        row.role === 'Employee' ? t('EMPLOYEE') : t(row.role);
+                return row.role === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
+                row.role === roleConstant.administrator ? t('ADMINISTRATOR') :
+                    row.role === roleConstant.employee ? t('EMPLOYEE') : t(row.role);
             },
             sortable: true,
         },
