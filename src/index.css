@@ -42,6 +42,7 @@
     lg:w-[10rem] md:w-[10rem] sm:w-full xs:w-full ss:w-full;
 }
   
+
   
 .input-select-border input[type='text']:focus {
     box-shadow: none;

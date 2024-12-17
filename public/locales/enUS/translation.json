@@ -111,5 +111,21 @@
     "SELECT_STATUS":"Select a Status",
     "STATUS":"Status", 
     "SEARCH_PLACEHOLDER":"Search",
-    "BACK":"Back"
+    "BACK":"Back",
+    "ABSENCE_REQUESTS": "Absence requests",
+    "DATE_FROM": "Date From", 
+    "DATE_TO": "Date to",
+    "DATE_RETURN": "Return",
+    "TYPE": "Type", 
+    "NEW_REQUEST": "New Request",
+    "SELECT_USER": "Select User",
+    "SELECT_TYPE": "Select Type",
+    "SELECT": "Select",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "PENDING": "Pending",
+    "STATUS": "Status",
+    "SELECT_STATUS": "Select status"
+    
+
 }

@@ -2,20 +2,24 @@ import BaseService from "./baseService";
 
 
 class AbsenceRequestTypesService extends BaseService {
-    async getList() {
-        const response = await this.api.get("/absencerequesttypes/list", {
-            cancelToken: null
+    async getList(isActive = null, signal = null) {
+        const response = await this.api.get("/absence-request-types/list", {
+            params: {
+            isActive: isActive,
+            },
+            signal: signal
         });
         return response;
     }
+
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
-            `/absencerequesttypes/paged`, 
+            `/absence-request-types/paged`,
             {
                 params: {
                     isActive: filter.isActive,
                     query: filter.query,
-                    page: filter.pageNumber,
+                    page: filter.page,
                     pageSize: filter.pageSize,
                 },
                 signal: signal
@@ -23,21 +27,24 @@ class AbsenceRequestTypesService extends BaseService {
         );
         return response.data;
     }
-    async add(absenceRequestTypesData){
-        const response = await this.api.post(`/absencerequesttypes`, absenceRequestTypesData, {
-            cancelToken: null,
+
+    async add(absenceRequestTypesData, signal = null) {
+        const response = await this.api.post(`/absence-request-types`, absenceRequestTypesData, {
+            signal: signal,
         });
         return response.data;
     }
-    async update(absenceRequestTypesData){
-        const response = await this.api.put(`/absencerequesttypes`, absenceRequestTypesData, {
-            cancelToken: null,
+
+    async update(absenceRequestTypesData, signal = null) {
+        const response = await this.api.put(`/absence-request-types`, absenceRequestTypesData, {
+            signal: signal,
         });
         return response.data;
     }
-    async delete(absenceRequestTypesId){
-        const response = await this.api.delete(`/absencerequesttypes/${absenceRequestTypesId}`, {
-            cancelToken: null,
+    
+    async delete(absenceRequestTypesId, signal = null) {
+        const response = await this.api.delete(`/absence-request-types/${absenceRequestTypesId}`, {
+            signal: signal,
         });
         return response.data;
     }

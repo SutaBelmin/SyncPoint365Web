@@ -12,6 +12,11 @@ class EnumsService extends BaseService {
         return response;
     }
 
+    async getAbsenceRequestsStatus() {
+        const response = await this.api.get("/enums/absence-requests-status");
+        return response;
+    }
+
 }
 
 const enumsService = new EnumsService();

@@ -9,6 +9,7 @@ import { UsersAdd, UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 import { CitiesList } from '../pages/cities';
+import { AbsenceRequestsList } from '../pages/absence-requests';
 
 const AppRoutes = () => {
   return (
@@ -21,7 +22,8 @@ const AppRoutes = () => {
             <Route index element={<UsersList />} />
             <Route path="add" element={<UsersAdd />} />
           </Route>
-          <Route path="/absenceRequestTypes" element={<AbsenceRequestTypesList />} />
+          <Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
+          <Route path="/absence-requests" element={<AbsenceRequestsList />} />
           <Route path="/countries" element={<CountriesList />} />
           <Route path="/cities" element={<CitiesList />} />
         </Route>

@@ -1,14 +1,24 @@
-import { makeAutoObservable } from 'mobx';
+import { makeObservable, action, observable } from "mobx";
+import { absenceRequestTypeStatusConstant } from "../../../constants";
 
 class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
-    pageNumber = 1;
+    page = 1;
     pageSize = 10;
     totalItemCount = 0;
 
     constructor() {
-        makeAutoObservable(this);
+        makeObservable(this, {
+            setPage: action,
+            setPageSize: action,
+            setTotalItemCount: action,
+            page: observable,
+            pageSize: observable,
+            totalItemCount: observable
+        });
+
+        this.initializeQueryParams();
     }
 
     setQuery(value) {
@@ -26,8 +36,8 @@ class AbsenceRequestTypesSearchStore {
         this.syncWithQueryParams();
     }
 
-    setPageNumber(value) {
-        this.pageNumber = value;
+    setPage(value) {
+        this.page = value;
         this.syncWithQueryParams();
     }
 
@@ -35,20 +45,11 @@ class AbsenceRequestTypesSearchStore {
         this.totalItemCount = value;
     }
 
-    get absenceRequestFilter() {
-        return {
-            isActive: this.isActive,
-            query: this.searchQuery,
-            pageNumber: this.pageNumber,
-            pageSize: this.pageSize,
-        };
-    }
-
-    reset() {
-        this.pageSize = 10;
-        this.pageNumber = 1;
-        this.searchQuery = '';
-        this.isActive = null;
+    clearFilters() {
+        this.setQuery(""); 
+        this.setIsActive(null);
+        this.setPage(1);
+        this.syncWithQueryParams();
     }
 
     syncWithQueryParams() {
@@ -58,10 +59,10 @@ class AbsenceRequestTypesSearchStore {
             params.set("searchQuery", this.searchQuery);
 
         if (this.isActive !== null)
-            params.set("status", this.isActive ? 'active' : 'inactive');
-        
-        if (this.pageNumber !== 1)
-            params.set("page", this.pageNumber);
+            params.set("status", this.isActive ? absenceRequestTypeStatusConstant.active : absenceRequestTypeStatusConstant.inactive);
+
+        if (this.page !== 1)
+            params.set("page", this.page);
 
         if (this.pageSize !== 10)
             params.set("pageSize", this.pageSize);
@@ -69,11 +70,22 @@ class AbsenceRequestTypesSearchStore {
         return params;
     }
 
-    initializeQueryParams(searchParams) {
-        const searchQuery = searchParams.get("searchQuery") || '';
-        const status = searchParams.get("status");
+    initializeQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const searchQuery = params.get("searchQuery") || '';
+        const status = params.get("status");
         this.setQuery(searchQuery);
-        this.setIsActive(status === null ? null : (status === 'active'));
+        this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.all));
+    }
+
+    get absenceRequestFilter() {
+        return {
+            totalItemCount: this.totalItemCount,
+            isActive: this.isActive,
+            query: this.searchQuery,
+            page: this.page,
+            pageSize: this.pageSize,
+        };
     }
 }
 
