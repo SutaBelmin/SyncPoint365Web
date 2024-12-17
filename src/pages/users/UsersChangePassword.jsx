@@ -1,6 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useTranslation } from 'react-i18next';
-import { userService } from "../../services";
+import { usersService } from "../../services";
 import { toast } from 'react-toastify';
 import * as Yup from "yup";
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -29,7 +29,7 @@ export const UsersChangePassword = ({ userId, onCancel, fetchData, closeModal })
 
     const handleSubmit = async (values) => {
         try {
-            await userService.passwordChange(userId, values.newPassword);
+            await usersService.passwordChange(userId, values.newPassword);
             toast.success(t('ADDED'));
             fetchData();
             closeModal();
