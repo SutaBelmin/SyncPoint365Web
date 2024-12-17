@@ -10,7 +10,7 @@ import { Formik, Form } from 'formik';
 import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { format } from 'date-fns';
 import { absenceRequestsSearchStore } from '../stores';
-import { absenceRequestTypesService, userService, enumsService } from '../../../services';
+import { absenceRequestTypesService, usersService, enumsService } from '../../../services';
 import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
 
 
@@ -30,7 +30,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 
 	const fetchUsers = useCallback(async () => {
 		try {
-			const response = await userService.getUsers(signal);
+			const response = await usersService.getUsers(signal);
 			const usersOptions = response.data.map(user => ({
 				value: user.id,
 				label: user.firstName + " " + user.lastName,

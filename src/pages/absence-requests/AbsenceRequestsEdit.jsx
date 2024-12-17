@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import * as Yup from "yup"
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
-import { absenceRequestsService, absenceRequestTypesService, userService } from '../../services';
+import { absenceRequestsService, absenceRequestTypesService, usersService } from '../../services';
 import { format } from 'date-fns';
 
 export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) => {
@@ -27,7 +27,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 					label: type.name
 				})));
 
-				const responseUsers = await userService.getUsers();
+				const responseUsers = await usersService.getUsers();
 				setUsers(responseUsers.data.map(user => ({
 					value: user.id,
 					label: user.firstname
