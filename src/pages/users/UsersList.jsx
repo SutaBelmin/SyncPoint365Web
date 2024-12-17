@@ -161,17 +161,17 @@ export const UsersList = observer(() => {
             <ConfirmationModal
                 title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
                 onConfirm={() => handleStatusChange(userId)}
-                onCancel={closeModal}
             />
         );
     };
 
-    const changePassword = (userId, isActive) => {
+    const changePasswordClick = (userId) => {
         openModal(
             <UsersChangePassword
-                title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
-                onConfirm={() => handleStatusChange(userId)}
+                userId={userId}
                 onCancel={closeModal}
+                fetchData={fetchData}
+                closeModal={closeModal}
             />
         );
     };
