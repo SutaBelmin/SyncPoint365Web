@@ -11,7 +11,7 @@ import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { format } from 'date-fns';
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, userService, enumsService } from '../../../services';
-import { localeConstant, absenceRequestStatuses } from '../../../constants';
+import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
 
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
@@ -60,9 +60,9 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			const response = await enumsService.getAbsenceRequestsStatus();
 			const statusOptions = response.data.map(requestStatus => ({
 				value: requestStatus.id,
-				label: requestStatus.label === absenceRequestStatuses.APPROVED ? t('APPROVED') :
-					requestStatus.label === absenceRequestStatuses.PENDING ? t('PENDING') :
-						requestStatus.label === absenceRequestStatuses.REJECTED ? t('REJECTED') :
+				label: requestStatus.label === absenceRequestStatusConstant.approved ? t('APPROVED') :
+					requestStatus.label === absenceRequestStatusConstant.pending ? t('PENDING') :
+						requestStatus.label === absenceRequestStatusConstant.rejected ? t('REJECTED') :
 							requestStatus.label
 			}));
 			setAbsenceRequestsStatuses(statusOptions);
@@ -77,7 +77,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		fetchUsers();
 		fetchAbsenceRequestTypes();
 		fetchAbsenceRequestStatus();
-	}, [searchParams, fetchAbsenceRequestTypes, fetchUsers, fetchAbsenceRequestStatus]);
+	}, [fetchAbsenceRequestTypes, fetchUsers, fetchAbsenceRequestStatus]);
 
 
 	const handleSearch = (values) => {

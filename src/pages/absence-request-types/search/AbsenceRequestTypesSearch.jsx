@@ -4,21 +4,21 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field } from 'formik';
 import { absenceRequestTypesSearchStore } from '../stores';
-import { absenceTypeConst } from '../../../constants';
+import { absenceRequestTypeStatusConstant } from '../../../constants';
 
 const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
 
-    const activityTypesOptions = ([
-        { value: absenceTypeConst.ALL, label: t('ALL') },
-        { value: absenceTypeConst.ACTIVE, label: t('ACTIVE') },
-        { value: absenceTypeConst.INACTIVE, label: t('INACTIVE') },
+    const absenceRequestTypeStatusOptions = ([
+        { value: absenceRequestTypeStatusConstant.all, label: t('ALL') },
+        { value: absenceRequestTypeStatusConstant.active, label: t('ACTIVE') },
+        { value: absenceRequestTypeStatusConstant.inactive, label: t('INACTIVE') },
     ])
 
     const handleSubmit = (values) => {
         absenceRequestTypesSearchStore.setQuery(values.searchQuery);
-        absenceRequestTypesSearchStore.setIsActive(values.status.value === absenceTypeConst.ALL ? null : (values.status.value === absenceTypeConst.ACTIVE));
+        absenceRequestTypesSearchStore.setIsActive(values.status.value === absenceRequestTypeStatusConstant.all ? null : (values.status.value === absenceRequestTypeStatusConstant.active));
         const queryParams = absenceRequestTypesSearchStore.syncWithQueryParams();
         setSearchParams(queryParams);
 
@@ -28,7 +28,7 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const handleClear = (setFieldValue) => {
         setSearchParams({});
         setFieldValue('searchQuery', "");
-        setFieldValue('status', activityTypesOptions[0]);
+        setFieldValue('status', absenceRequestTypeStatusOptions.filter(option => option.value === 'all'));
         absenceRequestTypesSearchStore.clearFilters();
         fetchData();
     };
@@ -37,9 +37,9 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
         <Formik
             initialValues={{
                 searchQuery: absenceRequestTypesSearchStore.searchQuery,
-                status: activityTypesOptions.find(
+                status: absenceRequestTypeStatusOptions.find(
                     (option) => option.value === searchParams.get('status')
-                ) || activityTypesOptions[0],
+                ) || absenceRequestTypeStatusOptions.filter(option => option.value === 'all')
             }}
             enableReinitialize
             onSubmit={handleSubmit}>
@@ -60,13 +60,13 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                     <Select
                         name="status"
                         placeholder={t("SELECT")}
-                        options={activityTypesOptions}
+                        options={absenceRequestTypeStatusOptions}
                         isSearchable={false}
                         isClearable
                         className="h-10 border-gray-300 input-select-border w-full md:min-w-[8rem] "
                         value={values.status}
                         onChange={(selectedOption) => {
-                            setFieldValue('status', selectedOption || activityTypesOptions[0]);
+                            setFieldValue('status', selectedOption || absenceRequestTypeStatusOptions.filter(option => option.value === 'all'));
                         }}
                     />
                     <button type="submit" className="btn-common h-10">

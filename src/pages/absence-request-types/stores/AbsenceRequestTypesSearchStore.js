@@ -1,4 +1,5 @@
 import { makeObservable, action, observable } from "mobx";
+import { absenceRequestTypeStatusConstant } from "../../../constants";
 
 class AbsenceRequestTypesSearchStore {
     searchQuery = '';
@@ -58,7 +59,7 @@ class AbsenceRequestTypesSearchStore {
             params.set("searchQuery", this.searchQuery);
 
         if (this.isActive !== null)
-            params.set("status", this.isActive ? 'active' : 'inactive');
+            params.set("status", this.isActive ? absenceRequestTypeStatusConstant.active : absenceRequestTypeStatusConstant.inactive);
 
         if (this.page !== 1)
             params.set("page", this.page);
@@ -74,7 +75,7 @@ class AbsenceRequestTypesSearchStore {
         const searchQuery = params.get("searchQuery") || '';
         const status = params.get("status");
         this.setQuery(searchQuery);
-        this.setIsActive(status === null ? null : (status === 'active'));
+        this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.active));
     }
 
     get absenceRequestFilter() {

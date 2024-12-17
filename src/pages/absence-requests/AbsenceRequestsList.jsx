@@ -13,9 +13,8 @@ import { format } from 'date-fns';
 import { AbsenceRequestsSearch } from "./search";
 import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
-//import { AbsenceRequestsEdit } from "../absence-requests";
 import "./AbsenceRequestsList.css";
-import { absenceRequestStatuses } from "../../constants/constants";
+import { absenceRequestStatusConstant } from "../../constants";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();
@@ -82,9 +81,9 @@ export const AbsenceRequestsList = observer(() => {
             name: t('STATUS'),
             selector: row => {
                 switch (row.absenceRequestStatus) {
-                    case absenceRequestStatuses.APPROVED:
+                    case absenceRequestStatusConstant.approved:
                         return t('APPROVED');
-                    case absenceRequestStatuses.REJECTED:
+                    case absenceRequestStatusConstant.rejected:
                         return t('REJECTED');
                     default:
                         return t('PENDING');

@@ -4,7 +4,9 @@ import BaseService from "./baseService";
 class AbsenceRequestTypesService extends BaseService {
     async getList(isActive = null, signal = null) {
         const response = await this.api.get("/absence-request-types/list", {
-            params: isActive !== null ? { isActive } : {},
+            params: {
+            isActive: isActive,
+            },
             signal: signal
         });
         return response;
