@@ -5,6 +5,7 @@ class CitiesSearchStore {
     searchQuery = "";
     page = 1;
     pageSize = 10;
+    orderBy = 'name|asc';
 
     constructor(){
         makeObservable(this, {
@@ -13,7 +14,8 @@ class CitiesSearchStore {
             setTotalItemCount: action, 
             page: observable,
             pageSize: observable,
-            totalItemCount: observable
+            totalItemCount: observable,
+            orderBy: observable
         });
 
         this.initializeQueryParams();
@@ -43,6 +45,11 @@ class CitiesSearchStore {
         this.syncWithQueryParams();
     }
 
+    setOrderBy(orderBy) {
+        this.orderBy = orderBy;  
+        this.syncWithQueryParams();
+    }
+
     clearFilters() {
         this.setCountryId(null);
         this.setQuery(""); 
@@ -65,6 +72,9 @@ class CitiesSearchStore {
         if(this.pageSize !== 10) 
             params.set("pageSize", this.pageSize);
 
+        if (this.orderBy)  
+            params.set("orderBy", this.orderBy);
+
         return params;
     }
 
@@ -72,9 +82,11 @@ class CitiesSearchStore {
         const params = new URLSearchParams(window.location.search);
         const searchQuery = params.get("searchQuery") || "";
         const countryId = params.get("countryId") || null;
+        const orderBy = params.get("orderBy") || 'name|asc';
 
         this.setQuery(searchQuery);
         this.setCountryId(countryId);
+        this.setOrderBy(orderBy);
     }
 
     get cityFilter() {
@@ -83,7 +95,8 @@ class CitiesSearchStore {
             countryId: this.countryId,
             searchQuery: this.searchQuery,
             page: this.page,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            orderBy: this.orderBy
         };
     }
 }

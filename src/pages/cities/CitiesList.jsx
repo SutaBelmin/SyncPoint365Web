@@ -8,7 +8,7 @@ import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {CitiesSearch} from "./search";
+import { CitiesSearch } from "./search";
 import { observer } from "mobx-react";
 import { reaction } from "mobx";
 import { citiesSearchStore } from './stores';
@@ -25,7 +25,9 @@ export const CitiesList = observer(() => {
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = {...citiesSearchStore.cityFilter};
+            const filter = {
+                ...citiesSearchStore.cityFilter
+            };
 
             const response = await citiesService.getPagedCities(filter, signal);
 
@@ -39,8 +41,8 @@ export const CitiesList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                page : citiesSearchStore.page,
-                pageSize : citiesSearchStore.pageSize
+                page: citiesSearchStore.page,
+                pageSize: citiesSearchStore.pageSize
             }),
             () => {
                 fetchData();
@@ -62,17 +64,17 @@ export const CitiesList = observer(() => {
         {
             name: t('DISPLAY_NAME'),
             selector: row => row.displayName,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('COUNTRY_NAME'),
             selector: row => row.country?.name,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('POSTAL_CODE'),
             selector: row => row.postalCode,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ACTIONS'),
@@ -81,12 +83,12 @@ export const CitiesList = observer(() => {
                     <button
                         onClick={() => onEditCityClick(row)}
                         className="text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit}/>
+                        <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
                         onClick={() => onDeleteCityClick(row)}
                         className="text-red-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faTrash}/>
+                        <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
             ),
@@ -117,10 +119,10 @@ export const CitiesList = observer(() => {
     }
 
     return (
-        <div  className="flex-1 p-6 bg-gray-100 h-screen">
+        <div className="flex-1 p-6 bg-gray-100 h-screen">
             <h1 className="h1"> {t("CITIES")}</h1>
-            <div className="flex flex-col gap-4 md:flex-row">            
-                <CitiesSearch fetchData={fetchData}/>
+            <div className="flex flex-col gap-4 md:flex-row">
+                <CitiesSearch fetchData={fetchData} />
 
                 <button
                     type="button"
@@ -133,26 +135,34 @@ export const CitiesList = observer(() => {
 
             <BaseModal />
             <div className="table max-w-full">
-            <DataTable
-                columns={columns}
-                data={data || []}
-                pagination
-                paginationServer
-                paginationTotalRows={citiesSearchStore.totalItemCount}
-                onChangePage={(newPage) => {
-                    citiesSearchStore.setPage(newPage);
-                }}
-                paginationPerPage={citiesSearchStore.pageSize}
-                onChangeRowsPerPage={
-                    (newPageSize) =>{
-                        citiesSearchStore.setPageSize(newPageSize);
-                        citiesSearchStore.setPage(1);
+                <DataTable
+                    columns={columns}
+                    data={data || []}
+                    pagination
+                    paginationServer
+                    paginationTotalRows={citiesSearchStore.totalItemCount}
+                    onChangePage={(newPage) => {
+                        citiesSearchStore.setPage(newPage);
+                    }}
+                    paginationPerPage={citiesSearchStore.pageSize}
+                    onChangeRowsPerPage={
+                        (newPageSize) => {
+                            citiesSearchStore.setPageSize(newPageSize);
+                            citiesSearchStore.setPage(1);
+                        }
                     }
-                }
-                highlightOnHover
-                persistTableHead={true}
-                paginationComponentOptions={PaginationOptions}
-                noDataComponent={<NoDataMessage message="No cities available."/>} />
+                    highlightOnHover
+                    persistTableHead={true}
+                    paginationComponentOptions={PaginationOptions}
+                    noDataComponent={<NoDataMessage message="No cities available." />}
+                    onSort={(column, sortDirection) => {
+                        const sortField = 'name';
+                        const orderBy = `${sortField}|${sortDirection}`;
+                        citiesSearchStore.setOrderBy(orderBy);
+                        citiesSearchStore.setPage(1); 
+                        fetchData();
+                    }}
+                />
             </div>
         </div>
     );

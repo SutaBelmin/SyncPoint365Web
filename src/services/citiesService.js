@@ -34,7 +34,8 @@ class CitiesService extends BaseService {
                 countryId: filter.countryId,
                 query: filter.searchQuery,
                 page: filter.page,
-                pageSize: filter.pageSize
+                pageSize: filter.pageSize,
+                orderBy: filter.orderBy
             },
             signal: signal
         });
