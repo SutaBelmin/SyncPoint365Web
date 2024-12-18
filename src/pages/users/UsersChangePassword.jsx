@@ -24,7 +24,10 @@ export const UsersChangePassword = ({ userId, onCancel, fetchData, closeModal })
 
     const handleSubmit = async (values) => {
         try {
-            await usersService.changePassword(userId, values.password);
+            await usersService.changePassword({
+                id: userId, 
+                password: values.password,
+            });
             toast.success(t('ADDED'));
             fetchData();
             closeModal();
@@ -38,7 +41,7 @@ export const UsersChangePassword = ({ userId, onCancel, fetchData, closeModal })
             <h2 className="text-xl font-semibold mb-4">{t('CHANGE_PASSWORD')}</h2>
             <Formik
                 initialValues={{
-                    userId,
+                    userId: userId,
                     password: "",
                     passwordConfirmation: "",
                 }}
