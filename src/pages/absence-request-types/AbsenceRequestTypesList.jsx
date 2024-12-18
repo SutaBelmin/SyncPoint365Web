@@ -23,11 +23,10 @@ export const AbsenceRequestTypesList = observer(() => {
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
-    const [sortOrder, setSortOrder] = useState("Name|asc");
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = {...absenceRequestTypesSearchStore.absenceRequestFilter};
+            const filter = { ...absenceRequestTypesSearchStore.absenceRequestFilter };
             const response = await absenceRequestTypesService.getPagedList(filter, signal);
             setData(response.items);
             absenceRequestTypesSearchStore.setTotalItemCount(response.totalItemCount);
@@ -41,8 +40,8 @@ export const AbsenceRequestTypesList = observer(() => {
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                page : absenceRequestTypesSearchStore.page,
-                pageSize : absenceRequestTypesSearchStore.pageSize
+                page: absenceRequestTypesSearchStore.page,
+                pageSize: absenceRequestTypesSearchStore.pageSize
             }),
             () => {
                 fetchData();
@@ -55,24 +54,12 @@ export const AbsenceRequestTypesList = observer(() => {
         return () => disposeReaction();
     }, [fetchData]);
 
-    const handleSort = (column) => {
-        setSortOrder((prevSortOrder) => {
-            const [field, direction] = prevSortOrder.split("|");
-            if (field === column) {
-                return direction === "asc" ? `${column}|desc` : `${column}|asc`;
-            }
-            return `${column}|asc`;
-        });
-        absenceRequestTypesService.getPagedList(sortOrder);
-
-    };
-
     const columns = [
         {
             name: t('NAME'),
             selector: (row) => row.name,
             sortable: true,
-            onSort: () => handleSort('Name'),
+            sortField: 'Name',
         },
         {
             name: t('ACTIVE'),
@@ -96,6 +83,23 @@ export const AbsenceRequestTypesList = observer(() => {
             ),
         },
     ];
+
+    const handleSort = (column, direction) => {
+        const field = column.sortField;
+        if (field) {
+            const sortOrder = `${field}|${direction}`;
+            absenceRequestTypesSearchStore.setSortOrder(sortOrder);
+            absenceRequestTypesSearchStore.setPage(1);
+    
+            const params = absenceRequestTypesSearchStore.syncWithQueryParams();
+            params.set("sortOrder", sortOrder);
+    
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.pushState({}, "", newUrl);
+    
+            fetchData();
+        }
+    };
 
     const addNewRequestClick = () => {
         openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
@@ -134,7 +138,7 @@ export const AbsenceRequestTypesList = observer(() => {
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUEST_TYPES')}</h1>
             <div className="flex flex-col gap-4 md:flex-row">
-                <AbsenceRequestTypesSearch fetchData={fetchData}/>
+                <AbsenceRequestTypesSearch fetchData={fetchData} />
                 <button
                     type="button"
                     onClick={addNewRequestClick}
@@ -160,6 +164,8 @@ export const AbsenceRequestTypesList = observer(() => {
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={PaginationOptions()}
+                    onSort={handleSort}
+                    sortServer={true}
                 />
             </div>
         </div>
