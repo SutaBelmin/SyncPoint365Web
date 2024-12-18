@@ -159,7 +159,7 @@ export const CountriesList = observer(() => {
 						const sortField = column.sortField;
 						if(sortField) {
 							const orderBy = `${sortField}|${sortDirection}`;
-
+	
 							countriesSearchStore.setOrderBy(orderBy);
 							countriesSearchStore.setPage(1);
 

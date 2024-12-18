@@ -80,7 +80,7 @@ class CountriesStore {
   initializeQueryParams() {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get("searchQuery") || "";
-    const orderBy = params.get("orderBy") || 'name|asc';
+    const orderBy = params.get("orderBy") || '';
     this.setSearchQuery(searchQuery);
     this.setOrderBy(orderBy);
   }
