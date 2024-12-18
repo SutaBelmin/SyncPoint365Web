@@ -161,7 +161,6 @@ export const CountriesList = observer(() => {
 							const orderBy = `${sortField}|${sortDirection}`;
 	
 							countriesSearchStore.setOrderBy(orderBy);
-							countriesSearchStore.setPage(1);
 
 							const params = countriesSearchStore.syncWithQueryParams();
 							params.set("orderBy", orderBy);
