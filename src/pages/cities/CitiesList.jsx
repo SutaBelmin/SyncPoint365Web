@@ -162,7 +162,6 @@ export const CitiesList = observer(() => {
                             const orderBy = `${sortField}|${sortDirection}`;
 
                             citiesSearchStore.setOrderBy(orderBy);
-                            citiesSearchStore.setPage(1);
 
                             const params = citiesSearchStore.syncWithQueryParams();
                             params.set("orderBy", orderBy); 
@@ -173,6 +172,7 @@ export const CitiesList = observer(() => {
                             fetchData();
                         }
                     }}
+                    sortServer={true}
                 />
             </div>
         </div>

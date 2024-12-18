@@ -54,6 +54,7 @@ class CitiesSearchStore {
         this.setCountryId(null);
         this.setQuery(""); 
         this.setPage(1);
+        this.setOrderBy("");
         this.syncWithQueryParams();
     }
 

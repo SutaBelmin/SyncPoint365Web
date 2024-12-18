@@ -30,22 +30,16 @@ export const UsersList = observer(() => {
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
-    const [resetSort, setResetSort] = useState(false);
-
-    const resetSorting = () => {
-        setResetSort(true); 
-        usersSearchStore.setOrderBy("");
-        usersSearchStore.setPage(1);
-    };
 
     const fetchData = useCallback(async () => {
         try {
             const filter = { ...usersSearchStore.userFilter };
-
+            console.log("filteri",filter);
             const response = await usersService.getPagedUsersFilter(filter, signal);
 
             setData(response.data.items);
             usersSearchStore.setTotalItemCount(response.data.totalItemCount);
+            console.log("podaci: ", response.data.items);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -62,7 +56,8 @@ export const UsersList = observer(() => {
         const disposeReaction = reaction(
             () => ({
                 page: usersSearchStore.page,
-                pageSize: usersSearchStore.pageSize
+                pageSize: usersSearchStore.pageSize,
+                orderBy: usersSearchStore.orderBy
             }),
             () => {
                 fetchData();
@@ -202,7 +197,7 @@ export const UsersList = observer(() => {
             <h1 className="h1">{t('USERS')}</h1>
 
             <div className="flex flex-col gap-4 xs:flex-row">
-                <UsersSearch fetchData={fetchData} resetSorting={resetSorting} />
+                <UsersSearch fetchData={fetchData} />
             </div>
 
             <div className="flex justify-end mt-4">
@@ -218,7 +213,6 @@ export const UsersList = observer(() => {
 
             <div className="table max-w-full">
                 <DataTable
-                    key={resetSort}
                     columns={columns}
                     data={data || []}
                     pagination
@@ -243,7 +237,6 @@ export const UsersList = observer(() => {
                             const orderBy = `${sortField}|${sortDirection}`;
 
                             usersSearchStore.setOrderBy(orderBy);
-                            usersSearchStore.setPage(1);
 
                             const params = usersSearchStore.syncWithQueryParams();
                             params.set("orderBy", orderBy); 
@@ -254,6 +247,7 @@ export const UsersList = observer(() => {
                             fetchData();
                         }
                     }}
+                    sortServer={true}
                 />
             </div>
         </div>

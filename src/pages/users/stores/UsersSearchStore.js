@@ -14,10 +14,11 @@ class UsersSearchStore {
         makeObservable(this, {
             setPage: action, 
             setPageSize: action, 
-            setTotalItemCount: action, 
+            setTotalItemCount: action,
+            setOrderBy: action,
             page: observable,
             pageSize: observable,
-            totalItemCount: observable,
+            totalItemCount: observable, 
             orderBy: observable
         });
 
@@ -63,9 +64,9 @@ class UsersSearchStore {
         this.setRoleId(null);
         this.setIsActive(null);
         this.setPage(1);
+        this.setOrderBy("");
         this.syncWithQueryParams();
     }
-
 
     syncWithQueryParams() {
         const params = new URLSearchParams();
