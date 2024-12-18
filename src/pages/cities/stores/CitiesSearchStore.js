@@ -6,6 +6,7 @@ class CitiesSearchStore {
     page = 1;
     pageSize = 10;
     orderBy = "";
+    currentQueryParams = null;
 
     constructor(){
         makeObservable(this, {
@@ -33,6 +34,7 @@ class CitiesSearchStore {
 
     setTotalItemCount(count) {
         this.totalItemCount = count;
+        this.syncWithQueryParams();
     }
 
     setPage(page) {
@@ -54,6 +56,7 @@ class CitiesSearchStore {
         this.setCountryId(null);
         this.setQuery(""); 
         this.setPage(1);
+        this.setPageSize(10);
         this.setOrderBy("");
         this.syncWithQueryParams();
     }
@@ -73,9 +76,13 @@ class CitiesSearchStore {
         if(this.pageSize !== 10) 
             params.set("pageSize", this.pageSize);
 
+        if(this.totalItemCount !== 0) 
+            params.set("totalItemCount", this.totalItemCount);
+
         if (this.orderBy)  
             params.set("orderBy", this.orderBy);
 
+        this.currentQueryParams = params;
         return params;
     }
 
@@ -84,10 +91,16 @@ class CitiesSearchStore {
         const searchQuery = params.get("searchQuery") || "";
         const countryId = params.get("countryId") || null;
         const orderBy = params.get("orderBy") || "";
+        const page = parseInt(params.get("page")) || 1;
+        const pageSize = parseInt(params.get("pageSize")) || 10;
+        const totalItemCount = parseInt(params.get("totalItemCount")) || 0;
 
         this.setQuery(searchQuery);
         this.setCountryId(countryId);
         this.setOrderBy(orderBy);
+        this.setPage(page);
+        this.setPageSize(pageSize);
+        this.setTotalItemCount(totalItemCount);
     }
 
     get cityFilter() {
@@ -99,6 +112,10 @@ class CitiesSearchStore {
             pageSize: this.pageSize,
             orderBy: this.orderBy
         };
+    }
+
+    get queryParams() {
+        return this.currentQueryParams;
     }
 }
 

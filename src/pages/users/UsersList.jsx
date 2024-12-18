@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
+import { useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BaseModal } from '../../components/modal';
 import { observer } from "mobx-react";
@@ -22,24 +23,22 @@ import { roleConstant } from '../../constants';
 import { UsersPreview } from './UsersPreview';
 import { UsersChangePassword } from './UsersChangePassword';
 
+
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
-
     const { t } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
+    const [,setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
             const filter = { ...usersSearchStore.userFilter };
-            console.log("filteri",filter);
             const response = await usersService.getPagedUsersFilter(filter, signal);
-
             setData(response.data.items);
             usersSearchStore.setTotalItemCount(response.data.totalItemCount);
-            console.log("podaci: ", response.data.items);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -220,11 +219,13 @@ export const UsersList = observer(() => {
                     paginationTotalRows={usersSearchStore.totalItemCount}
                     onChangePage={(newPage) => {
                         usersSearchStore.setPage(newPage);
+                        setSearchParams(usersSearchStore.queryParams);
                     }}
                     paginationPerPage={usersSearchStore.pageSize}
                     onChangeRowsPerPage={(newPageSize) => {
                         usersSearchStore.setPageSize(newPageSize);
                         usersSearchStore.setPage(1);
+                        setSearchParams(usersSearchStore.queryParams);
                     }}
                     highlightOnHover
                     persistTableHead={true}
@@ -235,16 +236,8 @@ export const UsersList = observer(() => {
                         const sortField = column.sortField;
                         if (sortField) {
                             const orderBy = `${sortField}|${sortDirection}`;
-
                             usersSearchStore.setOrderBy(orderBy);
-
-                            const params = usersSearchStore.syncWithQueryParams();
-                            params.set("orderBy", orderBy); 
-
-                            const newUrl = `${window.location.pathname}?${params.toString()}`;
-                            window.history.pushState({}, "", newUrl);
-
-                            fetchData();
+                            setSearchParams(usersSearchStore.queryParams);
                         }
                     }}
                     sortServer={true}

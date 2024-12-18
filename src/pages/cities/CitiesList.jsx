@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import DataTable from "react-data-table-component";
+import { useSearchParams } from "react-router-dom";
 import { useModal } from "../../context/ModalProvider";
 import { NoDataMessage } from "../../components/common-ui";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
@@ -19,9 +20,9 @@ import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 export const CitiesList = observer(() => {
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
-
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
+    const [, setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
@@ -42,7 +43,8 @@ export const CitiesList = observer(() => {
         const disposeReaction = reaction(
             () => ({
                 page: citiesSearchStore.page,
-                pageSize: citiesSearchStore.pageSize
+                pageSize: citiesSearchStore.pageSize,
+                orderBy: citiesSearchStore.orderBy
             }),
             () => {
                 fetchData();
@@ -93,6 +95,7 @@ export const CitiesList = observer(() => {
                     </button>
                 </div>
             ),
+            ignoreRowClick: true,
         }
     ];
 
@@ -144,12 +147,14 @@ export const CitiesList = observer(() => {
                     paginationTotalRows={citiesSearchStore.totalItemCount}
                     onChangePage={(newPage) => {
                         citiesSearchStore.setPage(newPage);
+                        setSearchParams(citiesSearchStore.queryParams);
                     }}
                     paginationPerPage={citiesSearchStore.pageSize}
                     onChangeRowsPerPage={
                         (newPageSize) => {
                             citiesSearchStore.setPageSize(newPageSize);
                             citiesSearchStore.setPage(1);
+                            setSearchParams(citiesSearchStore.queryParams);
                         }
                     }
                     highlightOnHover
@@ -160,16 +165,8 @@ export const CitiesList = observer(() => {
                         const sortField = column.sortField;
                         if (sortField) {
                             const orderBy = `${sortField}|${sortDirection}`;
-
                             citiesSearchStore.setOrderBy(orderBy);
-
-                            const params = citiesSearchStore.syncWithQueryParams();
-                            params.set("orderBy", orderBy); 
-
-                            const newUrl = `${window.location.pathname}?${params.toString()}`;
-                            window.history.pushState({}, "", newUrl);
-
-                            fetchData();
+                            setSearchParams(citiesSearchStore.queryParams);
                         }
                     }}
                     sortServer={true}
