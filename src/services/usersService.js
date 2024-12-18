@@ -23,7 +23,6 @@ class UsersService extends BaseService {
     }
 
     async getPagedUsersFilter(filter, signal = null) {
-        console.log("params: ", filter);
         const response = await this.api.get(`/users/paged`, {
             params: {
                 isActive: filter.isActive,
@@ -74,13 +73,8 @@ class UsersService extends BaseService {
         return response;
     }
     
-    async passwordChange(id, password){
-        const response = await this.api.post('users/password-change', {
-            params: {
-                id: id,
-                password: password
-            }
-        });
+    async changePassword(id, password) {
+        const response = await this.api.put(`users/change-password?id=${id}&password=${password}`);
         return response.data;
     }
 }

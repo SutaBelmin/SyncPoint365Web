@@ -87,6 +87,7 @@
     "ROLE":"Role",
     "SELECT_ROLE":"Select a Role",
     "ROLE_REQUIRED": "Role is required.",
+    "PASSWORD_REQUIREMENTS": "Password is too weak.",
     "PASSWORD_RULES": "Password must\n • Be at least 8 characters long\n • Contain at least one letter\n • Contain at least one number\n • Contain at least one special character",
     "EMAIL":"Email", 
     "ADDRESS":"Address",
@@ -136,8 +137,7 @@
     "CONTACT_INFORMATION":"Contact",
     "PERSONAL_INFORMATION":"Personal information",
     "CHANGE_PASSWORD": "Change Password",
-    "USER_ID": "User ID",
     "NEW_PASSWORD": "New Password",
-    "REPEAT_PASSWORD": "Repeat the Password",
+    "PASSWORD_CONFIRMATION": "Password Confirmation",
     "USER_ID_REQUIRED": "User ID is required."
 }
