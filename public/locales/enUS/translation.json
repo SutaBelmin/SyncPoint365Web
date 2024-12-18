@@ -109,8 +109,6 @@
     "EMAIL_ALREADY_EXIST": "Email already exist.",
     "DATE_FORMAT": "MM/dd/yyyy",
     "SEARCH_FIRST_LAST_NAME":"Search by First or Last name",
-    "SELECT_STATUS":"Select a Status",
-    "STATUS":"Status", 
     "SEARCH_PLACEHOLDER":"Search",
     "BACK":"Back",
     "ABSENCE_REQUESTS": "Absence requests",

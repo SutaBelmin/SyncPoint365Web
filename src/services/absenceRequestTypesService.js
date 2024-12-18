@@ -21,6 +21,7 @@ class AbsenceRequestTypesService extends BaseService {
                     query: filter.query,
                     page: filter.page,
                     pageSize: filter.pageSize,
+                    sortOrder: filter.sortOrder,
                 },
                 signal: signal
             }

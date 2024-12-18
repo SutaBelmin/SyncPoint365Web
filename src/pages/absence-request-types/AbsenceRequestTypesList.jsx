@@ -23,6 +23,7 @@ export const AbsenceRequestTypesList = observer(() => {
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
+    const [sortOrder, setSortOrder] = useState("Name|asc");
 
     const fetchData = useCallback(async () => {
         try {
@@ -54,16 +55,28 @@ export const AbsenceRequestTypesList = observer(() => {
         return () => disposeReaction();
     }, [fetchData]);
 
+    const handleSort = (column) => {
+        setSortOrder((prevSortOrder) => {
+            const [field, direction] = prevSortOrder.split("|");
+            if (field === column) {
+                return direction === "asc" ? `${column}|desc` : `${column}|asc`;
+            }
+            return `${column}|asc`;
+        });
+        absenceRequestTypesService.getPagedList(sortOrder);
+
+    };
+
     const columns = [
         {
             name: t('NAME'),
             selector: (row) => row.name,
-            sortable: true
+            sortable: true,
+            onSort: () => handleSort('Name'),
         },
         {
             name: t('ACTIVE'),
             selector: (row) => row.isActive ? t('YES') : t('NO'),
-            sortable: true
         },
         {
             name: t('ACTIONS'),

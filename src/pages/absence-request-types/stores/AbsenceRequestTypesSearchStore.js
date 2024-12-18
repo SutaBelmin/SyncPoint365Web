@@ -4,6 +4,7 @@ import { absenceRequestTypeStatusConstant } from "../../../constants";
 class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
+    sortOrder = null;
     page = 1;
     pageSize = 10;
     totalItemCount = 0;
@@ -31,6 +32,11 @@ class AbsenceRequestTypesSearchStore {
         this.syncWithQueryParams();
     }
 
+    setSortOrder(value) {
+        this.sortOrder = value;
+        this.syncWithQueryParams();
+    }
+
     setPageSize(newPageSize) {
         this.pageSize = newPageSize;
         this.syncWithQueryParams();
@@ -48,6 +54,7 @@ class AbsenceRequestTypesSearchStore {
     clearFilters() {
         this.setQuery(""); 
         this.setIsActive(null);
+        this.setSortOrder(null);
         this.setPage(1);
         this.syncWithQueryParams();
     }
@@ -60,6 +67,9 @@ class AbsenceRequestTypesSearchStore {
 
         if (this.isActive !== null)
             params.set("status", this.isActive ? absenceRequestTypeStatusConstant.active : absenceRequestTypeStatusConstant.inactive);
+
+        if(this.sortOrder !== null)
+            params.set("sortOrder", this.sortOrder);
 
         if (this.page !== 1)
             params.set("page", this.page);
@@ -74,17 +84,20 @@ class AbsenceRequestTypesSearchStore {
         const params = new URLSearchParams(window.location.search);
         const searchQuery = params.get("searchQuery") || '';
         const status = params.get("status");
+        const sortOrder = params.get("sortOrder");
         this.setQuery(searchQuery);
         this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.all));
+        this.setSortOrder(sortOrder);
     }
 
     get absenceRequestFilter() {
         return {
-            totalItemCount: this.totalItemCount,
             isActive: this.isActive,
             query: this.searchQuery,
+            sortOrder: this.sortOrder,
             page: this.page,
             pageSize: this.pageSize,
+            totalItemCount: this.totalItemCount,
         };
     }
 }
