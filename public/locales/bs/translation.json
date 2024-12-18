@@ -139,5 +139,5 @@
     "CHANGE_PASSWORD": "Promijeni lozinku",
     "NEW_PASSWORD": "Nova lozinka",
     "PASSWORD_CONFIRMATION": "Ponovi lozinku",
-    "USER_ID_REQUIRED": "ID korisnika obavezan."
+    "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena."
 }

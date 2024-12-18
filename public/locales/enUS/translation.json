@@ -139,5 +139,5 @@
     "CHANGE_PASSWORD": "Change Password",
     "NEW_PASSWORD": "New Password",
     "PASSWORD_CONFIRMATION": "Password Confirmation",
-    "USER_ID_REQUIRED": "User ID is required."
+    "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed."
 }

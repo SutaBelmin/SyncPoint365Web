@@ -28,7 +28,7 @@ export const UsersChangePassword = ({ userId, onCancel, fetchData, closeModal })
                 id: userId, 
                 password: values.password,
             });
-            toast.success(t('ADDED'));
+            toast.success(t('PASSWORD_SUCCESSFULLY_CHANGED'));
             fetchData();
             closeModal();
         } catch (error) {
