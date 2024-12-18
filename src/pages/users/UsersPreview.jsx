@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { genderConstant } from "../../constants/constants";
 
 export const UsersPreview = ({ user, closeModal }) => {
   const { t } = useTranslation();
@@ -14,15 +15,10 @@ export const UsersPreview = ({ user, closeModal }) => {
   };
 
   const translateGender = (gender) => {
-    switch (gender) {
-      case "Male":
-        return t('MALE');
-      case "Female":
-        return t('FEMALE');
-      default:
-        return gender;
-    }
+    if (gender === genderConstant.male) return t('MALE');
+    else return t('FEMALE');
   };
+  
 
   return (
     <div className="p-6">

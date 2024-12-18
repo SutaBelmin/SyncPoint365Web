@@ -119,7 +119,7 @@ export const UsersList = observer(() => {
             cell: (row) => (
                 <div className="flex">
                       <button 
-                    onClick={() => handleEdit(row.id)}
+                    onClick={() => navigateToEdit(row.id)}
                     className="text-xl text-blue-500 hover:underline p-2"
                     >
                         <FontAwesomeIcon icon={faEdit}/>
@@ -146,7 +146,7 @@ export const UsersList = observer(() => {
         },
     ];
 
-    const handleEdit = (userId) => {
+    const navigateToEdit = (userId) => {
         navigate(`/users/update/${userId}`);
     }
 
