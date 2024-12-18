@@ -30,6 +30,13 @@ export const UsersList = observer(() => {
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
+    const [resetSort, setResetSort] = useState(false);
+
+    const resetSorting = () => {
+        setResetSort(true); 
+        usersSearchStore.setOrderBy("");
+        usersSearchStore.setPage(1);
+    };
 
     const fetchData = useCallback(async () => {
         try {
@@ -195,7 +202,7 @@ export const UsersList = observer(() => {
             <h1 className="h1">{t('USERS')}</h1>
 
             <div className="flex flex-col gap-4 xs:flex-row">
-                <UsersSearch fetchData={fetchData} />
+                <UsersSearch fetchData={fetchData} resetSorting={resetSorting} />
             </div>
 
             <div className="flex justify-end mt-4">
@@ -211,6 +218,7 @@ export const UsersList = observer(() => {
 
             <div className="table max-w-full">
                 <DataTable
+                    key={resetSort}
                     columns={columns}
                     data={data || []}
                     pagination

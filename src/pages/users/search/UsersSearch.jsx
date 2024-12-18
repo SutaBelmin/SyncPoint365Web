@@ -8,7 +8,7 @@ import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
 import { userStatusConstant, roleConstant } from '../../../constants';
 
-export const UsersSearch = ({ fetchData }) => {
+export const UsersSearch = ({ fetchData, resetSorting }) => {
     const { t } = useTranslation();
     const [roles, setRoles] = useState([]);
     const [userStatusOptions, setUserStatusOptions] = useState([]);
@@ -56,6 +56,7 @@ export const UsersSearch = ({ fetchData }) => {
         setFieldValue("roleId", null);
         setFieldValue('isActive', userStatusOptions[0]);
         usersSearchStore.clearFilters();
+        resetSorting();
         fetchData();
     };
 
