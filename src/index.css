@@ -82,6 +82,9 @@ svg path[d="M7 10l5 5 5-5z"] {
   padding-bottom: 20px;
 }
 
+.base-modal{
+  z-index: 50;
+}
 
 /* Medium screens (max-width: 1024px) */
 @media (max-width: 1024px) {

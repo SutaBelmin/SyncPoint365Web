@@ -12,6 +12,7 @@ export const roleConstant = {
     employee: 'Employee'
 }
 
+
 export const userStatusConstant = {
     all: 'all',
     active: 'active',
@@ -34,4 +35,5 @@ export const absenceRequestTypeStatusConstant = {
     active: 'active',
     inactive: 'inactive',
 };
+
 

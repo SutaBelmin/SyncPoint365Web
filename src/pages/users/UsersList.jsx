@@ -12,13 +12,14 @@ import { useModal } from '../../context';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faCircleXmark, faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
 import './UsersList.css';
 import { roleConstant } from '../../constants';
+import { UsersPreview } from './UsersPreview';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -42,6 +43,12 @@ export const UsersList = observer(() => {
         }
 
     }, [signal, t]);
+
+    const onPreviewUserClick = (user) => {
+        openModal(
+            <UsersPreview user={user} closeModal={closeModal}/>
+        );
+    };
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -107,21 +114,38 @@ export const UsersList = observer(() => {
         {
             name: t('ACTIONS'),
             cell: (row) => (
-                <div className="flex justify-center items-center w-10">
+                <div className="flex">
+                      <button 
+                    onClick={() => navigateToEdit(row.id)}
+                    className="text-xl text-blue-500 hover:underline p-2"
+                    >
+                        <FontAwesomeIcon icon={faEdit}/>
+                    </button>
                     <button
                         onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-xl ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
+                        className={`text-xl ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
                     >
                         {row.isActive ? (
-                            <FontAwesomeIcon icon={faCircleCheck} />
-                        ) : (
                             <FontAwesomeIcon icon={faCircleXmark} />
+                        ) : (
+                            <FontAwesomeIcon icon={faCircleCheck} />
                         )}
+                    </button>
+                    <button
+                    type="button"
+                    onClick={() => onPreviewUserClick(row)}
+                    className="text-blue-500 hover:underline p-2"
+                    >
+                        <FontAwesomeIcon icon={faEye}/>
                     </button>
                 </div>
             ),
         },
     ];
+
+    const navigateToEdit = (userId) => {
+        navigate(`/users/update/${userId}`);
+    }
 
     const statusChange = (userId, isActive) => {
         openModal(
@@ -182,6 +206,7 @@ export const UsersList = observer(() => {
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={paginationComponentOptions}
+                    onRowClicked={(row) => onPreviewUserClick(row)}
                 />
             </div>
         </div>

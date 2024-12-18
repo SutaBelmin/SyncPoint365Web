@@ -40,7 +40,8 @@ export const CountriesList = observer(() => {
 	useEffect(() => {
 		const disposer = reaction(
 			() => ({
-				filter: countriesSearchStore.countryFilter,
+				page: countriesSearchStore.page,
+				pageSize: countriesSearchStore.pageSize
 			}),
 			() => {
 				fetchData();
@@ -130,7 +131,7 @@ export const CountriesList = observer(() => {
 		<div className="flex-1 p-6 bg-gray-100 h-screen">
 			<h1 className="h1">{t('COUNTRIES')}</h1>
 			<div className="flex flex-col gap-4 sm:flex-row">
-				<CountriesSearch />
+				<CountriesSearch fetchData={fetchData}/>
 				<button
 					type='button'
 					onClick={onAddCountriesClick}

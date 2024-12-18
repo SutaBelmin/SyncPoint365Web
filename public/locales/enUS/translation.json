@@ -124,8 +124,16 @@
     "APPROVED": "Approved",
     "REJECTED": "Rejected",
     "PENDING": "Pending",
-    "STATUS": "Status",
-    "SELECT_STATUS": "Select status"
-    
-
+    "UPDATE_USER":"Update user",
+    "USER_PREVIEW":"Preview of user",
+    "CLOSE":"Close",
+    "ERROR_LOADING_CITIES":"Error while loading cities.",
+    "ERROR_LOADING_ROLES":"Error while loading roles.",
+    "ERROR_LOADING_GENDERS":"Error while loading genders.",
+    "LOADING":"Loading...",
+    "BACK":"Back",
+    "INVALID_CREDENTIALS":"Invalid credentials!",
+    "ACCOUNT_INACTIVE":"Account inactive!",
+    "CONTACT_INFORMATION":"Contact",
+    "PERSONAL_INFORMATION":"Personal information"
 }

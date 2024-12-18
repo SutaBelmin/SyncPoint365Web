@@ -1,33 +1,36 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from "react-router-dom";
 
-export const CountriesSearch = () => {
+export const CountriesSearch = ({fetchData}) => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  countriesSearchStore.setSearchQuery(searchParams.get('searchQuery') || '');
+
   const handleSearch = (values) => {
     countriesSearchStore.setSearchQuery(values.searchQuery);
-    setSearchParams(countriesSearchStore.countryFilter);
+
+    const queryParams = countriesSearchStore.syncWithQueryParams();
+    setSearchParams(queryParams);
+
+    fetchData();
   };
 
   const handleClearFilters = (setFieldValue) => {
-    countriesSearchStore.resetFilters();
-    setFieldValue("searchQuery", "");
     setSearchParams({});
+    setFieldValue("searchQuery", "");
+    countriesSearchStore.resetFilters();
+    fetchData();
   };
             
-  useEffect(() => {
-    countriesSearchStore.initializeQueryParams(searchParams);
-  }, [searchParams]);
-
   return (
     <Formik
+      enableReinitialize
       initialValues={{searchQuery: countriesSearchStore.searchQuery}}
       onSubmit={handleSearch}
-      enableReinitialize
     >
       {({ setFieldValue  }) => (
         <Form className="flex flex-col gap-4 xs:flex-row">

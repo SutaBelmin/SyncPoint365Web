@@ -11,7 +11,7 @@ const { isModalOpen, closeModal, modalContent } = useModal();
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Modal"
-      className="relative p-6 w-full max-w-md mx-auto bg-white rounded-lg shadow-lg"
+      className="relative p-6 w-full max-w-md mx-auto bg-white rounded-lg shadow-lg base-modal"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
     >
       <div className="relative">

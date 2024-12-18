@@ -3,20 +3,12 @@ import BaseService from './baseService';
 class AuthService extends BaseService {
 
   async login(email, password) {
-    try {
       const response = await this.api.post('/auth/login', { email, password });
       const { token, user } = response.data;
 
       localStorage.setItem('token', token);
 
       return { user, token };
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        throw new Error('Invalid credentials');
-      } else {
-        throw new Error('An error occurred, please try again later');
-      }
-    }
   }
 
   logout() {
