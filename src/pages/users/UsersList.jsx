@@ -12,7 +12,6 @@ import { useModal } from '../../context';
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark, faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
@@ -20,8 +19,6 @@ import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
 import './UsersList.css';
 import { roleConstant } from '../../constants';
-import { useNavigate } from 'react-router-dom';
-import { useModal } from '../../context';
 import { UsersPreview } from './UsersPreview';
 
 export const UsersList = observer(() => {
@@ -148,12 +145,6 @@ export const UsersList = observer(() => {
 
     const navigateToEdit = (userId) => {
         navigate(`/users/update/${userId}`);
-    }
-
-    const formatRoleKey = (role) => {
-        return role
-            .replace(/([a-z])([A-Z])/g, '$1_$2')
-            .toUpperCase();
     }
 
     const statusChange = (userId, isActive) => {
