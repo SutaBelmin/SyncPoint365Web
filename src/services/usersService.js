@@ -74,10 +74,7 @@ class UsersService extends BaseService {
     }
     
     async changePassword(user) {
-        const response = await this.api.put('users/change-password', {
-            id: user.id,
-            password: user.password,
-        });
+        const response = await this.api.put('users/change-password', user);
         return response.data;
     }    
 }
