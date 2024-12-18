@@ -96,7 +96,7 @@ class UsersSearchStore {
         const searchQuery = params.get("searchQuery") || "";
         const roleId = params.get("roleId") || null;
         const isActive = params.get("isActive") || null;
-        const orderBy = params.get("orderBy") || 'firstName|asc';
+        const orderBy = params.get("orderBy") || "";
 
         this.setQuery(searchQuery);
         this.setRoleId(roleId);

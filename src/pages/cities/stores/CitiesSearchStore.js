@@ -82,7 +82,7 @@ class CitiesSearchStore {
         const params = new URLSearchParams(window.location.search);
         const searchQuery = params.get("searchQuery") || "";
         const countryId = params.get("countryId") || null;
-        const orderBy = params.get("orderBy") || 'name|asc';
+        const orderBy = params.get("orderBy") || "";
 
         this.setQuery(searchQuery);
         this.setCountryId(countryId);
