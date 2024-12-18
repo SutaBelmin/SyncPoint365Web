@@ -1,4 +1,4 @@
-import {makeObservable, action, observable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 
 class CountriesStore {
   totalItemCount = 0;
@@ -12,9 +12,11 @@ class CountriesStore {
       setPage: action,
       setPageSize: action,
       setTotalItemCount: action,
+      setOrderBy: action,
       page: observable,
       rowsPerPage: observable,
       totalItemCount: observable,
+      orderBy: observable
     });
 
     this.initializeQueryParams();
