@@ -8,15 +8,18 @@ class AbsenceRequestTypesSearchStore {
     page = 1;
     pageSize = 10;
     totalItemCount = 0;
+    currentQueryParams = null;
 
     constructor() {
         makeObservable(this, {
             setPage: action,
             setPageSize: action,
             setTotalItemCount: action,
+            setSortOrder:action,
             page: observable,
             pageSize: observable,
-            totalItemCount: observable
+            totalItemCount: observable,
+            sortOrder: observable
         });
 
         this.initializeQueryParams();
@@ -37,8 +40,8 @@ class AbsenceRequestTypesSearchStore {
         this.syncWithQueryParams();
     }
 
-    setPageSize(newPageSize) {
-        this.pageSize = newPageSize;
+    setPageSize(value) {
+        this.pageSize = value;
         this.syncWithQueryParams();
     }
 
@@ -77,17 +80,24 @@ class AbsenceRequestTypesSearchStore {
         if (this.pageSize !== 10)
             params.set("pageSize", this.pageSize);
 
+        this.currentQueryParams = params;
         return params;
     }
 
     initializeQueryParams() {
         const params = new URLSearchParams(window.location.search);
+
         const searchQuery = params.get("searchQuery") || '';
         const status = params.get("status");
         const sortOrder = params.get("sortOrder");
+        const page = parseInt(params.get("page")) || 1;
+        const pageSize = parseInt(params.get("pageSize")) || 10;
+
         this.setQuery(searchQuery);
         this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.all));
         this.setSortOrder(sortOrder);
+        this.setPage(page);
+        this.setPageSize(pageSize);
     }
 
     get absenceRequestFilter() {
@@ -99,6 +109,10 @@ class AbsenceRequestTypesSearchStore {
             pageSize: this.pageSize,
             totalItemCount: this.totalItemCount,
         };
+    }
+
+    get queryParams() {
+        return this.currentQueryParams;
     }
 }
 

@@ -15,12 +15,14 @@ import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
 import "./AbsenceRequestsList.css";
 import { absenceRequestStatusConstant } from "../../constants";
+import { useSearchParams } from "react-router-dom";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { signal } = useRequestAbort();
+    const [, setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
@@ -42,7 +44,7 @@ export const AbsenceRequestsList = observer(() => {
         const disposeReaction = reaction(
             () => ({
                 page: absenceRequestsSearchStore.page,
-                pageSize: absenceRequestsSearchStore.pageSize
+                pageSize: absenceRequestsSearchStore.pageSize,
             }),
             () => {
                 fetchData();
@@ -55,27 +57,51 @@ export const AbsenceRequestsList = observer(() => {
         return () => disposeReaction();
     }, [fetchData]);
 
+    const handleSort = async (column, direction) => {
+        if (Object.keys(column).length === 0) {
+            return;
+        }
+        const field = column.sortField;
+        let sortOrder = '';
+        if (field === "user.lastName") {
+            sortOrder = `${field}|${direction}, user.firstName|${direction}`;
+        } else {
+            sortOrder = `${field}|${direction}`;
+        }
+        absenceRequestsSearchStore.setSortOrder(sortOrder);
+        absenceRequestsSearchStore.setPage(1);
+
+        const params = absenceRequestsSearchStore.syncWithQueryParams();
+        params.set("sortOrder", sortOrder);
+
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        window.history.pushState({}, "", newUrl);
+
+        fetchData();
+    };
 
     const columns = [
         {
-            name: t('USERS'),
+            name: t('USER'),
             selector: (row) => `${row.user?.firstName || ''} ${row.user?.lastName || ''}`.trim(),
             sortable: true,
+            sortField: 'user.lastName',
         },
         {
             name: t('DATE_FROM'),
             selector: (row) => row.dateFrom ? format(new Date(row.dateFrom), t('DATE_FORMAT')) : '',
             sortable: true,
+            sortField: 'dateFrom',
         },
         {
             name: t('DATE_TO'),
             selector: (row) => row.dateTo ? format(new Date(row.dateTo), t('DATE_FORMAT')) : '',
             sortable: true,
+            sortField: 'dateTo'
         },
         {
             name: t('DATE_RETURN'),
             selector: (row) => row.dateReturn ? format(new Date(row.dateReturn), t('DATE_FORMAT')) : '',
-            sortable: true,
         },
         {
             name: t('STATUS'),
@@ -89,12 +115,10 @@ export const AbsenceRequestsList = observer(() => {
                         return t('PENDING');
                 }
             },
-            sortable: true,
         },
         {
             name: t('TYPE'),
             selector: (row) => row.absenceRequestType?.name,
-            sortable: true,
         },
         {
             name: t('ACTIONS'),
@@ -143,9 +167,9 @@ export const AbsenceRequestsList = observer(() => {
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
             <div className="flex flex-col gap-4 xs:flex-row">
                 <AbsenceRequestsSearch fetchData={fetchData} />
-                </div>
+            </div>
 
-                {/* <div className="flex justify-end mt-4">
+            {/* <div className="flex justify-end mt-4">
                     <button
                         type="button"
                         className="btn-common h-10 ml-auto"
@@ -163,21 +187,29 @@ export const AbsenceRequestsList = observer(() => {
                     pagination
                     paginationServer
                     paginationTotalRows={absenceRequestsSearchStore.totalItemCount}
+                    paginationDefaultPage={absenceRequestsSearchStore.page}
                     onChangePage={(newPage) => {
-                        absenceRequestsSearchStore.setPage(newPage);
+                        if (newPage !== absenceRequestsSearchStore.page) {
+                            absenceRequestsSearchStore.setPage(newPage);
+                            setSearchParams(absenceRequestsSearchStore.queryParams);
+                        }
                     }}
                     paginationPerPage={absenceRequestsSearchStore.pageSize}
                     onChangeRowsPerPage={
                         (newPageSize) => {
-                            absenceRequestsSearchStore.setPageSize(newPageSize);
-                            absenceRequestsSearchStore.setPage(1);
-                        }
-                    }
+                            if (newPageSize !== absenceRequestsSearchStore.pageSize) {
+                                absenceRequestsSearchStore.setPageSize(newPageSize);
+                                absenceRequestsSearchStore.setPage(1);
+                                setSearchParams(absenceRequestsSearchStore.queryParams);
+                            }
+                        }}
                     highlightOnHover
                     progressPending={loading}
                     persistTableHead={true}
                     paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
+                    onSort={handleSort}
+                    sortServer={true}
                 />
             </div>
         </div >

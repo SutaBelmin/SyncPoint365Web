@@ -14,6 +14,7 @@
     "HOME": "Home",
     "WELCOME_TO_HOME_SCREEN": "Welcome to the Home Screen.",
     "USERS": "Users",
+    "USER": "User",
     "FIRST_NAME":"First name",
     "LAST_NAME":"Last name",
     "FULL_NAME":"Full name",
@@ -111,9 +112,9 @@
     "SEARCH_FIRST_LAST_NAME":"Search by First or Last name",
     "SEARCH_PLACEHOLDER":"Search",
     "BACK":"Back",
-    "ABSENCE_REQUESTS": "Absence requests",
+    "ABSENCE_REQUESTS": "Absence Requests",
     "DATE_FROM": "Date From", 
-    "DATE_TO": "Date to",
+    "DATE_TO": "Date To",
     "DATE_RETURN": "Return",
     "TYPE": "Type", 
     "NEW_REQUEST": "New Request",
@@ -137,5 +138,6 @@
     "CHANGE_PASSWORD": "Change Password",
     "NEW_PASSWORD": "New Password",
     "PASSWORD_CONFIRMATION": "Password Confirmation",
-    "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed."
+    "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed.",
+    "SELECT_STATUS": "Select Status"
 }

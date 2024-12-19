@@ -15,6 +15,7 @@ import AbsenceRequestTypesSearch from "./search";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { absenceRequestTypesSearchStore } from "./stores";
 import { absenceRequestTypesService } from "../../services";
+import { useSearchParams } from "react-router-dom";
 
 
 export const AbsenceRequestTypesList = observer(() => {
@@ -23,6 +24,7 @@ export const AbsenceRequestTypesList = observer(() => {
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
+    const [, setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
@@ -41,7 +43,7 @@ export const AbsenceRequestTypesList = observer(() => {
         const disposeReaction = reaction(
             () => ({
                 page: absenceRequestTypesSearchStore.page,
-                pageSize: absenceRequestTypesSearchStore.pageSize
+                pageSize: absenceRequestTypesSearchStore.pageSize,
             }),
             () => {
                 fetchData();
@@ -53,6 +55,23 @@ export const AbsenceRequestTypesList = observer(() => {
 
         return () => disposeReaction();
     }, [fetchData]);
+
+    const handleSort = (column, direction) => {
+        const field = column.sortField;
+        if (field) {
+            const sortOrder = `${field}|${direction}`;
+            absenceRequestTypesSearchStore.setSortOrder(sortOrder);
+            absenceRequestTypesSearchStore.setPage(1);
+    
+            const params = absenceRequestTypesSearchStore.syncWithQueryParams();
+            params.set("sortOrder", sortOrder);
+    
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.pushState({}, "", newUrl);
+    
+            fetchData();
+        }
+    };
 
     const columns = [
         {
@@ -84,23 +103,6 @@ export const AbsenceRequestTypesList = observer(() => {
         },
     ];
 
-    const handleSort = (column, direction) => {
-        const field = column.sortField;
-        if (field) {
-            const sortOrder = `${field}|${direction}`;
-            absenceRequestTypesSearchStore.setSortOrder(sortOrder);
-            absenceRequestTypesSearchStore.setPage(1);
-    
-            const params = absenceRequestTypesSearchStore.syncWithQueryParams();
-            params.set("sortOrder", sortOrder);
-    
-            const newUrl = `${window.location.pathname}?${params.toString()}`;
-            window.history.pushState({}, "", newUrl);
-    
-            fetchData();
-        }
-    };
-
     const addNewRequestClick = () => {
         openModal(<AbsenceRequestTypesAdd closeModal={closeModal} fetchData={fetchData} />);
     }
@@ -125,12 +127,19 @@ export const AbsenceRequestTypesList = observer(() => {
     }
 
     const handlePageChange = (newPage) => {
-        absenceRequestTypesSearchStore.setPage(newPage);
+        if (newPage !== absenceRequestTypesSearchStore.page){
+            absenceRequestTypesSearchStore.setPage(newPage);
+            setSearchParams(absenceRequestTypesSearchStore.queryParams);
+        }
     }
 
     const handleRowsPerPageChange = (newPageSize) => {
-        absenceRequestTypesSearchStore.setPageSize(newPageSize);
-        absenceRequestTypesSearchStore.setPage(1);
+        if(newPageSize !== absenceRequestTypesSearchStore.pageSize){
+            absenceRequestTypesSearchStore.setPageSize(newPageSize);
+            absenceRequestTypesSearchStore.setPage(1);
+            setSearchParams(absenceRequestTypesSearchStore.queryParams);
+        }
+        
     };
 
 
@@ -152,7 +161,6 @@ export const AbsenceRequestTypesList = observer(() => {
                 <DataTable
                     columns={columns}
                     data={data}
-                    highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={absenceRequestTypesSearchStore.totalItemCount}
@@ -160,6 +168,7 @@ export const AbsenceRequestTypesList = observer(() => {
                     paginationPerPage={absenceRequestTypesSearchStore.rowsPerPage}
                     onChangePage={handlePageChange}
                     onChangeRowsPerPage={handleRowsPerPageChange}
+                    highlightOnHover
                     progressPending={loading}
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}

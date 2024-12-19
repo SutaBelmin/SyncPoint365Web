@@ -14,6 +14,7 @@
     "HOME": "Naslovnica",
     "WELCOME_TO_HOME_SCREEN": "Dobrodošli na početnu stranicu.",
     "USERS": "Korisnici",
+    "USER": "User",
     "FIRST_NAME":"Ime",
     "LAST_NAME":"Prezime",
     "FULL_NAME":"Ime i prezime",
@@ -137,5 +138,6 @@
     "CHANGE_PASSWORD": "Promijeni lozinku",
     "NEW_PASSWORD": "Nova lozinka",
     "PASSWORD_CONFIRMATION": "Ponovi lozinku",
-    "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena."
+    "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena.",
+    "SELECT_STATUS": "Odaberi status"
 }

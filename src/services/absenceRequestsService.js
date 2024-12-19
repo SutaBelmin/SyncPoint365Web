@@ -12,11 +12,11 @@ class AbsenceRequestsService extends BaseService {
                     userId: filter.userId, 
                     dateFrom: filter.dateFrom,
                     dateTo: filter.dateTo,
+                    sortOrder: filter.sortOrder,
                     page: filter.page, 
                     pageSize: filter.pageSize,
                 },
                 signal: signal,
-                
             }
         );
         return response;
