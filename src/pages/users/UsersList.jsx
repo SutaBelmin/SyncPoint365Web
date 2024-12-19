@@ -18,11 +18,10 @@ import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
-import './UsersList.css';
 import { roleConstant } from '../../constants';
 import { UsersPreview } from './UsersPreview';
 import { UsersChangePassword } from './UsersChangePassword';
-
+import './UsersList.css';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -217,15 +216,20 @@ export const UsersList = observer(() => {
                     pagination
                     paginationServer
                     paginationTotalRows={usersSearchStore.totalItemCount}
+                    paginationDefaultPage={usersSearchStore.page}
                     onChangePage={(newPage) => {
-                        usersSearchStore.setPage(newPage);
-                        setSearchParams(usersSearchStore.queryParams);
+                        if(newPage !== usersSearchStore.page){
+                            usersSearchStore.setPage(newPage);
+                            setSearchParams(usersSearchStore.queryParams);
+                        }
                     }}
                     paginationPerPage={usersSearchStore.pageSize}
                     onChangeRowsPerPage={(newPageSize) => {
-                        usersSearchStore.setPageSize(newPageSize);
-                        usersSearchStore.setPage(1);
-                        setSearchParams(usersSearchStore.queryParams);
+                        if(newPageSize !== usersSearchStore.pageSize){
+                            usersSearchStore.setPageSize(newPageSize);
+                            usersSearchStore.setPage(1);
+                            setSearchParams(usersSearchStore.queryParams);
+                        }
                     }}
                     highlightOnHover
                     persistTableHead={true}

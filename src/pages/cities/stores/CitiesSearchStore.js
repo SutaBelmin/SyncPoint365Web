@@ -13,6 +13,7 @@ class CitiesSearchStore {
             setPage: action, 
             setPageSize: action, 
             setTotalItemCount: action, 
+            setOrderBy: action,
             page: observable,
             pageSize: observable,
             totalItemCount: observable,
@@ -63,7 +64,6 @@ class CitiesSearchStore {
 
     syncWithQueryParams() {
         const params = new URLSearchParams();
-
         if (this.searchQuery)
             params.set("searchQuery", this.searchQuery);
         
@@ -72,7 +72,7 @@ class CitiesSearchStore {
 
         if(this.page !== 1) 
             params.set("page", this.page);
-      
+        
         if(this.pageSize !== 10) 
             params.set("pageSize", this.pageSize);
 
@@ -94,7 +94,7 @@ class CitiesSearchStore {
         const page = parseInt(params.get("page")) || 1;
         const pageSize = parseInt(params.get("pageSize")) || 10;
         const totalItemCount = parseInt(params.get("totalItemCount")) || 0;
-
+    
         this.setQuery(searchQuery);
         this.setCountryId(countryId);
         this.setOrderBy(orderBy);

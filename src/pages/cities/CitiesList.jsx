@@ -44,6 +44,7 @@ export const CitiesList = observer(() => {
             () => ({
                 page: citiesSearchStore.page,
                 pageSize: citiesSearchStore.pageSize,
+                totalItemCount: citiesSearchStore.totalItemCount,
                 orderBy: citiesSearchStore.orderBy
             }),
             () => {
@@ -145,22 +146,28 @@ export const CitiesList = observer(() => {
                     pagination
                     paginationServer
                     paginationTotalRows={citiesSearchStore.totalItemCount}
+                    paginationDefaultPage={citiesSearchStore.page}
                     onChangePage={(newPage) => {
-                        citiesSearchStore.setPage(newPage);
-                        setSearchParams(citiesSearchStore.queryParams);
+                        if (newPage !== citiesSearchStore.page) {
+                            citiesSearchStore.setPage(newPage);
+                            setSearchParams(citiesSearchStore.queryParams);
+                        }
                     }}
+
                     paginationPerPage={citiesSearchStore.pageSize}
                     onChangeRowsPerPage={
                         (newPageSize) => {
-                            citiesSearchStore.setPageSize(newPageSize);
-                            citiesSearchStore.setPage(1);
-                            setSearchParams(citiesSearchStore.queryParams);
+                            if (newPageSize !== citiesSearchStore.pageSize) {
+                                citiesSearchStore.setPageSize(newPageSize);
+                                citiesSearchStore.setPage(1);
+                                setSearchParams(citiesSearchStore.queryParams);
+                            }
                         }
                     }
                     highlightOnHover
                     persistTableHead={true}
                     paginationComponentOptions={PaginationOptions}
-                    noDataComponent={<NoDataMessage message="No cities available." />}
+                    noDataComponent={<NoDataMessage />}
                     onSort={(column, sortDirection) => {
                         const sortField = column.sortField;
                         if (sortField) {

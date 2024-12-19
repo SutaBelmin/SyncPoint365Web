@@ -70,7 +70,6 @@ class UsersSearchStore {
     }
 
     syncWithQueryParams() {
-        console.log("page:", this.page);
         const params = new URLSearchParams();
 
         if (this.searchQuery)
