@@ -44,7 +44,6 @@ export const CitiesList = observer(() => {
             () => ({
                 page: citiesSearchStore.page,
                 pageSize: citiesSearchStore.pageSize,
-                totalItemCount: citiesSearchStore.totalItemCount,
                 orderBy: citiesSearchStore.orderBy
             }),
             () => {

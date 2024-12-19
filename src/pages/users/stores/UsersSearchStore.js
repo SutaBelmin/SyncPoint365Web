@@ -28,6 +28,7 @@ class UsersSearchStore {
 
     setTotalItemCount(count) {
         this.totalItemCount = count;
+        this.syncWithQueryParams();
     }
 
     setPage(page) {
