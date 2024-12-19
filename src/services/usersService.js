@@ -23,7 +23,6 @@ class UsersService extends BaseService {
     }
 
     async getPagedUsersFilter(filter, signal = null) {
-        console.log("params: ", filter);
         const response = await this.api.get(`/users/paged`, {
             params: {
                 isActive: filter.isActive,
@@ -73,6 +72,11 @@ class UsersService extends BaseService {
         const response = await this.api.put(`/users`, userData);
         return response;
     }
+    
+    async changePassword(user) {
+        const response = await this.api.put('users/change-password', user);
+        return response.data;
+    }    
 }
 
 const usersService = new UsersService();

@@ -34,7 +34,7 @@
     "ROWS_PER_PAGE:": "Broj redova po stranici:",
     "OF": "Od",
     "SAVE": "Spremi",
-    "CANCEL": "Poništi",
+    "CANCEL": "Odustani",
     "CONFIRM_DELETE": "Potvrdi brisanje",
     "ARE_YOU_SURE_YOU_WANT_TO_DELETE?": "Jeste li sigurni da želite obrisati?",
     "NO": "Ne", 
@@ -87,6 +87,7 @@
     "ROLE":"Uloga",
     "SELECT_ROLE":"Odaberi ulogu",
     "ROLE_REQUIRED": "Obavezna uloga.",
+    "PASSWORD_REQUIREMENTS": "Lozinka je preslaba.",
     "PASSWORD_RULES":"Lozinka mora\n • imati najmanje 8 znakova\n • sadržavati najmanje jedno slovo\n • sadržavati najmanje jedan broj \n • sadržavati najmanje jedan specijalni znak",
     "EMAIL":"Email",
     "ADDRESS":"Adresa",
@@ -131,9 +132,12 @@
     "ERROR_LOADING_ROLES":"Greška pri učitavanju uloga.",
     "ERROR_LOADING_GENDERS":"Greška pri učitavanju spolova.",
     "LOADING":"Učitavanje...",
-    "BACK":"Nazad",
     "INVALID_CREDENTIALS":"Nevažeći kredencijali!",
     "ACCOUNT_INACTIVE":"Profil neaktivan!",
     "CONTACT_INFORMATION":"Kontakt",
-    "PERSONAL_INFORMATION":"Lični podaci"
+    "PERSONAL_INFORMATION":"Lični podaci",
+    "CHANGE_PASSWORD": "Promijeni lozinku",
+    "NEW_PASSWORD": "Nova lozinka",
+    "PASSWORD_CONFIRMATION": "Ponovi lozinku",
+    "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena."
 }

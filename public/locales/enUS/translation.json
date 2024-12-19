@@ -87,6 +87,7 @@
     "ROLE":"Role",
     "SELECT_ROLE":"Select a Role",
     "ROLE_REQUIRED": "Role is required.",
+    "PASSWORD_REQUIREMENTS": "Password is too weak.",
     "PASSWORD_RULES": "Password must\n • Be at least 8 characters long\n • Contain at least one letter\n • Contain at least one number\n • Contain at least one special character",
     "EMAIL":"Email", 
     "ADDRESS":"Address",
@@ -131,9 +132,12 @@
     "ERROR_LOADING_ROLES":"Error while loading roles.",
     "ERROR_LOADING_GENDERS":"Error while loading genders.",
     "LOADING":"Loading...",
-    "BACK":"Back",
     "INVALID_CREDENTIALS":"Invalid credentials!",
     "ACCOUNT_INACTIVE":"Account inactive!",
     "CONTACT_INFORMATION":"Contact",
-    "PERSONAL_INFORMATION":"Personal information"
+    "PERSONAL_INFORMATION":"Personal information",
+    "CHANGE_PASSWORD": "Change Password",
+    "NEW_PASSWORD": "New Password",
+    "PASSWORD_CONFIRMATION": "Password Confirmation",
+    "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed."
 }
