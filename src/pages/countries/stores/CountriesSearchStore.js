@@ -6,6 +6,7 @@ class CountriesStore {
   page = 1;
   rowsPerPage = 10;
   orderBy = "";
+  currentQueryParams = null;
 
   constructor() {
     makeObservable(this, {
@@ -33,7 +34,7 @@ class CountriesStore {
   }
 
   setPageSize(newPageSize) {
-    this.pageSize = newPageSize;
+    this.rowsPerPage = newPageSize;
     this.syncWithQueryParams();
   }
 
@@ -44,15 +45,14 @@ class CountriesStore {
 
   setTotalItemCount(count) {
     this.totalItemCount = count;
+    this.syncWithQueryParams();
   }
 
   resetFilters() {
     this.setSearchQuery("");
     this.setPage(1);
-    this.searchQuery = "";
-    this.page = 1;
-    this.rowsPerPage = 10;
-    this.orderBy = "";
+    this.setPageSize(10);
+    this.setOrderBy("");
     this.syncWithQueryParams();
   }
 
@@ -76,15 +76,28 @@ class CountriesStore {
     if(this.orderBy)
       params.set("orderBy", this.orderBy);
 
+    this.currentQueryParams = params;
+
     return params;
   }
 
   initializeQueryParams() {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get("searchQuery") || "";
-    const orderBy = params.get("orderBy") || '';
+    const orderBy = params.get("orderBy") || "";
+    const page = parseInt(params.get("page")) || 1;
+    const pageSize = parseInt(params.get("rowsPerPage")) || 10;
+    const totalItemCount = parseInt(params.get("totalItemCount"));
+
     this.setSearchQuery(searchQuery);
     this.setOrderBy(orderBy);
+    this.setPage(page);
+    this.setRowsPerPage(pageSize);
+    this.setTotalItemCount(totalItemCount);
+  }
+
+  get queryParams() {
+    return this.currentQueryParams;
   }
 
   get countryFilter() {

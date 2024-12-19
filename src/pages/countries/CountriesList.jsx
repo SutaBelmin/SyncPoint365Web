@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { NoDataMessage } from "../../components/common-ui";
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { useSearchParams } from "react-router-dom";
 
 
 export const CountriesList = observer(() => {
@@ -24,7 +25,8 @@ export const CountriesList = observer(() => {
 	const { t } = useTranslation();
 	const paginationComponentOptions = PaginationOptions();
 	const { signal } = useRequestAbort();
-
+	const[,setSearchParams] = useSearchParams();
+	
 	const fetchData = useCallback(
 		async () => {
 			try {
@@ -39,11 +41,17 @@ export const CountriesList = observer(() => {
 
 		useEffect(() => {
 			const disposer = reaction(
-			  () => countriesSearchStore.countryFilter, 
+			  () => ({
+				page: countriesSearchStore.page,
+				pagesize: countriesSearchStore.pageSize,
+				orderBy: countriesSearchStore.orderBy
+			  }), 
 			  () => {
 				fetchData();  
 			  },
-			  { fireImmediately: true }  
+			  { 
+				fireImmediately: true 
+			  }  
 			);
 		  
 			return () => disposer();  
@@ -51,12 +59,21 @@ export const CountriesList = observer(() => {
 		  
 
 	const handlePageChange = (newPage) => {
-		countriesSearchStore.setPage(newPage);
+		if(newPage !== countriesSearchStore.page) {
+
+			countriesSearchStore.setPage(newPage);
+			setSearchParams(countriesSearchStore.queryParams);
+		}
 	};
 
 	const handleRowsPerChange = (newPageSize) => {
-		countriesSearchStore.setPageSize(newPageSize);
-		countriesSearchStore.setPage(1);
+		if(newPageSize !== countriesSearchStore.rowsPerPage){
+
+			countriesSearchStore.setPageSize(newPageSize);
+			countriesSearchStore.setPage(1);
+			setSearchParams(countriesSearchStore.queryParams);
+			fetchData();
+		}
 	};
 
 	const onAddCountriesClick = () => {
@@ -152,6 +169,7 @@ export const CountriesList = observer(() => {
 					paginationPerPage={countriesSearchStore.rowsPerPage}
 					onChangeRowsPerPage={handleRowsPerChange}
 					highlightOnHover
+					paginationDefaultPage={countriesSearchStore.page}
 					persistTableHead={true}
 					paginationComponentOptions={paginationComponentOptions}
 					noDataComponent={<NoDataMessage />}
@@ -159,16 +177,8 @@ export const CountriesList = observer(() => {
 						const sortField = column.sortField;
 						if(sortField) {
 							const orderBy = `${sortField}|${sortDirection}`;
-	
 							countriesSearchStore.setOrderBy(orderBy);
-
-							const params = countriesSearchStore.syncWithQueryParams();
-							params.set("orderBy", orderBy);
-
-							const newUrl = `${window.location.pathname}?${params.toString()}`;
-							window.history.pushState({}, "", newUrl);
-
-							fetchData();
+							setSearchParams(countriesSearchStore.queryParams);
 						}
 					  }}
 					sortServer
