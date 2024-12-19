@@ -95,7 +95,7 @@ class CountriesStore {
     this.setRowsPerPage(pageSize);
     this.setTotalItemCount(totalItemCount);
   }
-
+  
   get queryParams() {
     return this.currentQueryParams;
   }
