@@ -87,13 +87,11 @@ class CountriesStore {
     const orderBy = params.get("orderBy") || "";
     const page = parseInt(params.get("page")) || 1;
     const pageSize = parseInt(params.get("rowsPerPage")) || 10;
-    const totalItemCount = parseInt(params.get("totalItemCount"));
 
     this.setSearchQuery(searchQuery);
     this.setOrderBy(orderBy);
     this.setPage(page);
     this.setRowsPerPage(pageSize);
-    this.setTotalItemCount(totalItemCount);
   }
   
   get queryParams() {
@@ -105,6 +103,7 @@ class CountriesStore {
       searchQuery: this.searchQuery,
       page: this.page,
       rowsPerPage: this.rowsPerPage,
+      orderBy: this.orderBy
     };
   }
 
