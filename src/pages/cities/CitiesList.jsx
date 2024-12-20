@@ -154,7 +154,6 @@ export const CitiesList = observer(() => {
                     onChangeRowsPerPage={
                         (newPageSize) => {
                             citiesSearchStore.setPageSize(newPageSize);
-                            citiesSearchStore.setPage(1);
                             setSearchParams(citiesSearchStore.queryParams);
                         }
                     }

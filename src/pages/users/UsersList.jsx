@@ -224,7 +224,6 @@ export const UsersList = observer(() => {
                     paginationPerPage={usersSearchStore.pageSize}
                     onChangeRowsPerPage={(newPageSize) => {
                         usersSearchStore.setPageSize(newPageSize);
-                        usersSearchStore.setPage(1);
                         setSearchParams(usersSearchStore.queryParams);
                     }}
                     highlightOnHover
