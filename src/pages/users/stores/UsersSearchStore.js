@@ -14,12 +14,10 @@ class UsersSearchStore {
     constructor() {
         makeObservable(this, {
             setPage: action, 
-            setPageSize: action, 
-            setTotalItemCount: action,
+            setPageSize: action,
             setOrderBy: action,
             page: observable,
             pageSize: observable,
-            totalItemCount: observable, 
             orderBy: observable
         });
 
@@ -88,9 +86,6 @@ class UsersSearchStore {
         if (this.pageSize !== 10)
             params.set("pageSize", this.pageSize);
 
-        if(this.totalItemCount !== 0) 
-            params.set("totalItemCount", this.totalItemCount);
-
         if (this.orderBy)  
             params.set("orderBy", this.orderBy);
 
@@ -106,7 +101,6 @@ class UsersSearchStore {
         const orderBy = params.get("orderBy") || "";
         const page = parseInt(params.get("page")) || 1;
         const pageSize = parseInt(params.get("pageSize")) || 10;
-        const totalItemCount = parseInt(params.get("totalItemCount")) || 0;
 
         this.setQuery(searchQuery);
         this.setRoleId(roleId);
@@ -114,7 +108,6 @@ class UsersSearchStore {
         this.setOrderBy(orderBy);
         this.setPage(page);
         this.setPageSize(pageSize);
-        this.setTotalItemCount(totalItemCount);
     }
 
 
@@ -123,7 +116,6 @@ class UsersSearchStore {
             searchQuery: this.searchQuery,
             roleId: this.roleId,
             isActive: this.isActive,
-            totalItemCount: this.totalItemCount,
             page: this.page,
             pageSize: this.pageSize,
             orderBy: this.orderBy

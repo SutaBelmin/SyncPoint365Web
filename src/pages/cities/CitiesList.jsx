@@ -147,20 +147,15 @@ export const CitiesList = observer(() => {
                     paginationTotalRows={citiesSearchStore.totalItemCount}
                     paginationDefaultPage={citiesSearchStore.page}
                     onChangePage={(newPage) => {
-                        if (newPage !== citiesSearchStore.page) {
-                            citiesSearchStore.setPage(newPage);
-                            setSearchParams(citiesSearchStore.queryParams);
-                        }
+                        citiesSearchStore.setPage(newPage);
+                        setSearchParams(citiesSearchStore.queryParams);
                     }}
-
                     paginationPerPage={citiesSearchStore.pageSize}
                     onChangeRowsPerPage={
                         (newPageSize) => {
-                            if (newPageSize !== citiesSearchStore.pageSize) {
-                                citiesSearchStore.setPageSize(newPageSize);
-                                citiesSearchStore.setPage(1);
-                                setSearchParams(citiesSearchStore.queryParams);
-                            }
+                            citiesSearchStore.setPageSize(newPageSize);
+                            citiesSearchStore.setPage(1);
+                            setSearchParams(citiesSearchStore.queryParams);
                         }
                     }
                     highlightOnHover

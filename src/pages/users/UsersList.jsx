@@ -30,7 +30,7 @@ export const UsersList = observer(() => {
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
-    const [,setSearchParams] = useSearchParams();
+    const [, setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
@@ -218,18 +218,14 @@ export const UsersList = observer(() => {
                     paginationTotalRows={usersSearchStore.totalItemCount}
                     paginationDefaultPage={usersSearchStore.page}
                     onChangePage={(newPage) => {
-                        if(newPage !== usersSearchStore.page){
-                            usersSearchStore.setPage(newPage);
-                            setSearchParams(usersSearchStore.queryParams);
-                        }
+                        usersSearchStore.setPage(newPage);
+                        setSearchParams(usersSearchStore.queryParams);
                     }}
                     paginationPerPage={usersSearchStore.pageSize}
                     onChangeRowsPerPage={(newPageSize) => {
-                        if(newPageSize !== usersSearchStore.pageSize){
-                            usersSearchStore.setPageSize(newPageSize);
-                            usersSearchStore.setPage(1);
-                            setSearchParams(usersSearchStore.queryParams);
-                        }
+                        usersSearchStore.setPageSize(newPageSize);
+                        usersSearchStore.setPage(1);
+                        setSearchParams(usersSearchStore.queryParams);
                     }}
                     highlightOnHover
                     persistTableHead={true}
