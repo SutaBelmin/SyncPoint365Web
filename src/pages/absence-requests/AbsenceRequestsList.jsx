@@ -26,12 +26,14 @@ export const AbsenceRequestsList = observer(() => {
 
     const fetchData = useCallback(async () => {
         try {
+            console.log(absenceRequestsSearchStore.page, "page u listi u useeffect");
             const filter = { ...absenceRequestsSearchStore.absenceRequestFilter };
 
             const response = await absenceRequestsService.getPagedList(filter, signal);
 
             setData(response.data.items);
             absenceRequestsSearchStore.setTotalItemCount(response.data.totalItemCount);
+
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         } finally {
@@ -45,9 +47,12 @@ export const AbsenceRequestsList = observer(() => {
             () => ({
                 page: absenceRequestsSearchStore.page,
                 pageSize: absenceRequestsSearchStore.pageSize,
+                orderBy: absenceRequestsSearchStore.orderBy,
             }),
+            
             () => {
                 fetchData();
+
             },
             {
                 fireImmediately: true
@@ -58,26 +63,17 @@ export const AbsenceRequestsList = observer(() => {
     }, [fetchData]);
 
     const handleSort = async (column, direction) => {
-        if (Object.keys(column).length === 0) {
-            return;
-        }
         const field = column.sortField;
-        let sortOrder = '';
+        let orderBy = '';
         if (field === "user.lastName") {
-            sortOrder = `${field}|${direction}, user.firstName|${direction}`;
+            orderBy = `${field}|${direction}, user.firstName|${direction}`;
         } else {
-            sortOrder = `${field}|${direction}`;
+            orderBy = `${field}|${direction}`;
         }
-        absenceRequestsSearchStore.setSortOrder(sortOrder);
-        absenceRequestsSearchStore.setPage(1);
+        console.log(absenceRequestsSearchStore.page, "pagr u listi u handle sort");
 
-        const params = absenceRequestsSearchStore.syncWithQueryParams();
-        params.set("sortOrder", sortOrder);
-
-        const newUrl = `${window.location.pathname}?${params.toString()}`;
-        window.history.pushState({}, "", newUrl);
-
-        fetchData();
+        absenceRequestsSearchStore.setOrderBy(orderBy);
+        setSearchParams(absenceRequestsSearchStore.queryParams);
     };
 
     const columns = [
@@ -162,6 +158,19 @@ export const AbsenceRequestsList = observer(() => {
     //     }
     // }
 
+    const handlePageChange = (newPage) => {
+        absenceRequestsSearchStore.setPage(newPage);
+        setSearchParams(absenceRequestsSearchStore.queryParams);
+        console.log(absenceRequestsSearchStore.page, "pagr u listi u handle page change");
+    }
+
+    const handleRowsPerPageChange = (newPageSize) => {
+        absenceRequestsSearchStore.setPageSize(newPageSize);
+        setSearchParams(absenceRequestsSearchStore.queryParams);
+        console.log(absenceRequestsSearchStore.page, "pagr u listi u handle page size");
+
+    };
+
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
@@ -188,21 +197,9 @@ export const AbsenceRequestsList = observer(() => {
                     paginationServer
                     paginationTotalRows={absenceRequestsSearchStore.totalItemCount}
                     paginationDefaultPage={absenceRequestsSearchStore.page}
-                    onChangePage={(newPage) => {
-                        if (newPage !== absenceRequestsSearchStore.page) {
-                            absenceRequestsSearchStore.setPage(newPage);
-                            setSearchParams(absenceRequestsSearchStore.queryParams);
-                        }
-                    }}
+                    onChangePage={handlePageChange}
                     paginationPerPage={absenceRequestsSearchStore.pageSize}
-                    onChangeRowsPerPage={
-                        (newPageSize) => {
-                            if (newPageSize !== absenceRequestsSearchStore.pageSize) {
-                                absenceRequestsSearchStore.setPageSize(newPageSize);
-                                absenceRequestsSearchStore.setPage(1);
-                                setSearchParams(absenceRequestsSearchStore.queryParams);
-                            }
-                        }}
+                    onChangeRowsPerPage={handleRowsPerPageChange}
                     highlightOnHover
                     progressPending={loading}
                     persistTableHead={true}

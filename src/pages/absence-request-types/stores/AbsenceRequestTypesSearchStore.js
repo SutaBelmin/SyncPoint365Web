@@ -4,7 +4,7 @@ import { absenceRequestTypeStatusConstant } from "../../../constants";
 class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
-    sortOrder = null;
+    orderBy = null;
     page = 1;
     pageSize = 10;
     totalItemCount = 0;
@@ -15,11 +15,11 @@ class AbsenceRequestTypesSearchStore {
             setPage: action,
             setPageSize: action,
             setTotalItemCount: action,
-            setSortOrder:action,
+            setOrderBy:action,
             page: observable,
             pageSize: observable,
             totalItemCount: observable,
-            sortOrder: observable
+            orderBy: observable
         });
 
         this.initializeQueryParams();
@@ -35,8 +35,8 @@ class AbsenceRequestTypesSearchStore {
         this.syncWithQueryParams();
     }
 
-    setSortOrder(value) {
-        this.sortOrder = value;
+    setOrderBy(value) {
+        this.orderBy = value;
         this.syncWithQueryParams();
     }
 
@@ -57,7 +57,7 @@ class AbsenceRequestTypesSearchStore {
     clearFilters() {
         this.setQuery(""); 
         this.setIsActive(null);
-        this.setSortOrder(null);
+        this.setOrderBy(null);
         this.setPage(1);
         this.syncWithQueryParams();
     }
@@ -71,8 +71,8 @@ class AbsenceRequestTypesSearchStore {
         if (this.isActive !== null)
             params.set("status", this.isActive ? absenceRequestTypeStatusConstant.active : absenceRequestTypeStatusConstant.inactive);
 
-        if(this.sortOrder !== null)
-            params.set("sortOrder", this.sortOrder);
+        if(this.orderBy !== null)
+            params.set("orderBy", this.orderBy);
 
         if (this.page !== 1)
             params.set("page", this.page);
@@ -89,13 +89,13 @@ class AbsenceRequestTypesSearchStore {
 
         const searchQuery = params.get("searchQuery") || '';
         const status = params.get("status");
-        const sortOrder = params.get("sortOrder");
+        const orderBy = params.get("orderBy");
         const page = parseInt(params.get("page")) || 1;
         const pageSize = parseInt(params.get("pageSize")) || 10;
 
         this.setQuery(searchQuery);
         this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.all));
-        this.setSortOrder(sortOrder);
+        this.setOrderBy(orderBy);
         this.setPage(page);
         this.setPageSize(pageSize);
     }
@@ -104,10 +104,9 @@ class AbsenceRequestTypesSearchStore {
         return {
             isActive: this.isActive,
             query: this.searchQuery,
-            sortOrder: this.sortOrder,
+            orderBy: this.orderBy,
             page: this.page,
             pageSize: this.pageSize,
-            totalItemCount: this.totalItemCount,
         };
     }
 

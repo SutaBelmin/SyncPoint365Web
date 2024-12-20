@@ -44,6 +44,7 @@ export const AbsenceRequestTypesList = observer(() => {
             () => ({
                 page: absenceRequestTypesSearchStore.page,
                 pageSize: absenceRequestTypesSearchStore.pageSize,
+                orderBy: absenceRequestTypesSearchStore.orderBy,
             }),
             () => {
                 fetchData();
@@ -59,17 +60,9 @@ export const AbsenceRequestTypesList = observer(() => {
     const handleSort = (column, direction) => {
         const field = column.sortField;
         if (field) {
-            const sortOrder = `${field}|${direction}`;
-            absenceRequestTypesSearchStore.setSortOrder(sortOrder);
-            absenceRequestTypesSearchStore.setPage(1);
-    
-            const params = absenceRequestTypesSearchStore.syncWithQueryParams();
-            params.set("sortOrder", sortOrder);
-    
-            const newUrl = `${window.location.pathname}?${params.toString()}`;
-            window.history.pushState({}, "", newUrl);
-    
-            fetchData();
+            const orderBy = `${field}|${direction}`;
+            absenceRequestTypesSearchStore.setOrderBy(orderBy);
+            setSearchParams(absenceRequestTypesSearchStore.queryParams);
         }
     };
 
@@ -127,19 +120,13 @@ export const AbsenceRequestTypesList = observer(() => {
     }
 
     const handlePageChange = (newPage) => {
-        if (newPage !== absenceRequestTypesSearchStore.page){
-            absenceRequestTypesSearchStore.setPage(newPage);
-            setSearchParams(absenceRequestTypesSearchStore.queryParams);
-        }
+        absenceRequestTypesSearchStore.setPage(newPage);
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
     }
 
     const handleRowsPerPageChange = (newPageSize) => {
-        if(newPageSize !== absenceRequestTypesSearchStore.pageSize){
-            absenceRequestTypesSearchStore.setPageSize(newPageSize);
-            absenceRequestTypesSearchStore.setPage(1);
-            setSearchParams(absenceRequestTypesSearchStore.queryParams);
-        }
-        
+        absenceRequestTypesSearchStore.setPageSize(newPageSize);
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
     };
 
 

@@ -7,7 +7,7 @@ class AbsenceRequestsSearchStore {
     absenceRequestStatusId = null;
     dateFrom = null;
     dateTo = null;
-    sortOrder = '';
+    orderBy = '';
     page = 1;
     pageSize = 10;
     currentQueryParams = null;
@@ -17,12 +17,12 @@ class AbsenceRequestsSearchStore {
         makeObservable(this, {
             setPage: action, 
             setPageSize: action, 
-            setTotalItemCount: action, 
-            setSortOrder: action,
+            //setTotalItemCount: action, 
+            setOrderBy: action,
             page: observable,
             pageSize: observable,
-            totalItemCount: observable,
-            sortOrder: observable
+            //totalItemCount: observable,
+            orderBy: observable
         });
         this.initializeQueryParams();
     }
@@ -52,8 +52,8 @@ class AbsenceRequestsSearchStore {
         this.syncWithQueryParams();
     }
 
-    setSortOrder(value) {
-        this.sortOrder = value;
+    setOrderBy(value) {
+        this.orderBy = value;
         this.syncWithQueryParams();
     }
 
@@ -77,8 +77,9 @@ class AbsenceRequestsSearchStore {
         this.setAbsenceRequestStatusId(null);
         this.setDateFrom(null);
         this.setDateTo(null);
-        this.setSortOrder(null);
+        this.setOrderBy(null);
         this.setPage(1);
+        console.log(this.page, "pagr u storu u clear");
         this.syncWithQueryParams();
     }
 
@@ -100,12 +101,13 @@ class AbsenceRequestsSearchStore {
         if(this.dateTo)
             params.set("dateTo", this.dateTo);
         
-        if(this.sortOrder !== null)
-            params.set("sortOrder", this.sortOrder);
+        if(this.orderBy !== null)
+            params.set("orderBy", this.orderBy);
 
-        if(this.page !== 1)
+        if(this.page !== 1){
+            console.log(this.page, "pagr u storu u sync");
             params.set("page", this.page);
-
+        }
         if(this.pageSize !== 10)
             params.set("pageSize", this.pageSize);
 
@@ -120,8 +122,9 @@ class AbsenceRequestsSearchStore {
         const absenceRequestStatusId = params.get("absenceRequestStatusId") || null;
         const dateFrom = params.get("dateFrom") || null;
         const dateTo = params.get("dateTo") || null;
-        const sortOrder = params.get("sortOrder");
+        const orderBy = params.get("orderBy");
         const page = parseInt(params.get("page")) || 1;
+        console.log(this.page, "pagr u storu u initialize");
         const pageSize = parseInt(params.get("pageSize")) || 10;
 
         this.setAbsenceTypeId(absenceRequestTypeId);
@@ -129,7 +132,7 @@ class AbsenceRequestsSearchStore {
         this.setAbsenceRequestStatusId(absenceRequestStatusId);
         this.setDateFrom(dateFrom);
         this.setDateTo(dateTo);
-        this.setSortOrder(sortOrder);
+        this.setOrderBy(orderBy);
         this.setPage(page);
         this.setPageSize(pageSize);
     }
@@ -141,7 +144,7 @@ class AbsenceRequestsSearchStore {
             userId: this.userId,
             dateFrom: this.dateFrom,
             dateTo: this.dateTo, 
-            sortOrder: this.sortOrder,
+            orderBy: this.orderBy,
             page: this.page, 
             pageSize: this.pageSize, 
             totalItemCount: this.totalItemCount,

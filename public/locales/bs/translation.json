@@ -139,5 +139,6 @@
     "NEW_PASSWORD": "Nova lozinka",
     "PASSWORD_CONFIRMATION": "Ponovi lozinku",
     "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena.",
-    "SELECT_STATUS": "Odaberi status"
+    "SELECT_STATUS": "Odaberi status",
+    "STATUS": "Status"
 }

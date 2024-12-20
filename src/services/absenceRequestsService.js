@@ -12,7 +12,7 @@ class AbsenceRequestsService extends BaseService {
                     userId: filter.userId, 
                     dateFrom: filter.dateFrom,
                     dateTo: filter.dateTo,
-                    sortOrder: filter.sortOrder,
+                    orderBy: filter.orderBy,
                     page: filter.page, 
                     pageSize: filter.pageSize,
                 },

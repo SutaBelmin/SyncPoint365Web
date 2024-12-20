@@ -139,5 +139,6 @@
     "NEW_PASSWORD": "New Password",
     "PASSWORD_CONFIRMATION": "Password Confirmation",
     "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed.",
-    "SELECT_STATUS": "Select Status"
+    "SELECT_STATUS": "Select Status",
+    "STATUS": "Status"
 }

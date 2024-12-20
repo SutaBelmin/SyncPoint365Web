@@ -192,7 +192,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
+						className='input-search h-10 rounded-md border-gray-300 min-w-[5rem]'
 						locale={i18n.language}
 					/>
 					<DatePicker
@@ -208,7 +208,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
+						className='input-search h-10 rounded-md border-gray-300 min-w-[5rem]'
 						locale={i18n.language}
 					/>
 					<div className='flex gap-4 '>
