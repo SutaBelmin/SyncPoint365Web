@@ -66,7 +66,6 @@ export const CountriesList = observer(() => {
 
 	const handleRowsPerChange = (newPageSize) => {
 		countriesSearchStore.setPageSize(newPageSize);
-		countriesSearchStore.setPage(1);
 		setSearchParams(countriesSearchStore.queryParams);
 		fetchData();
 	};
