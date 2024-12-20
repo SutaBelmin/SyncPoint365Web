@@ -161,6 +161,7 @@ export const UsersList = observer(() => {
             <ConfirmationModal
                 title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
                 onConfirm={() => handleStatusChange(userId)}
+                onCancel={closeModal}
             />
         );
     };
