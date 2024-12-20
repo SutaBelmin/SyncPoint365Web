@@ -67,10 +67,10 @@ class CountriesStore {
     if(this.searchQuery) 
       params.set("searchQuery", this.searchQuery);
 
-    if(this.page !== 1) 
+    if(this.page) 
       params.set("page", this.page);
 
-    if(this.rowsPerPage !== 10) 
+    if(this.rowsPerPage) 
       params.set("rowsPerPage",this.rowsPerPage);
 
     if(this.orderBy)

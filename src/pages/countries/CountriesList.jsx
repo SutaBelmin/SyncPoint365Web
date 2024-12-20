@@ -27,6 +27,7 @@ export const CountriesList = observer(() => {
 	const { signal } = useRequestAbort();
 	const[,setSearchParams] = useSearchParams();
 	
+
 	const fetchData = useCallback(
 		async () => {
 			try {
@@ -59,21 +60,15 @@ export const CountriesList = observer(() => {
 		  
 
 	const handlePageChange = (newPage) => {
-		if(newPage !== countriesSearchStore.page) {
-
-			countriesSearchStore.setPage(newPage);
-			setSearchParams(countriesSearchStore.queryParams);
-		}
+		countriesSearchStore.setPage(newPage);
+		setSearchParams(countriesSearchStore.queryParams);
 	};
 
 	const handleRowsPerChange = (newPageSize) => {
-		if(newPageSize !== countriesSearchStore.rowsPerPage){
-
-			countriesSearchStore.setPageSize(newPageSize);
-			countriesSearchStore.setPage(1);
-			setSearchParams(countriesSearchStore.queryParams);
-			fetchData();
-		}
+		countriesSearchStore.setPageSize(newPageSize);
+		countriesSearchStore.setPage(1);
+		setSearchParams(countriesSearchStore.queryParams);
+		fetchData();
 	};
 
 	const onAddCountriesClick = () => {
