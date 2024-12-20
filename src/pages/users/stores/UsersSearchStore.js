@@ -80,10 +80,10 @@ class UsersSearchStore {
         if (this.isActive !== null)
             params.set("isActive", this.isActive ? userStatusConstant.active : userStatusConstant.inactive);
 
-         if (this.page !== 1)
+         if (this.page)
             params.set("page", this.page);
 
-        if (this.pageSize !== 10)
+        if (this.pageSize)
             params.set("pageSize", this.pageSize);
 
         if (this.orderBy)  
