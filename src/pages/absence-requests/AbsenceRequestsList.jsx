@@ -26,7 +26,6 @@ export const AbsenceRequestsList = observer(() => {
 
     const fetchData = useCallback(async () => {
         try {
-            console.log(absenceRequestsSearchStore.page, "page u listi u useeffect");
             const filter = { ...absenceRequestsSearchStore.absenceRequestFilter };
 
             const response = await absenceRequestsService.getPagedList(filter, signal);
@@ -61,20 +60,6 @@ export const AbsenceRequestsList = observer(() => {
 
         return () => disposeReaction();
     }, [fetchData]);
-
-    const handleSort = async (column, direction) => {
-        const field = column.sortField;
-        let orderBy = '';
-        if (field === "user.lastName") {
-            orderBy = `${field}|${direction}, user.firstName|${direction}`;
-        } else {
-            orderBy = `${field}|${direction}`;
-        }
-        console.log(absenceRequestsSearchStore.page, "pagr u listi u handle sort");
-
-        absenceRequestsSearchStore.setOrderBy(orderBy);
-        setSearchParams(absenceRequestsSearchStore.queryParams);
-    };
 
     const columns = [
         {
@@ -161,15 +146,31 @@ export const AbsenceRequestsList = observer(() => {
     const handlePageChange = (newPage) => {
         absenceRequestsSearchStore.setPage(newPage);
         setSearchParams(absenceRequestsSearchStore.queryParams);
-        console.log(absenceRequestsSearchStore.page, "pagr u listi u handle page change");
     }
 
     const handleRowsPerPageChange = (newPageSize) => {
         absenceRequestsSearchStore.setPageSize(newPageSize);
         setSearchParams(absenceRequestsSearchStore.queryParams);
-        console.log(absenceRequestsSearchStore.page, "pagr u listi u handle page size");
-
     };
+
+    const handleSort = async (column, direction) => {
+        const field = column.sortField || null; 
+        let orderBy = null;
+    
+        if (field) {
+            if (field === "user.lastName") {
+                orderBy = `${field}|${direction}, user.firstName|${direction}`;
+            } else {
+                orderBy = `${field}|${direction}`;
+            }
+            absenceRequestsSearchStore.setOrderBy(orderBy);
+        } else {
+            absenceRequestsSearchStore.setOrderBy(null);
+        }
+    
+        setSearchParams(absenceRequestsSearchStore.queryParams);
+    };
+    
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
@@ -193,6 +194,7 @@ export const AbsenceRequestsList = observer(() => {
                 <DataTable
                     columns={columns}
                     data={data}
+                    sortServer={true}
                     pagination
                     paginationServer
                     paginationTotalRows={absenceRequestsSearchStore.totalItemCount}
@@ -206,7 +208,6 @@ export const AbsenceRequestsList = observer(() => {
                     paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
                     onSort={handleSort}
-                    sortServer={true}
                 />
             </div>
         </div >

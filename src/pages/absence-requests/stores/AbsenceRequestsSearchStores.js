@@ -7,7 +7,7 @@ class AbsenceRequestsSearchStore {
     absenceRequestStatusId = null;
     dateFrom = null;
     dateTo = null;
-    orderBy = '';
+    orderBy = null;
     page = 1;
     pageSize = 10;
     currentQueryParams = null;
@@ -17,11 +17,9 @@ class AbsenceRequestsSearchStore {
         makeObservable(this, {
             setPage: action, 
             setPageSize: action, 
-            //setTotalItemCount: action, 
             setOrderBy: action,
             page: observable,
             pageSize: observable,
-            //totalItemCount: observable,
             orderBy: observable
         });
         this.initializeQueryParams();
@@ -79,7 +77,6 @@ class AbsenceRequestsSearchStore {
         this.setDateTo(null);
         this.setOrderBy(null);
         this.setPage(1);
-        console.log(this.page, "pagr u storu u clear");
         this.syncWithQueryParams();
     }
 
@@ -101,14 +98,13 @@ class AbsenceRequestsSearchStore {
         if(this.dateTo)
             params.set("dateTo", this.dateTo);
         
-        if(this.orderBy !== null)
+        if(this.orderBy)
             params.set("orderBy", this.orderBy);
 
-        if(this.page !== 1){
-            console.log(this.page, "pagr u storu u sync");
+        if(this.page){
             params.set("page", this.page);
         }
-        if(this.pageSize !== 10)
+        if(this.pageSize)
             params.set("pageSize", this.pageSize);
 
         this.currentQueryParams = params;
@@ -122,9 +118,8 @@ class AbsenceRequestsSearchStore {
         const absenceRequestStatusId = params.get("absenceRequestStatusId") || null;
         const dateFrom = params.get("dateFrom") || null;
         const dateTo = params.get("dateTo") || null;
-        const orderBy = params.get("orderBy");
+        const orderBy = params.get("orderBy") || null;
         const page = parseInt(params.get("page")) || 1;
-        console.log(this.page, "pagr u storu u initialize");
         const pageSize = parseInt(params.get("pageSize")) || 10;
 
         this.setAbsenceTypeId(absenceRequestTypeId);

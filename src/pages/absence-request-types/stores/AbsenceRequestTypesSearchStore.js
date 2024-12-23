@@ -4,7 +4,7 @@ import { absenceRequestTypeStatusConstant } from "../../../constants";
 class AbsenceRequestTypesSearchStore {
     searchQuery = '';
     isActive = null;
-    orderBy = null;
+    orderBy = '';
     page = 1;
     pageSize = 10;
     totalItemCount = 0;
@@ -74,10 +74,10 @@ class AbsenceRequestTypesSearchStore {
         if(this.orderBy !== null)
             params.set("orderBy", this.orderBy);
 
-        if (this.page !== 1)
+        if (this.page)
             params.set("page", this.page);
 
-        if (this.pageSize !== 10)
+        if (this.pageSize)
             params.set("pageSize", this.pageSize);
 
         this.currentQueryParams = params;
@@ -89,7 +89,7 @@ class AbsenceRequestTypesSearchStore {
 
         const searchQuery = params.get("searchQuery") || '';
         const status = params.get("status");
-        const orderBy = params.get("orderBy");
+        const orderBy = params.get("orderBy") || null;
         const page = parseInt(params.get("page")) || 1;
         const pageSize = parseInt(params.get("pageSize")) || 10;
 
