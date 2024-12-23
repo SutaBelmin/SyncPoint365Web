@@ -12,7 +12,6 @@ class CountriesStore {
     makeObservable(this, {
       setPage: action,
       setPageSize: action,
-      setTotalItemCount: action,
       setOrderBy: action,
       page: observable,
       rowsPerPage: observable,
@@ -43,11 +42,13 @@ class CountriesStore {
   }
 
   resetFilters() {
-    this.setSearchQuery("");
-    this.setPage(1);
-    this.setPageSize(10);
-    this.setOrderBy("");
-    this.syncWithQueryParams();
+    action(()=>{
+      this.setSearchQuery("");
+      this.setPage(1);
+      this.setPageSize(10);
+      this.setOrderBy("");
+      this.syncWithQueryParams();
+    })();
   }
 
   setOrderBy(order) {
