@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, makeObservable, observable, runInAction } from "mobx";
 
 class CountriesStore {
   totalItemCount = 0;
@@ -42,13 +42,13 @@ class CountriesStore {
   }
 
   resetFilters() {
-    action(()=>{
+    runInAction(()=>{
       this.setSearchQuery("");
       this.setPage(1);
       this.setPageSize(10);
       this.setOrderBy("");
       this.syncWithQueryParams();
-    })();
+    })
   }
 
   setOrderBy(order) {

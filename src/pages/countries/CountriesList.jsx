@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CountriesAdd, CountriesEdit } from "../countries"
@@ -17,6 +17,7 @@ import { NoDataMessage } from "../../components/common-ui";
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { useSearchParams } from "react-router-dom";
+import debounce from "lodash/debounce";
 
 
 export const CountriesList = observer(() => {
@@ -40,23 +41,29 @@ export const CountriesList = observer(() => {
 			}
 		}, [signal, t]);
 
+		const debouncedFetchData = useMemo(() => debounce(fetchData, 300), [fetchData]);
+
 		useEffect(() => {
 			const disposer = reaction(
-			  () => ({
-				page: countriesSearchStore.page,
-				pagesize: countriesSearchStore.rowsPerPage,
-				orderBy: countriesSearchStore.orderBy
-			  }), 
-			  () => {
-				fetchData();  
-			  },
-			  { 
-				fireImmediately: true 
-			  }  
+				() => ({
+					page: countriesSearchStore.page,
+					rowsPerPage: countriesSearchStore.rowsPerPage,
+					orderBy: countriesSearchStore.orderBy,
+				}), 
+				() => {
+					debouncedFetchData();
+				},
+				{ fireImmediately: true }
 			);
-			return () => disposer();  
-		  }, [fetchData]);
-		  
+		
+			return () => disposer();
+		}, [fetchData, debouncedFetchData]);
+		
+
+		useEffect(() => {
+			setSearchParams(countriesSearchStore.queryParams);
+		}, [setSearchParams]);
+		
 
 	const handlePageChange = (newPage) => {
 		countriesSearchStore.setPage(newPage);
