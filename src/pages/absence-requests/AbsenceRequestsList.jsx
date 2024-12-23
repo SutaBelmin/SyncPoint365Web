@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import DataTable from "react-data-table-component";
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
@@ -16,6 +16,7 @@ import { absenceRequestsSearchStore } from "./stores"
 import "./AbsenceRequestsList.css";
 import { absenceRequestStatusConstant } from "../../constants";
 import { useSearchParams } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();
@@ -32,14 +33,14 @@ export const AbsenceRequestsList = observer(() => {
 
             setData(response.data.items);
             absenceRequestsSearchStore.setTotalItemCount(response.data.totalItemCount);
-
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         } finally {
             setLoading(false);
         }
-
     }, [signal, t]);
+
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -50,8 +51,7 @@ export const AbsenceRequestsList = observer(() => {
             }),
             
             () => {
-                fetchData();
-
+                debouncedFetchData();
             },
             {
                 fireImmediately: true
@@ -59,7 +59,11 @@ export const AbsenceRequestsList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData]);
+    }, [fetchData, debouncedFetchData]);
+
+    useEffect(() => {
+        setSearchParams(absenceRequestsSearchStore.queryParams);
+    }, [setSearchParams]);
 
     const columns = [
         {

@@ -14,11 +14,9 @@ class AbsenceRequestTypesSearchStore {
         makeObservable(this, {
             setPage: action,
             setPageSize: action,
-            setTotalItemCount: action,
             setOrderBy:action,
             page: observable,
             pageSize: observable,
-            totalItemCount: observable,
             orderBy: observable
         });
 
@@ -60,6 +58,7 @@ class AbsenceRequestTypesSearchStore {
         this.setOrderBy(null);
         this.setPage(1);
         this.syncWithQueryParams();
+        
     }
 
     syncWithQueryParams() {

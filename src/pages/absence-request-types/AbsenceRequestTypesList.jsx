@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
@@ -16,6 +16,7 @@ import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-requ
 import { absenceRequestTypesSearchStore } from "./stores";
 import { absenceRequestTypesService } from "../../services";
 import { useSearchParams } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 
 export const AbsenceRequestTypesList = observer(() => {
@@ -39,6 +40,8 @@ export const AbsenceRequestTypesList = observer(() => {
         }
     }, [signal, t]);
 
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
+
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
@@ -47,7 +50,7 @@ export const AbsenceRequestTypesList = observer(() => {
                 orderBy: absenceRequestTypesSearchStore.orderBy,
             }),
             () => {
-                fetchData();
+                debouncedFetchData();
             },
             {
                 fireImmediately: true
@@ -55,16 +58,11 @@ export const AbsenceRequestTypesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData]);
+    }, [fetchData, debouncedFetchData]);
 
-    const handleSort = (column, direction) => {
-        const field = column.sortField;
-        if (field) {
-            const orderBy = `${field}|${direction}`;
-            absenceRequestTypesSearchStore.setOrderBy(orderBy);
-            setSearchParams(absenceRequestTypesSearchStore.queryParams);
-        }
-    };
+    useEffect(() => {
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
+    }, [setSearchParams]);
 
     const columns = [
         {
@@ -129,6 +127,14 @@ export const AbsenceRequestTypesList = observer(() => {
         setSearchParams(absenceRequestTypesSearchStore.queryParams);
     };
 
+    const handleSort = (column, direction) => {
+        const field = column.sortField;
+        if (field) {
+            const orderBy = `${field}|${direction}`;
+            absenceRequestTypesSearchStore.setOrderBy(orderBy);
+        }
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
+    };
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
