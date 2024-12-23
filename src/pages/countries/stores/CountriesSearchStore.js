@@ -16,7 +16,6 @@ class CountriesStore {
       setOrderBy: action,
       page: observable,
       rowsPerPage: observable,
-      totalItemCount: observable,
       orderBy: observable
     });
 
@@ -35,11 +34,6 @@ class CountriesStore {
 
   setPageSize(newPageSize) {
     this.rowsPerPage = newPageSize;
-    this.syncWithQueryParams();
-  }
-
-  setRowsPerPage(rows) {
-    this.rowsPerPage = rows;
     this.syncWithQueryParams();
   }
 
@@ -91,7 +85,7 @@ class CountriesStore {
     this.setSearchQuery(searchQuery);
     this.setOrderBy(orderBy);
     this.setPage(page);
-    this.setRowsPerPage(pageSize);
+    this.setPageSize(pageSize);
   }
   
   get queryParams() {

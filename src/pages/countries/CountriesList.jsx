@@ -44,7 +44,7 @@ export const CountriesList = observer(() => {
 			const disposer = reaction(
 			  () => ({
 				page: countriesSearchStore.page,
-				pagesize: countriesSearchStore.pageSize,
+				pagesize: countriesSearchStore.rowsPerPage,
 				orderBy: countriesSearchStore.orderBy
 			  }), 
 			  () => {
@@ -54,7 +54,6 @@ export const CountriesList = observer(() => {
 				fireImmediately: true 
 			  }  
 			);
-		  
 			return () => disposer();  
 		  }, [fetchData]);
 		  
@@ -67,7 +66,6 @@ export const CountriesList = observer(() => {
 	const handleRowsPerChange = (newPageSize) => {
 		countriesSearchStore.setPageSize(newPageSize);
 		setSearchParams(countriesSearchStore.queryParams);
-		fetchData();
 	};
 
 	const onAddCountriesClick = () => {
