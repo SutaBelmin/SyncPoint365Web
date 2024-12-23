@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import DataTable from "react-data-table-component";
@@ -16,6 +16,7 @@ import { citiesSearchStore } from './stores';
 import { citiesService } from "../../services";
 import { CitiesAdd, CitiesEdit } from "../cities";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import debounce from "lodash.debounce";
 
 export const CitiesList = observer(() => {
     const { t } = useTranslation();
@@ -39,6 +40,8 @@ export const CitiesList = observer(() => {
         }
     }, [signal, t]);
 
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
+
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
@@ -47,7 +50,7 @@ export const CitiesList = observer(() => {
                 orderBy: citiesSearchStore.orderBy
             }),
             () => {
-                fetchData();
+                debouncedFetchData();
             },
             {
                 fireImmediately: true
@@ -55,7 +58,12 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData]);
+    }, [fetchData, debouncedFetchData]);
+
+    useEffect(() => {
+        setSearchParams(citiesSearchStore.queryParams);
+    }, [setSearchParams]);
+
 
     const columns = [
         {

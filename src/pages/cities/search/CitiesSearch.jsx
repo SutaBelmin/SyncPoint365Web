@@ -34,13 +34,7 @@ export const CitiesSearch = ({ fetchData }) => {
 
   useEffect(() => {
     fetchCountries();
-
-    const countryIdFromParams = searchParams.get("countryId");
-
-    if (countryIdFromParams)
-      citiesSearchStore.setCountryId(parseInt(countryIdFromParams));
-
-  }, [searchParams, fetchCountries]);
+  }, [fetchCountries]);
 
 
   const handleSearch = (values) => {
@@ -63,7 +57,7 @@ export const CitiesSearch = ({ fetchData }) => {
 
   const initialValues = {
     searchQuery: citiesSearchStore.searchQuery,
-    countryId: citiesSearchStore.countryId
+    countryId: searchParams.get("countryId") ? parseInt(searchParams.get("countryId")) : citiesSearchStore.countryId || null,
   }
 
   return (

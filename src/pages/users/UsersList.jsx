@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ import { roleConstant } from '../../constants';
 import { UsersPreview } from './UsersPreview';
 import { UsersChangePassword } from './UsersChangePassword';
 import './UsersList.css';
+import debounce from 'lodash.debounce';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -49,6 +50,7 @@ export const UsersList = observer(() => {
             <UsersPreview user={user} closeModal={closeModal} />
         );
     };
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
     useEffect(() => {
         const disposeReaction = reaction(
@@ -58,15 +60,19 @@ export const UsersList = observer(() => {
                 orderBy: usersSearchStore.orderBy
             }),
             () => {
-                fetchData();
+                debouncedFetchData();
             },
             {
                 fireImmediately: true
             }
         );
-
         return () => disposeReaction();
-    }, [fetchData]);
+    }, [fetchData, debouncedFetchData]);
+
+    useEffect(() => {
+        setSearchParams(usersSearchStore.queryParams);
+    }, [setSearchParams]);
+
 
     const onAddUserClick = () => {
         navigate('add');
