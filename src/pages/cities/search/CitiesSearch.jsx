@@ -36,6 +36,10 @@ export const CitiesSearch = ({ fetchData }) => {
     fetchCountries();
   }, [fetchCountries]);
 
+  useEffect(() => {
+    setSearchParams(citiesSearchStore.queryParams);
+}, [setSearchParams]);
+
 
   const handleSearch = (values) => {
     citiesSearchStore.setQuery(values.searchQuery);

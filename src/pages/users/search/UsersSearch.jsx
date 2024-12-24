@@ -40,6 +40,11 @@ export const UsersSearch = ({ fetchData }) => {
 
     }, [fetchRoles, t]);
 
+    useEffect(() => {
+        setSearchParams(usersSearchStore.queryParams);
+    }, [setSearchParams]);
+
+
     const handleSearch = (values) => {
         usersSearchStore.setQuery(values.searchQuery);
         usersSearchStore.setRoleId(values.roleId);

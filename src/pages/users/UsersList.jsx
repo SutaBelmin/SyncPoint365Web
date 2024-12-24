@@ -67,12 +67,7 @@ export const UsersList = observer(() => {
             }
         );
         return () => disposeReaction();
-    }, [fetchData, debouncedFetchData]);
-
-    useEffect(() => {
-        setSearchParams(usersSearchStore.queryParams);
-    }, [setSearchParams]);
-
+    }, [debouncedFetchData]);
 
     const onAddUserClick = () => {
         navigate('add');

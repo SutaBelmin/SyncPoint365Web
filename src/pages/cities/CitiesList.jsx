@@ -58,12 +58,8 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData, debouncedFetchData]);
-
-    useEffect(() => {
-        setSearchParams(citiesSearchStore.queryParams);
-    }, [setSearchParams]);
-
+    }, [debouncedFetchData]);
+    
 
     const columns = [
         {
