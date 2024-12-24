@@ -24,7 +24,6 @@ const Login = () => {
     try {
       await authService.login(values.email, values.password);
       navigate('/home');
-      toast.success(t('WELCOME'));
     } catch (error) {
       if(error.response && error.response.status === 401){
         toast.error(t('INVALID_CREDENTIALS'));

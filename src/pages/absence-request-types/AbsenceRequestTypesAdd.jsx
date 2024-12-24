@@ -42,7 +42,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                 <Form>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700" htmlFor="name">
-                            {t('NAME')}
+                            {t('NAME')} <span className='text-red-500'>*</span>
                         </label>
                         <Field
                             type="text"
@@ -61,7 +61,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             className="mr-2"
                         />
                         <label htmlFor="isActive" className="block text-sm font-medium text-gray-700">
-                            {t('ACTIVE')}
+                            {t('ACTIVE')} 
                         </label>
                     </div>
                     <div className="flex justify-end gap-4">

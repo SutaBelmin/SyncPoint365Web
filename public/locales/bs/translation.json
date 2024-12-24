@@ -21,7 +21,7 @@
     "ADD_USER": "Dodaj korisnika",
     "USERS_ADD": "Stranica za dodavanje korisnika",
     "NO_USERS_AVAILABLE.": "Nema korisnika za prikaz.",
-    "COUNTRIES": "Zemlje",
+    "COUNTRIES": "Države",
     "COUNTRY_NAME": "Ime države",
     "CITY_NAME": "Ime grada",
     "ADD_COUNTRY": "Dodaj zemlju",
@@ -140,5 +140,6 @@
     "PASSWORD_CONFIRMATION": "Ponovi lozinku",
     "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena.",
     "SELECT_STATUS": "Odaberi status",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "LOCATION": "Lokacije"
 }

@@ -65,7 +65,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 }
 
 .h1 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: bold;
   padding-top: 3rem;
   margin-bottom: 20px;
@@ -89,7 +89,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 /* Medium screens (max-width: 1024px) */
 @media (max-width: 1024px) {
   .h1 {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
   }
   .header{
       height: 60px;
@@ -99,7 +99,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 /* Small screens (max-width: 768px) */
 @media (max-width: 768px) {
   .h1 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
   .header{
       height: 50px;
@@ -109,7 +109,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 /* Very small screens (max-width: 480px) */
 @media (max-width: 480px) {
   .h1 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
   .header{
       height: 40px;

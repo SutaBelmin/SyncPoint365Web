@@ -11,7 +11,10 @@ const Header = ({ isCollapsed }) => {
     return (
         <header className={`header-comp ${isCollapsed ? 'header-collapsed' : ''}`}>
             <div className="header-actions">
-                <h1 className="header-font">SyncPoint365</h1>
+                <h1 className="header-font">
+                    <span className="text-blue-800">SyncPoint</span>
+                    <span className="text-yellow-400">365</span>
+                </h1>
                 <LanguageSwitcher />
                 <a
                     href="/"

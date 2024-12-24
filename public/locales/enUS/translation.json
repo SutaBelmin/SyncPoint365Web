@@ -140,5 +140,6 @@
     "PASSWORD_CONFIRMATION": "Password Confirmation",
     "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed.",
     "SELECT_STATUS": "Select Status",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "LOCATION": "Location"
 }
