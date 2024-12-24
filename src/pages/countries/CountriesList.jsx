@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { useModal } from "../../context/ModalProvider";
 import { CountriesAdd, CountriesEdit } from "../countries"
@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
 import { NoDataMessage } from "../../components/common-ui";
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { useSearchParams } from "react-router-dom";
+import debounce from "lodash/debounce";
 
 
 export const CountriesList = observer(() => {
@@ -24,6 +26,8 @@ export const CountriesList = observer(() => {
 	const { t } = useTranslation();
 	const paginationComponentOptions = PaginationOptions();
 	const { signal } = useRequestAbort();
+	const[,setSearchParams] = useSearchParams();
+	
 
 	const fetchData = useCallback(
 		async () => {
@@ -37,29 +41,33 @@ export const CountriesList = observer(() => {
 			}
 		}, [signal, t]);
 
-	useEffect(() => {
-		const disposer = reaction(
-			() => ({
-				page: countriesSearchStore.page,
-				pageSize: countriesSearchStore.pageSize
-			}),
-			() => {
-				fetchData();
-			},
-			{
-				fireImmediately: true,
-			}
-		);
-		return () => disposer();
-	}, [fetchData]);
+		const debouncedFetchData = useMemo(() => debounce(fetchData, 300), [fetchData]);
+
+		useEffect(() => {
+			const disposer = reaction(
+				() => ({
+					page: countriesSearchStore.page,
+					pageSize: countriesSearchStore.pageSize,
+					orderBy: countriesSearchStore.orderBy,
+				}), 
+				() => {
+					debouncedFetchData();
+				},
+				{ fireImmediately: true }
+			);
+		
+			return () => disposer();
+		}, [debouncedFetchData]);
+		
 
 	const handlePageChange = (newPage) => {
 		countriesSearchStore.setPage(newPage);
+		setSearchParams(countriesSearchStore.queryParams);
 	};
 
 	const handleRowsPerChange = (newPageSize) => {
 		countriesSearchStore.setPageSize(newPageSize);
-		countriesSearchStore.setPage(1);
+		setSearchParams(countriesSearchStore.queryParams);
 	};
 
 	const onAddCountriesClick = () => {
@@ -98,11 +106,13 @@ export const CountriesList = observer(() => {
 			name: t('NAME'),
 			selector: row => row.name,
 			sortable: true,
+			sortField: 'name'
 		},
 		{
 			name: t('DISPLAY_NAME'),
 			selector: row => row.displayName,
 			sortable: true,
+			sortField: 'displayName'
 		},
 		{
 			name: t('ACTIONS'),
@@ -150,12 +160,22 @@ export const CountriesList = observer(() => {
 					paginationServer
 					paginationTotalRows={countriesSearchStore.totalItemCount}
 					onChangePage={handlePageChange}
-					paginationPerPage={countriesSearchStore.rowsPerPage}
+					paginationPerPage={countriesSearchStore.pageSize}
 					onChangeRowsPerPage={handleRowsPerChange}
 					highlightOnHover
+					paginationDefaultPage={countriesSearchStore.page}
 					persistTableHead={true}
 					paginationComponentOptions={paginationComponentOptions}
 					noDataComponent={<NoDataMessage />}
+					onSort={(column, sortDirection) => {
+						const sortField = column.sortField;
+						if(sortField) {
+							const orderBy = `${sortField}|${sortDirection}`;
+							countriesSearchStore.setOrderBy(orderBy);
+							setSearchParams(countriesSearchStore.queryParams);
+						}
+					  }}
+					sortServer
 				/>
 			</div>
 		</div>

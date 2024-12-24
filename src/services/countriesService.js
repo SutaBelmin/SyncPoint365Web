@@ -32,12 +32,13 @@ class CountriesService extends BaseService {
 
     async getPagedList(filters, signal = null) {
         const response = await this.api.get(
-            `/countries/paged-list`, 
+            `/countries/paged`, 
             {
                 params: {
                     page: filters.page,
                     pageSize: filters.pageSize,
                     query: filters.searchQuery || '', 
+                    orderBy: filters.orderBy
                 },
                 signal: signal
             }

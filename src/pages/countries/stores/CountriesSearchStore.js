@@ -1,19 +1,21 @@
-import {makeObservable, action, observable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 
 class CountriesStore {
   totalItemCount = 0;
   searchQuery = "";
   page = 1;
-  rowsPerPage = 10;
+  pageSize = 10;
+  orderBy = "";
+  currentQueryParams = null;
 
   constructor() {
     makeObservable(this, {
       setPage: action,
       setPageSize: action,
-      setTotalItemCount: action,
+      setOrderBy: action,
       page: observable,
-      rowsPerPage: observable,
-      totalItemCount: observable,
+      pageSize: observable,
+      orderBy: observable
     });
 
     this.initializeQueryParams();
@@ -34,18 +36,18 @@ class CountriesStore {
     this.syncWithQueryParams();
   }
 
-  setRowsPerPage(rows) {
-    this.rowsPerPage = rows;
+  setTotalItemCount(count) {
+    this.totalItemCount = count;
     this.syncWithQueryParams();
   }
 
-  setTotalItemCount(count) {
-    this.totalItemCount = count;
+  resetFilters() {
+      this.setSearchQuery("");
+      this.syncWithQueryParams();
   }
 
-  resetFilters() {
-    this.setSearchQuery("");
-    this.setPage(1);
+  setOrderBy(order) {
+    this.orderBy = order;
     this.syncWithQueryParams();
   }
 
@@ -55,11 +57,16 @@ class CountriesStore {
     if(this.searchQuery) 
       params.set("searchQuery", this.searchQuery);
 
-    if(this.page !== 1) 
+    if(this.page) 
       params.set("page", this.page);
 
-    if(this.rowsPerPage !== 10) 
-      params.set("rowsPerPage",this.rowsPerPage);
+    if(this.pageSize) 
+      params.set("pageSize",this.pageSize);
+
+    if(this.orderBy)
+      params.set("orderBy", this.orderBy);
+
+    this.currentQueryParams = params;
 
     return params;
   }
@@ -67,15 +74,26 @@ class CountriesStore {
   initializeQueryParams() {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get("searchQuery") || "";
-    
+    const orderBy = params.get("orderBy") || "";
+    const page = parseInt(params.get("page")) || 1;
+    const pageSize = parseInt(params.get("pageSize")) || 10;
+
     this.setSearchQuery(searchQuery);
+    this.setOrderBy(orderBy);
+    this.setPage(page);
+    this.setPageSize(pageSize);
+  }
+  
+  get queryParams() {
+    return this.currentQueryParams;
   }
 
   get countryFilter() {
     return {
       searchQuery: this.searchQuery,
       page: this.page,
-      rowsPerPage: this.rowsPerPage,
+      pageSize: this.pageSize,
+      orderBy: this.orderBy
     };
   }
 
