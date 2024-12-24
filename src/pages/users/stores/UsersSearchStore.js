@@ -63,8 +63,6 @@ class UsersSearchStore {
         this.setQuery("");
         this.setRoleId(null);
         this.setIsActive(null);
-        this.setPage(1);
-        this.setOrderBy("");
         this.syncWithQueryParams();
     }
 

@@ -54,9 +54,6 @@ class CitiesSearchStore {
     clearFilters() {
         this.setCountryId(null);
         this.setQuery("");
-        this.setPage(1);
-        this.setPageSize(10);
-        this.setOrderBy("");
         this.syncWithQueryParams();
     }
 
