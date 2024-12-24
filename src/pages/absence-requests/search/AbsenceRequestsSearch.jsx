@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, usersService, enumsService } from '../../../services';
 import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
+import { action } from 'mobx';
 
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
@@ -70,8 +71,10 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [t]);
-
-
+	
+    useEffect(() => {
+        setSearchParams(absenceRequestsSearchStore.queryParams);
+    }, [setSearchParams]);
 
 	useEffect(() => {
 		fetchUsers();
@@ -93,7 +96,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 	};
 
 
-	const handleClear = (setFieldValue) => {
+	const handleClear = action((setFieldValue) => {
 		setSearchParams({});
 		setFieldValue("absenceRequestTypeId", null);
 		setFieldValue("userId", null);
@@ -101,8 +104,9 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		setFieldValue("dateFrom", null);
 		setFieldValue("dateTo", null);
 		absenceRequestsSearchStore.clearFilters();
+	
 		fetchData();
-	};
+	});
 
 
 	const initialValues = {

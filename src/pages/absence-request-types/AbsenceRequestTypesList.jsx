@@ -58,11 +58,7 @@ export const AbsenceRequestTypesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData, debouncedFetchData]);
-
-    useEffect(() => {
-        setSearchParams(absenceRequestTypesSearchStore.queryParams);
-    }, [setSearchParams]);
+    }, [debouncedFetchData]);
 
     const columns = [
         {

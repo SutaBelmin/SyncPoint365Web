@@ -50,20 +50,16 @@ export const AbsenceRequestsList = observer(() => {
                 orderBy: absenceRequestsSearchStore.orderBy,
             }),
             
-            () => {
+        (changes) => {
+            console.log("Reaction triggered with changes:", changes);
                 debouncedFetchData();
             },
             {
                 fireImmediately: true
             }
         );
-
         return () => disposeReaction();
-    }, [fetchData, debouncedFetchData]);
-
-    useEffect(() => {
-        setSearchParams(absenceRequestsSearchStore.queryParams);
-    }, [setSearchParams]);
+    }, [debouncedFetchData]);
 
     const columns = [
         {

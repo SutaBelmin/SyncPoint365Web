@@ -75,8 +75,6 @@ class AbsenceRequestsSearchStore {
         this.setAbsenceRequestStatusId(null);
         this.setDateFrom(null);
         this.setDateTo(null);
-        this.setOrderBy(null);
-        this.setPage(1);
         this.syncWithQueryParams();
     }
 
