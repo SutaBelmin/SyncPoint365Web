@@ -4,7 +4,7 @@ import BaseService from "./baseService";
 class AbsenceRequestsService extends BaseService {
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
-            `/absence-requests/paged`, 
+            "/absence-requests/paged", 
             {
                 params: {
                     absenceRequestTypeId: filter.absenceRequestTypeId,

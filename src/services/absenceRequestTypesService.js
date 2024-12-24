@@ -14,7 +14,7 @@ class AbsenceRequestTypesService extends BaseService {
 
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
-            `/absence-request-types/paged`,
+            "/absence-request-types/paged",
             {
                 params: {
                     isActive: filter.isActive,
