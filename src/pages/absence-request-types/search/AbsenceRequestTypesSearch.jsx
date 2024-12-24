@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select from 'react-select';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,10 @@ import { absenceRequestTypeStatusConstant } from '../../../constants';
 const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
+
+    useEffect(() => {
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
+    }, [setSearchParams]);
 
     const absenceRequestTypeStatusOptions = ([
         { value: absenceRequestTypeStatusConstant.all, label: t('ALL') },

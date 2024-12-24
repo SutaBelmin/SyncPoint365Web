@@ -14,6 +14,7 @@
     "HOME": "Naslovnica",
     "WELCOME_TO_HOME_SCREEN": "Dobrodošli na početnu stranicu.",
     "USERS": "Korisnici",
+    "USER": "User",
     "FIRST_NAME":"Ime",
     "LAST_NAME":"Prezime",
     "FULL_NAME":"Ime i prezime",
@@ -109,8 +110,6 @@
     "EMAIL_ALREADY_EXIST": "Email već postoji.",
     "DATE_FORMAT": "dd/MM/yyyy",
     "SEARCH_FIRST_LAST_NAME":"Pretraži po imenu ili prezimenu",
-    "SELECT_STATUS":"Odaberi status",
-    "STATUS":"Status",
     "SEARCH_PLACEHOLDER":"Pretraga",
     "BACK":"Nazad",
     "ABSENCE_REQUESTS": "Zahtjevi za odsustvo",
@@ -139,5 +138,7 @@
     "CHANGE_PASSWORD": "Promijeni lozinku",
     "NEW_PASSWORD": "Nova lozinka",
     "PASSWORD_CONFIRMATION": "Ponovi lozinku",
-    "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena."
+    "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena.",
+    "SELECT_STATUS": "Odaberi status",
+    "STATUS": "Status"
 }

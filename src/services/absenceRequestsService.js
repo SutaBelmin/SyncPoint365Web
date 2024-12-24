@@ -4,7 +4,7 @@ import BaseService from "./baseService";
 class AbsenceRequestsService extends BaseService {
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
-            `/absence-requests/paged`, 
+            "/absence-requests/paged", 
             {
                 params: {
                     absenceRequestTypeId: filter.absenceRequestTypeId,
@@ -12,11 +12,11 @@ class AbsenceRequestsService extends BaseService {
                     userId: filter.userId, 
                     dateFrom: filter.dateFrom,
                     dateTo: filter.dateTo,
+                    orderBy: filter.orderBy,
                     page: filter.page, 
                     pageSize: filter.pageSize,
                 },
                 signal: signal,
-                
             }
         );
         return response;

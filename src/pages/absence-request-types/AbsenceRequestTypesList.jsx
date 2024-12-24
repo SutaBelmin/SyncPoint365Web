@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
@@ -15,6 +15,8 @@ import AbsenceRequestTypesSearch from "./search";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
 import { absenceRequestTypesSearchStore } from "./stores";
 import { absenceRequestTypesService } from "../../services";
+import { useSearchParams } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 
 export const AbsenceRequestTypesList = observer(() => {
@@ -23,10 +25,11 @@ export const AbsenceRequestTypesList = observer(() => {
     const { openModal, closeModal } = useModal();
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
+    const [, setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = {...absenceRequestTypesSearchStore.absenceRequestFilter};
+            const filter = { ...absenceRequestTypesSearchStore.absenceRequestFilter };
             const response = await absenceRequestTypesService.getPagedList(filter, signal);
             setData(response.items);
             absenceRequestTypesSearchStore.setTotalItemCount(response.totalItemCount);
@@ -37,14 +40,17 @@ export const AbsenceRequestTypesList = observer(() => {
         }
     }, [signal, t]);
 
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
+
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                page : absenceRequestTypesSearchStore.page,
-                pageSize : absenceRequestTypesSearchStore.pageSize
+                page: absenceRequestTypesSearchStore.page,
+                pageSize: absenceRequestTypesSearchStore.pageSize,
+                orderBy: absenceRequestTypesSearchStore.orderBy,
             }),
             () => {
-                fetchData();
+                debouncedFetchData();
             },
             {
                 fireImmediately: true
@@ -52,18 +58,18 @@ export const AbsenceRequestTypesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData]);
+    }, [debouncedFetchData]);
 
     const columns = [
         {
             name: t('NAME'),
             selector: (row) => row.name,
-            sortable: true
+            sortable: true,
+            sortField: 'Name',
         },
         {
             name: t('ACTIVE'),
             selector: (row) => row.isActive ? t('YES') : t('NO'),
-            sortable: true
         },
         {
             name: t('ACTIONS'),
@@ -109,19 +115,28 @@ export const AbsenceRequestTypesList = observer(() => {
 
     const handlePageChange = (newPage) => {
         absenceRequestTypesSearchStore.setPage(newPage);
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
     }
 
     const handleRowsPerPageChange = (newPageSize) => {
         absenceRequestTypesSearchStore.setPageSize(newPageSize);
-        absenceRequestTypesSearchStore.setPage(1);
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
     };
 
+    const handleSort = (column, direction) => {
+        const field = column.sortField;
+        if (field) {
+            const orderBy = `${field}|${direction}`;
+            absenceRequestTypesSearchStore.setOrderBy(orderBy);
+        }
+        setSearchParams(absenceRequestTypesSearchStore.queryParams);
+    };
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUEST_TYPES')}</h1>
             <div className="flex flex-col gap-4 md:flex-row">
-                <AbsenceRequestTypesSearch fetchData={fetchData}/>
+                <AbsenceRequestTypesSearch fetchData={fetchData} />
                 <button
                     type="button"
                     onClick={addNewRequestClick}
@@ -135,7 +150,6 @@ export const AbsenceRequestTypesList = observer(() => {
                 <DataTable
                     columns={columns}
                     data={data}
-                    highlightOnHover
                     pagination
                     paginationServer
                     paginationTotalRows={absenceRequestTypesSearchStore.totalItemCount}
@@ -143,10 +157,13 @@ export const AbsenceRequestTypesList = observer(() => {
                     paginationPerPage={absenceRequestTypesSearchStore.rowsPerPage}
                     onChangePage={handlePageChange}
                     onChangeRowsPerPage={handleRowsPerPageChange}
+                    highlightOnHover
                     progressPending={loading}
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={PaginationOptions()}
+                    onSort={handleSort}
+                    sortServer={true}
                 />
             </div>
         </div>

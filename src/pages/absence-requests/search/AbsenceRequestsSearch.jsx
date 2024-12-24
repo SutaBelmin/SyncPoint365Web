@@ -13,7 +13,6 @@ import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, usersService, enumsService } from '../../../services';
 import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
 
-
 export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
 	const [users, setUsers] = useState([]);
@@ -70,8 +69,10 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [t]);
-
-
+	
+    useEffect(() => {
+        setSearchParams(absenceRequestsSearchStore.queryParams);
+    }, [setSearchParams]);
 
 	useEffect(() => {
 		fetchUsers();
@@ -101,6 +102,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		setFieldValue("dateFrom", null);
 		setFieldValue("dateTo", null);
 		absenceRequestsSearchStore.clearFilters();
+	
 		fetchData();
 	};
 
@@ -192,7 +194,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
+						className='input-search h-10 rounded-md border-gray-300 min-w-[5rem]'
 						locale={i18n.language}
 					/>
 					<DatePicker
@@ -208,7 +210,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-10 rounded-md border-gray-300 min-w-[7rem]'
+						className='input-search h-10 rounded-md border-gray-300 min-w-[5rem]'
 						locale={i18n.language}
 					/>
 					<div className='flex gap-4 '>
