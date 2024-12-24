@@ -1,10 +1,10 @@
-import { action, makeObservable, observable, runInAction } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 
 class CountriesStore {
   totalItemCount = 0;
   searchQuery = "";
   page = 1;
-  rowsPerPage = 10;
+  pageSize = 10;
   orderBy = "";
   currentQueryParams = null;
 
@@ -14,7 +14,7 @@ class CountriesStore {
       setPageSize: action,
       setOrderBy: action,
       page: observable,
-      rowsPerPage: observable,
+      pageSize: observable,
       orderBy: observable
     });
 
@@ -32,7 +32,7 @@ class CountriesStore {
   }
 
   setPageSize(newPageSize) {
-    this.rowsPerPage = newPageSize;
+    this.pageSize = newPageSize;
     this.syncWithQueryParams();
   }
 
@@ -42,13 +42,8 @@ class CountriesStore {
   }
 
   resetFilters() {
-    runInAction(()=>{
       this.setSearchQuery("");
-      this.setPage(1);
-      this.setPageSize(10);
-      this.setOrderBy("");
       this.syncWithQueryParams();
-    })
   }
 
   setOrderBy(order) {
@@ -65,8 +60,8 @@ class CountriesStore {
     if(this.page) 
       params.set("page", this.page);
 
-    if(this.rowsPerPage) 
-      params.set("rowsPerPage",this.rowsPerPage);
+    if(this.pageSize) 
+      params.set("pageSize",this.pageSize);
 
     if(this.orderBy)
       params.set("orderBy", this.orderBy);
@@ -81,7 +76,7 @@ class CountriesStore {
     const searchQuery = params.get("searchQuery") || "";
     const orderBy = params.get("orderBy") || "";
     const page = parseInt(params.get("page")) || 1;
-    const pageSize = parseInt(params.get("rowsPerPage")) || 10;
+    const pageSize = parseInt(params.get("pageSize")) || 10;
 
     this.setSearchQuery(searchQuery);
     this.setOrderBy(orderBy);
@@ -97,7 +92,7 @@ class CountriesStore {
     return {
       searchQuery: this.searchQuery,
       page: this.page,
-      rowsPerPage: this.rowsPerPage,
+      pageSize: this.pageSize,
       orderBy: this.orderBy
     };
   }

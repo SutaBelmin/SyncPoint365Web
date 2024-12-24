@@ -36,7 +36,7 @@ class CountriesService extends BaseService {
             {
                 params: {
                     page: filters.page,
-                    pageSize: filters.rowsPerPage,
+                    pageSize: filters.pageSize,
                     query: filters.searchQuery || '', 
                     orderBy: filters.orderBy
                 },

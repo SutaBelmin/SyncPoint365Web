@@ -47,7 +47,7 @@ export const CountriesList = observer(() => {
 			const disposer = reaction(
 				() => ({
 					page: countriesSearchStore.page,
-					rowsPerPage: countriesSearchStore.rowsPerPage,
+					pageSize: countriesSearchStore.pageSize,
 					orderBy: countriesSearchStore.orderBy,
 				}), 
 				() => {
@@ -57,12 +57,7 @@ export const CountriesList = observer(() => {
 			);
 		
 			return () => disposer();
-		}, [fetchData, debouncedFetchData]);
-		
-
-		useEffect(() => {
-			setSearchParams(countriesSearchStore.queryParams);
-		}, [setSearchParams]);
+		}, [debouncedFetchData]);
 		
 
 	const handlePageChange = (newPage) => {
@@ -165,7 +160,7 @@ export const CountriesList = observer(() => {
 					paginationServer
 					paginationTotalRows={countriesSearchStore.totalItemCount}
 					onChangePage={handlePageChange}
-					paginationPerPage={countriesSearchStore.rowsPerPage}
+					paginationPerPage={countriesSearchStore.pageSize}
 					onChangeRowsPerPage={handleRowsPerChange}
 					highlightOnHover
 					paginationDefaultPage={countriesSearchStore.page}
