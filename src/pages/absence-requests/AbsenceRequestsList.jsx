@@ -49,9 +49,7 @@ export const AbsenceRequestsList = observer(() => {
                 pageSize: absenceRequestsSearchStore.pageSize,
                 orderBy: absenceRequestsSearchStore.orderBy,
             }),
-            
-        (changes) => {
-            console.log("Reaction triggered with changes:", changes);
+            () => {
                 debouncedFetchData();
             },
             {

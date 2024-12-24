@@ -12,8 +12,6 @@ import { format } from 'date-fns';
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, usersService, enumsService } from '../../../services';
 import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
-import { action } from 'mobx';
-
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
@@ -96,7 +94,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 	};
 
 
-	const handleClear = action((setFieldValue) => {
+	const handleClear = (setFieldValue) => {
 		setSearchParams({});
 		setFieldValue("absenceRequestTypeId", null);
 		setFieldValue("userId", null);
@@ -106,7 +104,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		absenceRequestsSearchStore.clearFilters();
 	
 		fetchData();
-	});
+	};
 
 
 	const initialValues = {
