@@ -10,7 +10,6 @@ class UsersService extends BaseService {
     }
 
     async getPagedUsers(page = 1, pageSize = 10, signal = null) {
-
         const response = await this.api.get(`/users/paged-list`, {
             params: {
                 page: page,
@@ -28,15 +27,15 @@ class UsersService extends BaseService {
                 isActive: filter.isActive,
                 query: filter.searchQuery,
                 roleId: filter.roleId,
+                orderBy: filter.orderBy,
                 page: filter.page,
-                pageSize: filter.pageSize,
+                pageSize: filter.pageSize
             },
             signal: signal
         }
         );
         return response;
     }
-
 
     async updateUserStatus(id) {
         const response = await this.api.post(`/users/change-status?id=${id}`);

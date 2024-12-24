@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
+import { useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BaseModal } from '../../components/modal';
 import { observer } from "mobx-react";
@@ -17,26 +18,25 @@ import { ConfirmationModal } from '../../components/modal';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
-import './UsersList.css';
 import { roleConstant } from '../../constants';
 import { UsersPreview } from './UsersPreview';
 import { UsersChangePassword } from './UsersChangePassword';
+import './UsersList.css';
+import debounce from 'lodash.debounce';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
-
     const { t } = useTranslation();
     const paginationComponentOptions = PaginationOptions();
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
+    const [, setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
             const filter = { ...usersSearchStore.userFilter };
-
             const response = await usersService.getPagedUsersFilter(filter, signal);
-
             setData(response.data.items);
             usersSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
@@ -50,23 +50,24 @@ export const UsersList = observer(() => {
             <UsersPreview user={user} closeModal={closeModal} />
         );
     };
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
                 page: usersSearchStore.page,
-                pageSize: usersSearchStore.pageSize
+                pageSize: usersSearchStore.pageSize,
+                orderBy: usersSearchStore.orderBy
             }),
             () => {
-                fetchData();
+                debouncedFetchData();
             },
             {
                 fireImmediately: true
             }
         );
-
         return () => disposeReaction();
-    }, [fetchData]);
+    }, [debouncedFetchData]);
 
     const onAddUserClick = () => {
         navigate('add');
@@ -77,26 +78,28 @@ export const UsersList = observer(() => {
             name: t('FIRST_NAME'),
             selector: row => row.firstName,
             sortable: true,
+            sortField: 'firstName'
         },
         {
             name: t('LAST_NAME'),
             selector: row => row.lastName,
             sortable: true,
+            sortField: 'lastName'
         },
         {
             name: t('CITY'),
             selector: row => row.cityName,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ADDRESS'),
             selector: row => row.address,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('PHONE'),
             selector: row => row.phone,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ROLE'),
@@ -105,12 +108,12 @@ export const UsersList = observer(() => {
                     row.role === roleConstant.administrator ? t('ADMINISTRATOR') :
                         row.role === roleConstant.employee ? t('EMPLOYEE') : t(row.role);
             },
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('STATUS'),
             selector: row => row.isActive ? t('ACTIVE') : t('INACTIVE'),
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ACTIONS'),
@@ -214,19 +217,30 @@ export const UsersList = observer(() => {
                     pagination
                     paginationServer
                     paginationTotalRows={usersSearchStore.totalItemCount}
+                    paginationDefaultPage={usersSearchStore.page}
                     onChangePage={(newPage) => {
                         usersSearchStore.setPage(newPage);
+                        setSearchParams(usersSearchStore.queryParams);
                     }}
                     paginationPerPage={usersSearchStore.pageSize}
                     onChangeRowsPerPage={(newPageSize) => {
                         usersSearchStore.setPageSize(newPageSize);
-                        usersSearchStore.setPage(1);
+                        setSearchParams(usersSearchStore.queryParams);
                     }}
                     highlightOnHover
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={paginationComponentOptions}
                     onRowClicked={(row) => onPreviewUserClick(row)}
+                    onSort={(column, sortDirection) => {
+                        const sortField = column.sortField;
+                        if (sortField) {
+                            const orderBy = `${sortField}|${sortDirection}`;
+                            usersSearchStore.setOrderBy(orderBy);
+                            setSearchParams(usersSearchStore.queryParams);
+                        }
+                    }}
+                    sortServer={true}
                 />
             </div>
         </div>

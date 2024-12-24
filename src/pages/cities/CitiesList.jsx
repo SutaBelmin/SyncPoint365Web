@@ -1,31 +1,35 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import DataTable from "react-data-table-component";
+import { useSearchParams } from "react-router-dom";
 import { useModal } from "../../context/ModalProvider";
 import { NoDataMessage } from "../../components/common-ui";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {CitiesSearch} from "./search";
+import { CitiesSearch } from "./search";
 import { observer } from "mobx-react";
 import { reaction } from "mobx";
 import { citiesSearchStore } from './stores';
 import { citiesService } from "../../services";
 import { CitiesAdd, CitiesEdit } from "../cities";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import debounce from "lodash.debounce";
 
 export const CitiesList = observer(() => {
     const { t } = useTranslation();
     const { signal } = useRequestAbort();
-
     const [data, setData] = useState([]);
     const { openModal, closeModal } = useModal();
+    const [, setSearchParams] = useSearchParams();
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = {...citiesSearchStore.cityFilter};
+            const filter = {
+                ...citiesSearchStore.cityFilter
+            };
 
             const response = await citiesService.getPagedCities(filter, signal);
 
@@ -36,14 +40,17 @@ export const CitiesList = observer(() => {
         }
     }, [signal, t]);
 
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
+
     useEffect(() => {
         const disposeReaction = reaction(
             () => ({
-                page : citiesSearchStore.page,
-                pageSize : citiesSearchStore.pageSize
+                page: citiesSearchStore.page,
+                pageSize: citiesSearchStore.pageSize,
+                orderBy: citiesSearchStore.orderBy
             }),
             () => {
-                fetchData();
+                debouncedFetchData();
             },
             {
                 fireImmediately: true
@@ -51,28 +58,30 @@ export const CitiesList = observer(() => {
         );
 
         return () => disposeReaction();
-    }, [fetchData]);
+    }, [debouncedFetchData]);
+    
 
     const columns = [
         {
             name: t('NAME'),
             selector: row => row.name,
             sortable: true,
+            sortField: 'name'
         },
         {
             name: t('DISPLAY_NAME'),
             selector: row => row.displayName,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('COUNTRY_NAME'),
             selector: row => row.country?.name,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('POSTAL_CODE'),
             selector: row => row.postalCode,
-            sortable: true,
+            sortable: false,
         },
         {
             name: t('ACTIONS'),
@@ -81,15 +90,16 @@ export const CitiesList = observer(() => {
                     <button
                         onClick={() => onEditCityClick(row)}
                         className="text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit}/>
+                        <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
                         onClick={() => onDeleteCityClick(row)}
                         className="text-red-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faTrash}/>
+                        <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
             ),
+            ignoreRowClick: true,
         }
     ];
 
@@ -117,10 +127,10 @@ export const CitiesList = observer(() => {
     }
 
     return (
-        <div  className="flex-1 p-6 bg-gray-100 h-screen">
+        <div className="flex-1 p-6 bg-gray-100 h-screen">
             <h1 className="h1"> {t("CITIES")}</h1>
-            <div className="flex flex-col gap-4 md:flex-row">            
-                <CitiesSearch fetchData={fetchData}/>
+            <div className="flex flex-col gap-4 md:flex-row">
+                <CitiesSearch fetchData={fetchData} />
 
                 <button
                     type="button"
@@ -133,26 +143,38 @@ export const CitiesList = observer(() => {
 
             <BaseModal />
             <div className="table max-w-full">
-            <DataTable
-                columns={columns}
-                data={data || []}
-                pagination
-                paginationServer
-                paginationTotalRows={citiesSearchStore.totalItemCount}
-                onChangePage={(newPage) => {
-                    citiesSearchStore.setPage(newPage);
-                }}
-                paginationPerPage={citiesSearchStore.pageSize}
-                onChangeRowsPerPage={
-                    (newPageSize) =>{
-                        citiesSearchStore.setPageSize(newPageSize);
-                        citiesSearchStore.setPage(1);
+                <DataTable
+                    columns={columns}
+                    data={data || []}
+                    pagination
+                    paginationServer
+                    paginationTotalRows={citiesSearchStore.totalItemCount}
+                    paginationDefaultPage={citiesSearchStore.page}
+                    onChangePage={(newPage) => {
+                        citiesSearchStore.setPage(newPage);
+                        setSearchParams(citiesSearchStore.queryParams);
+                    }}
+                    paginationPerPage={citiesSearchStore.pageSize}
+                    onChangeRowsPerPage={
+                        (newPageSize) => {
+                            citiesSearchStore.setPageSize(newPageSize);
+                            setSearchParams(citiesSearchStore.queryParams);
+                        }
                     }
-                }
-                highlightOnHover
-                persistTableHead={true}
-                paginationComponentOptions={PaginationOptions}
-                noDataComponent={<NoDataMessage message="No cities available."/>} />
+                    highlightOnHover
+                    persistTableHead={true}
+                    paginationComponentOptions={PaginationOptions}
+                    noDataComponent={<NoDataMessage />}
+                    onSort={(column, sortDirection) => {
+                        const sortField = column.sortField;
+                        if (sortField) {
+                            const orderBy = `${sortField}|${sortDirection}`;
+                            citiesSearchStore.setOrderBy(orderBy);
+                            setSearchParams(citiesSearchStore.queryParams);
+                        }
+                    }}
+                    sortServer={true}
+                />
             </div>
         </div>
     );

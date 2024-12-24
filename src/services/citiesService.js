@@ -33,6 +33,7 @@ class CitiesService extends BaseService {
             params: {
                 countryId: filter.countryId,
                 query: filter.searchQuery,
+                orderBy: filter.orderBy,
                 page: filter.page,
                 pageSize: filter.pageSize
             },
