@@ -30,7 +30,17 @@ export const UsersAdd = () => {
 
     const addUser = async (values) => {
         try {
+            const userId = values.id;
+            const File = values.File;
             await usersService.add(values, signal);
+
+            if(values.File){
+                const formData = new FormData();
+                formData.append('UserId', userId);
+                formData.append('File', File);
+
+                await usersService.uploadProfilePicture(formData);
+            }
             toast.success(t('ADDED'));
             navigate('/users');
         } catch (error) {
@@ -156,7 +166,8 @@ export const UsersAdd = () => {
                         phone: '',
                         roleId: null,
                         password: '',
-                        passwordConfirm: ''
+                        passwordConfirm: '',
+                        File: ''
                     }}
                     validationSchema={validationSchema}
                     onSubmit={addUser}
@@ -358,6 +369,23 @@ export const UsersAdd = () => {
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
                                 <ErrorMessage name="passwordConfirm" component="div" className="text-red-500 text-sm" />
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="File" className="block text-sm font-medium text-gray-700">
+                                    {t('PROFILE_IMAGE')}
+                                </label>
+                                <input
+                                type="File"
+                                id="File"
+                                name="File"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    setFieldValue('File', e.target.files[0]);
+                                }}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                 <ErrorMessage name="File" component="div" className="text-red-500 text-sm" />
                             </div>
 
                             <div className="flex flex-col md:flex-row pb-2">
