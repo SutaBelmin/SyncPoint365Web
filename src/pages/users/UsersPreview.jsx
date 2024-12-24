@@ -19,7 +19,6 @@ export const UsersPreview = ({ user, closeModal }) => {
     else return t('FEMALE');
   };
   
-
   return (
     <div className="p-6">
       <h1 className="text-xl font-bold mb-6 text-center text-gray-800">{t('USER_PREVIEW')}</h1>
@@ -79,5 +78,5 @@ export const UsersPreview = ({ user, closeModal }) => {
       </button>
     </div>
   );
-  
+
 };  

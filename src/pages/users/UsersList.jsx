@@ -124,7 +124,7 @@ export const UsersList = observer(() => {
                     </button>
                     <button
                         onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-xl pr-2 ${row.isActive ? 'text-green-500' : 'text-red-500'}`}
+                        className={`text-xl pr-2 ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
                     >
                         {row.isActive ? (
                             <FontAwesomeIcon icon={faCircleXmark} />
