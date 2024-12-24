@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faHourglass, faSquareCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
@@ -17,9 +17,12 @@ import "./AbsenceRequestsList.css";
 import { absenceRequestStatusConstant } from "../../constants";
 import { useSearchParams } from "react-router-dom";
 import debounce from "lodash.debounce";
+import { useModal } from "../../context";
+import { AbsenceRequestsChangeStatus } from "../absence-requests";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();
+    const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { signal } = useRequestAbort();
@@ -113,11 +116,25 @@ export const AbsenceRequestsList = observer(() => {
                         className="text-lg text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
+                    <button
+                        onClick={() => changeStatus(row.id, row.absenceRequestStatus)}
+                        >
+                        {
+                            row.absenceRequestStatus === absenceRequestStatusConstant.pending ? (
+                                <FontAwesomeIcon icon={faHourglass} className="text-yellow-600 hover:underline p-2"/>
+                            ) : (
+                                <FontAwesomeIcon icon={faSquareCheck} className="text-green-700 hover:underline p-2"/>
+                            )
+                        }
+                    </button>
                 </div>
             ),
         }
     ];
 
+    const changeStatus = (absenceRequestId, absenceRequestStatus) => {
+        openModal(<AbsenceRequestsChangeStatus absenceRequestId={absenceRequestId} absenceRequestStatus={absenceRequestStatus} onCancel={closeModal} fetchData={fetchData} />);
+    }
     // const addNewRequestClick = () => {
     //     openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
     // }
@@ -152,9 +169,9 @@ export const AbsenceRequestsList = observer(() => {
     };
 
     const handleSort = async (column, direction) => {
-        const field = column.sortField || null; 
+        const field = column.sortField || null;
         let orderBy = null;
-    
+
         if (field) {
             if (field === "user.lastName") {
                 orderBy = `${field}|${direction}, user.firstName|${direction}`;
@@ -165,10 +182,10 @@ export const AbsenceRequestsList = observer(() => {
         } else {
             absenceRequestsSearchStore.setOrderBy(null);
         }
-    
+
         setSearchParams(absenceRequestsSearchStore.queryParams);
     };
-    
+
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">

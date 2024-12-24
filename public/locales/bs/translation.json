@@ -142,5 +142,6 @@
     "SELECT_STATUS": "Odaberi status",
     "STATUS": "Status",
     "LOCATION": "Lokacije",
-    "COUNTRY_REQUIRED": "Obavezna država."
+    "COUNTRY_REQUIRED": "Obavezna država.",
+    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Promijeni status zahtjeva:"
 }

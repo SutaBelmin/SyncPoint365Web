@@ -142,5 +142,6 @@
     "SELECT_STATUS": "Select Status",
     "STATUS": "Status",
     "LOCATION": "Location",
-    "COUNTRY_REQUIRED": "Country is required."
+    "COUNTRY_REQUIRED": "Country is required.",
+    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Change request status:"
 }
