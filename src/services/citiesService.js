@@ -2,28 +2,30 @@ import BaseService from "./baseService";
 
 
 class CitiesService extends BaseService {
-    async getList() {
-        const response = this.api.get("/cities/list");
+    async getList(signal = null) {
+        const response = this.api.get("/cities/list", {
+            signal: signal,
+        });
         return response;
     }
 
-    async add(cityData) {
+    async add(cityData, signal = null) {
         const response = await this.api.post(`/cities`, cityData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
 
-    async update(updatedCityData) {
+    async update(updatedCityData, signal = null) {
         const response = await this.api.put(`/cities`, updatedCityData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
 
-    async delete(cityId) {
+    async delete(cityId, signal = null) {
         const response = await this.api.delete(`/cities/${cityId}`, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }

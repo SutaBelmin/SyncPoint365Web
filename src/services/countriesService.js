@@ -3,28 +3,28 @@ import BaseService from "./baseService"
 class CountriesService extends BaseService {
     async getList(signal = null) {
         const response = await this.api.get(`/countries/list`, {
-            cancellationToken: signal
+            signal: signal
         });
         return response;
     }
 
-    async add(countryData) {
+    async add(countryData, signal = null) {
         const response = await this.api.post(`/countries`, countryData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
 
-    async update(countryData) {
+    async update(countryData, signal = null) {
         const response = await this.api.put(`/countries`, countryData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
 
-    async delete(countryId) {
+    async delete(countryId, signal = null) {
         const response = await this.api.delete(`/countries/${countryId}`, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }

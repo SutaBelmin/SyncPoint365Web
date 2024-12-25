@@ -7,6 +7,7 @@ import * as Yup from "yup"
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
 import { absenceRequestsService, absenceRequestTypesService, usersService } from '../../services';
+import { useRequestAbort } from "../../components/hooks";
 import { format } from 'date-fns';
 
 export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) => {
@@ -14,6 +15,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 	const [users, setUsers] = useState([]);
 
 	const { t } = useTranslation();
+	const { signal } = useRequestAbort();
 	const { i18n } = useTranslation();
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
@@ -21,7 +23,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 	useEffect(() => {
 		const fetchTypeUserId = async () => {
 			try {
-				const responseAbsenceType = await absenceRequestTypesService.getList();
+				const responseAbsenceType = await absenceRequestTypesService.getList(signal);
 				setAbsenceRequestTypes(responseAbsenceType.data.map(type => ({
 					value: type.id,
 					label: type.name
@@ -37,7 +39,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 			}
 		};
 		fetchTypeUserId();
-	}, [t]);
+	}, [signal, t]);
 
 
 	const validationSchema = Yup.object().shape({
@@ -56,7 +58,7 @@ export const AbsenceRequestsEdit = ({ absenceRequest, closeModal, fetchData }) =
 	const editHandling = async (values, actions) => {
 		const { setSubmitting } = actions;
 		try {
-			await absenceRequestsService.update({ values });
+			await absenceRequestsService.update({ values }, signal);
 			fetchData();
 			closeModal();
 			toast.success(t('UPDATED'));

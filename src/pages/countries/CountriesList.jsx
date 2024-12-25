@@ -92,7 +92,7 @@ export const CountriesList = observer(() => {
 
 	const handleDelete = async (countryId) => {
 		try {
-			await countriesService.delete(countryId);
+			await countriesService.delete(countryId, signal);
 			fetchData();
 			closeModal();
 			toast.success(t('DELETED'));
@@ -121,14 +121,14 @@ export const CountriesList = observer(() => {
 					<button
 						type="button"
 						onClick={() => onEditCountriesClick(row)}
-						className="text-blue-500 hover:underline p-2"
+						className="text-lg text-blue-500 hover:underline p-2"
 					>
 						<FontAwesomeIcon icon={faEdit} />
 					</button>
 					<button
 						type="button"
 						onClick={() => onDeleteCountriesClick(row)}
-						className="text-red-500 hover:underline p-2"
+						className="text-lg text-red-500 hover:underline p-2"
 					>
 						<FontAwesomeIcon icon={faTrash} />
 					</button>

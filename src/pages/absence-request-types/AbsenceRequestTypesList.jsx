@@ -77,12 +77,12 @@ export const AbsenceRequestTypesList = observer(() => {
                 <div className="flex">
                     <button
                         onClick={() => editRequestClick(row)}
-                        className="text-blue-500 hover:underline p-2">
+                        className="text-lg text-blue-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
                         onClick={() => deleteRequestClick(row)}
-                        className="text-red-500 hover:underline p-2">
+                        className="text-lg text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
@@ -104,7 +104,7 @@ export const AbsenceRequestTypesList = observer(() => {
 
     const handleDelete = async (absenceRequestTypeId) => {
         try {
-            await absenceRequestTypesService.delete(absenceRequestTypeId);
+            await absenceRequestTypesService.delete(absenceRequestTypeId, signal);
             fetchData();
             closeModal();
             toast.success(t('DELETED'));

@@ -121,13 +121,13 @@ export const UsersList = observer(() => {
                 <div className="flex">
                     <button
                         onClick={() => navigateToEdit(row.id)}
-                        className="text-xl text-blue-500 hover:underline p-2"
+                        className="text-lg text-blue-500 hover:underline p-2"
                     >
                         <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
                         onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-xl pr-2 ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
+                        className={`text-lg tpr-2 ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
                     >
                         {row.isActive ? (
                             <FontAwesomeIcon icon={faCircleXmark} />
@@ -138,13 +138,13 @@ export const UsersList = observer(() => {
                     <button
                         type="button"
                         onClick={() => onPreviewUserClick(row)}
-                        className="text-blue-500 hover:underline p-2"
+                        className="text-lg text-blue-500 hover:underline p-2"
                     >
                         <FontAwesomeIcon icon={faEye} />
                     </button>
                     <button
                         onClick={() => changePasswordClick(row.id)}
-                        className={'text-xl text-gray-250'}
+                        className={'text-lg text-gray-250'}
                     >
                         {(
                             <FontAwesomeIcon icon={faLock} />
@@ -182,7 +182,7 @@ export const UsersList = observer(() => {
 
     const handleStatusChange = async (userId) => {
         try {
-            await usersService.updateUserStatus(userId);
+            await usersService.updateUserStatus(userId, signal);
             fetchData();
             toast.success(t('UPDATED'));
             closeModal();

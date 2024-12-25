@@ -2,18 +2,24 @@ import BaseService from "./baseService";
 
 
 class EnumsService extends BaseService {
-    async getRoles() {
-        const response = await this.api.get("/enums/roles");
+    async getRoles(signal = null) {
+        const response = await this.api.get("/enums/roles", {
+            signal: signal
+        });
         return response;
     }
 
-    async getGenders() {
-        const response = await this.api.get("/enums/genders");
+    async getGenders(signal = null) {
+        const response = await this.api.get("/enums/genders", {
+            signal: signal
+        });
         return response;
     }
 
-    async getAbsenceRequestsStatus() {
-        const response = await this.api.get("/enums/absence-requests-status");
+    async getAbsenceRequestsStatus(signal = null) {
+        const response = await this.api.get("/enums/absence-requests-status", {
+            signal: signal
+        });
         return response;
     }
 

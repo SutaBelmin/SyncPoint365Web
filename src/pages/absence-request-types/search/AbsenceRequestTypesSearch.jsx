@@ -6,6 +6,7 @@ import { Formik, Form, Field } from 'formik';
 import { absenceRequestTypesSearchStore } from '../stores';
 import { absenceRequestTypeStatusConstant } from '../../../constants';
 
+
 const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();

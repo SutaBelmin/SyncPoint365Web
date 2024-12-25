@@ -1,16 +1,18 @@
 import React from "react";
 import * as Yup from "yup";
 import { countriesService } from "../../services";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 
 export const CountriesAdd = ({ closeModal, fetchData }) => {
   const { t } = useTranslation();
+  const { signal } = useRequestAbort();
 
   const addCountry = async (values, setSubmitting) => {
     try {
-      await countriesService.add(values);
+      await countriesService.add(values, signal);
       fetchData(); 
       toast.success(t('ADDED'));
       closeModal();

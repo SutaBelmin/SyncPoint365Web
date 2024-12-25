@@ -7,16 +7,18 @@ import { Formik, Form, Field } from "formik";
 import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
 import { userStatusConstant, roleConstant } from '../../../constants';
+import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 
 export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
     const [roles, setRoles] = useState([]);
     const [userStatusOptions, setUserStatusOptions] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const fetchRoles = useCallback(async () => {
         try {
-            const response = await enumsService.getRoles();
+            const response = await enumsService.getRoles(signal);
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
                 label: role.label === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
@@ -27,7 +29,7 @@ export const UsersSearch = ({ fetchData }) => {
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, [t]);
+    }, [signal, t]);
 
     useEffect(() => {
         fetchRoles();

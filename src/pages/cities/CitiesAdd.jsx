@@ -6,14 +6,16 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { citiesService, countriesService } from "../../services";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
 
     const fetchCountries = useCallback(async () => {
         try {
-            const response = await countriesService.getList();
+            const response = await countriesService.getList(signal);
             setCountries(response.data.map(country => ({
                 value: country.id,
                 label: country.name
@@ -21,7 +23,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, [t]);
+    }, [signal, t]);
 
     useEffect(() => {
         fetchCountries();
@@ -29,7 +31,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
 
     const addCity = async (values) => {
         try {
-            await citiesService.add(values);
+            await citiesService.add(values, signal);
             fetchData();
             closeModal();
             toast.success(t('ADDED'));

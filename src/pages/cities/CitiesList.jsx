@@ -89,12 +89,12 @@ export const CitiesList = observer(() => {
                 <div className="flex">
                     <button
                         onClick={() => onEditCityClick(row)}
-                        className="text-blue-500 hover:underline p-2">
+                        className="text-lg text-blue-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faEdit} />
                     </button>
                     <button
                         onClick={() => onDeleteCityClick(row)}
-                        className="text-red-500 hover:underline p-2">
+                        className="text-lg text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
@@ -117,7 +117,7 @@ export const CitiesList = observer(() => {
 
     const handleDelete = async (cityId) => {
         try {
-            await citiesService.delete(cityId);
+            await citiesService.delete(cityId, signal);
             fetchData();
             closeModal();
             toast.success("Country deleted successfully!");

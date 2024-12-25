@@ -56,7 +56,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 
 	const fetchAbsenceRequestStatus = useCallback(async () => {
 		try {
-			const response = await enumsService.getAbsenceRequestsStatus();
+			const response = await enumsService.getAbsenceRequestsStatus(signal);
 			const statusOptions = response.data.map(requestStatus => ({
 				value: requestStatus.id,
 				label: requestStatus.label === absenceRequestStatusConstant.approved ? t('APPROVED') :
@@ -68,7 +68,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		} catch (error) {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
-	}, [t]);
+	}, [signal, t]);
 	
     useEffect(() => {
         setSearchParams(absenceRequestsSearchStore.queryParams);
