@@ -42,7 +42,9 @@
     lg:w-[10rem] md:w-[10rem] sm:w-full xs:w-full ss:w-full;
 }
   
-
+.text-custom-blue {
+  @apply text-[rgb(30,58,138)];
+}
   
 .input-select-border input[type='text']:focus {
     box-shadow: none;
@@ -67,7 +69,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 .h1 {
   font-size: 1.3rem;
   font-weight: bold;
-  padding-top: 3rem;
+  padding-top: 4rem;
   margin-bottom: 20px;
 }
 

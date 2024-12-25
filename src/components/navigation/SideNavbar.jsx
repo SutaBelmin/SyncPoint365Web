@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCity, faEarthAmerica, faUser, faHome, faCalendarCheck, faFileCirclePlus, faCaretDown, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCity, faEarthAmerica, faUser, faHome, faCalendarCheck, faCaretDown, faLocationCrosshairs, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 const SideNavbar = ({ isCollapsed, onToggle }) => {
@@ -24,10 +24,8 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                 <ul className="space-y-4">
                     {[{ icon: faHome, label: t('HOME'), link: '/home' },
                     { icon: faUser, label: t('USERS'), link: '/users' },
-                    // { icon: faEarthAmerica, label: t('COUNTRIES'), link: '/countries' },
-                    // { icon: faCity, label: t('CITIES'), link: '/cities' },
-                    { icon: faFileCirclePlus, label: t('REQUEST_TYPES'), link: '/absence-request-types' },
-                    { icon: faCalendarCheck, label: t('ABSENCE_REQUESTS'), link: '/absence-requests' }
+                    { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types' },
+                    { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests' }
                     ].map(({ icon, label, link }) => (
                         <li key={label}>
                             <a href={link} className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700">
