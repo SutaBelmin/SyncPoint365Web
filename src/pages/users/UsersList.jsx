@@ -123,7 +123,7 @@ export const UsersList = observer(() => {
                         onClick={() => navigateToEdit(row.id)}
                         className="text-lg text-blue-500 hover:underline p-2"
                     >
-                        <FontAwesomeIcon icon={faEdit} />
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
                         onClick={() => statusChange(row.id, row.isActive)}
@@ -138,13 +138,14 @@ export const UsersList = observer(() => {
                     <button
                         type="button"
                         onClick={() => onPreviewUserClick(row)}
-                        className="text-lg text-blue-500 hover:underline p-2"
+                        className="text-lg text-blue-500 hover:underline p-2" 
+                        style={{ color: '#276EEC' }}
                     >
                         <FontAwesomeIcon icon={faEye} />
                     </button>
                     <button
                         onClick={() => changePasswordClick(row.id)}
-                        className={'text-lg text-gray-250'}
+                        className={'text-lg text-gray-400'}
                     >
                         {(
                             <FontAwesomeIcon icon={faLock} />

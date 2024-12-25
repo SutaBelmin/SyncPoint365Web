@@ -141,5 +141,6 @@
     "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed.",
     "SELECT_STATUS": "Select Status",
     "STATUS": "Status",
-    "LOCATION": "Location"
+    "LOCATION": "Location",
+    "COUNTRY_REQUIRED": "Country is required."
 }

@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faCity, faEarthAmerica, faUser, faHome, faCalendarCheck, faCaretDown, faLocationCrosshairs, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const SideNavbar = ({ isCollapsed, onToggle }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const [isLocationOpen, setLocationOpen] = useState(false);
 
+    const handleLinkClick = (e, path) => {
+        e.preventDefault();
+        navigate(path);
+    }
 
+    const toggleLocationDropdown = (e) => {
+        e.stopPropagation();
+        setLocationOpen((prevState) => !prevState);
+    }
 
     return (
         <nav className={`bg-gray-800 text-white h-full p-4 fixed top-0 left-0 z-50 transition-all duration-300 
@@ -28,26 +39,34 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                     { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests' }
                     ].map(({ icon, label, link }) => (
                         <li key={label}>
-                            <a href={link} className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700">
+                            <a 
+                            href={link} 
+                            onClick={(e) => handleLinkClick(e, link)}
+                            className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700">
                                 <FontAwesomeIcon icon={icon} className="mr-3" />
                                 {label}
                             </a>
                         </li>
                     ))}
                     <li>
-                        <details className='group'>
-                            <summary className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 cursor-pointer">
+                        <div>
+                            <div 
+                              className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 cursor-pointer"
+                              onClick={toggleLocationDropdown}
+                            >
                                 <FontAwesomeIcon icon={faLocationCrosshairs} className="mr-3" />
                                 {t('LOCATION')}
                                 <FontAwesomeIcon
                                     icon={faCaretDown}
-                                    className="ml-auto transform group-open:rotate-180 transition-transform"
+                                    className={`ml-auto transform ${isLocationOpen ? 'rotate-180' : ''} transition-transform`}
                                 />
-                            </summary>
+                            </div>
+                            {isLocationOpen && (
                             <ul className="ml-6 mt-2 space-y-2">
                                 <li>
                                     <a
                                         href="/countries"
+                                        onClick={(e) => handleLinkClick(e, '/countries')}
                                         className="block py-2 px-4 text-md rounded hover:bg-gray-600"
                                     >
                                         <FontAwesomeIcon icon={faEarthAmerica} className="mr-3" />
@@ -57,6 +76,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                                 <li>
                                     <a
                                         href="/cities"
+                                        onClick={(e) => handleLinkClick(e, 'cities')}
                                         className="block py-2 px-4 text-md rounded hover:bg-gray-600"
                                     >
                                          <FontAwesomeIcon icon={faCity} className="mr-3" />
@@ -64,7 +84,8 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                                     </a>
                                 </li>
                             </ul>
-                        </details>
+                        )}
+                        </div>
                     </li>
                 </ul>
             )}

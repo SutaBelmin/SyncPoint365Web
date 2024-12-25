@@ -106,7 +106,7 @@ export const AbsenceRequestsList = observer(() => {
                     <button
                         //onClick={() => editRequestClick(row)}
                         className="text-lg text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} />
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
                         //onClick={() => deleteRequestClick(row)}

@@ -40,7 +40,7 @@ const Login = () => {
   return (
     <div className="flex min-h-full flex-col justify-center">
       <header className="text-white flex justify-between items-center h-16 px-6 shadow-md">
-        <h1 className="header-font">
+        <h1 className="header-font" style={{ paddingLeft: '0rem' }}>
           <span className="text-custom-blue">SyncPoint</span>
           <span className="text-yellow-600">365</span>
         </h1>

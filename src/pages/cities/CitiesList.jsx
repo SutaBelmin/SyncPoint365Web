@@ -90,7 +90,7 @@ export const CitiesList = observer(() => {
                     <button
                         onClick={() => onEditCityClick(row)}
                         className="text-lg text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} />
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
                         onClick={() => onDeleteCityClick(row)}

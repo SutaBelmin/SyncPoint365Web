@@ -141,5 +141,6 @@
     "PASSWORD_SUCCESSFULLY_CHANGED": "Lozinka uspješno promijenjena.",
     "SELECT_STATUS": "Odaberi status",
     "STATUS": "Status",
-    "LOCATION": "Lokacije"
+    "LOCATION": "Lokacije",
+    "COUNTRY_REQUIRED": "Obavezna država."
 }

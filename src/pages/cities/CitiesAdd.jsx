@@ -49,7 +49,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
             .required(t('POSTAL_CODE_IS_REQUIRED'))
             .matches(/^\d+$/, t('POSTAL_CODE_NUMBER')),
         countryId: Yup.string()
-            .required("Country Id is required!")
+            .required(t('COUNTRY_REQUIRED'))
     });
 
     return (

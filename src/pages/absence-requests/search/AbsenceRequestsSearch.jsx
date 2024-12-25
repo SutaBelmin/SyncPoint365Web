@@ -164,7 +164,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						options={users}
 						value={users.find((option) => option.value === values.userId) || null}
 						onChange={(option) => setFieldValue("userId", option ? option.value : null)}
-						className="border-gray-300 input-select-border w-full min-w-[12rem] md:w-auto"
+						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
 						isClearable
 						isSearchable
 
@@ -177,7 +177,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						onChange={(option) => setFieldValue('absenceRequestStatusId', option && option.value)}
 						options={statuses}
 						placeholder={t('SELECT_STATUS')}
-						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
+						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
 						isClearable
 						isSearchable
 					/>
@@ -194,7 +194,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-10 rounded-md border-gray-300 min-w-[5rem]'
+						className='input-search h-9 rounded-md border-gray-300 min-w-[5rem]'
 						locale={i18n.language}
 					/>
 					<DatePicker
@@ -210,7 +210,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-10 rounded-md border-gray-300 min-w-[5rem]'
+						className='input-search h-9 rounded-md border-gray-300 min-w-[5rem]'
 						locale={i18n.language}
 					/>
 					<div className='flex gap-4 '>
