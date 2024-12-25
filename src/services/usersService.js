@@ -88,18 +88,15 @@ class UsersService extends BaseService {
         return response.data;
     }    
 
-    async uploadProfilePicture(file){
-        const formData = new FormData();
-        formData.append("File", file);
-
+    async uploadProfilePicture(formData){
         const response = await this.api.post('/users/upload-profile-picture', formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
         });
-
         return response;
     }
+    
 }
 
 const usersService = new UsersService();

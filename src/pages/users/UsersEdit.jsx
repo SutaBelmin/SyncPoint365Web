@@ -31,7 +31,15 @@ export const UsersEdit = () => {
 
     const updateUser = async (values) => {
         try {
-            await usersService.update({...values, id:userId}, signal); 
+            const formData = new FormData();
+            if (values.File){
+                formData.append("File", values.File);
+                formData.append("UserId", userId); 
+            }
+            
+            await usersService.uploadProfilePicture(formData); 
+            
+            await usersService.update({...values, id:userId}, signal);  
             toast.success(t('UPDATED'));
             navigate('/users');
         } catch (error) {
@@ -176,7 +184,8 @@ export const UsersEdit = () => {
                         cityId: user.cityId || null,
                         address: user.address || '',
                         phone: user.phone || '',
-                        role: roles.find(r => r.label.toLowerCase() === user.role.toLowerCase())?.value
+                        role: roles.find(r => r.label.toLowerCase() === user.role.toLowerCase())?.value,
+                        File: null
                     }}
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
@@ -341,6 +350,23 @@ export const UsersEdit = () => {
                            />
                            <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
                        </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="File" className="block text-sm font-medium text-gray-700">
+                                {t('PROFILE_PICTURE')}
+                            </label>
+                            <input
+                                type="file"
+                                id="File"
+                                name="File"
+                                onChange={(event) => {
+                                    const file = event.target.files[0];
+                                    setFieldValue("File", file);
+                                }}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                        </div>
+
                    
                        <div className="mb-4 flex">
                            <button

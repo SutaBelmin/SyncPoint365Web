@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from 'react-phone-input-2';
@@ -25,22 +25,24 @@ export const UsersAdd = () => {
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
+    const {userId} = useParams();
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const addUser = async (values) => {
         try {
             const userId = values.id;
-            const File = values.File;
             await usersService.add(values, signal);
+            
+            await usersService.getById(userId);
 
-            if(values.File){
-                const formData = new FormData();
-                formData.append('UserId', userId);
-                formData.append('File', File);
+            const formData = new FormData();
+            if (values.File){
+                formData.append("File", values.File);
+                formData.append("UserId", userId); 
+            }
 
                 await usersService.uploadProfilePicture(formData);
-            }
             toast.success(t('ADDED'));
             navigate('/users');
         } catch (error) {
@@ -167,7 +169,7 @@ export const UsersAdd = () => {
                         roleId: null,
                         password: '',
                         passwordConfirm: '',
-                        File: ''
+                        File: null
                     }}
                     validationSchema={validationSchema}
                     onSubmit={addUser}
@@ -373,19 +375,18 @@ export const UsersAdd = () => {
 
                             <div className="mb-4">
                                 <label htmlFor="File" className="block text-sm font-medium text-gray-700">
-                                    {t('PROFILE_IMAGE')}
+                                    {t('PROFILE_PICTURE')}
                                 </label>
                                 <input
-                                type="File"
+                                type="file"
                                 id="File"
                                 name="File"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    setFieldValue('File', e.target.files[0]);
+                                onChange={(event) => {
+                                    const file = event.target.files[0];
+                                    setFieldValue("File", file);
                                 }}
                                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 />
-                                 <ErrorMessage name="File" component="div" className="text-red-500 text-sm" />
                             </div>
 
                             <div className="flex flex-col md:flex-row pb-2">
