@@ -95,16 +95,12 @@ class UsersService extends BaseService {
     }
 
     async getProfilePicture(userId){
-        try {
             const response = await this.api.get(`/users/get-profile-picture`, {
                 params: {userId},
                 responseType: 'blob'
             });
             const imageUrl = URL.createObjectURL(response.data);
             return imageUrl;
-        } catch (error){
-            throw error;
-        }
     }
     
 }

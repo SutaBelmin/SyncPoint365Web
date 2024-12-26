@@ -179,18 +179,18 @@ export const UsersEdit = () => {
     if (!user) return <div>{t('LOADING')}</div>;
 
     return (
-        <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <div className="w-full max-w-lg">
-                <div className="realtive">
+        <div className="flex-1 p-6 bg-gray-100 min-h-screen">
+            <div className="w-full max-w-full mx-auto">
+                <div className="relative mb-6">
                     <button
                         onClick={handleBack}
-                        className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center absolute top-20 right-5"
+                        className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center absolute top-14 right-0"
                     >
                         <FaArrowLeft className="mr-auto" />
                         <span className="flex-grow text-center">{t('BACK')}</span>
                     </button>
                 </div>
-                <h1 className="h1">{t('UPDATE_USER')}</h1>
+                <h1 className="h1 mb-6">{t('UPDATE_USER')}</h1>
                 <Formik
                     initialValues={{
                         firstName: user.firstName || '',
@@ -208,235 +208,238 @@ export const UsersEdit = () => {
                     onSubmit={updateUser}
                 >
                     {({ setFieldValue, values }) => (
-                        <Form className="w-full">
+                        <Form className="w-full flex flex-col md:flex-row">
+                            <div className="w-full md:w-1/2 pr-0 md:pr-4">
+                                <div className="mb-4">
+                                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                                        {t('FIRST_NAME')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="firstName"
+                                        name="firstName"
+                                        placeholder={t('FIRST_NAME')}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    />
+                                    <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
+                                </div>
 
-                            <div className="mb-4">
-                                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                                    {t('FIRST_NAME')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="firstName"
-                                    name="firstName"
-                                    placeholder={t('FIRST_NAME')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
+                                <div className="mb-4">
+                                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                                        {t('LAST_NAME')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="lastName"
+                                        name="lastName"
+                                        placeholder={t('LAST_NAME')}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    />
+                                    <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                        {t('EMAIL')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="email"
+                                        name="email"
+                                        placeholder={t('EMAIL')}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    />
+                                    <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                                        {t('GENDER')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Select
+                                        id="gender"
+                                        name="gender"
+                                        onChange={(option) => setFieldValue('gender', option ? option.value : '')}
+                                        options={genderOptions}
+                                        placeholder={t('SELECT_GENDER')}
+                                        value={genderOptions.find((gender) => gender.value === values.gender)}
+                                        getOptionLabel={option => option.label}
+                                        getOptionValue={option => option.value}
+                                        className='input-select-border mt-1'
+                                    />
+                                    <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                                        {t('ROLE')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Select
+                                        id="role"
+                                        name="role"
+                                        onChange={(option) => setFieldValue('role', option ? option.value : '')}
+                                        options={rolesOptions}
+                                        value={rolesOptions.find((role) => role.value === values.role)}
+                                        getOptionLabel={option => option.label}
+                                        getOptionValue={option => option.value}
+                                        placeholder={t('SELECT_ROLE')}
+                                        className='input-select-border mt-1'
+                                    />
+                                    <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
+                                        {t('BIRTH_DATE')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <DatePicker
+                                        id="birthDate"
+                                        name="birthDate"
+                                        selected={values.birthDate ? new Date(values.birthDate) : null}
+                                        onChange={(date) => {
+                                            const formattedDate = format(new Date(date), 'yyyy-MM-dd');
+                                            setFieldValue("birthDate", formattedDate)
+                                        }}
+                                        dateFormat={t('DATE_FORMAT')}
+                                        placeholderText={t('SELECT_BIRTH_DATE')}
+                                        showYearDropdown
+                                        maxDate={new Date()}
+                                        yearDropdownItemNumber={100}
+                                        scrollableYearDropdown
+                                        onKeyDown={(e) => e.preventDefault()}
+                                        locale={i18n.language}
+                                        autoComplete='off'
+                                    />
+                                    <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                                        {t('PHONE')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Field
+                                        name="phone"
+                                        render={({ field }) => (
+                                            <PhoneInput
+                                                inputProps={{
+                                                    name: 'phone',
+                                                    id: 'phone',
+                                                    className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                                }}
+                                                {...field}
+                                                onChange={(value) => setFieldValue('phone', value)}
+                                                value={values.phone}
+                                                enableSearch
+                                                country={'ba'}
+                                                className="phone-input"
+                                            />
+                                        )}
+                                    />
+                                    <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                        {t('ADDRESS')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Field
+                                        type="text"
+                                        id="address"
+                                        name="address"
+                                        placeholder={t('ADDRESS')}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    />
+                                    <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label htmlFor="cityId" className="block text-sm font-medium text-gray-700">
+                                        {t('CITY')} <span className='text-red-500'>*</span>
+                                    </label>
+                                    <Select
+                                        id="cityId"
+                                        name="cityId"
+                                        onChange={(option) => setFieldValue('cityId', option ? option.value : null)}
+                                        options={cities}
+                                        value={cities.find(city => city.value === values.cityId)}
+                                        placeholder={t('SELECT_CITY')}
+                                        className='input-select-border mt-1'
+                                    />
+                                    <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
+                                </div>
+
+                                <div className="mb-4 flex">
+                                    <button
+                                        type="submit"
+                                        className="btn-save ml-auto"
+                                    >
+                                        {t('SAVE')}
+                                    </button>
+                                </div>
                             </div>
 
-                            <div className="mb-4">
-                                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                                    {t('LAST_NAME')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="lastName"
-                                    name="lastName"
-                                    placeholder={t('LAST_NAME')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
-                            </div>
+                            <div className="w-full md:w-1/2 pl-0 md:pl-4">
+                                <div className="mb-4">
+                                    <label htmlFor="File" className="block text-sm font-medium text-gray-700 mb-2">
+                                        {t('PROFILE_PICTURE')}
+                                    </label>
 
-                            <div className="mb-4">
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                    {t('EMAIL')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="email"
-                                    name="email"
-                                    placeholder={t('EMAIL')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
-                            </div>
+                                    <div className="flex justify-center mb-4">
+                                        <div className="w-[325px] h-[325px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
+                                            {profilePicture ? (
+                                                <img
+                                                    src={profilePicture}
+                                                    alt="Profile"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <p className="w-full h-full flex items-center justify-center text-gray-500">
+                                                    {t('NO_PICTURE')}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
 
-                            <div className="mb-4">
-                                <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-                                    {t('GENDER')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Select
-                                    id="gender"
-                                    name="gender"
-                                    onChange={(option) => setFieldValue('gender', option ? option.value : '')}
-                                    options={genderOptions}
-                                    placeholder={t('SELECT_GENDER')}
-                                    value={genderOptions.find((gender) => gender.value === values.gender)}
-                                    getOptionLabel={option => option.label}
-                                    getOptionValue={option => option.value}
-                                    className='input-select-border mt-1'
-                                />
-                                <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                                    {t('ROLE')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Select
-                                    id="role"
-                                    name="role"
-                                    onChange={(option) => setFieldValue('role', option ? option.value : '')}
-                                    options={rolesOptions}
-                                    value={rolesOptions.find((role) => role.value === values.role)}
-                                    getOptionLabel={option => option.label}
-                                    getOptionValue={option => option.value}
-                                    placeholder={t('SELECT_ROLE')}
-                                    className='input-select-border mt-1'
-                                />
-                                <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
-                                    {t('BIRTH_DATE')} <span className='text-red-500'>*</span>
-                                </label>
-                                <DatePicker
-                                    id="birthDate"
-                                    name="birthDate"
-                                    selected={values.birthDate ? new Date(values.birthDate) : null}
-                                    onChange={(date) => {
-                                        const formattedDate = format(new Date(date), 'yyyy-MM-dd');
-                                        setFieldValue("birthDate", formattedDate)
-                                    }}
-                                    dateFormat={t('DATE_FORMAT')}
-                                    placeholderText={t('SELECT_BIRTH_DATE')}
-                                    showYearDropdown
-                                    maxDate={new Date()}
-                                    yearDropdownItemNumber={100}
-                                    scrollableYearDropdown
-                                    onKeyDown={(e) => e.preventDefault()}
-                                    locale={i18n.language}
-                                    autoComplete='off'
-                                />
-                                <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                                    {t('PHONE')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    name="phone"
-                                    render={({ field }) => (
-                                        <PhoneInput
-                                            inputProps={{
-                                                name: 'phone',
-                                                id: 'phone',
-                                                className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
-                                            }}
-                                            {...field}
-                                            onChange={(value) => setFieldValue('phone', value)}
-                                            value={values.phone}
-                                            enableSearch
-                                            country={'ba'}
-                                            className="phone-input"
-                                        />
-                                    )}
-                                />
-                                <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                                    {t('ADDRESS')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="address"
-                                    name="address"
-                                    placeholder={t('ADDRESS')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="cityId" className="block text-sm font-medium text-gray-700">
-                                    {t('CITY')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Select
-                                    id="cityId"
-                                    name="cityId"
-                                    onChange={(option) => setFieldValue('cityId', option ? option.value : null)}
-                                    options={cities}
-                                    value={cities.find(city => city.value === values.cityId)}
-                                    placeholder={t('SELECT_CITY')}
-                                    className='input-select-border mt-1'
-                                />
-                                <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="File" className="block text-sm font-medium text-gray-700">
-                                    {t('PROFILE_PICTURE')}
-                                </label>
-                                
-                                <div className="flex justify-center mb-4">
-                                <div className="w-[250px] h-[250px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
-                                    {profilePicture ? (
-                                        <img
-                                            src={profilePicture}
-                                            alt="Profile"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <p className="w-full h-full flex items-center justify-center text-gray-500">
-                                            {t('NO_PICTURE')}
+                                    <div
+                                        className="w-full h-80 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200"
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            const file = e.dataTransfer.files[0];
+                                            if (file) {
+                                                setFieldValue("File", file);
+                                                setProfilePicture(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        onDragOver={(e) => e.preventDefault()}
+                                    >
+                                        <p className="text-center">
+                                            {t('DRAG_AND_DROP')}
+                                            <br />
                                         </p>
-                                    )}
+                                    </div>
+
+                                    <input
+                                        type="file"
+                                        id="File"
+                                        name="File"
+                                        onChange={(event) => {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                                setFieldValue("File", file);
+                                                setProfilePicture(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        className="mt-2 hidden"
+                                    />
+
+                                    <label
+                                        htmlFor="File"
+                                        className="btn-save inline-flex items-center mt-4 px-3 py-1  rounded-md cursor-pointer transition-colors float-right mr-2"
+                                    >
+                                        <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
+                                        {t('CHOOSE_PICTURE')}
+                                    </label>
                                 </div>
-                                </div>
-
-                                <div
-                                    className="w-full h-32 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200"
-                                    onDrop={(e) => {
-                                        e.preventDefault();
-                                        const file = e.dataTransfer.files[0];
-                                        if (file) {
-                                            setFieldValue("File", file);
-                                            setProfilePicture(URL.createObjectURL(file));
-                                        }
-                                    }}
-                                    onDragOver={(e) => e.preventDefault()}
-                                >
-                                    <p className="text-center">
-                                        {t('DRAG_AND_DROP')}
-                                        <br />
-                                    </p>
-                                </div>
-
-                                <input
-                                    type="file"
-                                    id="File"
-                                    name="File"
-                                    onChange={(event) => {
-                                        const file = event.target.files[0];
-                                        if (file) {
-                                            setFieldValue("File", file);
-                                            setProfilePicture(URL.createObjectURL(file));
-                                        }
-                                    }}
-                                    className="mt-2 hidden"
-                                />
-
-                                <label
-                                    htmlFor="File"
-                                    className="inline-flex items-center mt-2 px-3 py-1 bg-blue-400 text-white rounded-md cursor-pointer hover:bg-blue-500 transition-colors"
-                                >
-                                    <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
-                                    {t('CHOOSE_PICTURE')}
-                                </label>
-                            </div>
-
-                            <div className="mb-4 flex">
-                                <button
-                                    type="submit"
-                                    className="btn-save ml-auto"
-                                >
-                                    {t('SAVE')}
-                                </button>
                             </div>
                         </Form>
                     )}
@@ -444,4 +447,4 @@ export const UsersEdit = () => {
             </div>
         </div>
     );
-};
+}

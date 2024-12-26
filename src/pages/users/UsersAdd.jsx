@@ -19,6 +19,7 @@ import { genderConstant, localeConstant, roleConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import defaultUserImage from '../../assets/images/defaultUser.PNG';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -385,7 +386,7 @@ export const UsersAdd = () => {
                                     <div className="mb-4 flex justify-center">
                                         <div className="w-[250px] h-[250px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
                                             <img
-                                                src={imagePreview}
+                                                src={imagePreview || defaultUserImage}
                                                 alt="Profile Preview"
                                                 className="w-[250px] h-[250px] object-cover rounded-full mb-4 border-4 border-blue-400"
                                             />
@@ -422,7 +423,7 @@ export const UsersAdd = () => {
                                             const previewUrl = URL.createObjectURL(file);
                                             setImagePreview(previewUrl);
                                             setFieldValue("File", file);
-                                        }
+                                        } 
                                     }}
                                     className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 file:hidden"
                                 />
