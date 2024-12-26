@@ -82,7 +82,7 @@ export const AbsenceRequestTypesList = observer(() => {
                     </button>
                     <button
                         onClick={() => deleteRequestClick(row)}
-                        className="text-md text-red-500 hover:underline p-2">
+                        className="text-lg text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>

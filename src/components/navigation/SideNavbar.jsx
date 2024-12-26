@@ -8,9 +8,11 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [isLocationOpen, setLocationOpen] = useState(false);
+    const [activeLink, setActiveLink] = useState('');
 
     const handleLinkClick = (e, path) => {
         e.preventDefault();
+        setActiveLink(path);
         navigate(path);
     }
 
@@ -42,7 +44,9 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                             <a 
                             href={link} 
                             onClick={(e) => handleLinkClick(e, link)}
-                            className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700">
+                            className={`flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 ${
+                                activeLink === link ? 'bg-gray-700' : ''
+                            }`}>
                                 <FontAwesomeIcon icon={icon} className="mr-3" />
                                 {label}
                             </a>
@@ -67,7 +71,9 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                                     <a
                                         href="/countries"
                                         onClick={(e) => handleLinkClick(e, '/countries')}
-                                        className="block py-2 px-4 text-md rounded hover:bg-gray-600"
+                                        className={`block py-2 px-4 text-md rounded hover:bg-gray-600 ${
+                                            activeLink === '/countries' ? 'bg-gray-700' : ''
+                                        }`}
                                     >
                                         <FontAwesomeIcon icon={faEarthAmerica} className="mr-3" />
                                         {t('COUNTRIES')}
@@ -76,8 +82,10 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                                 <li>
                                     <a
                                         href="/cities"
-                                        onClick={(e) => handleLinkClick(e, 'cities')}
-                                        className="block py-2 px-4 text-md rounded hover:bg-gray-600"
+                                        onClick={(e) => handleLinkClick(e, '/cities')}
+                                        className={`block py-2 px-4 text-md rounded hover:bg-gray-600 ${
+                                            activeLink === '/cities' ? 'bg-gray-700' : ''
+                                        }`}
                                     >
                                          <FontAwesomeIcon icon={faCity} className="mr-3" />
                                         {t('CITIES')}
