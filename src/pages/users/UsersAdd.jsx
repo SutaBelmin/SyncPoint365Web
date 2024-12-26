@@ -155,8 +155,8 @@ export const UsersAdd = () => {
                         className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center"
                         onClick={() => navigate('/users')}
                     >
-                         <FaArrowLeft className="mr-auto" />
-                         <span className="flex-grow text-center">{t('BACK')}</span>
+                        <FaArrowLeft className="mr-auto" />
+                        <span className="flex-grow text-center">{t('BACK')}</span>
                     </button>
                 </div>
                 <Formik
@@ -377,42 +377,63 @@ export const UsersAdd = () => {
                             </div>
 
                             <div className="mb-4">
-                            <label htmlFor="File" className="block text-sm font-medium text-gray-700">
-                                {t('PROFILE_PICTURE')}
-                            </label>
+                                <label htmlFor="File" className="block text-sm font-medium text-gray-700">
+                                    {t('PROFILE_PICTURE')}
+                                </label>
 
-                            {imagePreview && (
-                                <div className="mb-4 flex justify-center">
-                                <img
-                                    src={imagePreview}
-                                    alt="Profile Preview"
-                                    className="w-[250px] h-[250px] object-cover rounded-full mb-4 border-4 border-blue-400"
-                                />
+                                {imagePreview && (
+                                    <div className="mb-4 flex justify-center">
+                                        <div className="w-[250px] h-[250px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
+                                            <img
+                                                src={imagePreview}
+                                                alt="Profile Preview"
+                                                className="w-[250px] h-[250px] object-cover rounded-full mb-4 border-4 border-blue-400"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div
+                                    className="w-full h-32 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200"
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        const file = e.dataTransfer.files[0];
+                                        if (file) {
+                                            const previewUrl = URL.createObjectURL(file);
+                                            setImagePreview(previewUrl);
+                                            setFieldValue("File", file);
+                                        }
+                                    }}
+                                    onDragOver={(e) => e.preventDefault()}
+                                >
+                                    <p className="text-center">
+                                        {t('DRAG_AND_DROP')}
+                                        <br />
+                                    </p>
                                 </div>
-                            )}
 
-                            <input
-                                type="file"
-                                id="File"
-                                name="File"
-                                onChange={(event) => {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    const previewUrl = URL.createObjectURL(file);
-                                    setImagePreview(previewUrl);
-                                    setFieldValue("File", file);
-                                }
-                                }}
-                                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 file:hidden"
-                            />
+                                <input
+                                    type="file"
+                                    id="File"
+                                    name="File"
+                                    onChange={(event) => {
+                                        const file = event.target.files[0];
+                                        if (file) {
+                                            const previewUrl = URL.createObjectURL(file);
+                                            setImagePreview(previewUrl);
+                                            setFieldValue("File", file);
+                                        }
+                                    }}
+                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 file:hidden"
+                                />
 
-                            <label
-                                htmlFor="File"
-                                className="inline-flex items-center mt-2 px-3 py-1 bg-blue-400 text-white rounded-md cursor-pointer hover:bg-blue-500 transition-colors"
-                            >
-                               <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2"/>
-                                {t('CHOOSE_PICTURE')}
-                            </label>
+                                <label
+                                    htmlFor="File"
+                                    className="inline-flex items-center mt-2 px-3 py-1 bg-blue-400 text-white rounded-md cursor-pointer hover:bg-blue-500 transition-colors"
+                                >
+                                    <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
+                                    {t('CHOOSE_PICTURE')}
+                                </label>
                             </div>
 
                             <div className="flex flex-col md:flex-row pb-2">
