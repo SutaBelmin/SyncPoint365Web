@@ -26,8 +26,8 @@ export const CountriesList = observer(() => {
 	const { t } = useTranslation();
 	const paginationComponentOptions = PaginationOptions();
 	const { signal } = useRequestAbort();
-	const[,setSearchParams] = useSearchParams();
-	
+	const [, setSearchParams] = useSearchParams();
+
 
 	const fetchData = useCallback(
 		async () => {
@@ -41,24 +41,24 @@ export const CountriesList = observer(() => {
 			}
 		}, [signal, t]);
 
-		const debouncedFetchData = useMemo(() => debounce(fetchData, 300), [fetchData]);
+	const debouncedFetchData = useMemo(() => debounce(fetchData, 300), [fetchData]);
 
-		useEffect(() => {
-			const disposer = reaction(
-				() => ({
-					page: countriesSearchStore.page,
-					pageSize: countriesSearchStore.pageSize,
-					orderBy: countriesSearchStore.orderBy,
-				}), 
-				() => {
-					debouncedFetchData();
-				},
-				{ fireImmediately: true }
-			);
-		
-			return () => disposer();
-		}, [debouncedFetchData]);
-		
+	useEffect(() => {
+		const disposer = reaction(
+			() => ({
+				page: countriesSearchStore.page,
+				pageSize: countriesSearchStore.pageSize,
+				orderBy: countriesSearchStore.orderBy,
+			}),
+			() => {
+				debouncedFetchData();
+			},
+			{ fireImmediately: true }
+		);
+
+		return () => disposer();
+	}, [debouncedFetchData]);
+
 
 	const handlePageChange = (newPage) => {
 		countriesSearchStore.setPage(newPage);
@@ -139,18 +139,24 @@ export const CountriesList = observer(() => {
 
 	return (
 		<div className="flex-1 p-6 bg-gray-100 h-screen">
-			<h1 className="h1">{t('COUNTRIES')}</h1>
-			<div className="flex flex-col gap-4 sm:flex-row">
-				<CountriesSearch fetchData={fetchData}/>
-				<button
-					type='button'
-					onClick={onAddCountriesClick}
-					className="btn-common h-10 md:ml-auto"
-				>
-					{t('ADD_COUNTRY')}
-				</button>
-
+			<div className="flex justify-between items-center">
+				<h1 className="h1">{t('COUNTRIES')}</h1>
+				<div className="flex justify-end mt-4 pt-14 pb-4">
+					<button
+						type='button'
+						onClick={onAddCountriesClick}
+						className="btn-common h-10 md:ml-auto"
+					>
+						{t('ADD_COUNTRY')}
+					</button>
+				</div>
 			</div>
+
+			<div className="flex flex-col gap-4 sm:flex-row">
+				<CountriesSearch fetchData={fetchData} />
+			</div>
+
+
 			<BaseModal />
 			<div className="table max-w-full">
 				<DataTable
@@ -169,12 +175,12 @@ export const CountriesList = observer(() => {
 					noDataComponent={<NoDataMessage />}
 					onSort={(column, sortDirection) => {
 						const sortField = column.sortField;
-						if(sortField) {
+						if (sortField) {
 							const orderBy = `${sortField}|${sortDirection}`;
 							countriesSearchStore.setOrderBy(orderBy);
 							setSearchParams(countriesSearchStore.queryParams);
 						}
-					  }}
+					}}
 					sortServer
 				/>
 			</div>

@@ -13,6 +13,10 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
     const handleLinkClick = (e, path) => {
         e.preventDefault();
         setActiveLink(path);
+
+        if(path !=='/countries' && path!=='/cities')
+            setLocationOpen(false);
+
         navigate(path);
     }
 
