@@ -143,7 +143,7 @@ export const AbsenceRequestTypesList = observer(() => {
                         onClick={addNewRequestClick}
                         className=" btn-common h-10  md:ml-auto"
                     >
-                        {t('NEW_REQUEST_TYPE')}
+                        {t('ADD_REQUEST_TYPE')}
                     </button>
                 </div>
             </div>

@@ -128,18 +128,6 @@ export const CitiesList = observer(() => {
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
-            {/* <h1 className="h1"> {t("CITIES")}</h1>
-            <div className="flex flex-col gap-4 md:flex-row">
-                <CitiesSearch fetchData={fetchData} />
-
-                <button
-                    type="button"
-                    onClick={onAddCitiesClick}
-                    className="btn-common h-10 md:ml-auto"
-                >
-                    {t('ADD_CITY')}
-                </button>
-            </div> */}
             <div className="flex justify-between items-center">
                 <h1 className="h1"> {t("CITIES")}</h1>
                 <div className="flex justify-end mt-4 pt-14 pb-4">

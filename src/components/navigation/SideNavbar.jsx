@@ -10,11 +10,11 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
     const [isLocationOpen, setLocationOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
 
-    const handleLinkClick = (e, path) => {
+    const handleLinkClick = (e, path, isChild = false) => {
         e.preventDefault();
         setActiveLink(path);
 
-        if(path !=='/countries' && path!=='/cities')
+        if(!isChild)
             setLocationOpen(false);
 
         navigate(path);
@@ -74,7 +74,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                                 <li>
                                     <a
                                         href="/countries"
-                                        onClick={(e) => handleLinkClick(e, '/countries')}
+                                        onClick={(e) => handleLinkClick(e, '/countries', true)}
                                         className={`block py-2 px-4 text-md rounded hover:bg-gray-600 ${
                                             activeLink === '/countries' ? 'bg-gray-700' : ''
                                         }`}
@@ -86,7 +86,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                                 <li>
                                     <a
                                         href="/cities"
-                                        onClick={(e) => handleLinkClick(e, '/cities')}
+                                        onClick={(e) => handleLinkClick(e, '/cities', true)}
                                         className={`block py-2 px-4 text-md rounded hover:bg-gray-600 ${
                                             activeLink === '/cities' ? 'bg-gray-700' : ''
                                         }`}
