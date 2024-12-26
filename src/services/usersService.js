@@ -44,16 +44,13 @@ class UsersService extends BaseService {
         return response;
     }
 
-    async add(userData, signal = null) {
-        const dataToSend = {
-            ...userData,
-            role: userData.roleId
-        };
-
-        const response = await this.api.post(`/users`, dataToSend, {
-            signal: signal
+    async add(userData) {
+        const response = await this.api.post(`/users`, userData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' 
+            }
         });
-
+    
         return response.data;
     }
 

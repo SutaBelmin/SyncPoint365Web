@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from 'react-phone-input-2';
@@ -17,6 +17,8 @@ import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
 import { genderConstant, localeConstant, roleConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -25,14 +27,13 @@ export const UsersAdd = () => {
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
-    const {userId} = useParams();
+    const [imagePreview, setImagePreview] = useState(null);
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const addUser = async (values) => {
         try {
             const userId = values.id;
-            await usersService.add(values, signal);
             
             await usersService.getById(userId);
 
@@ -42,7 +43,8 @@ export const UsersAdd = () => {
                 formData.append("UserId", userId); 
             }
 
-                await usersService.uploadProfilePicture(formData);
+            await usersService.uploadProfilePicture(formData);
+            await usersService.add(values);
             toast.success(t('ADDED'));
             navigate('/users');
         } catch (error) {
@@ -141,6 +143,7 @@ export const UsersAdd = () => {
         fetchRoles();
         fetchGenders();
     }, [fetchCities, fetchGenders, fetchRoles]);
+
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
@@ -374,19 +377,42 @@ export const UsersAdd = () => {
                             </div>
 
                             <div className="mb-4">
-                                <label htmlFor="File" className="block text-sm font-medium text-gray-700">
-                                    {t('PROFILE_PICTURE')}
-                                </label>
-                                <input
+                            <label htmlFor="File" className="block text-sm font-medium text-gray-700">
+                                {t('PROFILE_PICTURE')}
+                            </label>
+
+                            {imagePreview && (
+                                <div className="mb-4 flex justify-center">
+                                <img
+                                    src={imagePreview}
+                                    alt="Profile Preview"
+                                    className="w-[250px] h-[250px] object-cover rounded-full mb-4 border-4 border-blue-400"
+                                />
+                                </div>
+                            )}
+
+                            <input
                                 type="file"
                                 id="File"
                                 name="File"
                                 onChange={(event) => {
-                                    const file = event.target.files[0];
+                                const file = event.target.files[0];
+                                if (file) {
+                                    const previewUrl = URL.createObjectURL(file);
+                                    setImagePreview(previewUrl);
                                     setFieldValue("File", file);
+                                }
                                 }}
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
+                                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 file:hidden"
+                            />
+
+                            <label
+                                htmlFor="File"
+                                className="inline-flex items-center mt-2 px-3 py-1 bg-blue-400 text-white rounded-md cursor-pointer hover:bg-blue-500 transition-colors"
+                            >
+                               <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2"/>
+                                {t('CHOOSE_PICTURE')}
+                            </label>
                             </div>
 
                             <div className="flex flex-col md:flex-row pb-2">

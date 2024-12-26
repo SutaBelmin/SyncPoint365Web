@@ -171,7 +171,7 @@
     "SELECT_DATE_RETURN": "Odaberi datum povratka",
     "ADD_ABSENCE_REQUEST": "Dodaj zahtjev za odsustvo",
     "ADD_NEW_REQUEST": "Dodaj zahtjev",
-    "ADD_ABSENCE_REQUEST_TYPE": "Dodaj tip zahtjeva"
-
-
+    "ADD_ABSENCE_REQUEST_TYPE": "Dodaj tip zahtjeva",
+    "PROFILE_PICTURE": "Profilna slika.",
+    "CHOOSE_PICTURE": "Odaberi sliku"
 }
