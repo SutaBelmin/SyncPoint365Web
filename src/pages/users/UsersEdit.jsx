@@ -372,7 +372,8 @@ export const UsersEdit = () => {
                                 <label htmlFor="File" className="block text-sm font-medium text-gray-700">
                                     {t('PROFILE_PICTURE')}
                                 </label>
-
+                                
+                                <div className="flex justify-center mb-4">
                                 <div className="w-[250px] h-[250px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
                                     {profilePicture ? (
                                         <img
@@ -381,8 +382,29 @@ export const UsersEdit = () => {
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <p className="w-full h-full flex items-center justify-center">Loading...</p>
+                                        <p className="w-full h-full flex items-center justify-center text-gray-500">
+                                            {t('NO_PICTURE')}
+                                        </p>
                                     )}
+                                </div>
+                                </div>
+
+                                <div
+                                    className="w-full h-32 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200"
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        const file = e.dataTransfer.files[0];
+                                        if (file) {
+                                            setFieldValue("File", file);
+                                            setProfilePicture(URL.createObjectURL(file));
+                                        }
+                                    }}
+                                    onDragOver={(e) => e.preventDefault()}
+                                >
+                                    <p className="text-center">
+                                        {t('DRAG_AND_DROP')}
+                                        <br />
+                                    </p>
                                 </div>
 
                                 <input
@@ -396,7 +418,7 @@ export const UsersEdit = () => {
                                             setProfilePicture(URL.createObjectURL(file));
                                         }
                                     }}
-                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 file:hidden"
+                                    className="mt-2 hidden"
                                 />
 
                                 <label
@@ -407,8 +429,6 @@ export const UsersEdit = () => {
                                     {t('CHOOSE_PICTURE')}
                                 </label>
                             </div>
-
-
 
                             <div className="mb-4 flex">
                                 <button

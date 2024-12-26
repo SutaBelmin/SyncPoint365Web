@@ -173,5 +173,6 @@
     "ADD_NEW_REQUEST": "Dodaj zahtjev",
     "ADD_ABSENCE_REQUEST_TYPE": "Dodaj tip zahtjeva",
     "PROFILE_PICTURE": "Profilna slika.",
-    "CHOOSE_PICTURE": "Odaberi sliku"
+    "CHOOSE_PICTURE": "Odaberi sliku",
+    "DRAG_AND_DROP":"Prevucite sliku"
 }

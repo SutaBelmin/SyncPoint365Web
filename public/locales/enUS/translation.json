@@ -173,5 +173,6 @@
     "ADD_NEW_REQUEST": "Add New Request",
     "ADD_ABSENCE_REQUEST_TYPE": "Add Absence Request",
     "PROFILE_PICTURE": "Profile picture.",
-    "CHOOSE_PICTURE": "Choose picture"
+    "CHOOSE_PICTURE": "Choose picture",
+    "DRAG_AND_DROP":"Drag and drop"
 }
