@@ -7,22 +7,22 @@ import { useNavigate } from 'react-router-dom';
 const SideNavbar = ({ isCollapsed, onToggle }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [isLocationOpen, setLocationOpen] = useState(false);
     const [activeLink, setActiveLink] = useState('');
+    const [openDropdown, setOpenDropdown] = useState(null);
 
     const handleLinkClick = (e, path, isChild = false) => {
         e.preventDefault();
         setActiveLink(path);
 
         if(!isChild)
-            setLocationOpen(false);
+            setOpenDropdown(null);
 
         navigate(path);
     }
 
-    const toggleLocationDropdown = (e) => {
+    const toggleDropdown = (e, dropdown) => {
         e.stopPropagation();
-        setLocationOpen((prevState) => !prevState);
+        setOpenDropdown(prevState => (prevState === dropdown ? null : dropdown));
     }
 
     return (
@@ -60,16 +60,16 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                         <div>
                             <div 
                               className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 cursor-pointer"
-                              onClick={toggleLocationDropdown}
+                              onClick={(e) => toggleDropdown(e, 'location')}
                             >
                                 <FontAwesomeIcon icon={faLocationCrosshairs} className="mr-3" />
                                 {t('LOCATION')}
                                 <FontAwesomeIcon
                                     icon={faCaretDown}
-                                    className={`ml-auto transform ${isLocationOpen ? 'rotate-180' : ''} transition-transform`}
+                                    className={`ml-auto transform ${openDropdown === 'location' ? 'rotate-180' : ''} transition-transform`}
                                 />
                             </div>
-                            {isLocationOpen && (
+                            {openDropdown === 'location' && (
                             <ul className="ml-6 mt-2 space-y-2">
                                 <li>
                                     <a
