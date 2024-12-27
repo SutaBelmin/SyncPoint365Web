@@ -143,5 +143,7 @@
     "STATUS": "Status",
     "LOCATION": "Location",
     "COUNTRY_REQUIRED": "Country is required.",
-    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Change request status:"
+    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Change request status to:",
+    "STATUS_SUCCESSFULLY_CHANGED": "Status successfully changed.", 
+    "CONFIRM": "Confirm"
 }

@@ -143,5 +143,7 @@
     "STATUS": "Status",
     "LOCATION": "Lokacije",
     "COUNTRY_REQUIRED": "Obavezna država.",
-    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Promijeni status zahtjeva:"
+    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Promijeni status zahtjeva:",
+    "STATUS_SUCCESSFULLY_CHANGED": "Status uspješno promijenjen.", 
+    "CONFIRM": "Potvrdi"
 }

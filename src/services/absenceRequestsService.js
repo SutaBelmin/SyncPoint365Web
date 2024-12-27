@@ -39,9 +39,9 @@ class AbsenceRequestsService extends BaseService {
         });
         return response.data;
     }
-    async changeAbsenceRequestStatus(id) {
-        const response = await this.api.put(`/absence-requests/change-absence-request-status?id=${id}`);
-        return response;
+    async changeAbsenceRequestStatus(id, newStatus) {
+        const response = await this.api.put(`/absence-requests/change-absence-request-status?id=${id}`, newStatus);
+        return response.data;
     }
 }
 

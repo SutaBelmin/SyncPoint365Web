@@ -133,7 +133,7 @@ export const AbsenceRequestsList = observer(() => {
     ];
 
     const changeStatus = (absenceRequestId, absenceRequestStatus) => {
-        openModal(<AbsenceRequestsChangeStatus absenceRequestId={absenceRequestId} absenceRequestStatus={absenceRequestStatus} onCancel={closeModal} fetchData={fetchData} />);
+        openModal(<AbsenceRequestsChangeStatus absenceRequestId={absenceRequestId} absenceRequestStatus={absenceRequestStatus} closeModal={closeModal} fetchData={fetchData}/>);
     }
     // const addNewRequestClick = () => {
     //     openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
