@@ -4,11 +4,10 @@ import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { authService } from '../../services';
 import LanguageSwitcher from '../../components/localization';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-
-import { useAuth } from '../../context/AuthProvider';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -19,11 +18,10 @@ const Login = () => {
     password: Yup.string().required(t('PASSWORD_IS_REQUIRED'))
   });
 
-  const { login } = useAuth();
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
-      await login(values.email, values.password);
+      authService.login(values.email, values.password);
       navigate('/home');
     } catch (error) {
       if (error.response && error.response.status === 401) {
