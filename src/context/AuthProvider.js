@@ -11,10 +11,14 @@ export const AuthProvider = ({ children }) => {
     });
 
     const login = async (email, password) => {
-        const { user: loggedInUser, token } = await authService.login(email, password);
-        localStorage.setItem('user', JSON.stringify(loggedInUser));
-        setUser(loggedInUser);
-        return { loggedInUser, token };
+        try {
+            const { user: loggedInUser, token } = await authService.login(email, password);
+            localStorage.setItem('user', JSON.stringify(loggedInUser));
+            setUser(loggedInUser);
+            return { loggedInUser, token };
+        } catch (error) {
+            throw error;
+        }
     };
 
     const logout = () => {
@@ -25,12 +29,12 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
-        if(storedUser){
+        if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
     }, []);
 
-    return(
+    return (
         <AuthContext.Provider value={{ user, login, logout }}>
             {children}
         </AuthContext.Provider>

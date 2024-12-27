@@ -5,17 +5,20 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { localizationsService } from './services';
 import { I18nextProvider } from 'react-i18next';
- 
+import { AuthProvider } from './context';
+
 
 function App() {
   return (
     <I18nextProvider i18n={localizationsService}>
-     <ModalProvider>
-       <AppRoutes />
-       <ToastContainer/>
-     </ModalProvider>
-     </I18nextProvider>
- 
+      <AuthProvider>
+        <ModalProvider>
+          <AppRoutes />
+          <ToastContainer />
+        </ModalProvider>
+      </AuthProvider>
+    </I18nextProvider>
+
   );
 }
 
