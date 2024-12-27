@@ -39,10 +39,12 @@
     @apply rounded-md bg-[#1e3a8a] px-3 py-2 text-sm font-semibold text-white shadow-sm
     hover:bg-[#1e3a8a]/90 focus-visible:outline focus-visible:outline-2
     focus-visible:outline-offset-2 focus-visible:outline-[#1e3a8a]
-    lg:w-[10rem] md:w-[10rem] sm:w-full xs:w-full ss:w-full;
+    lg:w-[10rem] md:w-[10rem] sm:w-full xs:w-full ss:w-full; 
 }
   
-
+.text-custom-blue {
+  @apply text-[rgb(30,58,138)];
+}
   
 .input-select-border input[type='text']:focus {
     box-shadow: none;
@@ -65,9 +67,9 @@ svg path[d="M7 10l5 5 5-5z"] {
 }
 
 .h1 {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   font-weight: bold;
-  padding-top: 3rem;
+  padding-top: 4.5rem;
   margin-bottom: 20px;
 }
 
@@ -89,7 +91,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 /* Medium screens (max-width: 1024px) */
 @media (max-width: 1024px) {
   .h1 {
-    font-size: 1.6rem;
+    font-size: 1.1rem;
   }
   .header{
       height: 60px;
@@ -99,7 +101,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 /* Small screens (max-width: 768px) */
 @media (max-width: 768px) {
   .h1 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
   .header{
       height: 50px;
@@ -109,7 +111,7 @@ svg path[d="M7 10l5 5 5-5z"] {
 /* Very small screens (max-width: 480px) */
 @media (max-width: 480px) {
   .h1 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
   }
   .header{
       height: 40px;

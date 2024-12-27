@@ -121,13 +121,13 @@ export const UsersList = observer(() => {
                 <div className="flex">
                     <button
                         onClick={() => navigateToEdit(row.id)}
-                        className="text-xl text-blue-500 hover:underline p-2"
+                        className="text-lg text-blue-500 hover:underline p-2"
                     >
-                        <FontAwesomeIcon icon={faEdit} />
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
                         onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-xl pr-2 ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
+                        className={`text-lg tpr-2 ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
                     >
                         {row.isActive ? (
                             <FontAwesomeIcon icon={faCircleXmark} />
@@ -138,13 +138,14 @@ export const UsersList = observer(() => {
                     <button
                         type="button"
                         onClick={() => onPreviewUserClick(row)}
-                        className="text-blue-500 hover:underline p-2"
+                        className="text-lg text-blue-500 hover:underline p-2"
+                        style={{ color: '#276EEC' }}
                     >
                         <FontAwesomeIcon icon={faEye} />
                     </button>
                     <button
                         onClick={() => changePasswordClick(row.id)}
-                        className={'text-xl text-gray-250'}
+                        className={'text-lg text-gray-400'}
                     >
                         {(
                             <FontAwesomeIcon icon={faLock} />
@@ -182,7 +183,7 @@ export const UsersList = observer(() => {
 
     const handleStatusChange = async (userId) => {
         try {
-            await usersService.updateUserStatus(userId);
+            await usersService.updateUserStatus(userId, signal);
             fetchData();
             toast.success(t('UPDATED'));
             closeModal();
@@ -193,21 +194,24 @@ export const UsersList = observer(() => {
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
-            <h1 className="h1">{t('USERS')}</h1>
+            <div className="flex justify-between items-center">
+                <h1 className="h1">{t('USERS')}</h1>
+
+                <div className="flex justify-end mt-4 pt-14 pb-4">
+                    <button
+                        type='button'
+                        onClick={onAddUserClick}
+                        className="btn-common h-10"
+                    >
+                        {t('ADD_USER')}
+                    </button>
+                </div>
+            </div>
 
             <div className="flex flex-col gap-4 xs:flex-row">
                 <UsersSearch fetchData={fetchData} />
             </div>
-
-            <div className="flex justify-end mt-4">
-                <button
-                    type='button'
-                    onClick={onAddUserClick}
-                    className="btn-common h-10"
-                >
-                    {t('ADD_USER')}
-                </button>
-            </div>
+        
             <BaseModal />
 
             <div className="table max-w-full">

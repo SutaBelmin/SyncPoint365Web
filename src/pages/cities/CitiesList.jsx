@@ -59,7 +59,7 @@ export const CitiesList = observer(() => {
 
         return () => disposeReaction();
     }, [debouncedFetchData]);
-    
+
 
     const columns = [
         {
@@ -89,12 +89,12 @@ export const CitiesList = observer(() => {
                 <div className="flex">
                     <button
                         onClick={() => onEditCityClick(row)}
-                        className="text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} />
+                        className="text-lg text-blue-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
                         onClick={() => onDeleteCityClick(row)}
-                        className="text-red-500 hover:underline p-2">
+                        className="text-lg text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
@@ -117,7 +117,7 @@ export const CitiesList = observer(() => {
 
     const handleDelete = async (cityId) => {
         try {
-            await citiesService.delete(cityId);
+            await citiesService.delete(cityId, signal);
             fetchData();
             closeModal();
             toast.success("Country deleted successfully!");
@@ -128,18 +128,22 @@ export const CitiesList = observer(() => {
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <h1 className="h1"> {t("CITIES")}</h1>
+            <div className="flex justify-between items-center">
+                <h1 className="h1"> {t("CITIES")}</h1>
+                <div className="flex justify-end mt-4 pt-14 pb-4">
+                    <button
+                        type="button"
+                        onClick={onAddCitiesClick}
+                        className="btn-common h-10 md:ml-auto"
+                    >
+                        {t('ADD_CITY')}
+                    </button>
+                </div>
+            </div>
             <div className="flex flex-col gap-4 md:flex-row">
                 <CitiesSearch fetchData={fetchData} />
-
-                <button
-                    type="button"
-                    onClick={onAddCitiesClick}
-                    className="btn-common h-10 md:ml-auto"
-                >
-                    {t('ADD_CITY')}
-                </button>
             </div>
+
 
             <BaseModal />
             <div className="table max-w-full">

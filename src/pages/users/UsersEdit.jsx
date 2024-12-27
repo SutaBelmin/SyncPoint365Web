@@ -15,10 +15,11 @@ import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
 import { FaArrowLeft } from 'react-icons/fa';
 import { roleConstant, genderConstant, localeConstant } from '../../constants';
-
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const UsersEdit = () => {
     const { t, i18n } = useTranslation();
+    const { signal } = useRequestAbort();
     const navigate = useNavigate();
     const { userId } = useParams(); 
     const [cities, setCities] = useState([]);
@@ -26,12 +27,11 @@ export const UsersEdit = () => {
     const [genders, setGenders] = useState([]);
     const [user, setUser] = useState(null);
     
-    
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const updateUser = async (values) => {
         try {
-            await usersService.update({...values, id:userId}); 
+            await usersService.update({...values, id:userId}, signal); 
             toast.success(t('UPDATED'));
             navigate('/users');
         } catch (error) {
@@ -58,7 +58,7 @@ export const UsersEdit = () => {
 
                 if (Yup.string().email().isValidSync(value)) {
                     try {
-                        const response = await usersService.emailExists(value);
+                        const response = await usersService.emailExists(value, signal);
 
                         if (response === true)
                             return createError({ path, message: t('EMAIL_ALREADY_EXIST') });
@@ -94,16 +94,16 @@ export const UsersEdit = () => {
 
     const fetchUser = useCallback(async () => {
         try {
-            const response = await usersService.getById(userId);
+            const response = await usersService.getById(userId, signal);
             setUser(response.data);
         } catch (error) {
             toast.error(t('ERROR_LOADING_USER'));
         }
-    }, [userId, t]);
+    }, [userId, signal, t]);
 
     const fetchCities = useCallback(async () => {
         try {
-            const response = await citiesService.getList();
+            const response = await citiesService.getList(signal);
             const citiesOption = response.data.map(city => ({
                 value: city.id,
                 label: city.name
@@ -112,11 +112,11 @@ export const UsersEdit = () => {
         } catch (error) {
             toast.error(t('ERROR_LOADING_CITIES'));
         }
-    }, [t]);
+    }, [signal, t]);
 
     const fetchRoles = useCallback(async () => {
         try {
-            const response = await enumsService.getRoles();
+            const response = await enumsService.getRoles(signal);
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
                 label: role.label
@@ -125,11 +125,11 @@ export const UsersEdit = () => {
         } catch (error) {
             toast.error(t('ERROR_LOADING_ROLES'));
         }
-    }, [t]);
+    }, [signal, t]);
 
     const fetchGenders = useCallback(async () => {
         try {
-            const response = await enumsService.getGenders();
+            const response = await enumsService.getGenders(signal);
             const genderOptions = response.data.map(gender => ({
                 value: gender.id,
                 label: gender.label 
@@ -138,7 +138,7 @@ export const UsersEdit = () => {
         } catch (error) {
             toast.error(t('ERROR_LOADING_GENDERS'))
         }
-    }, [t]);
+    }, [signal, t]);
 
     useEffect(() => {
          fetchUser();

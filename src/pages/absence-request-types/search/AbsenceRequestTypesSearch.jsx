@@ -6,6 +6,7 @@ import { Formik, Form, Field } from 'formik';
 import { absenceRequestTypesSearchStore } from '../stores';
 import { absenceRequestTypeStatusConstant } from '../../../constants';
 
+
 const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
@@ -53,7 +54,7 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                         name="searchQuery"
                         type="text"
                         placeholder={t('SEARCH_ABSENCE_REQUEST_TYPE')}
-                        className="input-search h-10 rounded-md border-gray-300 w-full md:w-[13rem]"
+                        className="input-search h-10 rounded-md border-gray-300 min-w-[18rem] w-full md:w-[13rem]"
                         autoComplete="off"
                         value={values.searchQuery}
                         onChange={(e) => {
@@ -67,13 +68,13 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                         options={absenceRequestTypeStatusOptions}
                         isSearchable={false}
                         isClearable
-                        className="h-10 border-gray-300 input-select-border w-full md:min-w-[8rem] "
+                        className="h-10 border-gray-300 input-select-border min-w-[20rem] w-full md:min-w-[8rem] "
                         value={values.status}
                         onChange={(selectedOption) => {
                             setFieldValue('status', selectedOption || absenceRequestTypeStatusOptions.find(option => option.value === absenceRequestTypeStatusConstant.all));
                         }}
                     />
-                    <button type="submit" className="btn-common h-10">
+                    <button type="submit" className="btn-new h-10">
                         {t('SEARCH')}
                     </button>
                     <button

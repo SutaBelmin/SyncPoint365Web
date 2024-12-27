@@ -37,7 +37,7 @@
     "SAVE": "Save",
     "CANCEL": "Cancel",
     "CONFIRM_DELETE": "Confirm delete",
-    "ARE_YOU_SURE_YOU_WANT_TO_DELETE?": "Are you sure you want to delete?",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE?": "Are you sure you want to delete",
     "NO": "No", 
     "YES": "Yes",
     "CITIES": "Cities",
@@ -54,7 +54,7 @@
     "ACTIVE": "Active",
     "ALL": "All",
     "INACTIVE": "Inactive",
-    "NEW_REQUEST_TYPE": "New Request Type",
+    "ADD_REQUEST_TYPE": "Add Request Type",
     "NEW_ABSENCE_REQUEST": "New Absence Request Type",
     "EDIT_ABSENCE_REQUEST": "Edit Absence Request Type",
     "ENTER_YOUR_NAME": "Enter your name.",
@@ -140,5 +140,7 @@
     "PASSWORD_CONFIRMATION": "Password Confirmation",
     "PASSWORD_SUCCESSFULLY_CHANGED": "Password successfully changed.",
     "SELECT_STATUS": "Select Status",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "LOCATION": "Location",
+    "COUNTRY_REQUIRED": "Country is required."
 }

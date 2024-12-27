@@ -6,14 +6,16 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { citiesService, countriesService } from "../../services";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const CitiesAdd = ({ closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
 
     const fetchCountries = useCallback(async () => {
         try {
-            const response = await countriesService.getList();
+            const response = await countriesService.getList(signal);
             setCountries(response.data.map(country => ({
                 value: country.id,
                 label: country.name
@@ -21,7 +23,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, [t]);
+    }, [signal, t]);
 
     useEffect(() => {
         fetchCountries();
@@ -29,7 +31,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
 
     const addCity = async (values) => {
         try {
-            await citiesService.add(values);
+            await citiesService.add(values, signal);
             fetchData();
             closeModal();
             toast.success(t('ADDED'));
@@ -47,7 +49,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
             .required(t('POSTAL_CODE_IS_REQUIRED'))
             .matches(/^\d+$/, t('POSTAL_CODE_NUMBER')),
         countryId: Yup.string()
-            .required("Country Id is required!")
+            .required(t('COUNTRY_REQUIRED'))
     });
 
     return (
@@ -67,7 +69,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                     <Form className="w-full max-w-sm">
                         <div className="mb-4">
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                {t('NAME')}
+                                {t('NAME')} <span className='text-red-500'>*</span>
                             </label>
                             <Field
                                 type="text"
@@ -80,7 +82,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                         </div>
                         <div className="mb-4">
                             <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
-                            {t('DISPLAY_NAME')}
+                            {t('DISPLAY_NAME')} <span className='text-red-500'>*</span>
                             </label>
                             <Field
                                 type="text"
@@ -93,7 +95,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
                         </div>
                         <div className="mb-4">
                             <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
-                            {t('POSTAL_CODE')}
+                            {t('POSTAL_CODE')} <span className='text-red-500'>*</span>
                             </label>
                             <Field
                                 type="text"
@@ -107,7 +109,7 @@ export const CitiesAdd = ({ closeModal, fetchData }) => {
 
                         <div className="mb-4">
                             <label htmlFor="countryId" className="block text-sm font-medium text-gray-700">
-                                {t('SELECT_A_COUNTRY')}
+                                {t('SELECT_A_COUNTRY')} <span className='text-red-500'>*</span>
                             </label>
                             <Select
                                 options={countries}

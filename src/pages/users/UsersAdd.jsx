@@ -16,9 +16,11 @@ import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
 import { genderConstant, localeConstant, roleConstant } from '../../constants';
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
+    const { signal } = useRequestAbort();
     const navigate = useNavigate();
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
@@ -28,7 +30,7 @@ export const UsersAdd = () => {
 
     const addUser = async (values) => {
         try {
-            await usersService.add(values);
+            await usersService.add(values, signal);
             toast.success(t('ADDED'));
             navigate('/users');
         } catch (error) {
@@ -49,7 +51,7 @@ export const UsersAdd = () => {
 
                 if (Yup.string().email().isValidSync(value)) {
                     try {
-                        const response = await usersService.emailExists(value);
+                        const response = await usersService.emailExists(value, signal);
 
                         if (response === true)
                             return createError({ path, message: t('EMAIL_ALREADY_EXIST') });
@@ -81,9 +83,9 @@ export const UsersAdd = () => {
             .oneOf([Yup.ref('password')], t('PASSWORDS_MUST_MATCH'))
     });
 
-    const fetchCities = async () => {
+    const fetchCities = useCallback( async () => {
         try {
-            const response = await citiesService.getList();
+            const response = await citiesService.getList(signal);
             const citiesOption = response.data.map(city => ({
                 value: city.id,
                 label: city.name
@@ -92,11 +94,11 @@ export const UsersAdd = () => {
         } catch (error) {
 
         }
-    }
+    }, [signal]);
 
     const fetchRoles = useCallback(async () => {
         try {
-            const response = await enumsService.getRoles();
+            const response = await enumsService.getRoles(signal);
             const rolesOptions = response.data.map(role => ({
                 value: role.id,
                 label: role.label === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
@@ -107,11 +109,11 @@ export const UsersAdd = () => {
         } catch (error) {
 
         }
-    }, [t]);
+    }, [signal, t]);
 
     const fetchGenders = useCallback(async () => {
         try {
-            const response = await enumsService.getGenders();
+            const response = await enumsService.getGenders(signal);
             const genderOptions = response.data.map(gender => ({
                 value: gender.id,
                 label: gender.label === genderConstant.male ? t('MALE') : t('FEMALE')
@@ -120,13 +122,13 @@ export const UsersAdd = () => {
         } catch (error) {
 
         }
-    }, [t]);
+    }, [signal, t]);
 
     useEffect(() => {
         fetchCities();
         fetchRoles();
         fetchGenders();
-    }, [fetchGenders, fetchRoles]);
+    }, [fetchCities, fetchGenders, fetchRoles]);
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">

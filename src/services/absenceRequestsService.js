@@ -21,21 +21,21 @@ class AbsenceRequestsService extends BaseService {
         );
         return response;
     }
-    async add(absenceRequestData){
+    async add(absenceRequestData, signal = null){
         const response = await this.api.post(`/absence-requests`, absenceRequestData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
-    async update(absenceRequestData){
+    async update(absenceRequestData, signal = null){
         const response = await this.api.put(`/absence-requests`, absenceRequestData, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }
-    async delete(absenceRequestId){
+    async delete(absenceRequestId, signal = null){
         const response = await this.api.delete(`/absence-requests/${absenceRequestId}`, {
-            cancelToken: null,
+            signal: signal,
         });
         return response.data;
     }

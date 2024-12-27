@@ -2,11 +2,13 @@ import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
+import { useRequestAbort } from "../../components/hooks";
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
 
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -16,7 +18,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
     const addHandling = async (values, actions) => {
         const { setSubmitting } = actions;
         try {
-            await absenceRequestTypesService.add(values);
+            await absenceRequestTypesService.add(values, signal);
             fetchData();
             closeModal(); 
             toast.success(t('ADDED')); 
@@ -42,7 +44,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                 <Form>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700" htmlFor="name">
-                            {t('NAME')}
+                            {t('NAME')} <span className='text-red-500'>*</span>
                         </label>
                         <Field
                             type="text"
@@ -61,7 +63,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             className="mr-2"
                         />
                         <label htmlFor="isActive" className="block text-sm font-medium text-gray-700">
-                            {t('ACTIVE')}
+                            {t('ACTIVE')} 
                         </label>
                     </div>
                     <div className="flex justify-end gap-4">

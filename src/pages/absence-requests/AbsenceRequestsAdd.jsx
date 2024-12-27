@@ -3,21 +3,24 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import Select from "react-select";
 import * as Yup from "yup";
 import { absenceRequestsService, absenceRequestTypesService } from "../../services";
+import { useRequestAbort } from "../../components/hooks";
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
+
  
 export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
     const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
     const nextYear = new Date().getFullYear() + 1;
     const maxDate = new Date(nextYear, 11, 31);
 
     useEffect(() => {
         const fetchAbsenceRequestTypes = async () => {
             try {
-                const response = await absenceRequestTypesService.getList();
+                const response = await absenceRequestTypesService.getList(signal);
                 const options = response.data.map(absenceRequestTypesId => ({
                     value: absenceRequestTypesId.id, 
                     label: absenceRequestTypesId.name
@@ -28,7 +31,7 @@ export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
             }
         };
         fetchAbsenceRequestTypes();
-    }, [t]);
+    }, [signal, t]);
 
     const initialValues = {
         type: null,
@@ -53,7 +56,7 @@ export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
 
     const addHandling = async (values) => {
         try {
-            await absenceRequestsService.add(values);
+            await absenceRequestsService.add(values, signal);
             fetchData();
             closeModal(); 
             toast.success(t('ADDED')); 

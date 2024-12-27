@@ -43,16 +43,16 @@ export const CountriesSearch = ({fetchData}) => {
             name="searchQuery"
             placeholder={t('SEARCH_COUNTRIES')}
             autoComplete="off"
-            className="input-search h-10 rounded-md border-gray-300 min-w-[9rem] w-full"
+            className="input-search h-10 rounded-md border-gray-300 min-w-[18rem] w-full"
             onChange={(e) => setFieldValue('searchQuery', e.target.value)}
           />
-          <button type="submit" className="btn-common h-10">
+          <button type="submit" className="btn-new h-10">
             {t('SEARCH')}
           </button>
           <button
             type="button"
             onClick={() => handleClearFilters(setFieldValue)}
-            className="btn-common h-10"
+            className="btn-cancel h-10"
           >
             {t('CLEAR')}
           </button>

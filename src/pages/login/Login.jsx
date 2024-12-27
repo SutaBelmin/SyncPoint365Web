@@ -24,9 +24,8 @@ const Login = () => {
     try {
       await authService.login(values.email, values.password);
       navigate('/home');
-      toast.success(t('WELCOME'));
     } catch (error) {
-      if(error.response && error.response.status === 401){
+      if (error.response && error.response.status === 401) {
         toast.error(t('INVALID_CREDENTIALS'));
       } else if (error.response && error.response.status === 403) {
         toast.error(t('ACCOUNT_INACTIVE'));
@@ -40,11 +39,15 @@ const Login = () => {
 
   return (
     <div className="flex min-h-full flex-col justify-center">
-      <header className="text-white flex justify-end items-center h-16 px-6 shadow-md">
-            <div className="mr-4">
-                <LanguageSwitcher />
-            </div>
-        </header>
+      <header className="text-white flex justify-between items-center h-16 px-6 shadow-md">
+        <h1 className="header-font" style={{ paddingLeft: '0rem' }}>
+          <span className="text-custom-blue">SyncPoint</span>
+          <span className="text-yellow-600">365</span>
+        </h1>
+        <div className="mr-4">
+          <LanguageSwitcher />
+        </div>
+      </header>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm text-center">
           <div className="mx-auto h-10 w-10 bg-gray-800 rounded-full flex items-center justify-center mt-4">

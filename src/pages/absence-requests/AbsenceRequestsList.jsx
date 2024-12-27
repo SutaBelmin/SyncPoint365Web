@@ -105,12 +105,12 @@ export const AbsenceRequestsList = observer(() => {
                 <div className="flex">
                     <button
                         //onClick={() => editRequestClick(row)}
-                        className="text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} />
+                        className="text-lg text-blue-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
                         //onClick={() => deleteRequestClick(row)}
-                        className="text-red-500 hover:underline p-2">
+                        className="text-lg text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>

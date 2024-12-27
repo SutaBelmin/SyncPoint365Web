@@ -6,9 +6,11 @@ import * as Yup from "yup";
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const UsersChangePassword = ({ userId, onCancel, fetchData, closeModal }) => {
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
     const [seePassword, setSeePassword] = useState(false);
     const [seePasswordConfirmation, setSeePasswordConfirmation] = useState(false);
 
@@ -27,7 +29,7 @@ export const UsersChangePassword = ({ userId, onCancel, fetchData, closeModal })
             await usersService.changePassword({
                 id: userId, 
                 password: values.password,
-            });
+            }, signal);
             toast.success(t('PASSWORD_SUCCESSFULLY_CHANGED'));
             fetchData();
             closeModal();

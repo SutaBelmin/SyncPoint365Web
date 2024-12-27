@@ -2,11 +2,13 @@ import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
+import { useRequestAbort } from "../../components/hooks";
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
 
 export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchData }) => {
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
 
     const validationSchema = Yup.object({
         name: Yup.string().required(t('NAME_IS_REQUIRED'))
@@ -19,7 +21,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                 id: absenceRequestType.id,
                 name: values.name,
                 isActive: values.isActive,
-            });
+            }, signal);
             fetchData();
             closeModal(); 
             toast.success(t('UPDATED'));

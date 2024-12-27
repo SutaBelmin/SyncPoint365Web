@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {citiesService, countriesService} from "../../services";
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 
 export const CitiesEdit = ({ city, closeModal, fetchData }) => {
     const [countries, setCountries] = useState([]);
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
 
-    const fetchCountries = async () => {
+    const fetchCountries = useCallback(async () => {
         try {
-            const response = await countriesService.getList();
+            const response = await countriesService.getList(signal);
             setCountries(response.data.map(country => ({
                 value: country.id,
                 label: country.name
@@ -20,15 +22,15 @@ export const CitiesEdit = ({ city, closeModal, fetchData }) => {
         } catch (error) {
 
         }
-    };
+    }, [signal]);
 
     useEffect(() => {
         fetchCountries();
-    }, []);
+    }, [fetchCountries]);
 
     const updateCity = async (values) => {
         try {
-            await citiesService.update(values);
+            await citiesService.update(values, signal);
             fetchData();
             closeModal();
             toast.success(t('UPDATED'));
