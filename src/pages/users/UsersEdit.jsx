@@ -44,7 +44,10 @@ export const UsersEdit = () => {
             }
             
 
-            await usersService.uploadProfilePicture(formData);
+            if (values.File) {
+                await usersService.uploadProfilePicture(formData);
+            }
+
 
             await usersService.update({ ...values, id: userId });
             toast.success(t('UPDATED'));
@@ -181,10 +184,10 @@ export const UsersEdit = () => {
     return (
         <div className="flex-1 p-6 bg-gray-100 min-h-screen">
             <div className="w-full max-w-full mx-auto">
-                <div className="relative mb-6">
+                <div className=" flex items-center justify-between">
                     <button
                         onClick={handleBack}
-                        className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center absolute top-14 right-0"
+                        className="btn-cancel h-10 md:ml-auto w-[8rem] flex items-center justify-center absolute mt-40 right-0"
                     >
                         <FaArrowLeft className="mr-auto" />
                         <span className="flex-grow text-center">{t('BACK')}</span>
@@ -208,8 +211,70 @@ export const UsersEdit = () => {
                     onSubmit={updateUser}
                 >
                     {({ setFieldValue, values }) => (
-                        <Form className="w-full flex flex-col md:flex-row">
-                            <div className="w-full md:w-1/2 pr-0 md:pr-4">
+                        <Form className="w-full flex flex-col md:flex-row ">
+                            <div className="w-full md:w-1/3 pl-0 md:pl-4 bg-white rounded-xl mr-4 mb-5 h-1/2 items-center md:items-start">
+                                <div className="mb-4 mt-4">
+                                    <div className="flex justify-center mb-4">
+                                        <div className="w-[200px] h-[200px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
+                                            {profilePicture ? (
+                                                <img
+                                                    src={profilePicture}
+                                                    alt="Profile"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <p className="w-full h-full flex items-center justify-center text-gray-500">
+                                                    {t('NO_PICTURE')}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className="w-full sm:w-80 h-20 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-24"
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            const file = e.dataTransfer.files[0];
+                                            if (file) {
+                                                setFieldValue("File", file);
+                                                setProfilePicture(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        onDragOver={(e) => e.preventDefault()}
+                                    >
+                                        <p className="text-center">
+                                            {t('DRAG_AND_DROP')}
+                                            <br />
+                                        </p>
+                                    </div>
+
+                                    <input
+                                        type="file"
+                                        id="File"
+                                        name="File"
+                                        onChange={(event) => {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                                setFieldValue("File", file);
+                                                setProfilePicture(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        className="mt-2 hidden"
+                                    />
+
+                                    <div className="flex justify-center items-center">
+                                        <label
+                                            htmlFor="File"
+                                            className="btn-save inline-flex items-center mt-4 px-3 py-1  rounded-md cursor-pointer transition-colors mr-2"
+                                        >
+                                            <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
+                                            {t('CHOOSE_PICTURE')}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="ml-5 pr-7 md:pr-30 bg-white p-5 md:w-1/3 pl-0 md:pl-4 bg-white rounded-xl">
                                 <div className="mb-4">
                                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                                         {t('FIRST_NAME')} <span className='text-red-500'>*</span>
@@ -378,69 +443,6 @@ export const UsersEdit = () => {
                                 </div>
                             </div>
 
-                            <div className="w-full md:w-1/2 pl-0 md:pl-4">
-                                <div className="mb-4">
-                                    <label htmlFor="File" className="block text-sm font-medium text-gray-700 mb-2">
-                                        {t('PROFILE_PICTURE')}
-                                    </label>
-
-                                    <div className="flex justify-center mb-4">
-                                        <div className="w-[325px] h-[325px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
-                                            {profilePicture ? (
-                                                <img
-                                                    src={profilePicture}
-                                                    alt="Profile"
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            ) : (
-                                                <p className="w-full h-full flex items-center justify-center text-gray-500">
-                                                    {t('NO_PICTURE')}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div
-                                        className="w-full h-80 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200"
-                                        onDrop={(e) => {
-                                            e.preventDefault();
-                                            const file = e.dataTransfer.files[0];
-                                            if (file) {
-                                                setFieldValue("File", file);
-                                                setProfilePicture(URL.createObjectURL(file));
-                                            }
-                                        }}
-                                        onDragOver={(e) => e.preventDefault()}
-                                    >
-                                        <p className="text-center">
-                                            {t('DRAG_AND_DROP')}
-                                            <br />
-                                        </p>
-                                    </div>
-
-                                    <input
-                                        type="file"
-                                        id="File"
-                                        name="File"
-                                        onChange={(event) => {
-                                            const file = event.target.files[0];
-                                            if (file) {
-                                                setFieldValue("File", file);
-                                                setProfilePicture(URL.createObjectURL(file));
-                                            }
-                                        }}
-                                        className="mt-2 hidden"
-                                    />
-
-                                    <label
-                                        htmlFor="File"
-                                        className="btn-save inline-flex items-center mt-4 px-3 py-1  rounded-md cursor-pointer transition-colors float-right mr-2"
-                                    >
-                                        <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
-                                        {t('CHOOSE_PICTURE')}
-                                    </label>
-                                </div>
-                            </div>
                         </Form>
                     )}
                 </Formik>

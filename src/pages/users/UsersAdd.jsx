@@ -28,7 +28,7 @@ export const UsersAdd = () => {
     const [cities, setCities] = useState([]);
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
-    const [imagePreview, setImagePreview] = useState(null);
+    const [profilePicture, setProfilePicture] = useState(null);
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
@@ -148,7 +148,7 @@ export const UsersAdd = () => {
 
     return (
         <div className="flex-1 p-6 bg-gray-100 h-screen">
-            <div className="w-full">
+            <div className="w-full max-w-full mx-auto">
                 <div className='pt-16 pb-8 flex items-center justify-between'>
                     <h2 className='text-2xl font-bold'>{t('ADD_USER')}</h2>
                     <button
@@ -179,7 +179,64 @@ export const UsersAdd = () => {
                     onSubmit={addUser}
                 >
                     {({ setFieldValue, values }) => (
-                        <Form className="max-w-lg">
+                        <Form className="w-full flex flex-col md:flex-row">
+                            <div className="w-full md:w-1/3 pl-0 md:pl-4 bg-white rounded-xl mr-4 mb-5 h-1/2">
+                                <div className="mb-4 mt-4">
+                                    <div className="flex justify-center mb-4">
+                                        <div className="w-[200px] h-[200px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
+                                            <img
+                                                src={profilePicture || defaultUserImage}
+                                                alt="Profile"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className="w-full sm:w-80 h-20 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-24"
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            const file = e.dataTransfer.files[0];
+                                            if (file) {
+                                                setFieldValue("File", file);
+                                                setProfilePicture(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        onDragOver={(e) => e.preventDefault()}
+                                    >
+                                        <p className="text-center">
+                                            {t('DRAG_AND_DROP')}
+                                            <br />
+                                        </p>
+                                    </div>
+
+                                    <input
+                                        type="file"
+                                        id="File"
+                                        name="File"
+                                        onChange={(event) => {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                                setFieldValue("File", file);
+                                                setProfilePicture(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        className="mt-2 hidden"
+                                    />
+
+                                    <div className="flex justify-center items-center">
+                                        <label
+                                            htmlFor="File"
+                                            className="btn-save inline-flex items-center mt-4 px-3 py-1  rounded-md cursor-pointer transition-colors mr-2"
+                                        >
+                                            <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
+                                            {t('CHOOSE_PICTURE')}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="ml-5 pr-7 md:pr-30 bg-white p-5 md:w-1/3 pl-0 md:pl-4 bg-white rounded-xl">
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                     {t('FIRST_NAME')} <span className='text-red-500'>*</span>
@@ -377,73 +434,14 @@ export const UsersAdd = () => {
                                 <ErrorMessage name="passwordConfirm" component="div" className="text-red-500 text-sm" />
                             </div>
 
-                            <div className="mb-4">
-                                <label htmlFor="File" className="block text-sm font-medium text-gray-700">
-                                    {t('PROFILE_PICTURE')}
-                                </label>
-
-                                {imagePreview && (
-                                    <div className="mb-4 flex justify-center">
-                                        <div className="w-[250px] h-[250px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
-                                            <img
-                                                src={imagePreview || defaultUserImage}
-                                                alt="Profile Preview"
-                                                className="w-[250px] h-[250px] object-cover rounded-full mb-4 border-4 border-blue-400"
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div
-                                    className="w-full h-32 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200"
-                                    onDrop={(e) => {
-                                        e.preventDefault();
-                                        const file = e.dataTransfer.files[0];
-                                        if (file) {
-                                            const previewUrl = URL.createObjectURL(file);
-                                            setImagePreview(previewUrl);
-                                            setFieldValue("File", file);
-                                        }
-                                    }}
-                                    onDragOver={(e) => e.preventDefault()}
-                                >
-                                    <p className="text-center">
-                                        {t('DRAG_AND_DROP')}
-                                        <br />
-                                    </p>
-                                </div>
-
-                                <input
-                                    type="file"
-                                    id="File"
-                                    name="File"
-                                    onChange={(event) => {
-                                        const file = event.target.files[0];
-                                        if (file) {
-                                            const previewUrl = URL.createObjectURL(file);
-                                            setImagePreview(previewUrl);
-                                            setFieldValue("File", file);
-                                        } 
-                                    }}
-                                    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 file:hidden"
-                                />
-
-                                <label
-                                    htmlFor="File"
-                                    className="inline-flex items-center mt-2 px-3 py-1 bg-blue-400 text-white rounded-md cursor-pointer hover:bg-blue-500 transition-colors"
-                                >
-                                    <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
-                                    {t('CHOOSE_PICTURE')}
-                                </label>
-                            </div>
-
                             <div className="flex flex-col md:flex-row pb-2">
                                 <button
                                     type="submit"
-                                    className="btn-common h-10 md:ml-auto"
+                                    className="btn-save ml-auto"
                                 >
                                     {t('SAVE')}
                                 </button>
+                            </div>
                             </div>
 
                         </Form>
