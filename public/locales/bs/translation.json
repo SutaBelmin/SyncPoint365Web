@@ -144,6 +144,9 @@
     "LOCATION": "Lokacije",
     "COUNTRY_REQUIRED": "Obavezna država.",
     "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Promijeni status zahtjeva:",
+    "ABSENCE_REQUEST": "Zahtjev za odsutstvo",
     "STATUS_SUCCESSFULLY_CHANGED": "Status uspješno promijenjen.", 
-    "CONFIRM": "Potvrdi"
+    "CONFIRM": "Potvrdi",
+    "ABSENCE_REQUEST_TYPE": "Tip",
+    "APPLICANT": "Podnositelj"
 }

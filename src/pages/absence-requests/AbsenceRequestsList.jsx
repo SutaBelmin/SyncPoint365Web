@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faHourglass, faSquareCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faEdit, faHourglass, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
@@ -117,13 +117,13 @@ export const AbsenceRequestsList = observer(() => {
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                     <button
-                        onClick={() => changeStatus(row.id, row.absenceRequestStatus)}
-                        >
+                        onClick={() => changeStatus(row, row.absenceRequestType.name, `${row.user?.firstName || ''} ${row.user?.lastName || ''}`.trim(), row.id)}
+                    >
                         {
                             row.absenceRequestStatus === absenceRequestStatusConstant.pending ? (
-                                <FontAwesomeIcon icon={faHourglass} className="text-yellow-600 hover:underline p-2"/>
+                                <FontAwesomeIcon icon={faHourglass} className="text-yellow-600 hover:underline p-2" />
                             ) : (
-                                <FontAwesomeIcon icon={faSquareCheck} className="text-green-700 hover:underline p-2"/>
+                                <FontAwesomeIcon icon={faCircleCheck} className="text-green-700 hover:underline p-2" />
                             )
                         }
                     </button>
@@ -132,9 +132,29 @@ export const AbsenceRequestsList = observer(() => {
         }
     ];
 
-    const changeStatus = (absenceRequestId, absenceRequestStatus) => {
-        openModal(<AbsenceRequestsChangeStatus absenceRequestId={absenceRequestId} absenceRequestStatus={absenceRequestStatus} closeModal={closeModal} fetchData={fetchData}/>);
-    }
+    const changeStatus = (absenceRequest, absenceRequestTypeName, userName, absenceRequestId) => {
+        if (absenceRequest.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
+            openModal(<AbsenceRequestsChangeStatus 
+                absenceRequest={absenceRequest} 
+                absenceRequestTypeName={absenceRequestTypeName} 
+                userName={userName} 
+                absenceRequestId={absenceRequestId} 
+                closeModal={closeModal} 
+                fetchData={fetchData}
+                isStatusLocked={true} 
+            />);
+        } else {
+            openModal(<AbsenceRequestsChangeStatus 
+                absenceRequest={absenceRequest} 
+                absenceRequestTypeName={absenceRequestTypeName} 
+                userName={userName} 
+                absenceRequestId={absenceRequestId} 
+                closeModal={closeModal} 
+                fetchData={fetchData}
+            />);
+        }
+    };
+    
     // const addNewRequestClick = () => {
     //     openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
     // }
