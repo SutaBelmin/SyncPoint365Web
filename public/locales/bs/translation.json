@@ -148,5 +148,7 @@
     "STATUS_SUCCESSFULLY_CHANGED": "Status uspješno promijenjen.", 
     "CONFIRM": "Potvrdi",
     "ABSENCE_REQUEST_TYPE": "Tip",
-    "APPLICANT": "Podnositelj"
+    "APPLICANT": "Podnositelj",
+    "DATE_FROM_TO": "Datum od - do",
+    "COMMENT": "Komentar"
 }

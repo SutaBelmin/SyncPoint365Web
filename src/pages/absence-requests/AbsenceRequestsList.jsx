@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faEdit, faHourglass, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faHourglass, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
@@ -18,7 +18,7 @@ import { absenceRequestStatusConstant } from "../../constants";
 import { useSearchParams } from "react-router-dom";
 import debounce from "lodash.debounce";
 import { useModal } from "../../context";
-import { AbsenceRequestsChangeStatus } from "../absence-requests";
+import { AbsenceRequestsStatusChange } from "../absence-requests";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();
@@ -106,18 +106,17 @@ export const AbsenceRequestsList = observer(() => {
             name: t('ACTIONS'),
             cell: row => (
                 <div className="flex">
-                    <button
-                        //onClick={() => editRequestClick(row)}
-                        className="text-lg text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
-                    </button>
+                    {/* </button>
+                        className="text-blue-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faEdit} />
+                    </button> */}
                     <button
                         //onClick={() => deleteRequestClick(row)}
                         className="text-lg text-red-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
                     <button
-                        onClick={() => changeStatus(row, row.absenceRequestType.name, `${row.user?.firstName || ''} ${row.user?.lastName || ''}`.trim(), row.id)}
+                        onClick={() => changeStatus(row)}
                     >
                         {
                             row.absenceRequestStatus === absenceRequestStatusConstant.pending ? (
@@ -132,23 +131,19 @@ export const AbsenceRequestsList = observer(() => {
         }
     ];
 
-    const changeStatus = (absenceRequest, absenceRequestTypeName, userName, absenceRequestId) => {
+    const changeStatus = (absenceRequest) => {
+        const { comment } = absenceRequest;
         if (absenceRequest.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
-            openModal(<AbsenceRequestsChangeStatus 
-                absenceRequest={absenceRequest} 
-                absenceRequestTypeName={absenceRequestTypeName} 
-                userName={userName} 
-                absenceRequestId={absenceRequestId} 
+            openModal(<AbsenceRequestsStatusChange 
+                absenceRequest={absenceRequest}
+                comment={comment}
                 closeModal={closeModal} 
                 fetchData={fetchData}
                 isStatusLocked={true} 
             />);
         } else {
-            openModal(<AbsenceRequestsChangeStatus 
-                absenceRequest={absenceRequest} 
-                absenceRequestTypeName={absenceRequestTypeName} 
-                userName={userName} 
-                absenceRequestId={absenceRequestId} 
+            openModal(<AbsenceRequestsStatusChange 
+                absenceRequest={absenceRequest}
                 closeModal={closeModal} 
                 fetchData={fetchData}
             />);

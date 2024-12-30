@@ -10,7 +10,7 @@ import { absenceRequestStatusConstant } from "../../constants";
 import { format } from "date-fns";
 
 
-export const AbsenceRequestsChangeStatus = ({ absenceRequest, absenceRequestTypeName, userName, absenceRequestId, closeModal, fetchData, isStatusLocked }) => {
+export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModal, fetchData, isStatusLocked }) => {
     const [statuses, setAbsenceRequestsStatuses] = useState([]);
     const { t } = useTranslation();
 
@@ -39,8 +39,8 @@ export const AbsenceRequestsChangeStatus = ({ absenceRequest, absenceRequestType
     const handleConfirm = async (values) => {
         try {
             await absenceRequestsService.changeAbsenceRequestStatus({
-                id: absenceRequestId,
-                newStatus: values.absenceRequestStatus
+                id: absenceRequest.id,
+                status: values.absenceRequestStatus
             });
             toast.success(t('STATUS_SUCCESSFULLY_CHANGED'));
             fetchData();
@@ -76,33 +76,40 @@ export const AbsenceRequestsChangeStatus = ({ absenceRequest, absenceRequestType
                 {({ setFieldValue, values }) => (
                     <Form>
                         <div>
-
-                            <div className="grid grid-cols-2 pl-8 gap-x-6 gap-y-4">
-                                <div className="pb-3 flex flex-col">
-                                    <span className="font-medium pr-2 text-gray-600">{t('APPLICANT')}:</span>
-                                    <span className="text-gray-900">{userName}</span>
+                            <div className="grid grid-cols-1 gap-y-4">
+                                <div className="pb-3 flex items-center justify-center text-center">
+                                    <span className="pr-2 font-medium text-gray-600">{t('ABSENCE_REQUEST_TYPE')}:</span>
+                                    <span className="text-gray-900">{absenceRequest.absenceRequestType?.name}</span>
                                 </div>
-                                <div className="pb-3 flex flex-col">
-                                    <span className="pr-2 font-medium text-gray-600">{t('STATUS')}:</span>
-                                    <span className="text-gray-900">
-                                        {absenceRequest.absenceRequestStatus === absenceRequestStatusConstant.pending ? t('PENDING')
-                                            : absenceRequest.absenceRequestStatus === absenceRequestStatusConstant.approved ? t('APPROVED') : t('REJECTED')}</span>
+                                <div className="grid grid-cols-2 gap-x-6 pl-8">
+                                    <div className="pb-3 flex flex-col">
+                                        <span className="font-medium pr-2 text-gray-600">{t('APPLICANT')}:</span>
+                                        <span className="text-gray-900">{`${absenceRequest.user?.firstName || ''} ${absenceRequest.user?.lastName || ''}`.trim()}</span>
+                                    </div>
+                                    <div className="pb-3 flex flex-col">
+                                        <span className="pr-2 font-medium text-gray-600">{t('STATUS')}:</span>
+                                        <span className="text-gray-900">
+                                            {absenceRequest.absenceRequestStatus === absenceRequestStatusConstant.pending
+                                                ? t('PENDING')
+                                                : absenceRequest.absenceRequestStatus === absenceRequestStatusConstant.approved
+                                                    ? t('APPROVED')
+                                                    : t('REJECTED')}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col">
-                                    <span className="font-medium text-gray-600">{t('ABSENCE_REQUEST_TYPE')}:</span>
-                                    <span className="text-gray-900">{absenceRequestTypeName}</span>
+                                <div className="grid grid-cols-2 gap-x-6 pl-8">
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-gray-600">{t('DATE_FROM_TO')}:</span>
+                                        <span className="text-gray-900">{`${format(new Date(absenceRequest.dateFrom), t('DATE_FORMAT'))} - ${format(new Date(absenceRequest.dateTo), t('DATE_FORMAT'))}`}</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-gray-600">{t('DATE_RETURN')}:</span>
+                                        <span className="text-gray-900">{format(new Date(absenceRequest.dateReturn), t('DATE_FORMAT'))}</span>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col ">
-                                    <span className="font-medium text-gray-600">{t('DATE_RETURN')}:</span>
-                                    <span className="text-gray-900">{format(new Date(absenceRequest.dateReturn), t('DATE_FORMAT'))}</span>
-                                </div>
-                                <div className="flex flex-col ">
-                                    <span className="font-medium text-gray-600">{t('DATE_FROM')}:</span>
-                                    <span className="text-gray-900">{format(new Date(absenceRequest.dateFrom), t('DATE_FORMAT'))}</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="font-medium text-gray-600">{t('DATE_TO')}:</span>
-                                    <span className="text-gray-900">{format(new Date(absenceRequest.dateTo), t('DATE_FORMAT'))}</span>
+                                <div className="pb-3 flex items-center justify-center text-center">
+                                    <span className="pr-2 font-medium text-gray-600">{t('COMMENT')}:</span>
+                                    <span className="text-gray-900">{comment}</span>
                                 </div>
                             </div>
 
@@ -137,13 +144,15 @@ export const AbsenceRequestsChangeStatus = ({ absenceRequest, absenceRequestType
                                     </div>
                                 </div>
                             )}
-                            <button
-                                type="button"
-                                onClick={closeModal}
-                                className="mt-6 w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md shadow-sm transition duration-200"
-                            >
-                                {t('CLOSE')}
-                            </button>
+                            {isStatusLocked && (
+                                <button
+                                    type="button"
+                                    onClick={closeModal}
+                                    className="mt-6 w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md shadow-sm transition duration-200"
+                                >
+                                    {t('CLOSE')}
+                                </button>
+                            )}
                         </div>
                     </Form>
                 )}

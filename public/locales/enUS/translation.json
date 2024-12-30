@@ -148,5 +148,7 @@
     "STATUS_SUCCESSFULLY_CHANGED": "Status successfully changed.", 
     "CONFIRM": "Confirm",
     "ABSENCE_REQUEST_TYPE": "Type",
-    "APPLICANT": "Applicant"
+    "APPLICANT": "Applicant",
+    "DATE_FROM_TO": "Date from - to",
+    "COMMENT": "Comment"
 }
