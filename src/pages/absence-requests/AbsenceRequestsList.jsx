@@ -145,6 +145,7 @@ export const AbsenceRequestsList = observer(() => {
         } else {
             openModal(<AbsenceRequestsStatusChange 
                 absenceRequest={absenceRequest}
+                comment={comment}
                 closeModal={closeModal} 
                 fetchData={fetchData}
             />);

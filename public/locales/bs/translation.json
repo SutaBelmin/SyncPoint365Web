@@ -150,5 +150,6 @@
     "ABSENCE_REQUEST_TYPE": "Tip",
     "APPLICANT": "Podnositelj",
     "DATE_FROM_TO": "Datum od - do",
-    "COMMENT": "Komentar"
+    "COMMENT": "Komentar",
+    "NO_COMMENT": "Nema komentara"
 }

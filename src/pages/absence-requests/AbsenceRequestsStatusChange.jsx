@@ -78,10 +78,9 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
                         <div>
                             <div className="grid grid-cols-1 gap-y-4">
                                 <div className="pb-3 flex items-center justify-center text-center">
-                                    <span className="pr-2 font-medium text-gray-600">{t('ABSENCE_REQUEST_TYPE')}:</span>
-                                    <span className="text-gray-900">{absenceRequest.absenceRequestType?.name}</span>
+                                    <span className="text-gray-900 text-xl font-semibold">{absenceRequest.absenceRequestType?.name}</span>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-6 pl-8">
+                                <div className="grid grid-cols-2 gap-x-6 pl-4">
                                     <div className="pb-3 flex flex-col">
                                         <span className="font-medium pr-2 text-gray-600">{t('APPLICANT')}:</span>
                                         <span className="text-gray-900">{`${absenceRequest.user?.firstName || ''} ${absenceRequest.user?.lastName || ''}`.trim()}</span>
@@ -92,67 +91,76 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
                                             {absenceRequest.absenceRequestStatus === absenceRequestStatusConstant.pending
                                                 ? t('PENDING')
                                                 : absenceRequest.absenceRequestStatus === absenceRequestStatusConstant.approved
-                                                    ? t('APPROVED')
-                                                    : t('REJECTED')}
+                                                    ? t('APPROVED') : t('REJECTED')}
                                         </span>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-6 pl-8">
+                                <div className="grid grid-cols-2 gap-x-6 pl-4">
                                     <div className="flex flex-col">
-                                        <span className="font-medium text-gray-600">{t('DATE_FROM_TO')}:</span>
-                                        <span className="text-gray-900">{`${format(new Date(absenceRequest.dateFrom), t('DATE_FORMAT'))} - ${format(new Date(absenceRequest.dateTo), t('DATE_FORMAT'))}`}</span>
+                                        <span className="font-medium text-gray-600">{t('DATE_FROM')}:</span>
+                                        <span className="text-gray-900">{`${format(new Date(absenceRequest.dateFrom), t('DATE_FORMAT'))}`}</span>
                                     </div>
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-gray-600">{t('DATE_TO')}:</span>
+                                        <span className="text-gray-900">{`${format(new Date(absenceRequest.dateTo), t('DATE_FORMAT'))}`}</span>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-x-6 pl-4">
                                     <div className="flex flex-col">
                                         <span className="font-medium text-gray-600">{t('DATE_RETURN')}:</span>
                                         <span className="text-gray-900">{format(new Date(absenceRequest.dateReturn), t('DATE_FORMAT'))}</span>
                                     </div>
                                 </div>
-                                <div className="pb-3 flex items-center justify-center text-center">
-                                    <span className="pr-2 font-medium text-gray-600">{t('COMMENT')}:</span>
-                                    <span className="text-gray-900">{comment}</span>
-                                </div>
-                            </div>
-
-
-                            {!isStatusLocked && (
-                                <div className="mt-4">
-                                    <Select
-                                        id="absenceRequestStatus"
-                                        name="absenceRequestStatus"
-                                        value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatus) || null}
-                                        onChange={(option) => setFieldValue('absenceRequestStatus', option && option.value)}
-                                        options={statuses}
-                                        placeholder={t('SELECT_STATUS')}
-                                        className="border-gray-300 pt-4 input-select-border w-full min-w-[11rem] md:w-auto"
-                                        isClearable
-                                        isSearchable
-                                    />
-                                    <div className="flex justify-center pt-8 space-x-4 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={closeModal}
-                                            className="px-6 py-2 text-sm font-semibold text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none"
-                                        >
-                                            {t('CANCEL')}
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-6 py-2 text-sm font-semibold text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none"
-                                        >
-                                            {t('CONFIRM')}
-                                        </button>
+                                <div>
+                                    <label className="text-sm font-medium text-gray-700 mb-1">
+                                        {t('COMMENT')}:
+                                    </label>
+                                    <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none">
+                                        <span className="text-gray-700">{comment && comment.trim() ? comment : t('None')}</span>
                                     </div>
                                 </div>
-                            )}
-                            {isStatusLocked && (
-                                <button
-                                    type="button"
-                                    onClick={closeModal}
-                                    className="mt-6 w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md shadow-sm transition duration-200"
-                                >
-                                    {t('CLOSE')}
-                                </button>
-                            )}
+
+
+                                {!isStatusLocked && (
+                                    <div className="mt-4">
+                                        <Select
+                                            id="absenceRequestStatus"
+                                            name="absenceRequestStatus"
+                                            value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatus) || null}
+                                            onChange={(option) => setFieldValue('absenceRequestStatus', option && option.value)}
+                                            options={statuses}
+                                            placeholder={t('SELECT_STATUS')}
+                                            className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
+                                            isClearable
+                                            isSearchable
+                                        />
+                                        <div className="flex justify-center pt-8 space-x-4 pt-4">
+                                            <button
+                                                type="button"
+                                                onClick={closeModal}
+                                                className="px-6 py-2 text-sm font-semibold text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none"
+                                            >
+                                                {t('CANCEL')}
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-6 py-2 text-sm font-semibold text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none"
+                                            >
+                                                {t('CONFIRM')}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                                {isStatusLocked && (
+                                    <button
+                                        type="button"
+                                        onClick={closeModal}
+                                        className="mt-3 w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md shadow-sm transition duration-200"
+                                    >
+                                        {t('CLOSE')}
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </Form>
                 )}

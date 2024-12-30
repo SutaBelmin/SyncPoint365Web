@@ -150,5 +150,6 @@
     "ABSENCE_REQUEST_TYPE": "Type",
     "APPLICANT": "Applicant",
     "DATE_FROM_TO": "Date from - to",
-    "COMMENT": "Comment"
+    "COMMENT": "Comment",
+    "NO_COMMENT": "No comment"
 }
