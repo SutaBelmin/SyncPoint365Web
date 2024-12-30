@@ -1,22 +1,32 @@
-import { create } from 'zustand';
+export class AuthStore {
+  constructor() {
+    this.initialize();
+  }
 
-export const AuthStore = create((set) => ({
-  loggedUser: null,
-
-  setLoggedUser: (user) => {
+  setUser(user, token) {
     localStorage.setItem('loggedUser', JSON.stringify(user));
-    set({ loggedUser: user });
-  },
+    localStorage.setItem('token', token);
+    this.loggedUser = user;
+    this.token = token;
+  }
 
-  clearLoggedUser: () => {
+  removeUser() {
     localStorage.removeItem('loggedUser');
-    set({ loggedUser: null });
-  },
+    localStorage.removeItem('token');
+    this.loggedUser = null;
+    this.token = null;
+  }
 
-  initializeAuthStore: () => {
-    const savedUser = localStorage.getItem('loggedUser');
-    if (savedUser) {
-      set({ loggedUser: JSON.parse(savedUser) });
-    }
-  },
-}));
+  getUser() {
+    return this.loggedUser;
+  }
+
+  initialize() {
+    const loggedUser = localStorage.getItem('loggedUser');
+    const token = localStorage.getItem('token');
+    this.loggedUser = loggedUser ? JSON.parse(loggedUser) : null;
+    this.token = token || null; 
+  }
+
+}
+

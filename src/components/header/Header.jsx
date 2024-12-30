@@ -5,15 +5,15 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import LanguageSwitcher from '../localization';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
-import { AuthStore } from '../../stores';
+import { useAuth } from '../../context/AuthProvider';
 
 const Header = ({ isCollapsed }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const clearLoggedUser = AuthStore((state) => state.clearLoggedUser);
+    const { removeUser } = useAuth();
 
     const handleLogout = () => {
-        clearLoggedUser();
+        removeUser();
         navigate('/');
     }
 

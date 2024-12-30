@@ -8,12 +8,12 @@ import { authService } from '../../services';
 import LanguageSwitcher from '../../components/localization';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { AuthStore } from '../../stores';
+import { useAuth } from '../../context/AuthProvider';
 
 const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const setLoggedUser = AuthStore((state) => state.setLoggedUser);
+  const { setUser } = useAuth();
 
   const validationSchema = Yup.object({
     email: Yup.string().required(t('EMAIL_IS_REQUIRED')),
@@ -23,8 +23,9 @@ const Login = () => {
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
-      const user = await authService.login(values.email, values.password);
-      setLoggedUser(user);
+      const response = await authService.login(values.email, values.password);
+      const { user, token } = response;
+      setUser(user, token);
       navigate('/home');
     } catch (error) {
       if (error.response && error.response.status === 401) {
