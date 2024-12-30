@@ -1,1 +1,1 @@
-export { AuthStore } from '../stores';
+export { AuthStore } from './AuthStore';
