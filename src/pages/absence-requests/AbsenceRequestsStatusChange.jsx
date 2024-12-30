@@ -57,7 +57,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
     }
 
     return (
-        <div className="p-6 bg-white rounded-2xl relative">
+        <div className="p-6 bg-white rounded-2xl z-20 relative">
             <button
                 onClick={closeModal}
                 className="absolute -top-2 -right-1 text-gray-400 hover:text-gray-600 focus:outline-none text-xl"
@@ -65,7 +65,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
                 <FontAwesomeIcon icon={faTimes} />
             </button>
 
-            <div className="flex justify-center items-center mb-8">
+            <div className="flex justify-center items-center mb-4">
                 <h2 className="text-2xl font-semibold text-gray-800">{t('ABSENCE_REQUEST')}</h2>
             </div>
 
@@ -80,13 +80,13 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
                                 <div className="pb-3 flex items-center justify-center text-center">
                                     <span className="text-gray-900 text-xl font-semibold">{absenceRequest.absenceRequestType?.name}</span>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-6 pl-4">
-                                    <div className="pb-3 flex flex-col">
+                                <div className="grid grid-cols-2 gap-x-6">
+                                    <div className="flex flex-col">
                                         <span className="font-medium pr-2 text-gray-600">{t('APPLICANT')}:</span>
                                         <span className="text-gray-900">{`${absenceRequest.user?.firstName || ''} ${absenceRequest.user?.lastName || ''}`.trim()}</span>
                                     </div>
-                                    <div className="pb-3 flex flex-col">
-                                        <span className="pr-2 font-medium text-gray-600">{t('STATUS')}:</span>
+                                    <div className="flex flex-col pl-8">
+                                        <span className="font-medium text-gray-600">{t('STATUS')}:</span>
                                         <span className="text-gray-900">
                                             {absenceRequest.absenceRequestStatus === absenceRequestStatusConstant.pending
                                                 ? t('PENDING')
@@ -95,17 +95,17 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
                                         </span>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-6 pl-4">
+                                <div className="grid grid-cols-2 gap-x-6">
                                     <div className="flex flex-col">
                                         <span className="font-medium text-gray-600">{t('DATE_FROM')}:</span>
                                         <span className="text-gray-900">{`${format(new Date(absenceRequest.dateFrom), t('DATE_FORMAT'))}`}</span>
                                     </div>
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col pl-8">
                                         <span className="font-medium text-gray-600">{t('DATE_TO')}:</span>
                                         <span className="text-gray-900">{`${format(new Date(absenceRequest.dateTo), t('DATE_FORMAT'))}`}</span>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-6 pl-4">
+                                <div className="grid grid-cols-2 gap-x-6">
                                     <div className="flex flex-col">
                                         <span className="font-medium text-gray-600">{t('DATE_RETURN')}:</span>
                                         <span className="text-gray-900">{format(new Date(absenceRequest.dateReturn), t('DATE_FORMAT'))}</span>
@@ -122,7 +122,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
 
 
                                 {!isStatusLocked && (
-                                    <div className="mt-4">
+                                    <div>
                                         <Select
                                             id="absenceRequestStatus"
                                             name="absenceRequestStatus"
@@ -134,19 +134,19 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
                                             isClearable
                                             isSearchable
                                         />
-                                        <div className="flex justify-center pt-8 space-x-4 pt-4">
+                                        <div className="flex justify-end pt-5 space-x-2">
                                             <button
                                                 type="button"
                                                 onClick={closeModal}
-                                                className="px-6 py-2 text-sm font-semibold text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none"
+                                                className="btn-cancel"
                                             >
                                                 {t('CANCEL')}
                                             </button>
                                             <button
                                                 type="submit"
-                                                className="px-6 py-2 text-sm font-semibold text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none"
+                                                className="btn-save"
                                             >
-                                                {t('CONFIRM')}
+                                                {t('SAVE')}
                                             </button>
                                         </div>
                                     </div>
