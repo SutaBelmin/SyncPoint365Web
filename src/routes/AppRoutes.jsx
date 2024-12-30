@@ -7,9 +7,9 @@ import { UsersAdd, UsersEdit, UsersList } from '../pages/users';
 import { CountriesList } from '../pages/countries';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 import { CitiesList } from '../pages/cities';
-import { AbsenceRequestsList } from '../pages/absence-requests';
 import { NotFound } from '../pages/errors';
 import PrivateRoutes from './PrivateRoutes';
+import { AbsenceRequestsList, AbsenceRequestsListUser } from '../pages/absence-requests';
 
 const AppRoutes = () => {
   return (
@@ -23,6 +23,7 @@ const AppRoutes = () => {
             </Route>
             <Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
             <Route path="/absence-requests" element={<AbsenceRequestsList />} />
+            <Route path="/absence-requests-user" element={<AbsenceRequestsListUser />} />
             <Route path="/countries" element={<CountriesList />} />
             <Route path="/cities" element={<CitiesList />} />
             <Route path="/users/update/:userId" element={<UsersEdit />} />
