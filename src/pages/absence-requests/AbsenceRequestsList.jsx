@@ -107,6 +107,7 @@ export const AbsenceRequestsList = observer(() => {
             cell: row => (
                 <div className="flex">
                     {/* </button>
+                        //onClick={() => editRequestClick(row)}
                         className="text-blue-500 hover:underline p-2">
                         <FontAwesomeIcon icon={faEdit} />
                     </button> */}
