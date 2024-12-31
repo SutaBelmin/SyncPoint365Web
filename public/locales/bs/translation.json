@@ -174,5 +174,6 @@
     "ADD_ABSENCE_REQUEST_TYPE": "Dodaj tip zahtjeva",
     "PROFILE_PICTURE": "Profilna slika.",
     "CHOOSE_PICTURE": "Odaberi sliku",
-    "DRAG_AND_DROP":"Prevucite sliku"
+    "DRAG_AND_DROP":"Prevucite sliku",
+    "WRONG_EXTENSION":"Format slike nije podrzan!"
 }

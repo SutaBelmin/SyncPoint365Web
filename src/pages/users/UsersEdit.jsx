@@ -32,11 +32,21 @@ export const UsersEdit = () => {
     const [user, setUser] = useState(null);
     
     const [profilePicture, setProfilePicture] = useState(null);
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const updateUser = async (values) => {
         try {
+            if(values.PhotoFile) {
+                const fileExtension = values.PhotoFile.name.substring(values.PhotoFile.name.lastIndexOf('.')).toLowerCase();
+
+                if(!allowedExtensions.includes(fileExtension)){
+                    toast.error(t('WRONG_EXTENSION'));
+                    return;
+                }
+            }
+
             const formData = new FormData();
             if (values.PhotoFile) {
                 formData.append("PhotoFile", values.PhotoFile);

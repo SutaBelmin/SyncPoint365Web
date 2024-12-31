@@ -174,5 +174,6 @@
     "ADD_ABSENCE_REQUEST_TYPE": "Add Absence Request",
     "PROFILE_PICTURE": "Profile picture.",
     "CHOOSE_PICTURE": "Choose picture",
-    "DRAG_AND_DROP":"Drag and drop"
+    "DRAG_AND_DROP":"Drag and drop",
+    "WRONG_EXTENSION":"Image format not supported!"
 }
