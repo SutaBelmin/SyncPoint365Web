@@ -38,106 +38,120 @@ export const AbsenceRequestsSearchUser = ({ fetchData }) => {
 		return years.map(year => ({ value: year, label: year.toString() }));
 	};
 
-	// const handleYearChange = (selectedOption) => {
-	// 	if (selectedOption) {
-	// 		const selectedYear = selectedOption.value;
-	// 		const dateFrom = new Date(selectedYear, 0, 1);
-	// 		const dateTo = new Date(selectedYear, 11, 31);
-	// 	};
-	// }
-		useEffect(() => {
-			setSearchParams(absenceRequestsSearchStore.queryParams);
-		}, [setSearchParams]);
-
-		useEffect(() => {
-			fetchAbsenceRequestTypes();
-		}, [fetchAbsenceRequestTypes]);
-
-
-		const handleSearch = (values) => {
-			absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
-			absenceRequestsSearchStore.setAbsenceRequestStatusId(values.absenceRequestStatusId);
-			absenceRequestsSearchStore.setDateFrom(values.dateFrom);
-			absenceRequestsSearchStore.setDateTo(values.dateTo);
-
-			const queryParams = absenceRequestsSearchStore.syncWithQueryParams();
-			setSearchParams(queryParams);
-			fetchData();
-		};
-
-
-		const handleClear = (setFieldValue) => {
-			setSearchParams({});
-			setFieldValue("absenceRequestTypeId", null);
-			setFieldValue("absenceRequestStatusId", null);
-			absenceRequestsSearchStore.clearFilters();
-
-			fetchData();
-		};
-
-
-		const initialValues = {
-			absenceRequestTypeId: (() => {
-				const typeFromParams = searchParams.get("absenceRequestTypeId");
-				if (typeFromParams) {
-					const parsedTypeId = parseInt(typeFromParams);
-					absenceRequestsSearchStore.setAbsenceTypeId(parsedTypeId);
-					return parsedTypeId;
-				}
-				return absenceRequestsSearchStore.absenceRequestTypeId;
-			})(),
-			dateFrom: absenceRequestsSearchStore.dateFrom,
-			dateTo: absenceRequestsSearchStore.dateTo,
+	const handleYearChange = (selectedOption, setFieldValue) => {
+		if (selectedOption) {
+			const selectedYear = selectedOption.value;
+			const dateFrom = new Date(selectedYear, 0, 1).toISOString();
+			const dateTo = new Date(selectedYear, 11, 31, 23, 59, 59).toISOString();
+			setFieldValue('year', selectedYear);
+			setFieldValue('dateFrom', dateFrom);
+			setFieldValue('dateTo', dateTo);
+		} else {
+			setFieldValue('year', null);
+			setFieldValue('dateFrom', null);
+			setFieldValue('dateTo', null);
 		}
-
-		return (
-			<Formik
-				enableReinitialize
-				initialValues={initialValues}
-				onSubmit={handleSearch}
-			>
-				{({ setFieldValue, values }) => (
-					<Form className="grid gap-4 w-full lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
-						<Select
-							name="absenceRequestTypeId"
-							id="absenceRequestTypeId"
-							placeholder={t('SELECT_TYPE')}
-							options={absenceRequestTypes}
-							value={values.absenceRequestTypeId ? { value: values.absenceRequestTypeId, label: absenceRequestTypes.find(a => a.value === values.absenceRequestTypeId)?.label } : null}
-							onChange={(option) => setFieldValue('absenceRequestTypeId', option ? option.value : null)}
-							className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
-							isClearable
-							isSearchable
-						/>
-						<Select
-							name="year"
-							id="year"
-							placeholder={t('SELECT_YEAR')}
-							options={yearOptions()}
-							className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
-							onChange={(option) => setFieldValue('year', option ? option.value : null)}
-							isClearable
-							isSearchable
-							autoComplete='off'
-							locale={i18n.language}
-						/>
-						<div className='flex gap-4 '>
-							<button
-								type="submit"
-								className="btn-new h-10"
-							>
-								{t('SEARCH')}
-							</button>
-							<button
-								type="button"
-								onClick={() => handleClear(setFieldValue)}
-								className="btn-cancel h-10"
-							>
-								{t("CLEAR")}
-							</button>
-						</div>
-					</Form>
-				)}
-			</Formik >
-		);
 	};
+	useEffect(() => {
+		setSearchParams(absenceRequestsSearchStore.queryParams);
+	}, [setSearchParams]);
+
+	useEffect(() => {
+		fetchAbsenceRequestTypes();
+	}, [fetchAbsenceRequestTypes]);
+
+
+	const handleSearch = (values) => {
+		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
+		absenceRequestsSearchStore.setDateFrom(values.dateFrom);
+		absenceRequestsSearchStore.setDateTo(values.dateTo);
+
+		const queryParams = absenceRequestsSearchStore.syncWithQueryParams();
+		setSearchParams(queryParams);
+		fetchData();
+	};
+
+
+	const handleClear = (setFieldValue) => {
+		setSearchParams({});
+		setFieldValue("absenceRequestTypeId", null);
+		setFieldValue("absenceRequestStatusId", null);
+		absenceRequestsSearchStore.clearFilters();
+
+		fetchData();
+	};
+
+
+	const initialValues = {
+		absenceRequestTypeId: (() => {
+			const typeFromParams = searchParams.get("absenceRequestTypeId");
+			if (typeFromParams) {
+				const parsedTypeId = parseInt(typeFromParams);
+				absenceRequestsSearchStore.setAbsenceTypeId(parsedTypeId);
+				return parsedTypeId;
+			}
+			return absenceRequestsSearchStore.absenceRequestTypeId;
+		})(),
+		year: (() => {
+			const dateFromParam = searchParams.get("dateFrom");
+			if (dateFromParam) {
+				const year = new Date(dateFromParam).getFullYear();
+				return year;
+			}
+			const dateFromStore = absenceRequestsSearchStore.dateFrom;
+			return dateFromStore ? new Date(dateFromStore).getFullYear() : null;
+		})(),
+		dateFrom: absenceRequestsSearchStore.dateFrom,
+		dateTo: absenceRequestsSearchStore.dateTo,
+	}
+
+	return (
+		<Formik
+			enableReinitialize
+			initialValues={initialValues}
+			onSubmit={handleSearch}
+		>
+			{({ setFieldValue, values }) => (
+				<Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
+					<Select
+						name="absenceRequestTypeId"
+						id="absenceRequestTypeId"
+						placeholder={t('SELECT_TYPE')}
+						options={absenceRequestTypes}
+						value={values.absenceRequestTypeId ? { value: values.absenceRequestTypeId, label: absenceRequestTypes.find(a => a.value === values.absenceRequestTypeId)?.label } : null}
+						onChange={(option) => setFieldValue('absenceRequestTypeId', option ? option.value : null)}
+						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
+						isClearable
+						isSearchable
+					/>
+					<Select
+						name="year"
+						id="year"
+						placeholder={t('SELECT_YEAR')}
+						options={yearOptions()}
+						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
+						value={ values.year? { value: values.year, label: values.year.toString(), } : null }
+						onChange={(option) => handleYearChange(option, setFieldValue)}
+						isClearable
+						isSearchable
+					/>
+					<div className='flex gap-4 şm:w-full'>
+						<button
+							type="submit"
+							className="btn-new h-10"
+						>
+							{t('SEARCH')}
+						</button>
+						<button
+							type="button"
+							onClick={() => handleClear(setFieldValue)}
+							className="btn-cancel h-10"
+						>
+							{t("CLEAR")}
+						</button>
+					</div>
+				</Form>
+			)}
+		</Formik >
+	);
+};

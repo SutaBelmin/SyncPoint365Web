@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCity, faEarthAmerica, faUser, faHome, faCalendarCheck, faCaretDown, faLocationCrosshairs, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCity, faEarthAmerica, faUser, faHome, faCalendarCheck, faCaretDown, faLocationCrosshairs, faCalendarDays, faCalendarPlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,7 +43,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                     { icon: faUser, label: t('USERS'), link: '/users' },
                     { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types' },
                     { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests' },
-                    { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests-user' }
+                    { icon: faCalendarPlus, label: t('ABSENCE_REQUESTS_EMPLOYEE'), link: '/absence-requests-user' }
                     ].map(({ icon, label, link }) => (
                         <li key={label}>
                             <a 

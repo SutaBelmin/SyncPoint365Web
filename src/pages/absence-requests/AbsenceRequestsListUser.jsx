@@ -7,27 +7,32 @@ import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
-import { BaseModal } from "../../components/modal";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
 import { AbsenceRequestsSearchUser } from "./search";
+import { AbsenceRequestsEditUser, AbsenceRequestsAddUser } from "../absence-requests";
 import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
 import "./AbsenceRequestsList.css";
 import { absenceRequestStatusConstant } from "../../constants";
 import { useSearchParams } from "react-router-dom";
+import { useModal } from "../../context";
 import debounce from "lodash.debounce";
+import { useAuth } from "../../context/AuthProvider";
 
 export const AbsenceRequestsListUser = observer(() => {
     const { t } = useTranslation();
+    const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { signal } = useRequestAbort();
     const [, setSearchParams] = useSearchParams();
+    const { loggedUser } = useAuth();
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = { ...absenceRequestsSearchStore.absenceRequestFilter, userId:22};
+            const filter = { ...absenceRequestsSearchStore.absenceRequestFilter, userId: loggedUser.id};
 
             const response = await absenceRequestsService.getPagedList(filter, signal);
 
@@ -38,7 +43,7 @@ export const AbsenceRequestsListUser = observer(() => {
         } finally {
             setLoading(false);
         }
-    }, [signal, t]);
+    }, [signal, loggedUser, t]);
 
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
@@ -102,44 +107,47 @@ export const AbsenceRequestsListUser = observer(() => {
         {
             name: t('ACTIONS'),
             cell: row => (
-                <div className="flex">
-                    <button
-                        //onClick={() => editRequestClick(row)}
-                        className="text-lg text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
-                    </button>
-                    <button
-                        //onClick={() => deleteRequestClick(row)}
-                        className="text-lg text-red-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                </div>
+                row.absenceRequestStatus === absenceRequestStatusConstant.pending && (
+                    <div className="flex">
+                        <button
+                            onClick={() => editRequestClick(row)}
+                            className="text-lg text-blue-500 hover:underline p-2">
+                            <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
+                        </button>
+                        <button
+                            onClick={() => deleteRequestClick(row)}
+                            className="text-lg text-red-500 hover:underline p-2">
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    </div>
+                )
             ),
         }
+        
     ];
 
-    // const addNewRequestClick = () => {
-    //     openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
-    // }
+    const addNewRequestClick = (userId) => {
+        openModal(<AbsenceRequestsAddUser userId={loggedUser.id} closeModal={closeModal} fetchData={fetchData} />);
+    }
 
-    // const editRequestClick = (absenceRequest) => {
-    //     openModal(<AbsenceRequestsEdit absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
-    // };
+    const editRequestClick = (absenceRequest) => {
+        openModal(<AbsenceRequestsEditUser absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
+    };
 
-    // const deleteRequestClick = (absenceRequest) => {
-    //     openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
-    // };
+    const deleteRequestClick = (absenceRequest) => {
+        openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
+    };
 
-    // const handleDelete = async (absenceRequestId) => {
-    //     try {
-    //         await absenceRequestsService.delete(absenceRequestId);
-    //         fetchData();
-    //         closeModal();
-    //         toast.success(t('DELETED'));
-    //     } catch (error) {
-    //         toast.error(t('FAILED_TO_DELETE'));
-    //     }
-    // }
+    const handleDelete = async (absenceRequestId) => {
+        try {
+            await absenceRequestsService.delete(absenceRequestId);
+            fetchData();
+            closeModal();
+            toast.success(t('DELETED'));
+        } catch (error) {
+            toast.error(t('FAILED_TO_DELETE'));
+        }
+    }
 
     const handlePageChange = (newPage) => {
         absenceRequestsSearchStore.setPage(newPage);
@@ -173,19 +181,18 @@ export const AbsenceRequestsListUser = observer(() => {
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
+            <div className="flex justify-end pb-2 justify-end">
+            <button
+                type="button"
+                className="btn-common h-10 md:max-w-[8rem] sm:max-w-[8rem] xs:max-w-full ss:max-w-full md:ml-auto"
+                onClick={addNewRequestClick}
+            >
+                {t('NEW_REQUEST')}
+            </button>
+        </div>
             <div className="flex flex-col gap-4 xs:flex-row">
                 <AbsenceRequestsSearchUser fetchData={fetchData} />
             </div>
-
-            {/* <div className="flex justify-end mt-4">
-                    <button
-                        type="button"
-                        className="btn-common h-10 ml-auto"
-                        onClick={addNewRequestClick}
-                    >
-                        {t('NEW_REQUEST')}
-                    </button>
-                    </div> */}
             <BaseModal />
 
             <div className="table max-w-full">
