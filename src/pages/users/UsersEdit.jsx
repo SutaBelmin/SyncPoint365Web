@@ -38,13 +38,13 @@ export const UsersEdit = () => {
     const updateUser = async (values) => {
         try {
             const formData = new FormData();
-            if (values.File) {
-                formData.append("File", values.File);
+            if (values.PhotoFile) {
+                formData.append("PhotoFile", values.PhotoFile);
                 formData.append("UserId", userId);
             }
             
 
-            if (values.File) {
+            if (values.PhotoFile) {
                 await usersService.uploadProfilePicture(formData);
             }
 
@@ -205,7 +205,7 @@ export const UsersEdit = () => {
                         address: user.address || '',
                         phone: user.phone || '',
                         role: roles.find(r => r.label.toLowerCase() === user.role.toLowerCase())?.value,
-                        File: null
+                        PhotoFile: null
                     }}
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
@@ -237,7 +237,7 @@ export const UsersEdit = () => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
                                             if (file) {
-                                                setFieldValue("File", file);
+                                                setFieldValue("PhotoFile", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -251,12 +251,12 @@ export const UsersEdit = () => {
 
                                     <input
                                         type="file"
-                                        id="File"
-                                        name="File"
+                                        id="PhotoFile"
+                                        name="PhotoFile"
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
-                                                setFieldValue("File", file);
+                                                setFieldValue("PhotoFile", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -265,7 +265,7 @@ export const UsersEdit = () => {
 
                                     <div className="flex justify-center items-center">
                                         <label
-                                            htmlFor="File"
+                                            htmlFor="PhotoFile"
                                             className="btn-save inline-flex items-center mt-4 px-4 py-2 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 sm:px-5 sm:py-3 lg:px-6 lg:py-2"
                                         >
                                             <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
