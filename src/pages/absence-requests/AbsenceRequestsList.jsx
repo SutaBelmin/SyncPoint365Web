@@ -133,11 +133,9 @@ export const AbsenceRequestsList = observer(() => {
     ];
 
     const changeStatus = (absenceRequest) => {
-        const { comment } = absenceRequest;
         if (absenceRequest.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
             openModal(<AbsenceRequestsStatusChange 
                 absenceRequest={absenceRequest}
-                comment={comment}
                 closeModal={closeModal} 
                 fetchData={fetchData}
                 isStatusLocked={true} 
@@ -145,7 +143,6 @@ export const AbsenceRequestsList = observer(() => {
         } else {
             openModal(<AbsenceRequestsStatusChange 
                 absenceRequest={absenceRequest}
-                comment={comment}
                 closeModal={closeModal} 
                 fetchData={fetchData}
             />);

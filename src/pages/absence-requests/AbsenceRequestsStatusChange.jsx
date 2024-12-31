@@ -10,7 +10,7 @@ import { absenceRequestStatusConstant } from "../../constants";
 import { format } from "date-fns";
 
 
-export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModal, fetchData, isStatusLocked }) => {
+export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchData, isStatusLocked }) => {
     const [statuses, setAbsenceRequestsStatuses] = useState([]);
     const { t } = useTranslation();
 
@@ -52,7 +52,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
 
 
     const initialValues = {
-        absenceRequestStatusId: absenceRequest.id,
+        absenceRequestId: absenceRequest.id,
         absenceRequestStatus: absenceRequest.status,
     }
 
@@ -116,7 +116,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, comment, closeModa
                                         {t('COMMENT')}:
                                     </label>
                                     <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none">
-                                        <span className="text-gray-700">{comment && comment.trim() ? comment : t('None')}</span>
+                                        <span className="text-gray-700">{absenceRequest.comment && absenceRequest.comment.trim() ? absenceRequest.comment : t('None')}</span>
                                     </div>
                                 </div>
 
