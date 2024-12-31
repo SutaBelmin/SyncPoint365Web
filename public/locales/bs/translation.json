@@ -154,5 +154,6 @@
     "NO_COMMENT": "Nema komentara",
     "PAGE_NOT_FOUND":"Stranica nije pronađena",
     "BACK_TO_HOME":"Nazad na početnu stranicu",
-    "PAGE_NOT_FOUND_MESSAGE":"Nismo uspjeli pronaći stranicu koju tražite."
+    "PAGE_NOT_FOUND_MESSAGE":"Nismo uspjeli pronaći stranicu koju tražite.",
+    "SELECT_YEAR": "Odaberi godinu"
 }

@@ -43,7 +43,6 @@ export const AbsenceRequestsSearchUser = ({ fetchData }) => {
 			const selectedYear = selectedOption.value;
 			const dateFrom = new Date(selectedYear, 0, 1);
 			const dateTo = new Date(selectedYear, 11, 31);
-			//setFieldValue("year", selectedOption);
 		};
 	}
 		useEffect(() => {
