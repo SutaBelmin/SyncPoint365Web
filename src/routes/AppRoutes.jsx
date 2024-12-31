@@ -1,8 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import { Route, Routes } from 'react-router-dom';
 import { MainLayout } from '../components/layout';
-
 import Home from '../pages/home';
 import { Login } from '../pages/login';
 import { UsersAdd, UsersEdit, UsersList } from '../pages/users';
@@ -13,7 +11,6 @@ import { AbsenceRequestsList } from '../pages/absence-requests';
 
 const AppRoutes = () => {
   return (
-    <Router>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<MainLayout />}>
@@ -29,7 +26,6 @@ const AppRoutes = () => {
           <Route path="/users/update/:userId" element={<UsersEdit />} />
         </Route>
       </Routes>
-    </Router>
   );
 };
 
