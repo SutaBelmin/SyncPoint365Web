@@ -38,13 +38,13 @@ export const AbsenceRequestsSearchUser = ({ fetchData }) => {
 		return years.map(year => ({ value: year, label: year.toString() }));
 	};
 
-	const handleYearChange = (selectedOption) => {
-		if (selectedOption) {
-			const selectedYear = selectedOption.value;
-			const dateFrom = new Date(selectedYear, 0, 1);
-			const dateTo = new Date(selectedYear, 11, 31);
-		};
-	}
+	// const handleYearChange = (selectedOption) => {
+	// 	if (selectedOption) {
+	// 		const selectedYear = selectedOption.value;
+	// 		const dateFrom = new Date(selectedYear, 0, 1);
+	// 		const dateTo = new Date(selectedYear, 11, 31);
+	// 	};
+	// }
 		useEffect(() => {
 			setSearchParams(absenceRequestsSearchStore.queryParams);
 		}, [setSearchParams]);
