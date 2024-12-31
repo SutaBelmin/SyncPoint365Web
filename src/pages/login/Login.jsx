@@ -1,28 +1,31 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-
 import { authService } from '../../services';
 import LanguageSwitcher from '../../components/localization';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useAuth } from '../../context/AuthProvider';
 
 const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const validationSchema = Yup.object({
     email: Yup.string().required(t('EMAIL_IS_REQUIRED')),
     password: Yup.string().required(t('PASSWORD_IS_REQUIRED'))
   });
 
+
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
-      await authService.login(values.email, values.password);
+      const response = await authService.login(values.email, values.password);
+      const { user, token } = response;
+      setUser(user, token);
       navigate('/home');
     } catch (error) {
       if (error.response && error.response.status === 401) {

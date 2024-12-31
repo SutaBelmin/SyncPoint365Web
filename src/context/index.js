@@ -1,2 +1,2 @@
 export { ModalProvider, useModal } from './ModalProvider';
-export { AuthProvider, useAuth } from './AuthProvider';
+export { AuthProvider } from './AuthProvider';

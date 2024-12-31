@@ -1,46 +1,29 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import PropTypes from 'prop-types';
-import { authService } from "../services";
+import { useState, createContext, useContext } from 'react';
+import { AuthStore } from '../stores/AuthStore';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
+export const useAuth = () => {
+    return useContext(AuthContext);
+}
 
-    const login = async (email, password) => {
-        const { user: loggedInUser, token } = await authService.login(email, password);
-        localStorage.setItem('user', JSON.stringify(loggedInUser));
-        setUser(loggedInUser);
-        return { loggedInUser, token };
+export const AuthProvider = ({ children }) => {
+    const authStore = new AuthStore();
+    const [loggedUser, setloggedUser] = useState(authStore.getUser());
+
+    const setUser = (user, token) => {
+        authStore.setUser(user, token);
+        setloggedUser(user);
     };
 
-    const logout = () => {
-        authService.logout();
-        localStorage.removeItem('user');
-        setUser(null);
-    }
+    const removeUser = () => {
+        authStore.removeUser();
+        setloggedUser(null);
+    };
 
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if(storedUser){
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
-
-    return(
-        <AuthContext.Provider value={{ user, login, logout }}>
+    return (
+        <AuthContext.Provider value={{ loggedUser, setUser, removeUser }}>
             {children}
         </AuthContext.Provider>
     );
-};
-
-AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
-};
-
-export const useAuth = () => {
-    return useContext(AuthContext);
 };
