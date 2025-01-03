@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { MainLayout } from '../components/layout';
 import Home from '../pages/home';
 import { Login } from '../pages/login';
@@ -28,6 +28,7 @@ const AppRoutes = () => {
             <Route path="/users/update/:userId" element={<UsersEdit />} />
           </Route>
         </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
   );
 };
