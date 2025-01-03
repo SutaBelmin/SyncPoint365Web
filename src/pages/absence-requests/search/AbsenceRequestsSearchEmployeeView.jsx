@@ -11,7 +11,7 @@ import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService } from '../../../services';
 import { localeConstant } from '../../../constants';
 
-export const AbsenceRequestsSearchUser = ({ fetchData }) => {
+export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 	const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { t, i18n } = useTranslation();

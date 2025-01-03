@@ -8,28 +8,34 @@ import { CountriesList } from '../pages/countries';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 import { CitiesList } from '../pages/cities';
 import { NotFound } from '../pages/errors';
-import PrivateRoutes from './PrivateRoutes';
-import { AbsenceRequestsList, AbsenceRequestsListUser } from '../pages/absence-requests';
+import { AbsenceRequestsList, AbsenceRequestsListEmployeeView } from '../pages/absence-requests';
+import { PrivateRoutes } from '../routes';
+import { useAuth } from '../context/AuthProvider';
+import { roleConstant } from '../constants';
 
-const AppRoutes = () => {
+export const AppRoutes = () => {
+  const { userRole } = useAuth();
+
   return (
-      <Routes>
-        <Route path="/" element={<Login />} />
-          <Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/users">
-              <Route index element={<UsersList />} />
-              <Route path="add" element={<UsersAdd />} />
-            </Route>
-            <Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
-            <Route path="/absence-requests" element={<AbsenceRequestsList />} />
-            <Route path="/absence-requests-user" element={<AbsenceRequestsListUser />} />
-            <Route path="/countries" element={<CountriesList />} />
-            <Route path="/cities" element={<CitiesList />} />
-            <Route path="/users/update/:userId" element={<UsersEdit />} />
-          </Route>
-        <Route path ="*" element={<NotFound />} />
-      </Routes>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/users">
+          <Route index element={<UsersList />} />
+          <Route path="add" element={<UsersAdd />} />
+        </Route>
+        <Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
+        <Route path="/absence-requests" element={<AbsenceRequestsList />} />
+        {userRole(roleConstant.employee) && (
+          <Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />
+        )}
+        <Route path="/countries" element={<CountriesList />} />
+        <Route path="/cities" element={<CitiesList />} />
+        <Route path="/users/update/:userId" element={<UsersEdit />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

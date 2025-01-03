@@ -1,2 +1,2 @@
 export { AbsenceRequestsSearch } from './AbsenceRequestsSearch';
-export { AbsenceRequestsSearchUser } from './AbsenceRequestsSearchUser';
+export { AbsenceRequestsSearchEmployeeView } from './AbsenceRequestsSearchEmployeeView';

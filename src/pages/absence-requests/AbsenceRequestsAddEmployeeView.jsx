@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 import { absenceRequestStatusConstant } from '../../constants';
 
 
-export const AbsenceRequestsAddUser = ({ userId, closeModal, fetchData }) => {
+export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }) => {
     const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
     const { t } = useTranslation();
     const { signal } = useRequestAbort();

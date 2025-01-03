@@ -42,8 +42,12 @@ export const AuthProvider = ({ children }) => {
         setloggedUser(null);
     };
 
+    const userRole = (role) => {
+        return loggedUser?.role === role;
+    };
+
     return (
-        <AuthContext.Provider value={{ loggedUser, setUser, removeUser }}>
+        <AuthContext.Provider value={{ loggedUser, setUser, removeUser, userRole }}>
             {children}
         </AuthContext.Provider>
     );

@@ -10,8 +10,8 @@ import { useRequestAbort } from "../../components/hooks";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
-import { AbsenceRequestsSearchUser } from "./search";
-import { AbsenceRequestsEditUser, AbsenceRequestsAddUser } from "../absence-requests";
+import { AbsenceRequestsSearchEmployeeView } from "./search";
+import { AbsenceRequestsAddEmployeeView, AbsenceRequestsEditEmployeeView } from "../absence-requests";
 import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
 import "./AbsenceRequestsList.css";
@@ -21,7 +21,7 @@ import { useModal } from "../../context";
 import debounce from "lodash.debounce";
 import { useAuth } from "../../context/AuthProvider";
 
-export const AbsenceRequestsListUser = observer(() => {
+export const AbsenceRequestsListEmployeeView = observer(() => {
     const { t } = useTranslation();
     const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
@@ -127,11 +127,11 @@ export const AbsenceRequestsListUser = observer(() => {
     ];
 
     const addNewRequestClick = (userId) => {
-        openModal(<AbsenceRequestsAddUser userId={loggedUser.id} closeModal={closeModal} fetchData={fetchData} />);
+        openModal(<AbsenceRequestsAddEmployeeView userId={loggedUser.id} closeModal={closeModal} fetchData={fetchData} />);
     }
 
     const editRequestClick = (absenceRequest) => {
-        openModal(<AbsenceRequestsEditUser absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
+        openModal(<AbsenceRequestsEditEmployeeView absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
     };
 
     const deleteRequestClick = (absenceRequest) => {
@@ -191,7 +191,7 @@ export const AbsenceRequestsListUser = observer(() => {
             </button>
         </div>
             <div className="flex flex-col gap-4 xs:flex-row">
-                <AbsenceRequestsSearchUser fetchData={fetchData} />
+                <AbsenceRequestsSearchEmployeeView fetchData={fetchData} />
             </div>
             <BaseModal />
 

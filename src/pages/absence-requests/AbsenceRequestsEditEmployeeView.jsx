@@ -10,7 +10,7 @@ import { absenceRequestsService, absenceRequestTypesService } from '../../servic
 import { useRequestAbort } from "../../components/hooks";
 import { format } from 'date-fns';
 
-export const AbsenceRequestsEditUser = ({ absenceRequest, closeModal, fetchData }) => {
+export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fetchData }) => {
     const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
     const { t } = useTranslation();
     const { signal } = useRequestAbort();

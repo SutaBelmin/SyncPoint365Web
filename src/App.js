@@ -1,5 +1,5 @@
 import './App.css';
-import AppRoutes from './routes/AppRoutes';
+import { AppRoutes } from './routes';
 import { ModalProvider } from './context/ModalProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'

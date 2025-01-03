@@ -3,12 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faCity, faEarthAmerica, faUser, faHome, faCalendarCheck, faCaretDown, faLocationCrosshairs, faCalendarDays, faCalendarPlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider';
+import { roleConstant } from '../../constants';
 
 const SideNavbar = ({ isCollapsed, onToggle }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [activeLink, setActiveLink] = useState('');
     const [openDropdown, setOpenDropdown] = useState(null);
+    const { userRole } = useAuth();
 
     const handleLinkClick = (e, path, isChild = false) => {
         e.preventDefault();
@@ -43,7 +46,6 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                     { icon: faUser, label: t('USERS'), link: '/users' },
                     { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types' },
                     { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests' },
-                    { icon: faCalendarPlus, label: t('ABSENCE_REQUESTS_EMPLOYEE'), link: '/absence-requests-user' }
                     ].map(({ icon, label, link }) => (
                         <li key={label}>
                             <a 
@@ -57,6 +59,20 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                             </a>
                         </li>
                     ))}
+                    { userRole(roleConstant.employee) && ( 
+                         <li>
+                         <a
+                             href="/absence-requests-user"
+                             onClick={(e) => handleLinkClick(e, '/absence-requests-user')}
+                             className={`flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 ${
+                                 activeLink === '/absence-requests-user' ? 'bg-gray-700' : ''
+                             }`}
+                         >
+                             <FontAwesomeIcon icon={faCalendarPlus} className="mr-3" />
+                             {t('ABSENCE_REQUESTS')}
+                         </a>
+                     </li>
+                 )}
                     <li>
                         <div>
                             <div 
