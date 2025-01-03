@@ -9,7 +9,7 @@ import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 import { CitiesList } from '../pages/cities';
 import { NotFound } from '../pages/errors';
 import { AbsenceRequestsList, AbsenceRequestsListEmployeeView } from '../pages/absence-requests';
-import { PrivateRoutes } from '../routes';
+import PrivateRoutes from '../routes/PrivateRoutes';
 import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
 
@@ -38,5 +38,3 @@ export const AppRoutes = () => {
     </Routes>
   );
 };
-
-export default AppRoutes;
