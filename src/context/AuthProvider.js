@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
             if (!token || !storedUser) {
                 authStore.removeUser();
                 setloggedUser(null);
-                navigate('/'); 
+                navigate('/', { replace: true });
             }
         };
 
