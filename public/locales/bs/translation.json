@@ -175,5 +175,7 @@
     "PROFILE_PICTURE": "Profilna slika.",
     "CHOOSE_PICTURE": "Odaberi sliku",
     "DRAG_AND_DROP":"Prevucite sliku",
-    "WRONG_EXTENSION":"Format slike nije podrzan!"
+    "WRONG_EXTENSION":"Format slike nije podrzan!",
+    "IMAGE_ERROR":"Greska prilikom brisanja slike!",
+    "IMAGE_NOT_FOUND": "Dodajte sliku da bi je izbrisali!"
 }

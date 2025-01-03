@@ -175,5 +175,7 @@
     "PROFILE_PICTURE": "Profile picture.",
     "CHOOSE_PICTURE": "Choose picture",
     "DRAG_AND_DROP":"Drag and drop",
-    "WRONG_EXTENSION":"Image format not supported!"
+    "WRONG_EXTENSION":"Image format not supported!",
+    "IMAGE_ERROR":"Error while trying to delete image!",
+    "IMAGE_NOT_FOUND": "Add picture to delete it!"
 }

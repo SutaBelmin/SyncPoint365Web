@@ -67,6 +67,19 @@ export const UsersEdit = () => {
         }
     }
 
+    const handleDeleteImage = async () => {
+        try {
+            await usersService.deleteUserImage(userId);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                toast.info(t('IMAGE_NOT_FOUND'));
+            } else {
+                toast.error(t('IMAGE_ERROR'));
+            }
+        }
+    };
+    
+
     const validationSchema = Yup.object({
         firstName: Yup.string().required(t('FIRST_NAME_IS_REQUIRED')),
         lastName: Yup.string().required(t('LAST_NAME_IS_REQUIRED')),
@@ -281,8 +294,15 @@ export const UsersEdit = () => {
                                             <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
                                             {t('CHOOSE_PICTURE')}
                                         </label>
-                                    </div>
 
+                                    </div>
+                                    <div className="flex justify-center items-center">
+                                        <button 
+                                         className="btn-save inline-flex items-center mt-4 px-4 py-2 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 sm:px-5 sm:py-3 lg:px-6 lg:py-2"
+                                        onClick={handleDeleteImage}>
+                                            Ukloni sliku
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 

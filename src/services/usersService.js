@@ -102,6 +102,11 @@ class UsersService extends BaseService {
             const imageUrl = URL.createObjectURL(response.data);
             return imageUrl;
     }
+
+    async deleteUserImage(userId) {
+        const response = await this.api.delete(`/users/delete-image?id=${userId}`);
+        return response.data;
+    }    
     
 }
 
