@@ -50,16 +50,14 @@ export const UsersEdit = () => {
             const formData = new FormData();
             if (values.PhotoFile) {
                 formData.append("PhotoFile", values.PhotoFile);
-                formData.append("UserId", userId);
             }
             
+            await usersService.update({ ...values, id: userId, PhotoFile: values.PhotoFile });
 
             if (values.PhotoFile) {
-                await usersService.uploadProfilePicture(formData);
+                setProfilePicture(URL.createObjectURL(values.PhotoFile));
             }
 
-
-            await usersService.update({ ...values, id: userId });
             toast.success(t('UPDATED'));
             navigate('/users');
         } catch (error) {
@@ -70,6 +68,7 @@ export const UsersEdit = () => {
     const handleDeleteImage = async () => {
         try {
             await usersService.deleteUserImage(userId);
+            setProfilePicture(null);
         } catch (error) {
             if (error.response && error.response.status === 404) {
                 toast.info(t('IMAGE_NOT_FOUND'));
@@ -137,6 +136,10 @@ export const UsersEdit = () => {
         try {
             const response = await usersService.getById(userId, signal);
             setUser(response.data);
+            console.log("rd", response.data)
+            const userImage = response.data.PhotoFile || defaultUserImage;
+            
+            setProfilePicture(userImage);
         } catch (error) {
             toast.error(t('ERROR_LOADING_USER'));
         }
@@ -181,22 +184,12 @@ export const UsersEdit = () => {
         }
     }, [signal, t]);
 
-    const fetchPicture = useCallback(async () => {
-        try {
-            const picture = await usersService.getProfilePicture(userId);
-            setProfilePicture(picture);
-        } catch (error) {
-            setProfilePicture(defaultUserImage);
-        }
-    }, [userId]);
-
     useEffect(() => {
         fetchUser();
         fetchCities();
         fetchRoles();
         fetchGenders();
-        fetchPicture();
-    }, [fetchUser, fetchCities, fetchGenders, fetchRoles, fetchPicture]);
+    }, [fetchUser, fetchCities, fetchGenders, fetchRoles]);
 
     const handleBack = () => {
         navigate('/users');
@@ -228,7 +221,7 @@ export const UsersEdit = () => {
                         address: user.address || '',
                         phone: user.phone || '',
                         role: roles.find(r => r.label.toLowerCase() === user.role.toLowerCase())?.value,
-                        PhotoFile: null
+                        PhotoFile: user.PhotoFile
                     }}
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
@@ -240,17 +233,11 @@ export const UsersEdit = () => {
                                 <div className="mb-4 mt-4">
                                     <div className="flex justify-center mb-4">
                                         <div className="w-[200px] h-[200px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
-                                            {profilePicture ? (
                                                 <img
                                                     src={profilePicture}
                                                     alt="Profile"
                                                     className="w-full h-full object-cover"
                                                 />
-                                            ) : (
-                                                <p className="w-full h-full flex items-center justify-center text-gray-500">
-                                                    {t('NO_PICTURE')}
-                                                </p>
-                                            )}
                                         </div>
                                     </div>
 

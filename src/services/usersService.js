@@ -71,9 +71,11 @@ class UsersService extends BaseService {
         return response;
     }
 
-    async update(userData, signal = null) {
+    async update(userData) {
         const response = await this.api.put(`/users`, userData, {
-            signal: signal
+            headers: {
+                'Content-Type': 'multipart/form-data' 
+            }
         });
         return response;
     }
