@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { MainLayout } from '../components/layout';
 import Home from '../pages/home';
 import { Login } from '../pages/login';
@@ -8,6 +8,7 @@ import { CountriesList } from '../pages/countries';
 import { AbsenceRequestTypesList } from '../pages/absence-request-types';
 import { CitiesList } from '../pages/cities';
 import { AbsenceRequestsList } from '../pages/absence-requests';
+import { NotFound } from '../pages/errors';
 import PrivateRoutes from './PrivateRoutes';
 
 const AppRoutes = () => {
@@ -28,7 +29,7 @@ const AppRoutes = () => {
             <Route path="/users/update/:userId" element={<UsersEdit />} />
           </Route>
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path ="*" element={<NotFound />} />
       </Routes>
   );
 };
