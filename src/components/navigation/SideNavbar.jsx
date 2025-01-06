@@ -11,7 +11,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
     const navigate = useNavigate();
     const [activeLink, setActiveLink] = useState('');
     const [openDropdown, setOpenDropdown] = useState(null);
-    const { userRole } = useAuth();
+    const { userHasRole } = useAuth();
 
     const handleLinkClick = (e, path, isChild = false) => {
         e.preventDefault();
@@ -59,7 +59,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                             </a>
                         </li>
                     ))}
-                    { userRole(roleConstant.employee) && ( 
+                    { userHasRole(roleConstant.employee) && ( 
                          <li>
                          <a
                              href="/absence-requests-user"

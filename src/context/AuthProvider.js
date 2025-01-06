@@ -42,12 +42,12 @@ export const AuthProvider = ({ children }) => {
         setloggedUser(null);
     };
 
-    const userRole = (role) => {
+    const userHasRole = (role) => {
         return loggedUser?.role === role;
     };
 
     return (
-        <AuthContext.Provider value={{ loggedUser, setUser, removeUser, userRole }}>
+        <AuthContext.Provider value={{ loggedUser, setUser, removeUser, userHasRole }}>
             {children}
         </AuthContext.Provider>
     );

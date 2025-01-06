@@ -13,9 +13,8 @@ import PrivateRoutes from '../routes/PrivateRoutes';
 import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
 
-export const AppRoutes = () => {
-  const { userRole } = useAuth();
-
+const AppRoutes = () => {
+  const { userHasRole } = useAuth();
   return (
     <Routes>
       <Route path="/" element={<Login />} />
@@ -27,7 +26,7 @@ export const AppRoutes = () => {
         </Route>
         <Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
         <Route path="/absence-requests" element={<AbsenceRequestsList />} />
-        {userRole(roleConstant.employee) && (
+        {userHasRole(roleConstant.employee) && (
           <Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />
         )}
         <Route path="/countries" element={<CountriesList />} />
@@ -38,3 +37,5 @@ export const AppRoutes = () => {
     </Routes>
   );
 };
+
+export default AppRoutes;

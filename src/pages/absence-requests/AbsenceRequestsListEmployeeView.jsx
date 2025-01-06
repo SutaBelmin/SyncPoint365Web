@@ -66,12 +66,6 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
 
     const columns = [
         {
-            name: t('USER'),
-            selector: (row) => `${row.user?.firstName || ''} ${row.user?.lastName || ''}`.trim(),
-            sortable: true,
-            sortField: 'user.lastName',
-        },
-        {
             name: t('DATE_FROM'),
             selector: (row) => row.dateFrom ? format(new Date(row.dateFrom), t('DATE_FORMAT')) : '',
             sortable: true,
