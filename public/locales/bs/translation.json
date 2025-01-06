@@ -142,5 +142,14 @@
     "SELECT_STATUS": "Odaberi status",
     "STATUS": "Status",
     "LOCATION": "Lokacije",
-    "COUNTRY_REQUIRED": "Obavezna država."
+    "COUNTRY_REQUIRED": "Obavezna država.",
+    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Promijeni status zahtjeva:",
+    "ABSENCE_REQUEST": "Zahtjev za odsutstvo",
+    "STATUS_SUCCESSFULLY_CHANGED": "Status uspješno promijenjen.", 
+    "CONFIRM": "Potvrdi",
+    "ABSENCE_REQUEST_TYPE": "Tip",
+    "APPLICANT": "Podnositelj",
+    "DATE_FROM_TO": "Datum od - do",
+    "COMMENT": "Komentar",
+    "NO_COMMENT": "Nema komentara"
 }

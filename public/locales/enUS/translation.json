@@ -142,5 +142,14 @@
     "SELECT_STATUS": "Select Status",
     "STATUS": "Status",
     "LOCATION": "Location",
-    "COUNTRY_REQUIRED": "Country is required."
+    "COUNTRY_REQUIRED": "Country is required.",
+    "CHANGE_ABSENCE_REQUEST_STATUS_TO": "Change request status to:",
+    "ABSENCE_REQUEST": "Absence Request",
+    "STATUS_SUCCESSFULLY_CHANGED": "Status successfully changed.", 
+    "CONFIRM": "Confirm",
+    "ABSENCE_REQUEST_TYPE": "Type",
+    "APPLICANT": "Applicant",
+    "DATE_FROM_TO": "Date from - to",
+    "COMMENT": "Comment",
+    "NO_COMMENT": "No comment"
 }

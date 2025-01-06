@@ -43,3 +43,8 @@
     -webkit-appearance: none;
     -moz-appearance: none; 
 }
+.ReactModal__Content {
+  max-width: 350px; 
+  padding: 16px; 
+  z-index: 50;
+}
