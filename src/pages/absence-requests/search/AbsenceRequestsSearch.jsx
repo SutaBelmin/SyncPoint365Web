@@ -216,14 +216,14 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 					<div className='flex gap-4 '>
 						<button
 							type="submit"
-							className="btn-new h-10"
+							className="btn-new h-10 ss:w-full"
 						>
 							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
 							onClick={() => handleClear(setFieldValue)}
-							className="btn-cancel h-10"
+							className="btn-cancel h-10 ss:w-full"
 						>
 							{t("CLEAR")}
 						</button>

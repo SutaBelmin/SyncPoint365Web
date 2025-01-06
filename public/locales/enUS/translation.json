@@ -169,5 +169,6 @@
     "SELECT_DATE_TO": "Select date to",
     "SELECT_DATE_RETURN": "Select date of return",
     "COMMENT_FIELD": "Comment field",
-    "NEW_ABSENCE_REQUEST": "Novi zahtjev"
+    "NEW_ABSENCE_REQUEST": "New Request",
+    "ADD_NEW_REQUEST": "Add New Request"
 }

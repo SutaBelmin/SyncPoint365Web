@@ -169,7 +169,8 @@
     "SELECT_DATE_TO": "Odaberi datum do",
     "SELECT_DATE_RETURN": "Odaberi datum povratka",
     "COMMENT_FIELD": "Dodaj komentar",
-    "NEW_ABSENCE_REQUEST": "Novi zahtjev za odsustvo"
+    "NEW_ABSENCE_REQUEST": "Novi zahtjev za odsustvo",
+    "ADD_NEW_REQUEST": "Dodaj zahtjev"
 
 
 }

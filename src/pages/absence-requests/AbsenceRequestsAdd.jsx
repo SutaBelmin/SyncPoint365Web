@@ -85,7 +85,7 @@ export const AbsenceRequestsAdd = ({ closeModal, fetchData }) => {
                     <div className="mb-4">
                         <div className="flex space-x-4 mb-3">
                             <div className="flex flex-col w-1/2">
-                                <label className="text-sm font-medium text-gray-700 mb-1">
+                                <label className="text-sm font-medium text-gray-700 mb-1" >
                                     Date From
                                 </label>
                                 <DatePicker

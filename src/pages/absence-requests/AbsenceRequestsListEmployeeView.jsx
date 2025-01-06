@@ -32,7 +32,7 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = { ...absenceRequestsSearchStore.absenceRequestFilter, userId: loggedUser.id};
+            const filter = { ...absenceRequestsSearchStore.absenceRequestFilter, userId: loggedUser.id };
 
             const response = await absenceRequestsService.getPagedList(filter, signal);
 
@@ -123,10 +123,10 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
                 )
             ),
         }
-        
+
     ];
 
-    const addNewRequestClick = (userId) => {
+    const addNewRequestClick = () => {
         openModal(<AbsenceRequestsAddEmployeeView userId={loggedUser.id} closeModal={closeModal} fetchData={fetchData} />);
     }
 
@@ -160,9 +160,9 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
     };
 
     const handleSort = async (column, direction) => {
-        const field = column.sortField || null; 
+        const field = column.sortField || null;
         let orderBy = null;
-    
+
         if (field) {
             if (field === "user.lastName") {
                 orderBy = `${field}|${direction}, user.firstName|${direction}`;
@@ -173,23 +173,27 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
         } else {
             absenceRequestsSearchStore.setOrderBy(null);
         }
-    
+
         setSearchParams(absenceRequestsSearchStore.queryParams);
     };
-    
+
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
-            <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
-            <div className="flex justify-end pb-2 justify-end">
-            <button
-                type="button"
-                className="btn-common h-10 md:max-w-[8rem] sm:max-w-[8rem] xs:max-w-full ss:max-w-full md:ml-auto"
-                onClick={addNewRequestClick}
-            >
-                {t('NEW_REQUEST')}
-            </button>
-        </div>
+            <div className="flex flex-col xs:flex-row justify-between">
+                <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
+               
+                <div className="flex justify-end mt-4 pb-4 pt-14 md:pt-14 sm:pt-14 xs:pt-14 ss:pt-0">
+                    <button
+                        type="button"
+                        className="btn-common h-10 md:max-w-[9rem] sm:max-w-[9rem] xs:max-w-full ss:max-w-full md:ml-auto"
+                        onClick={addNewRequestClick}
+                    >
+                        {t('ADD_NEW_REQUEST')}
+                    </button>
+
+                </div>
+            </div>
             <div className="flex flex-col gap-4 xs:flex-row">
                 <AbsenceRequestsSearchEmployeeView fetchData={fetchData} />
             </div>

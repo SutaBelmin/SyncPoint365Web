@@ -112,7 +112,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 			onSubmit={handleSearch}
 		>
 			{({ setFieldValue, values }) => (
-				<Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
+				<Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
 					<Select
 						name="absenceRequestTypeId"
 						id="absenceRequestTypeId"
@@ -135,17 +135,17 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 						isClearable
 						isSearchable
 					/>
-					<div className='flex gap-4 şm:w-full'>
+					<div className='flex gap-4 xs:w-full'>
 						<button
 							type="submit"
-							className="btn-new h-10"
+							className="btn-new h-10 ss:w-full"
 						>
 							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
 							onClick={() => handleClear(setFieldValue)}
-							className="btn-cancel h-10"
+							className="btn-cancel h-10 ss:w-full"
 						>
 							{t("CLEAR")}
 						</button>
