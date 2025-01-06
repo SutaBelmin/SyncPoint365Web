@@ -173,7 +173,7 @@ export const UsersAdd = () => {
                         roleId: null,
                         password: '',
                         passwordConfirm: '',
-                        PhotoFile: null
+                        ImagePath: null
                     }}
                     validationSchema={validationSchema}
                     onSubmit={addUser}
@@ -198,7 +198,7 @@ export const UsersAdd = () => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
                                             if (file) {
-                                                setFieldValue("PhotoFile", file);
+                                                setFieldValue("ImagePath", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -212,12 +212,12 @@ export const UsersAdd = () => {
 
                                     <input
                                         type="file"
-                                        id="PhotoFile"
-                                        name="PhotoFile"
+                                        id="ImagePath"
+                                        name="ImagePath"
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
-                                                setFieldValue("PhotoFile", file);
+                                                setFieldValue("ImagePath", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -226,7 +226,7 @@ export const UsersAdd = () => {
 
                                     <div className="flex justify-center items-center">
                                         <label
-                                            htmlFor="PhotoFile"
+                                            htmlFor="ImagePath"
                                             className="btn-save inline-flex items-center mt-4 px-4 py-2 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 sm:px-5 sm:py-3 lg:px-6 lg:py-2"
                                         >
                                             <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />

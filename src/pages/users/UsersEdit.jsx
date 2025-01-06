@@ -38,24 +38,24 @@ export const UsersEdit = () => {
 
     const updateUser = async (values) => {
         try {
-            if(values.PhotoFile) {
-                const fileExtension = values.PhotoFile.name.substring(values.PhotoFile.name.lastIndexOf('.')).toLowerCase();
+            if (values.ImagePath) {
+                const fileExtension = values.ImagePath.name.substring(values.ImagePath.name.lastIndexOf('.')).toLowerCase();
 
-                if(!allowedExtensions.includes(fileExtension)){
+                if (!allowedExtensions.includes(fileExtension)) {
                     toast.error(t('WRONG_EXTENSION'));
                     return;
                 }
             }
 
             const formData = new FormData();
-            if (values.PhotoFile) {
-                formData.append("PhotoFile", values.PhotoFile);
+            if (values.ImagePath) {
+                formData.append("ImagePath", values.ImagePath);
             }
-            
-            await usersService.update({ ...values, id: userId, PhotoFile: values.PhotoFile });
 
-            if (values.PhotoFile) {
-                setProfilePicture(URL.createObjectURL(values.PhotoFile));
+            await usersService.update({ ...values, id: userId, ImagePath: values.ImagePath });
+
+            if (values.ImagePath) {
+                setProfilePicture(URL.createObjectURL(values.ImagePath));
             }
 
             toast.success(t('UPDATED'));
@@ -77,7 +77,7 @@ export const UsersEdit = () => {
             }
         }
     };
-    
+
 
     const validationSchema = Yup.object({
         firstName: Yup.string().required(t('FIRST_NAME_IS_REQUIRED')),
@@ -136,14 +136,17 @@ export const UsersEdit = () => {
         try {
             const response = await usersService.getById(userId, signal);
             setUser(response.data);
-            console.log("rd", response.data)
-            const userImage = response.data.PhotoFile || defaultUserImage;
-            
-            setProfilePicture(userImage);
+
+            const userImage = response.data.imagePath 
+            ? `data:image/jpeg;base64,${response.data.imagePath}`
+            : defaultUserImage;
+          setProfilePicture(userImage);
+          
         } catch (error) {
             toast.error(t('ERROR_LOADING_USER'));
         }
     }, [userId, signal, t]);
+
 
     const fetchCities = useCallback(async () => {
         try {
@@ -221,7 +224,7 @@ export const UsersEdit = () => {
                         address: user.address || '',
                         phone: user.phone || '',
                         role: roles.find(r => r.label.toLowerCase() === user.role.toLowerCase())?.value,
-                        PhotoFile: user.PhotoFile
+                        ImagePath: user.ImagePath
                     }}
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
@@ -233,11 +236,11 @@ export const UsersEdit = () => {
                                 <div className="mb-4 mt-4">
                                     <div className="flex justify-center mb-4">
                                         <div className="w-[200px] h-[200px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
-                                                <img
-                                                    src={profilePicture}
-                                                    alt="Profile"
-                                                    className="w-full h-full object-cover"
-                                                />
+                                            <img
+                                                src={profilePicture}
+                                                alt="Profile"
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
                                     </div>
 
@@ -247,7 +250,7 @@ export const UsersEdit = () => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
                                             if (file) {
-                                                setFieldValue("PhotoFile", file);
+                                                setFieldValue("ImagePath", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -261,12 +264,12 @@ export const UsersEdit = () => {
 
                                     <input
                                         type="file"
-                                        id="PhotoFile"
-                                        name="PhotoFile"
+                                        id="ImagePath"
+                                        name="ImagePath"
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
-                                                setFieldValue("PhotoFile", file);
+                                                setFieldValue("ImagePath", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -275,7 +278,7 @@ export const UsersEdit = () => {
 
                                     <div className="flex justify-center items-center">
                                         <label
-                                            htmlFor="PhotoFile"
+                                            htmlFor="ImagePath"
                                             className="btn-save inline-flex items-center mt-4 px-4 py-2 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 sm:px-5 sm:py-3 lg:px-6 lg:py-2"
                                         >
                                             <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
@@ -284,9 +287,9 @@ export const UsersEdit = () => {
 
                                     </div>
                                     <div className="flex justify-center items-center">
-                                        <button 
-                                         className="btn-save inline-flex items-center mt-4 px-4 py-2 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 sm:px-5 sm:py-3 lg:px-6 lg:py-2"
-                                        onClick={handleDeleteImage}>
+                                        <button
+                                            className="btn-save inline-flex items-center mt-4 px-4 py-2 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 sm:px-5 sm:py-3 lg:px-6 lg:py-2"
+                                            onClick={handleDeleteImage}>
                                             Ukloni sliku
                                         </button>
                                     </div>

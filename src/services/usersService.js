@@ -69,7 +69,7 @@ class UsersService extends BaseService {
             signal: signal
         })
         return response;
-    }
+    }   
 
     async update(userData) {
         const response = await this.api.put(`/users`, userData, {
@@ -86,24 +86,6 @@ class UsersService extends BaseService {
         });
         return response.data;
     }    
-
-    async uploadProfilePicture(formData){
-        const response = await this.api.post('/users/upload-profile-picture', formData, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        });
-        return response;
-    }
-
-    async getProfilePicture(userId){
-            const response = await this.api.get(`/users/get-profile-picture`, {
-                params: {userId},
-                responseType: 'blob'
-            });
-            const imageUrl = URL.createObjectURL(response.data);
-            return imageUrl;
-    }
 
     async deleteUserImage(userId) {
         const response = await this.api.delete(`/users/delete-image?id=${userId}`);
