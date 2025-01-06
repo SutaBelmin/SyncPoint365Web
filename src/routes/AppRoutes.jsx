@@ -14,28 +14,30 @@ import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
 
 const AppRoutes = () => {
-  const { userHasRole } = useAuth();
-  return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
-        <Route path="/home" element={<Home />} />
-        <Route path="/users">
-          <Route index element={<UsersList />} />
-          <Route path="add" element={<UsersAdd />} />
-        </Route>
-        <Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
-        <Route path="/absence-requests" element={<AbsenceRequestsList />} />
-        {userHasRole(roleConstant.employee) && (
-          <Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />
-        )}
-        <Route path="/countries" element={<CountriesList />} />
-        <Route path="/cities" element={<CitiesList />} />
-        <Route path="/users/update/:userId" element={<UsersEdit />} />
-      </Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
+	const { userHasRole } = useAuth();
+	return (
+		<Routes>
+			<Route path="/" element={<Login />} />
+			<Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
+				<Route path="/home" element={<Home />} />
+				<Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />
+				{!userHasRole(roleConstant.employee) && (
+					<>
+						<Route path="/users">
+							<Route index element={<UsersList />} />
+							<Route path="add" element={<UsersAdd />} />
+						</Route>
+						<Route path="/absence-request-types" element={<AbsenceRequestTypesList />} />
+						<Route path="/absence-requests" element={<AbsenceRequestsList />} />
+						<Route path="/countries" element={<CountriesList />} />
+						<Route path="/cities" element={<CitiesList />} />
+						<Route path="/users/update/:userId" element={<UsersEdit />} />
+					</>
+				)}
+			</Route>
+			<Route path="*" element={<NotFound />} />
+		</Routes>
+	);
 };
 
 export default AppRoutes;

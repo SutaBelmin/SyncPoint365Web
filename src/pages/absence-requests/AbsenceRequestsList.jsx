@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faHourglass, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faHourglass } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
@@ -114,7 +114,7 @@ export const AbsenceRequestsList = observer(() => {
                     <button
                         //onClick={() => deleteRequestClick(row)}
                         className="text-lg text-red-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faTrash} />
+                        {/* <FontAwesomeIcon icon={faTrash} /> */}
                     </button>
                     <button
                         onClick={() => changeStatus(row)}
