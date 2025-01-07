@@ -177,5 +177,8 @@
     "DRAG_AND_DROP":"Prevucite sliku",
     "WRONG_EXTENSION":"Format slike nije podrzan!",
     "IMAGE_ERROR":"Greska prilikom brisanja slike!",
-    "IMAGE_NOT_FOUND": "Dodajte sliku da bi je izbrisali!"
+    "IMAGE_NOT_FOUND": "Dodajte sliku da bi je izbrisali!",
+    "SYSTEM_DATA": "Sistemski podaci",
+    "DELETE_PICTURE":"Ukloni sliku",
+    "PERSONAL_INFO":"Lični podaci"
 }

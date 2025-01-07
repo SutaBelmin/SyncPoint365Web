@@ -6,8 +6,7 @@ import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-import { FaCalendarAlt } from "react-icons/fa";
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaUpload } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -17,8 +16,6 @@ import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
 import { genderConstant, localeConstant, roleConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import defaultUserImage from '../../assets/images/defaultUser.PNG';
 
 export const UsersAdd = () => {
@@ -139,6 +136,18 @@ export const UsersAdd = () => {
         }
     }, [signal, t]);
 
+    const handleDeleteImage = async () => {
+        try {
+            setProfilePicture(null);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                toast.info(t('IMAGE_NOT_FOUND'));
+            } else {
+                toast.error(t('IMAGE_ERROR'));
+            }
+        }
+    };
+
     useEffect(() => {
         fetchCities();
         fetchRoles();
@@ -179,9 +188,9 @@ export const UsersAdd = () => {
                     onSubmit={addUser}
                 >
                     {({ setFieldValue, values }) => (
-                        <Form className="w-full flex mt-16 flex-col md:flex-row h-full">
-                            <div className="w-full md:w-1/4 pl-0 md:pl-4 bg-white rounded-xl mr-4 mb-5 items-center md:items-start">
-                                <div className="mb-4 mt-4">
+                        <Form className="w-full flex flex-col md:flex-row h-full">
+                            <div className="w-full md:w-1/4 pl-0 md:pl-4 bg-white rounded-xl mr-4 mb-0 py-10 flex flex-col items-center pr-4">
+                                <div className="mb-4 mt-12 xl:w-4/5">
                                     <div className="flex justify-center mb-4">
                                         <div className="w-[200px] h-[200px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
                                             <img
@@ -193,7 +202,7 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div
-                                        className="w-full sm:w-4/5 md:w-2/3 lg:w-1/2 xl:w-1/3 h-20 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
+                                        className="w-full sm:w-2/5 md:w-2/3 lg:w-1/2 xl:w-full h-52 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
                                         onDrop={(e) => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
@@ -224,229 +233,242 @@ export const UsersAdd = () => {
                                         className="mt-2 hidden"
                                     />
 
-                                    <div className="flex justify-center items-center">
-                                        <label
-                                            htmlFor="ImagePath"
-                                            className="btn-save inline-flex items-center mt-4 px-4 py-2 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 sm:px-5 sm:py-3 lg:px-6 lg:py-2"
-                                        >
-                                            <FontAwesomeIcon icon={faUpload} className="h-5 w-5 mr-2" />
-                                            {t('CHOOSE_PICTURE')}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                        <div className="ml-5 pr-7 md:pr-30 bg-white p-3 md:w-2/3 pl-0 md:pl-4 bg-white rounded-xl">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('FIRST_NAME')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="firstName"
-                                    name="firstName"
-                                    placeholder={t('FIRST_NAME')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
-                            </div>
-                            
-
-                            <div className="mb-4">
-                                <div className='flex items-center space-x-2'>
-                                    <label htmlFor="birthDate" className="text-sm font-medium text-gray-700">
-                                        {t('BIRTH_DATE')}
-                                    </label>
-                                    <FaCalendarAlt className="text-gray-400" />
-                                    <span className='text-red-500'>*</span>
-                                </div>
-
-                                <DatePicker
-                                    id="birthDate"
-                                    name="birthDate"
-                                    selected={values.birthDate ? new Date(values.birthDate) : null}
-                                    onChange={(date) => {
-                                        const formattedDate = format(new Date(date), 'yyyy-MM-dd');
-                                        setFieldValue('birthDate', formattedDate);
-                                    }}
-                                    dateFormat={t('DATE_FORMAT')}
-                                    placeholderText={t('SELECT_BIRTH_DATE')}
-                                    showYearDropdown
-                                    maxDate={new Date()}
-                                    yearDropdownItemNumber={100}
-                                    scrollableYearDropdown
-                                    onKeyDown={(e) => e.preventDefault()}
-                                    locale={i18n.language}
-                                    autoComplete='off'
-                                />
-                                <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('LAST_NAME')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="lastName"
-                                    name="lastName"
-                                    placeholder={t('LAST_NAME')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('EMAIL')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="email"
-                                    name="email"
-                                    placeholder={t('EMAIL')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    onChange={async (e) => {
-                                        setFieldValue('email', e.target.value);
-                                    }}
-                                    autoComplete='off'
-                                />
-                                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('ADDRESS')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="text"
-                                    id="address"
-                                    name="address"
-                                    placeholder={t('ADDRESS')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4 relative">
-                                <div className="flex items-center">
-                                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                        {t('PASSWORD')} <span className='text-red-500'>*</span>
-                                    </label>
-                                    <div className="ml-2 relative group">
-                                        <i className="fas fa-info-circle text-gray-500 hover:text-indigo-500 cursor-pointer"></i>
-                                        <div className="hidden absolute top-7 left-0 w-max bg-gray-700 text-white text-xs rounded-md p-2 shadow-md group-hover:block">
-                                            <p dangerouslySetInnerHTML={{ __html: t('PASSWORD_RULES').replace(/\n/g, '<br />') }} />
+                                    <div className="flex justify-center items-center space-x-2 mt-2 h-14">
+                                        <div className="flex justify-center items-center">
+                                            <label
+                                                htmlFor="ImagePath"
+                                                className="btn-save inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 text-center"
+                                            >
+                                                <FaUpload className="mr-1"></FaUpload> 
+                                                {t('CHOOSE_PICTURE')}
+                                            </label>
+                                        </div>
+                                        <div className="flex justify-center items-center">
+                                            <button
+                                                className="btn-cancel inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer text-white text-center"
+                                                onClick={ handleDeleteImage }
+                                                disabled={!profilePicture}
+                                                >
+                                                {t('DELETE_PICTURE')}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <Field
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    placeholder={t('PASSWORD')}
-                                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
                             </div>
 
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('CITY')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Select
-                                    id="cityId"
-                                    name="cityId"
-                                    onChange={(option) => setFieldValue('cityId', option ? option.value : null)}
-                                    options={cities}
-                                    placeholder={t('SELECT_A_CITY')}
-                                    isClearable
-                                    isSearchable
-                                    className='input-select-border mt-1'
-                                />
-                                <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('PASSWORD_CONFIRM')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Field
-                                    type="password"
-                                    id="passwordConfirm"
-                                    name="passwordConfirm"
-                                    placeholder={t('PASSWORD_CONFIRM')}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <ErrorMessage name="passwordConfirm" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('GENDER')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Select
-                                    id="gender"
-                                    name="gender"
-                                    onChange={(option) => setFieldValue('gender', option ? option.value : null)}
-                                    options={genders}
-                                    placeholder={t('SELECT_A_GENDER')}
-                                    isClearable
-                                    isSearchable
-                                    className='input-select-border mt-1'
-                                />
-                                <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('ROLE')} <span className='text-red-500'>*</span>
-                                </label>
-                                <Select
-                                    id="roleId"
-                                    name="roleId"
-                                    onChange={(option) => setFieldValue('roleId', option ? option.value : null)}
-                                    options={roles}
-                                    placeholder={t('SELECT_ROLE')}
-                                    isClearable
-                                    isSearchable
-                                    className='input-select-border mt-1'
-                                />
-                                <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                    {t('PHONE')} <span className='text-red-500'>*</span>
-                                </label>
-                                <PhoneInput
-                                    inputProps={{
-                                        name: 'phone',
-                                        id: 'phone',
-                                        className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500',
-                                    }}
-                                    country={'ba'}
-                                    value={values.phone}
-                                    onChange={(phone) => setFieldValue('phone', phone)}
-                                    countryCodeEditable={false}
-                                    international
-                                />
-                                <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
-                            </div>
-
-                            <div className="mb-4 flex">
-                                        <button
-                                            type="submit"
-                                            className="btn-save font-medium text-sm w-32 h-10 rounded-md ml-auto transition mt-7"
-                                        >
-                                            {t('SAVE')}
-                                        </button>
+                            <div className="ml-5 pr-7 md:pr-30 bg-white p-3 md:w-2/3 pl-0 md:pl-4 bg-white rounded-xl">
+                            <h2 className="text-l font-bold col-span-2 mb-2">{t('PERSONAL_INFO')}</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div className="mb-4">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('FIRST_NAME')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Field
+                                            type="text"
+                                            id="firstName"
+                                            name="firstName"
+                                            placeholder={t('FIRST_NAME')}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+                                        <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
                                     </div>
+
+                                    <div className="mb-4 mt-1">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('PHONE')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <PhoneInput
+                                            inputProps={{
+                                                name: 'phone',
+                                                id: 'phone',
+                                                className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500',
+                                            }}
+                                            country={'ba'}
+                                            value={values.phone}
+                                            onChange={(phone) => setFieldValue('phone', phone)}
+                                            countryCodeEditable={false}
+                                            international
+                                        />
+                                        <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('LAST_NAME')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Field
+                                            type="text"
+                                            id="lastName"
+                                            name="lastName"
+                                            placeholder={t('LAST_NAME')}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+                                        <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+
+                                    <div className="mb-4">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('EMAIL')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Field
+                                            type="text"
+                                            id="email"
+                                            name="email"
+                                            placeholder={t('EMAIL')}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            onChange={async (e) => {
+                                                setFieldValue('email', e.target.value);
+                                            }}
+                                            autoComplete='off'
+                                        />
+                                        <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <div className='flex items-center space-x-2'>
+                                            <label htmlFor="birthDate" className="text-sm font-medium text-gray-700">
+                                                {t('BIRTH_DATE')}
+                                            </label>
+                                            <span className='text-red-500'>*</span>
+                                        </div>
+
+                                        <DatePicker
+                                            id="birthDate"
+                                            name="birthDate"
+                                            selected={values.birthDate ? new Date(values.birthDate) : null}
+                                            onChange={(date) => {
+                                                const formattedDate = format(new Date(date), 'yyyy-MM-dd');
+                                                setFieldValue('birthDate', formattedDate);
+                                            }}
+                                            dateFormat={t('DATE_FORMAT')}
+                                            placeholderText={t('SELECT_BIRTH_DATE')}
+                                            showYearDropdown
+                                            maxDate={new Date()}
+                                            yearDropdownItemNumber={100}
+                                            scrollableYearDropdown
+                                            onKeyDown={(e) => e.preventDefault()}
+                                            locale={i18n.language}
+                                            autoComplete='off'
+                                        />
+                                        <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('ADDRESS')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Field
+                                            type="text"
+                                            id="address"
+                                            name="address"
+                                            placeholder={t('ADDRESS')}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+                                        <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+
+                                    <div className="mb-4">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('GENDER')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Select
+                                            id="gender"
+                                            name="gender"
+                                            onChange={(option) => setFieldValue('gender', option ? option.value : null)}
+                                            options={genders}
+                                            placeholder={t('SELECT_A_GENDER')}
+                                            isClearable
+                                            isSearchable
+                                            className='input-select-border mt-1'
+                                        />
+                                        <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('CITY')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Select
+                                            id="cityId"
+                                            name="cityId"
+                                            onChange={(option) => setFieldValue('cityId', option ? option.value : null)}
+                                            options={cities}
+                                            placeholder={t('SELECT_A_CITY')}
+                                            isClearable
+                                            isSearchable
+                                            className='input-select-border mt-1'
+                                        />
+                                        <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+
+                                    <h2 className="text-l font-bold col-span-2">{t('SYSTEM_DATA')}</h2>
+
+                                    <div className="w-1/2 col-span-2">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('ROLE')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Select
+                                            id="roleId"
+                                            name="roleId"
+                                            onChange={(option) => setFieldValue('roleId', option ? option.value : null)}
+                                            options={roles}
+                                            placeholder={t('SELECT_ROLE')}
+                                            isClearable
+                                            isSearchable
+                                            className='input-select-border mt-1'
+                                        />
+                                        <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+                                    <div className="w-full col-span-1 mt-1">
+                                        <div className="flex items-center">
+                                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                                {t('PASSWORD')} <span className='text-red-500'>*</span>
+                                            </label>
+                                            <div className="ml-2 relative group">
+                                                <i className="fas fa-info-circle text-gray-500 hover:text-indigo-500 cursor-pointer"></i>
+                                                <div className="hidden absolute top-7 left-0 w-max bg-gray-700 text-white text-xs rounded-md p-2 shadow-md group-hover:block">
+                                                    <p dangerouslySetInnerHTML={{ __html: t('PASSWORD_RULES').replace(/\n/g, '<br />') }} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Field
+                                            type="password"
+                                            id="password"
+                                            name="password"
+                                            placeholder={t('PASSWORD')}
+                                            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+                                        <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+                                    <div className="w-1/2 col-span-2">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                            {t('PASSWORD_CONFIRM')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Field
+                                            type="password"
+                                            id="passwordConfirm"
+                                            name="passwordConfirm"
+                                            placeholder={t('PASSWORD_CONFIRM')}
+                                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        />
+                                        <ErrorMessage name="passwordConfirm" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
+                                </div>
+                                <div className="flex justify-end mt-4">
+                                    <button
+                                        type="submit"
+                                        className="btn-save font-medium text-sm w-32 h-10 rounded-md ml-auto transition mt-7"
+                                    >
+                                        {t('SAVE')}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
                         </Form>
                     )}

@@ -177,5 +177,8 @@
     "DRAG_AND_DROP":"Drag and drop",
     "WRONG_EXTENSION":"Image format not supported!",
     "IMAGE_ERROR":"Error while trying to delete image!",
-    "IMAGE_NOT_FOUND": "Add picture to delete it!"
+    "IMAGE_NOT_FOUND": "Add picture to delete it!",
+    "SYSTEM_DATA": "System data",
+    "DELETE_PICTURE": "Delete picture",
+    "PERSONAL_INFO":"Personal information"
 }
