@@ -44,7 +44,7 @@
     -moz-appearance: none; 
 }
 .ReactModal__Content {
-  max-width: 350px; 
+  max-width: 400px; 
   padding: 16px; 
   z-index: 50;
 }

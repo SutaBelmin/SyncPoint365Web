@@ -28,21 +28,23 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
         setOpenDropdown(prevState => (prevState === dropdown ? null : dropdown));
     }
 
-    const menuItems = [
-        { icon: faHome, label: t('HOME'), link: '/home', isVisible: true, },
-        { icon: faUser, label: t('USERS'), link: '/users', isVisible: !userHasRole(roleConstant.employee) },
-        { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types', isVisible: !userHasRole(roleConstant.employee) },
-        { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests', isVisible: !userHasRole(roleConstant.employee) },
-        { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests-user', isVisible: userHasRole(roleConstant.employee) },
-    ];
-
-    const locationDropdown = {
-        isVisible: !userHasRole(roleConstant.employee),
-        items: [
-            { icon: faEarthAmerica, label: t('COUNTRIES'), link: '/countries', },
-            { icon: faCity, label: t('CITIES'), link: '/cities', },
-        ],
+    const userHasAnyRole = () => {
+        return userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator) || userHasRole(roleConstant.employee);
     };
+
+    const menuItems = [
+        { icon: faHome, label: t('HOME'), link: '/home', isVisible: userHasAnyRole() },
+        { icon: faUser, label: t('USERS'), link: '/users', isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee) },
+        { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types', isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee) },
+        { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests', isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee) },
+        { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests-user', isVisible: userHasRole(roleConstant.employee) },
+        { icon: faLocationCrosshairs, label: t('LOCATION'), link: null, isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee),
+            items: [
+                { icon: faEarthAmerica, label: t('COUNTRIES'), link: '/countries' },
+                { icon: faCity, label: t('CITIES'), link: '/cities' },
+            ],
+        },
+    ];
 
     return (
         <nav
@@ -56,67 +58,56 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
                     />
                 </button>
             </div>
-
             {isCollapsed && (
                 <ul className="space-y-4">
-                    {menuItems.filter(({ isVisible }) => isVisible).map(({ icon, label, link }) => (
+                    {menuItems.filter(({ isVisible }) => isVisible).map(({ icon, label, link, items }) => (
                         <li key={label}>
-                            <a
-                                href={link}
-                                onClick={(e) => handleLinkClick(e, link)}
-                                className={`flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 ${activeLink === link ? 'bg-gray-700' : ''
-                                    }`}
-                            >
-                                <FontAwesomeIcon icon={icon} className="mr-3" />
-                                {label}
-                            </a>
+                            {items ? (
+                                <div>
+                                    <div
+                                        className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 cursor-pointer"
+                                        onClick={(e) => toggleDropdown(e, label)}
+                                    >
+                                        <FontAwesomeIcon icon={icon} className="mr-3" />
+                                        {label}
+                                        <FontAwesomeIcon
+                                            icon={faCaretDown}
+                                            className={`ml-auto transform ${openDropdown === label ? 'rotate-180' : ''} transition-transform`}
+                                        />
+                                    </div>
+                                    {openDropdown === label && (
+                                        <ul className="ml-6 mt-2 space-y-2">
+                                            {items.map(({ icon, label, link }) => (
+                                                <li key={label}>
+                                                    <a
+                                                        href={link}
+                                                        onClick={(e) => handleLinkClick(e, link, true)}
+                                                        className={`block py-2 px-4 text-md rounded hover:bg-gray-600 ${activeLink === link ? 'bg-gray-700' : ''
+                                                            }`}
+                                                    >
+                                                        <FontAwesomeIcon icon={icon} className="mr-3" />
+                                                        {label}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            ) : (
+                                <a
+                                    href={link}
+                                    onClick={(e) => handleLinkClick(e, link)}
+                                    className={`flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 ${activeLink === link ? 'bg-gray-700' : ''
+                                        }`}
+                                >
+                                    <FontAwesomeIcon icon={icon} className="mr-3" />
+                                    {label}
+                                </a>
+                            )}
                         </li>
                     ))}
-                    {locationDropdown.isVisible && (
-                        <li>
-                            <div>
-                                <div
-                                    className="flex items-center w-full py-2 px-4 text-lg rounded hover:bg-gray-700 cursor-pointer"
-                                    onClick={(e) => toggleDropdown(e, 'location')}
-                                >
-                                    <FontAwesomeIcon icon={faLocationCrosshairs} className="mr-3" />
-                                    {t('LOCATION')}
-                                    <FontAwesomeIcon
-                                        icon={faCaretDown}
-                                        className={`ml-auto transform ${openDropdown === 'location' ? 'rotate-180' : ''
-                                            } transition-transform`}
-                                    />
-                                </div>
-                                {openDropdown === 'location' && (
-                                    <ul className="ml-6 mt-2 space-y-2">
-                                        <li>
-                                            <a
-                                                href="/countries"
-                                                onClick={(e) => handleLinkClick(e, '/countries', true)}
-                                                className={`block py-2 px-4 text-md rounded hover:bg-gray-600 ${activeLink === '/countries' ? 'bg-gray-700' : ''
-                                                    }`}
-                                            >
-                                                <FontAwesomeIcon icon={faEarthAmerica} className="mr-3" />
-                                                {t('COUNTRIES')}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="/cities"
-                                                onClick={(e) => handleLinkClick(e, '/cities', true)}
-                                                className={`block py-2 px-4 text-md rounded hover:bg-gray-600 ${activeLink === '/cities' ? 'bg-gray-700' : ''
-                                                    }`}
-                                            >
-                                                <FontAwesomeIcon icon={faCity} className="mr-3" />
-                                                {t('CITIES')}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                )}
-                            </div>
-                        </li>
-                    )}
                 </ul>
+
             )}
         </nav>
     );

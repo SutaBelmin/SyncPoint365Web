@@ -10,7 +10,6 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { absenceRequestStatusConstant } from '../../constants';
 
-
 export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }) => {
     const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
     const { t } = useTranslation();
@@ -49,10 +48,9 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
             .max(Yup.ref('dateTo'), t('DATE_FROM_MUST_BE_BEFORE_OR_EQUAL_DATE_TO')),
         dateTo: Yup.date().required(t('DATE_TO_IS_REQUIRED'))
             .min(Yup.ref('dateFrom'), t('DATE_TO_MUST_BE_AFTER_OR_EQUAL_DATE_FROM')),
-            dateReturn: Yup.date().required(t('RETURN_DATE_IS_REQUIRED'))
-            .min(Yup.ref('dateTo'), t('RETURN_DATE_MUST_BE_ONE_DAY_AFTER_DATE_TO'))
-            .test('is-one-day-after',
-                t('RETURN_DATE_MUST_BE_AFTER_DATE_TO'),
+        dateReturn: Yup.date().required(t('RETURN_DATE_IS_REQUIRED'))
+            .min(Yup.ref('dateTo'), t('RETURN_DATE_MUST_BE_AFTER_DATE_TO'))
+            .test('is-one-day-after', t('RETURN_DATE_MUST_BE_AFTER_DATE_TO'),
                 function (value) {
                     const { dateTo } = this.parent;
                     if (dateTo && value) {
@@ -60,14 +58,14 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                         oneDayAfterDateTo.setDate(oneDayAfterDateTo.getDate() + 1);
                         return value >= oneDayAfterDateTo;
                     }
-                    return true; 
+                    return true;
                 }
             ),
         comment: Yup.string(),
     });
 
 
-    const addHandling = async (values, actions) => {
+    const addAbsenceRequest = async (values, actions) => {
         const { setSubmitting } = actions;
         try {
             await absenceRequestsService.add({
@@ -91,15 +89,18 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
 
     return (
         <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">{t('NEW_ABSENCE_REQUEST')}</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('ADD_ABSENCE_REQUEST')}</h2>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={addHandling}
+                onSubmit={addAbsenceRequest}
             >
                 {({ setFieldValue, values }) => (
                     <Form>
                         <div className="mb-4">
+                            <label className="text-sm font-medium text-gray-700 mb-1" >
+                                {t('ABSENCE_REQUEST_TYPE')}
+                            </label>
                             <Select
                                 name="absenceRequestTypeId"
                                 id="absenceRequestTypeId"
@@ -107,7 +108,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                                 value={absenceRequestTypes.find(option => option.value === values.absenceRequestTypeId)}
                                 onChange={(option) => setFieldValue('absenceRequestTypeId', option.value)}
                                 isSearchable
-                                placeholder={t('SELECT')}
+                                placeholder={t('ABSENCE_REQUEST_TYPE')}
                                 className="h-10 border-gray-300 input-select-border w-full"
                             />
                             <ErrorMessage name="absenceRequestTypeId" component="div" className="text-red-500 text-sm" />
@@ -127,7 +128,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                                             setFieldValue('dateFrom', formattedDate);
                                         }}
                                         dateFormat={t('DATE_FORMAT')}
-                                        placeholderText={t('SELECT_DATE_FROM')}
+                                        placeholderText={t('DATE_FROM')}
                                         showYearDropdown
                                         maxDate={maxDate}
                                         autoComplete='off'
@@ -150,7 +151,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                                             setFieldValue('dateTo', formattedDate);
                                         }}
                                         dateFormat={t('DATE_FORMAT')}
-                                        placeholderText={t('SELECT_DATE_TO')}
+                                        placeholderText={t('DATE_TO')}
                                         showYearDropdown
                                         maxDate={maxDate}
                                         autoComplete='off'
@@ -175,7 +176,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                                         setFieldValue('dateReturn', formattedDate);
                                     }}
                                     dateFormat={t('DATE_FORMAT')}
-                                    placeholderText={t('SELECT_DATE_RETURN')}
+                                    placeholderText={t('DATE_OF_RETURN')}
                                     showYearDropdown
                                     maxDate={maxDate}
                                     autoComplete='off'

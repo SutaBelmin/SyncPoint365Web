@@ -18,7 +18,6 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
     const nextYear = new Date().getFullYear() + 1;
     const maxDate = new Date(nextYear, 11, 31);
 
-
     const fetchAbsenceRequestTypes = useCallback(async () => {
         try {
             const response = await absenceRequestTypesService.getList(true, signal);
@@ -36,17 +35,15 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
         fetchAbsenceRequestTypes();
     }, [t, fetchAbsenceRequestTypes]);
 
-
     const validationSchema = Yup.object().shape({
         absenceRequestTypeId: Yup.string().required(t('TYPE_IS_REQUIRED')),
         dateFrom: Yup.date().required(t('DATE_FROM_IS_REQUIRED'))
             .max(Yup.ref('dateTo'), t('DATE_FROM_MUST_BE_BEFORE_OR_EQUAL_DATE_TO')),
         dateTo: Yup.date().required(t('DATE_TO_IS_REQUIRED'))
             .min(Yup.ref('dateFrom'), t('DATE_TO_MUST_BE_AFTER_OR_EQUAL_DATE_FROM')),
-            dateReturn: Yup.date().required(t('RETURN_DATE_IS_REQUIRED'))
-            .min(Yup.ref('dateTo'), t('RETURN_DATE_MUST_BE_ONE_DAY_AFTER_DATE_TO'))
-            .test('is-one-day-after',
-                t('RETURN_DATE_MUST_BE_ONE_DAY_AFTER_DATE_TO'),
+        dateReturn: Yup.date().required(t('RETURN_DATE_IS_REQUIRED'))
+            .min(Yup.ref('dateTo'), t('RETURN_DATE_MUST_BE_AFTER_DATE_TO'))
+            .test('is-one-day-after', t('RETURN_DATE_MUST_BE_AFTER_DATE_TO'),
                 function (value) {
                     const { dateTo } = this.parent;
                     if (dateTo && value) {
@@ -60,7 +57,7 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
         comment: Yup.string(),
     });
 
-    const editHandling = async (values, actions) => {
+    const editAbsenceRequest = async (values, actions) => {
         const { setSubmitting } = actions;
         try {
             await absenceRequestsService.update({
@@ -98,7 +95,7 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
                     userId: absenceRequest.userId,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={editHandling}
+                onSubmit={editAbsenceRequest}
             >
                 {({ setFieldValue, values }) => (
                     <Form className="space-y-4">

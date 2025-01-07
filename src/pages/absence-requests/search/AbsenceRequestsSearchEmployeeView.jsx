@@ -41,8 +41,10 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 	const handleYearChange = (selectedOption, setFieldValue) => {
 		if (selectedOption) {
 			const selectedYear = selectedOption.value;
-			const dateFrom = new Date(selectedYear, 0, 1).toISOString();
-			const dateTo = new Date(selectedYear, 11, 31, 23, 59, 59).toISOString();
+			const dateFrom = new Date(selectedYear, 0, 1, 0, 59, 59).toISOString();
+			console.log(dateFrom, "date from - ");
+			const dateTo = new Date(selectedYear, 11, 31, 24, 59, 59).toISOString();
+			console.log(dateTo, "date to");
 			setFieldValue('year', selectedYear);
 			setFieldValue('dateFrom', dateFrom);
 			setFieldValue('dateTo', dateTo);
@@ -52,6 +54,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 			setFieldValue('dateTo', null);
 		}
 	};
+
 	useEffect(() => {
 		setSearchParams(absenceRequestsSearchStore.queryParams);
 	}, [setSearchParams]);
@@ -60,8 +63,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 		fetchAbsenceRequestTypes();
 	}, [fetchAbsenceRequestTypes]);
 
-
-	const handleSearch = (values) => {
+	const searchAbsenceRequests = (values) => {
 		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
 		absenceRequestsSearchStore.setDateFrom(values.dateFrom);
 		absenceRequestsSearchStore.setDateTo(values.dateTo);
@@ -71,7 +73,6 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 		fetchData();
 	};
 
-
 	const handleClear = (setFieldValue) => {
 		setSearchParams({});
 		setFieldValue("absenceRequestTypeId", null);
@@ -80,7 +81,6 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 
 		fetchData();
 	};
-
 
 	const initialValues = {
 		absenceRequestTypeId: (() => {
@@ -109,14 +109,14 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 		<Formik
 			enableReinitialize
 			initialValues={initialValues}
-			onSubmit={handleSearch}
+			onSubmit={searchAbsenceRequests}
 		>
 			{({ setFieldValue, values }) => (
 				<Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
 					<Select
 						name="absenceRequestTypeId"
 						id="absenceRequestTypeId"
-						placeholder={t('SELECT_TYPE')}
+						placeholder={t('ABSENCE_REQUEST_TYPE')}
 						options={absenceRequestTypes}
 						value={values.absenceRequestTypeId ? { value: values.absenceRequestTypeId, label: absenceRequestTypes.find(a => a.value === values.absenceRequestTypeId)?.label } : null}
 						onChange={(option) => setFieldValue('absenceRequestTypeId', option ? option.value : null)}
@@ -130,7 +130,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 						placeholder={t('SELECT_YEAR')}
 						options={yearOptions()}
 						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
-						value={ values.year? { value: values.year, label: values.year.toString(), } : null }
+						value={values.year ? { value: values.year, label: values.year.toString(), } : null}
 						onChange={(option) => handleYearChange(option, setFieldValue)}
 						isClearable
 						isSearchable

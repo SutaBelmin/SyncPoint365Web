@@ -129,10 +129,10 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
     };
 
     const deleteRequestClick = (absenceRequest) => {
-        openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
+        openModal(<DeleteConfirmationModal onDelete={() => deleteAbsenceRequest(absenceRequest.id)} onCancel={closeModal} />);
     };
 
-    const handleDelete = async (absenceRequestId) => {
+    const deleteAbsenceRequest = async (absenceRequestId) => {
         try {
             await absenceRequestsService.delete(absenceRequestId);
             fetchData();
@@ -153,7 +153,7 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
         setSearchParams(absenceRequestsSearchStore.queryParams);
     };
 
-    const handleSort = async (column, direction) => {
+    const sortAbsenceRequest = async (column, direction) => {
         const field = column.sortField || null;
         let orderBy = null;
 
@@ -170,7 +170,6 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
 
         setSearchParams(absenceRequestsSearchStore.queryParams);
     };
-
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
@@ -210,7 +209,7 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
                     persistTableHead={true}
                     paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
-                    onSort={handleSort}
+                    onSort={sortAbsenceRequest}
                 />
             </div>
         </div >

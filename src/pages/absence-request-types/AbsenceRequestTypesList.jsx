@@ -134,22 +134,25 @@ export const AbsenceRequestTypesList = observer(() => {
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col xs:flex-row justify-between">
                 <h1 className="h1">{t('ABSENCE_REQUEST_TYPES')}</h1>
 
-                <div className="flex justify-end mt-4 pt-14 pb-4">
+                <div className="flex justify-end mt-4 pb-4 pt-14 md:pt-14 sm:pt-14 xs:pt-14 ss:pt-0">
                     <button
                         type="button"
                         onClick={addNewRequestClick}
-                        className=" btn-common h-10  md:ml-auto"
+                        className="btn-common h-10 md:max-w-[9rem] sm:max-w-[9rem] xs:max-w-full ss:max-w-full md:ml-auto"
                     >
                         {t('ADD_REQUEST_TYPE')}
                     </button>
-                </div>
+                    </div>
             </div>
+            <div className="flex flex-col gap-4 xs:flex-row">
+                <AbsenceRequestTypesSearch fetchData={fetchData} />
+                </div>
 
             <div className="flex flex-col gap-4 md:flex-row">
-                <AbsenceRequestTypesSearch fetchData={fetchData} />
+                
             </div>
 
 

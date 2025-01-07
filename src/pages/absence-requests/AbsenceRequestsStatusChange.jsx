@@ -9,11 +9,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { absenceRequestStatusConstant } from "../../constants";
 import { format } from "date-fns";
 
-
 export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchData, isStatusLocked }) => {
     const [statuses, setAbsenceRequestsStatuses] = useState([]);
     const { t } = useTranslation();
-
 
     const fetchAbsenceRequestStatus = useCallback(async () => {
         try {
@@ -36,7 +34,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
         fetchAbsenceRequestStatus();
     }, [fetchAbsenceRequestStatus]);
 
-    const handleConfirm = async (values) => {
+    const saveAbsenceRequestStatus = async (values) => {
         try {
             await absenceRequestsService.changeAbsenceRequestStatus({
                 id: absenceRequest.id,
@@ -49,7 +47,6 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     };
-
 
     const initialValues = {
         absenceRequestId: absenceRequest.id,
@@ -71,7 +68,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
 
             <Formik
                 initialValues={initialValues}
-                onSubmit={handleConfirm}
+                onSubmit={saveAbsenceRequestStatus}
             >
                 {({ setFieldValue, values }) => (
                     <Form>
@@ -115,8 +112,8 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                     <label className="text-sm font-medium text-gray-700 mb-1">
                                         {t('COMMENT')}:
                                     </label>
-                                    <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none">
-                                        <span className="text-gray-700">{absenceRequest.comment && absenceRequest.comment.trim() ? absenceRequest.comment : t('None')}</span>
+                                    <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-9">
+                                        <span className="text-gray-700">{absenceRequest.comment && absenceRequest.comment.trim() ? absenceRequest.comment : null}</span>
                                     </div>
                                 </div>
 

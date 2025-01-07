@@ -116,6 +116,7 @@
     "DATE_FROM": "Date From", 
     "DATE_TO": "Date To",
     "DATE_RETURN": "Return",
+    "DATE_OF_RETURN": "Date of Return",
     "TYPE": "Type", 
     "NEW_REQUEST": "New Request",
     "SELECT_USER": "Select User",
@@ -147,7 +148,7 @@
     "ABSENCE_REQUEST": "Absence Request",
     "STATUS_SUCCESSFULLY_CHANGED": "Status successfully changed.", 
     "CONFIRM": "Confirm",
-    "ABSENCE_REQUEST_TYPE": "Type",
+    "ABSENCE_REQUEST_TYPE": "Absence Request Type",
     "APPLICANT": "Applicant",
     "DATE_FROM_TO": "Date from - to",
     "NO_COMMENT": "No comment",
@@ -169,6 +170,7 @@
     "SELECT_DATE_TO": "Select date to",
     "SELECT_DATE_RETURN": "Select date of return",
     "COMMENT_FIELD": "Comment field",
-    "NEW_ABSENCE_REQUEST": "New Request",
-    "ADD_NEW_REQUEST": "Add New Request"
+    "ADD_ABSENCE_REQUEST": "Add Absence Request",
+    "ADD_NEW_REQUEST": "Add New Request",
+    "ADD_ABSENCE_REQUEST_TYPE": "Add Absence Request"
 }

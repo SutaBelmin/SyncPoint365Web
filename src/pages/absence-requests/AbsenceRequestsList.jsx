@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faHourglass } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal } from "../../components/modal";
 import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
@@ -106,22 +106,12 @@ export const AbsenceRequestsList = observer(() => {
             name: t('ACTIONS'),
             cell: row => (
                 <div className="flex">
-                    {/* </button>
-                        //onClick={() => editRequestClick(row)}
-                        className="text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
-                    </button>*/}
-                    <button
-                        //onClick={() => deleteRequestClick(row)}
-                        className="text-lg text-red-500 hover:underline p-2">
-                        {/* <FontAwesomeIcon icon={faTrash} /> */}
-                    </button>
                     <button
                         onClick={() => changeStatus(row)}
                     >
                         {
                             row.absenceRequestStatus === absenceRequestStatusConstant.pending ? (
-                                <FontAwesomeIcon icon={faHourglass} className="text-yellow-600 hover:underline p-2" />
+                                <FontAwesomeIcon icon={faEdit} className="text-blue-600 hover:underline p-2" />
                             ) : (
                                 <FontAwesomeIcon icon={faCircleCheck} className="text-green-700 hover:underline p-2" />
                             )
@@ -134,43 +124,20 @@ export const AbsenceRequestsList = observer(() => {
 
     const changeStatus = (absenceRequest) => {
         if (absenceRequest.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
-            openModal(<AbsenceRequestsStatusChange 
+            openModal(<AbsenceRequestsStatusChange
                 absenceRequest={absenceRequest}
-                closeModal={closeModal} 
+                closeModal={closeModal}
                 fetchData={fetchData}
-                isStatusLocked={true} 
+                isStatusLocked={true}
             />);
         } else {
-            openModal(<AbsenceRequestsStatusChange 
+            openModal(<AbsenceRequestsStatusChange
                 absenceRequest={absenceRequest}
-                closeModal={closeModal} 
+                closeModal={closeModal}
                 fetchData={fetchData}
             />);
         }
     };
-    
-    // const addNewRequestClick = () => {
-    //     openModal(<AbsenceRequestsAdd closeModal={closeModal} fetchData={fetchData} />);
-    // }
-
-    // const editRequestClick = (absenceRequest) => {
-    //     openModal(<AbsenceRequestsEdit absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
-    // };
-
-    // const deleteRequestClick = (absenceRequest) => {
-    //     openModal(<DeleteConfirmationModal onDelete={() => handleDelete(absenceRequest.id)} onCancel={closeModal} />);
-    // };
-
-    // const handleDelete = async (absenceRequestId) => {
-    //     try {
-    //         await absenceRequestsService.delete(absenceRequestId);
-    //         fetchData();
-    //         closeModal();
-    //         toast.success(t('DELETED'));
-    //     } catch (error) {
-    //         toast.error(t('FAILED_TO_DELETE'));
-    //     }
-    // }
 
     const handlePageChange = (newPage) => {
         absenceRequestsSearchStore.setPage(newPage);
@@ -182,7 +149,7 @@ export const AbsenceRequestsList = observer(() => {
         setSearchParams(absenceRequestsSearchStore.queryParams);
     };
 
-    const handleSort = async (column, direction) => {
+    const sortAbsenceRequest = async (column, direction) => {
         const field = column.sortField || null;
         let orderBy = null;
 
@@ -200,25 +167,13 @@ export const AbsenceRequestsList = observer(() => {
         setSearchParams(absenceRequestsSearchStore.queryParams);
     };
 
-
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
             <div className="flex flex-col gap-4 xs:flex-row">
                 <AbsenceRequestsSearch fetchData={fetchData} />
             </div>
-
-            {/* <div className="flex justify-end mt-4">
-                    <button
-                        type="button"
-                        className="btn-common h-10 ml-auto"
-                        onClick={addNewRequestClick}
-                    >
-                        {t('NEW_REQUEST')}
-                    </button>
-                    </div> */}
             <BaseModal />
-
             <div className="table max-w-full">
                 <DataTable
                     columns={columns}
@@ -236,7 +191,7 @@ export const AbsenceRequestsList = observer(() => {
                     persistTableHead={true}
                     paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
-                    onSort={handleSort}
+                    onSort={sortAbsenceRequest}
                 />
             </div>
         </div >

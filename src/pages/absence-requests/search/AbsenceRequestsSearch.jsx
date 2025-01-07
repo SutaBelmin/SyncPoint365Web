@@ -69,10 +69,10 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [signal, t]);
-	
-    useEffect(() => {
-        setSearchParams(absenceRequestsSearchStore.queryParams);
-    }, [setSearchParams]);
+
+	useEffect(() => {
+		setSearchParams(absenceRequestsSearchStore.queryParams);
+	}, [setSearchParams]);
 
 	useEffect(() => {
 		fetchUsers();
@@ -81,7 +81,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 	}, [fetchAbsenceRequestTypes, fetchUsers, fetchAbsenceRequestStatus]);
 
 
-	const handleSearch = (values) => {
+	const searchAbsenceRequests = (values) => {
 		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
 		absenceRequestsSearchStore.setUserId(values.userId);
 		absenceRequestsSearchStore.setAbsenceRequestStatusId(values.absenceRequestStatusId);
@@ -102,7 +102,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		setFieldValue("dateFrom", null);
 		setFieldValue("dateTo", null);
 		absenceRequestsSearchStore.clearFilters();
-	
+
 		fetchData();
 	};
 
@@ -143,10 +143,10 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		<Formik
 			enableReinitialize
 			initialValues={initialValues}
-			onSubmit={handleSearch}
+			onSubmit={searchAbsenceRequests}
 		>
 			{({ setFieldValue, values }) => (
-				<Form className="grid gap-4 w-full lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
+				<Form className="grid gap-4 w-full xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
 					<Select
 						name="absenceRequestTypeId"
 						id="absenceRequestTypeId"
@@ -164,7 +164,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						options={users}
 						value={users.find((option) => option.value === values.userId) || null}
 						onChange={(option) => setFieldValue("userId", option ? option.value : null)}
-						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
+						className="border-gray-300 input-select-border w-full min-w-[12rem] md:w-auto"
 						isClearable
 						isSearchable
 
@@ -177,7 +177,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						onChange={(option) => setFieldValue('absenceRequestStatusId', option && option.value)}
 						options={statuses}
 						placeholder={t('SELECT_STATUS')}
-						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
+						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
 						isClearable
 						isSearchable
 					/>
