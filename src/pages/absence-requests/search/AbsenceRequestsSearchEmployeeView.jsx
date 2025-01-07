@@ -38,23 +38,6 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 		return years.map(year => ({ value: year, label: year.toString() }));
 	};
 
-	const handleYearChange = (selectedOption, setFieldValue) => {
-		if (selectedOption) {
-			const selectedYear = selectedOption.value;
-			const dateFrom = new Date(selectedYear, 0, 1, 0, 59, 59).toISOString();
-			console.log(dateFrom, "date from - ");
-			const dateTo = new Date(selectedYear, 11, 31, 24, 59, 59).toISOString();
-			console.log(dateTo, "date to");
-			setFieldValue('year', selectedYear);
-			setFieldValue('dateFrom', dateFrom);
-			setFieldValue('dateTo', dateTo);
-		} else {
-			setFieldValue('year', null);
-			setFieldValue('dateFrom', null);
-			setFieldValue('dateTo', null);
-		}
-	};
-
 	useEffect(() => {
 		setSearchParams(absenceRequestsSearchStore.queryParams);
 	}, [setSearchParams]);
@@ -65,8 +48,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 
 	const searchAbsenceRequests = (values) => {
 		absenceRequestsSearchStore.setAbsenceTypeId(values.absenceRequestTypeId);
-		absenceRequestsSearchStore.setDateFrom(values.dateFrom);
-		absenceRequestsSearchStore.setDateTo(values.dateTo);
+		absenceRequestsSearchStore.setYear(values.year);
 
 		const queryParams = absenceRequestsSearchStore.syncWithQueryParams();
 		setSearchParams(queryParams);
@@ -77,6 +59,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 		setSearchParams({});
 		setFieldValue("absenceRequestTypeId", null);
 		setFieldValue("absenceRequestStatusId", null);
+		setFieldValue("year", null);
 		absenceRequestsSearchStore.clearFilters();
 
 		fetchData();
@@ -93,16 +76,13 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 			return absenceRequestsSearchStore.absenceRequestTypeId;
 		})(),
 		year: (() => {
-			const dateFromParam = searchParams.get("dateFrom");
-			if (dateFromParam) {
-				const year = new Date(dateFromParam).getFullYear();
-				return year;
+			const yearFromParams = searchParams.get("year");
+			if (yearFromParams) {
+				const parsedYear = parseInt(yearFromParams);
+				return parsedYear;
 			}
-			const dateFromStore = absenceRequestsSearchStore.dateFrom;
-			return dateFromStore ? new Date(dateFromStore).getFullYear() : null;
+			return absenceRequestsSearchStore.year;
 		})(),
-		dateFrom: absenceRequestsSearchStore.dateFrom,
-		dateTo: absenceRequestsSearchStore.dateTo,
 	}
 
 	return (
@@ -112,7 +92,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 			onSubmit={searchAbsenceRequests}
 		>
 			{({ setFieldValue, values }) => (
-				<Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
+				<Form className="grid gap-4 w-full xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
 					<Select
 						name="absenceRequestTypeId"
 						id="absenceRequestTypeId"
@@ -131,7 +111,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 						options={yearOptions()}
 						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
 						value={values.year ? { value: values.year, label: values.year.toString(), } : null}
-						onChange={(option) => handleYearChange(option, setFieldValue)}
+						onChange={(option) => setFieldValue('year', option ? option.value : null)}
 						isClearable
 						isSearchable
 					/>

@@ -7,6 +7,7 @@ class AbsenceRequestsSearchStore {
     absenceRequestStatusId = null;
     dateFrom = null;
     dateTo = null;
+    year = null;
     orderBy = null;
     page = 1;
     pageSize = 10;
@@ -50,6 +51,11 @@ class AbsenceRequestsSearchStore {
         this.syncWithQueryParams();
     }
 
+    setYear(value) {
+        this.year = value;
+        this.syncWithQueryParams();
+    }
+
     setOrderBy(value) {
         this.orderBy = value;
         this.syncWithQueryParams();
@@ -75,6 +81,7 @@ class AbsenceRequestsSearchStore {
         this.setAbsenceRequestStatusId(null);
         this.setDateFrom(null);
         this.setDateTo(null);
+        this.setYear(null);
         this.syncWithQueryParams();
     }
 
@@ -96,6 +103,9 @@ class AbsenceRequestsSearchStore {
         if(this.dateTo)
             params.set("dateTo", this.dateTo);
         
+        if(this.year)
+            params.set("year", this.year );
+        
         if(this.orderBy)
             params.set("orderBy", this.orderBy);
 
@@ -116,6 +126,7 @@ class AbsenceRequestsSearchStore {
         const absenceRequestStatusId = params.get("absenceRequestStatusId") || null;
         const dateFrom = params.get("dateFrom") || null;
         const dateTo = params.get("dateTo") || null;
+        const year = params.get("year") || null;
         const orderBy = params.get("orderBy") || null;
         const page = parseInt(params.get("page")) || 1;
         const pageSize = parseInt(params.get("pageSize")) || 10;
@@ -125,6 +136,7 @@ class AbsenceRequestsSearchStore {
         this.setAbsenceRequestStatusId(absenceRequestStatusId);
         this.setDateFrom(dateFrom);
         this.setDateTo(dateTo);
+        this.setYear(year);
         this.setOrderBy(orderBy);
         this.setPage(page);
         this.setPageSize(pageSize);
@@ -137,6 +149,7 @@ class AbsenceRequestsSearchStore {
             userId: this.userId,
             dateFrom: this.dateFrom,
             dateTo: this.dateTo, 
+            year: this.year,
             orderBy: this.orderBy,
             page: this.page, 
             pageSize: this.pageSize, 
