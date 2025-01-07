@@ -15,8 +15,7 @@ const AppRoutes = () => {
   return (
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route element={<PrivateRoutes />}>
-          <Route element={<MainLayout />}>
+          <Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
             <Route path="/home" element={<Home />} />
             <Route path="/users">
               <Route index element={<UsersList />} />
@@ -28,7 +27,6 @@ const AppRoutes = () => {
             <Route path="/cities" element={<CitiesList />} />
             <Route path="/users/update/:userId" element={<UsersEdit />} />
           </Route>
-        </Route>
         <Route path ="*" element={<NotFound />} />
       </Routes>
   );
