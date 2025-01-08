@@ -6,16 +6,13 @@ import { useAuth } from '../../context/AuthProvider';
 export const NotFound = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { loggedUser, removeUser } = useAuth();
+    const { loggedUser } = useAuth();
 
     const handleBackToHome = () => {
-        if (loggedUser) {
+        if (loggedUser) 
             navigate('/home', { replace: true });
-        }
-        else {
-            removeUser();
+        else 
             navigate('/', { replace: true });
-        }
     };
 
     return (
