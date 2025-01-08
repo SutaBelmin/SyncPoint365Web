@@ -181,5 +181,9 @@
     "SYSTEM_DATA": "Sistemski podaci",
     "DELETE_PICTURE":"Ukloni sliku",
     "PERSONAL_INFO":"Lični podaci",
-    "SELECT_GENDER":"Odaberi spol"
+    "SELECT_GENDER":"Odaberi spol",
+    "EMPLOYEE_COMMENT": "Komentar zaposlenika",
+    "ADMIN_COMMENT": "Komentar admina",
+    "REQUEST_STATUS":"Status zahtjeva:"
+
 }

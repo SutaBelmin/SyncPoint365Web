@@ -1,4 +1,4 @@
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { useTranslation } from 'react-i18next';
 import { absenceRequestsService, enumsService } from "../../services";
 import { toast } from 'react-toastify';
@@ -38,7 +38,8 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
         try {
             await absenceRequestsService.changeAbsenceRequestStatus({
                 id: absenceRequest.id,
-                status: values.absenceRequestStatus
+                status: values.absenceRequestStatus,
+                postComment: values.postComment
             });
             toast.success(t('STATUS_SUCCESSFULLY_CHANGED'));
             fetchData();
@@ -51,6 +52,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
     const initialValues = {
         absenceRequestId: absenceRequest.id,
         absenceRequestStatus: absenceRequest.status,
+        postComment: null,
     }
 
     return (
@@ -108,30 +110,50 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                         <span className="text-gray-900">{format(new Date(absenceRequest.dateReturn), t('DATE_FORMAT'))}</span>
                                     </div>
                                 </div>
-                                <div>
+                                <div className="pb-2">
                                     <label className="text-sm font-medium text-gray-700 mb-1">
-                                        {t('COMMENT')}:
+                                        {t('EMPLOYEE_COMMENT')}:
                                     </label>
-                                    <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[6rem]">
-                                        <span 
-                                            className="text-gray-700">{absenceRequest.comment && absenceRequest.comment.trim() ? absenceRequest.comment : null}</span>
+                                    <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[3.5rem]" id="preComment">
+                                        <span
+                                            id="preComment"
+                                            className="text-gray-700">{absenceRequest.preComment && absenceRequest.preComment.trim() ? absenceRequest.preComment : null}</span>
                                     </div>
+
                                 </div>
-
-
                                 {!isStatusLocked && (
                                     <div>
-                                        <Select
-                                            id="absenceRequestStatus"
-                                            name="absenceRequestStatus"
-                                            value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatus) || null}
-                                            onChange={(option) => setFieldValue('absenceRequestStatus', option && option.value)}
-                                            options={statuses}
-                                            placeholder={t('SELECT_STATUS')}
-                                            className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
-                                            isClearable
-                                            isSearchable
-                                        />
+                                        <div>
+                                            <div className="border-t border-gray-400 pb-4"></div>
+                                        <label className="text-sm font-medium text-gray-700" id="absenceRequestStatus">
+                                                {t('REQUEST_STATUS')}
+                                            </label>
+                                            <Select
+                                                id="absenceRequestStatus"
+                                                name="absenceRequestStatus"
+                                                value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatus) || null}
+                                                onChange={(option) => setFieldValue('absenceRequestStatus', option && option.value)}
+                                                options={statuses}
+                                                placeholder={t('SELECT_STATUS')}
+                                                className="border-blue-400 input-select-border w-full min-w-[11rem] md:w-auto"
+                                                isClearable
+                                                isSearchable
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-sm font-medium text-gray-700" id="postComment">
+                                                {t('COMMENT')}
+                                            </label>
+                                            <Field
+                                                id="postComment"
+                                                as="textarea"
+                                                rows="2"
+                                                name="postComment"
+                                                placeholder={t('COMMENT')}
+                                                autoComplete="off"
+                                                className="mt-1 mb-4 block w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            />
+                                        </div>
                                         <div className="flex justify-end pt-5 space-x-2">
                                             <button
                                                 type="button"
@@ -150,19 +172,30 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                     </div>
                                 )}
                                 {isStatusLocked && (
-                                    <button
-                                        type="button"
-                                        onClick={closeModal}
-                                        className="mt-3 w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md shadow-sm transition duration-200"
-                                    >
-                                        {t('CLOSE')}
-                                    </button>
+                                    <>
+                                    <div>
+                                        <label className="text-sm font-medium text-gray-700 mb-1" id="postComment">
+                                            {t('ADMIN_COMMENT')}:
+                                        </label>
+                                            <span
+                                                id="postComment"
+                                                className="mt-1 block bg-white p-1.5 text-gray-700 border border-gray-300 rounded-md shadow-sm select-none min-h-[3.5rem]"
+                                                >{absenceRequest.postComment && absenceRequest.postComment.trim() ? absenceRequest.postComment : null}</span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={closeModal}
+                                            className="mt-3 w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md shadow-sm transition duration-200"
+                                        >
+                                            {t('CLOSE')}
+                                        </button>
+                                    </>
                                 )}
                             </div>
                         </div>
                     </Form>
                 )}
             </Formik>
-        </div>
+        </div >
     );
 };
