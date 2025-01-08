@@ -108,7 +108,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                                 value={absenceRequestTypes.find(option => option.value === values.absenceRequestTypeId)}
                                 onChange={(option) => setFieldValue('absenceRequestTypeId', option.value)}
                                 isSearchable
-                                placeholder={t('ABSENCE_REQUEST_TYPE')}
+                                placeholder={t('SELECT_TYPE')}
                                 className="h-10 border-gray-300 input-select-border w-full"
                             />
                             <ErrorMessage name="absenceRequestTypeId" component="div" className="text-red-500 text-sm" />
@@ -197,7 +197,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                                 as="textarea"
                                 rows="4"
                                 name="name"
-                                placeholder={t('COMMENT_FIELD')}
+                                placeholder={t('COMMENT')}
                                 autoComplete="off"
                                 className="mt-1 mb-4 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
