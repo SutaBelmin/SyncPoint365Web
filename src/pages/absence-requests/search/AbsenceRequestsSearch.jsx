@@ -13,6 +13,7 @@ import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, usersService, enumsService } from '../../../services';
 import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
 import '../AbsenceRequestsList.css'
+import { yearOptions } from '../../../components/utils/yearOptions';
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -22,6 +23,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { t, i18n } = useTranslation();
 	const { signal } = useRequestAbort();
+	
 
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
@@ -71,12 +73,6 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [signal, t]);
-
-	const yearOptions = () => {
-		const currentYear = new Date().getFullYear();
-		const years = Array.from({ length: 6 }, (_, i) => currentYear + i);
-		return years.map(year => ({ value: year, label: year.toString() }));
-	};
 
 	useEffect(() => {
 		setSearchParams(absenceRequestsSearchStore.queryParams);

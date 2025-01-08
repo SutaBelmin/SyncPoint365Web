@@ -10,6 +10,7 @@ import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService } from '../../../services';
 import { localeConstant } from '../../../constants';
+import { yearOptions } from '../../../components/utils/yearOptions';
 
 export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -32,12 +33,6 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [t, signal])
-
-	const yearOptions = () => {
-		const currentYear = new Date().getFullYear();
-		const years = Array.from({ length: 6 }, (_, i) => currentYear + i);
-		return years.map(year => ({ value: year, label: year.toString() }));
-	};
 
 	useEffect(() => {
 		setSearchParams(absenceRequestsSearchStore.queryParams);
