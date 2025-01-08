@@ -99,7 +99,10 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
             >
                 {({ setFieldValue, values }) => (
                     <Form className="space-y-4">
-                        <div>
+                        <div className="mb-4">
+                            <label className="text-sm font-medium text-gray-700 mb-1" >
+                                {t('ABSENCE_REQUEST_TYPE')}
+                            </label>
                             <Select
                                 name="absenceRequestTypeId"
                                 id="absenceRequestTypeId"
@@ -193,7 +196,7 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
                                 as="textarea"
                                 rows="4"
                                 name="comment"
-                                placeholder={t('COMMENT_FIELD')}
+                                placeholder={t('COMMENT')}
                                 autoComplete="off"
                                 className="mt-1 mb-4 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
