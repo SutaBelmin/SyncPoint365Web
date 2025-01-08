@@ -6,7 +6,6 @@ import { useSearchParams } from "react-router-dom";
 import { useModal } from "../../context/ModalProvider";
 import { NoDataMessage } from "../../components/common-ui";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
-import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CitiesSearch } from "./search";
@@ -17,6 +16,7 @@ import { citiesService } from "../../services";
 import { CitiesAdd, CitiesEdit } from "../cities";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import debounce from "lodash.debounce";
+import { PaginationOptions } from "../../utils";
 
 export const CitiesList = observer(() => {
     const { t } = useTranslation();

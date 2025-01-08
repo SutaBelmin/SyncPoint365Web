@@ -1,4 +1,5 @@
 export { AbsenceRequestsList } from './AbsenceRequestsList';
-export { AbsenceRequestsAdd } from './AbsenceRequestsAdd';
-export { AbsenceRequestsEdit } from './AbsenceRequestsEdit';
+export { AbsenceRequestsListEmployeeView } from './AbsenceRequestsListEmployeeView';
+export { AbsenceRequestsAddEmployeeView } from './AbsenceRequestsAddEmployeeView';
+export { AbsenceRequestsEditEmployeeView } from './AbsenceRequestsEditEmployeeView';
 export { AbsenceRequestsStatusChange } from './AbsenceRequestsStatusChange';

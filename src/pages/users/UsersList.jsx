@@ -10,7 +10,6 @@ import { BaseModal } from '../../components/modal';
 import { observer } from "mobx-react";
 import { reaction } from "mobx";
 import { useModal } from '../../context';
-import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { faCircleCheck, faCircleXmark, faEdit, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -23,6 +22,7 @@ import { UsersPreview } from './UsersPreview';
 import { UsersChangePassword } from './UsersChangePassword';
 import './UsersList.css';
 import debounce from 'lodash.debounce';
+import { PaginationOptions } from '../../utils';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();

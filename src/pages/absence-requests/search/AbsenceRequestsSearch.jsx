@@ -12,14 +12,19 @@ import { format } from 'date-fns';
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, usersService, enumsService } from '../../../services';
 import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
+import { yearOptions } from '../../../utils/';
+import '../AbsenceRequestsList.css'
+
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
+	const [isFirstLoad, setIsFirstLoad] = useState(true);
 	const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [statuses, setAbsenceRequestsStatuses] = useState([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { t, i18n } = useTranslation();
 	const { signal } = useRequestAbort();
+	
 
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
@@ -69,10 +74,10 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			toast.error(t('ERROR_CONTACT_ADMIN'));
 		}
 	}, [signal, t]);
-	
-    useEffect(() => {
-        setSearchParams(absenceRequestsSearchStore.queryParams);
-    }, [setSearchParams]);
+
+	useEffect(() => {
+		setSearchParams(absenceRequestsSearchStore.queryParams);
+	}, [setSearchParams]);
 
 	useEffect(() => {
 		fetchUsers();
@@ -87,6 +92,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		absenceRequestsSearchStore.setAbsenceRequestStatusId(values.absenceRequestStatusId);
 		absenceRequestsSearchStore.setDateFrom(values.dateFrom);
 		absenceRequestsSearchStore.setDateTo(values.dateTo);
+		absenceRequestsSearchStore.setYear(values.year);
 
 		const queryParams = absenceRequestsSearchStore.syncWithQueryParams();
 		setSearchParams(queryParams);
@@ -101,8 +107,9 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 		setFieldValue("absenceRequestStatusId", null);
 		setFieldValue("dateFrom", null);
 		setFieldValue("dateTo", null);
+		setFieldValue("year", null);
 		absenceRequestsSearchStore.clearFilters();
-	
+
 		fetchData();
 	};
 
@@ -135,6 +142,21 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			}
 			return absenceRequestsSearchStore.absenceRequestStatusId;
 		})(),
+		year: (() => {
+			if (isFirstLoad) {
+                const yearFromParams = searchParams.get("year");
+                if (yearFromParams) {
+                    const parsedYear = parseInt(yearFromParams);
+                    absenceRequestsSearchStore.setYear(parsedYear);
+                    return parsedYear;
+                }
+                const currentYear = new Date().getFullYear();
+                absenceRequestsSearchStore.setYear(currentYear);
+                setIsFirstLoad(false);
+                return currentYear;
+            }
+            return absenceRequestsSearchStore.year;
+        })(),
 		dateFrom: absenceRequestsSearchStore.dateFrom,
 		dateTo: absenceRequestsSearchStore.dateTo,
 	}
@@ -146,7 +168,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 			onSubmit={handleSearch}
 		>
 			{({ setFieldValue, values }) => (
-				<Form className="grid gap-4 w-full lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
+				<Form className="grid gap-4 w-full xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
 					<Select
 						name="absenceRequestTypeId"
 						id="absenceRequestTypeId"
@@ -164,12 +186,10 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						options={users}
 						value={users.find((option) => option.value === values.userId) || null}
 						onChange={(option) => setFieldValue("userId", option ? option.value : null)}
-						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
+						className="border-gray-300 input-select-border w-full min-w-[12rem] md:w-auto"
 						isClearable
 						isSearchable
-
 					/>
-
 					<Select
 						id="absenceRequestStatusId"
 						name="absenceRequestStatusId"
@@ -177,7 +197,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						onChange={(option) => setFieldValue('absenceRequestStatusId', option && option.value)}
 						options={statuses}
 						placeholder={t('SELECT_STATUS')}
-						className="border-gray-300 input-select-border w-full min-w-[10rem] md:w-auto"
+						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
 						isClearable
 						isSearchable
 					/>
@@ -194,7 +214,7 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-9 rounded-md border-gray-300 min-w-[5rem]'
+						className='border-gray-300 input-select-border w-full min-w-[5rem] md:w-auto'
 						locale={i18n.language}
 					/>
 					<DatePicker
@@ -210,20 +230,31 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 						maxDate={maxDate}
 						autoComplete='off'
 						enableTabLoop={false}
-						className='input-search h-9 rounded-md border-gray-300 min-w-[5rem]'
+						className='border-gray-0 input-select-border w-full min-w-[5rem] md:w-auto'
 						locale={i18n.language}
+					/>
+					<Select
+						name="year"
+						id="year"
+						placeholder={t('SELECT_YEAR')}
+						options={yearOptions()}
+						className="border-gray-300 input-select-border w-full min-w-[11rem] md:w-auto"
+						value={values.year ? { value: values.year, label: values.year.toString(), } : null}
+						onChange={(option) => setFieldValue('year', option ? option.value : null)}
+						isClearable
+						isSearchable
 					/>
 					<div className='flex gap-4 '>
 						<button
 							type="submit"
-							className="btn-new h-10"
+							className="btn-search"
 						>
 							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
 							onClick={() => handleClear(setFieldValue)}
-							className="btn-cancel h-10"
+							className="btn-clear"
 						>
 							{t("CLEAR")}
 						</button>

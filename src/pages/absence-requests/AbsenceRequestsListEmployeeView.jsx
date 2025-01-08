@@ -5,33 +5,35 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
-import { BaseModal } from "../../components/modal";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
-import { AbsenceRequestsSearch } from "./search";
+import { AbsenceRequestsSearchEmployeeView } from "./search";
+import { AbsenceRequestsAddEmployeeView, AbsenceRequestsEditEmployeeView } from "../absence-requests";
 import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
 import "./AbsenceRequestsList.css";
 import { absenceRequestStatusConstant } from "../../constants";
 import { useSearchParams } from "react-router-dom";
-import debounce from "lodash.debounce";
 import { useModal } from "../../context";
-import { AbsenceRequestsStatusChange } from "../absence-requests";
+import debounce from "lodash.debounce";
+import { useAuth } from "../../context/AuthProvider";
 import { PaginationOptions } from "../../utils";
 
-export const AbsenceRequestsList = observer(() => {
+export const AbsenceRequestsListEmployeeView = observer(() => {
     const { t } = useTranslation();
     const { openModal, closeModal } = useModal();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { signal } = useRequestAbort();
     const [, setSearchParams] = useSearchParams();
+    const { loggedUser } = useAuth();
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = { ...absenceRequestsSearchStore.absenceRequestFilter };
+            const filter = { ...absenceRequestsSearchStore.absenceRequestFilter, userId: loggedUser.id };
 
             const response = await absenceRequestsService.getPagedList(filter, signal);
 
@@ -42,7 +44,7 @@ export const AbsenceRequestsList = observer(() => {
         } finally {
             setLoading(false);
         }
-    }, [signal, t]);
+    }, [signal, loggedUser, t]);
 
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
@@ -64,12 +66,6 @@ export const AbsenceRequestsList = observer(() => {
     }, [debouncedFetchData]);
 
     const columns = [
-        {
-            name: t('USER'),
-            selector: (row) => `${row.user?.firstName || ''} ${row.user?.lastName || ''}`.trim(),
-            sortable: true,
-            sortField: 'user.lastName',
-        },
         {
             name: t('DATE_FROM'),
             selector: (row) => row.dateFrom ? format(new Date(row.dateFrom), t('DATE_FORMAT')) : '',
@@ -106,39 +102,47 @@ export const AbsenceRequestsList = observer(() => {
         {
             name: t('ACTIONS'),
             cell: row => (
-                <div className="flex">
-                    <button
-                        onClick={() => changeStatus(row)}
-                    >
-                        {
-                            row.absenceRequestStatus === absenceRequestStatusConstant.pending ? (
-                                <FontAwesomeIcon icon={faEdit} className="text-blue-600 hover:underline p-2" />
-                            ) : (
-                                <FontAwesomeIcon icon={faCircleCheck} className="text-green-700 hover:underline p-2" />
-                            )
-                        }
-                    </button>
-                </div>
+                row.absenceRequestStatus === absenceRequestStatusConstant.pending && (
+                    <div className="flex">
+                        <button
+                            onClick={() => editRequestClick(row)}
+                            className="text-lg text-blue-500 hover:underline p-2">
+                            <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
+                        </button>
+                        <button
+                            onClick={() => deleteRequestClick(row)}
+                            className="text-lg text-red-500 hover:underline p-2">
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    </div>
+                )
             ),
         }
+
     ];
 
-    const changeStatus = (absenceRequest) => {
-        if (absenceRequest.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
-            openModal(<AbsenceRequestsStatusChange
-                absenceRequest={absenceRequest}
-                closeModal={closeModal}
-                fetchData={fetchData}
-                isStatusLocked={true}
-            />);
-        } else {
-            openModal(<AbsenceRequestsStatusChange
-                absenceRequest={absenceRequest}
-                closeModal={closeModal}
-                fetchData={fetchData}
-            />);
-        }
+    const addNewRequestClick = () => {
+        openModal(<AbsenceRequestsAddEmployeeView userId={loggedUser.id} closeModal={closeModal} fetchData={fetchData} />);
+    }
+
+    const editRequestClick = (absenceRequest) => {
+        openModal(<AbsenceRequestsEditEmployeeView absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
     };
+
+    const deleteRequestClick = (absenceRequest) => {
+        openModal(<DeleteConfirmationModal onDelete={() => deleteAbsenceRequest(absenceRequest.id)} onCancel={closeModal} />);
+    };
+
+    const deleteAbsenceRequest = async (absenceRequestId) => {
+        try {
+            await absenceRequestsService.delete(absenceRequestId);
+            fetchData();
+            closeModal();
+            toast.success(t('DELETED'));
+        } catch (error) {
+            toast.error(t('FAILED_TO_DELETE'));
+        }
+    }
 
     const handlePageChange = (newPage) => {
         absenceRequestsSearchStore.setPage(newPage);
@@ -170,11 +174,25 @@ export const AbsenceRequestsList = observer(() => {
 
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
-            <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
+            <div className="flex flex-col xs:flex-row justify-between">
+                <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
+               
+                <div className="flex justify-end mt-4 pb-4 pt-14 md:pt-14 sm:pt-14 xs:pt-14 ss:pt-0">
+                    <button
+                        type="button"
+                        className="btn-common h-10 md:max-w-[9rem] sm:max-w-[9rem] xs:max-w-full ss:max-w-full md:ml-auto"
+                        onClick={addNewRequestClick}
+                    >
+                        {t('ADD_NEW_REQUEST')}
+                    </button>
+
+                </div>
+            </div>
             <div className="flex flex-col gap-4 xs:flex-row">
-                <AbsenceRequestsSearch fetchData={fetchData} />
+                <AbsenceRequestsSearchEmployeeView fetchData={fetchData} />
             </div>
             <BaseModal />
+
             <div className="table max-w-full">
                 <DataTable
                     columns={columns}

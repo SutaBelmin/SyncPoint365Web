@@ -49,12 +49,12 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
             enableReinitialize
             onSubmit={handleSubmit}>
             {({ setFieldValue, values }) => (
-                <Form className="flex flex-col gap-4 md:flex-row">
+                <Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
                     <Field
                         name="searchQuery"
                         type="text"
                         placeholder={t('SEARCH_ABSENCE_REQUEST_TYPE')}
-                        className="input-search h-10 rounded-md border-gray-300 min-w-[18rem] w-full md:w-[13rem]"
+                        className="input-search h-10 rounded-md border-gray-300 w-full"
                         autoComplete="off"
                         value={values.searchQuery}
                         onChange={(e) => {
@@ -68,22 +68,26 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
                         options={absenceRequestTypeStatusOptions}
                         isSearchable={false}
                         isClearable
-                        className="h-10 border-gray-300 input-select-border min-w-[20rem] w-full md:min-w-[8rem] "
+                        className="h-10 border-gray-300 input-select-border w-full md:min-w-[8rem] "
                         value={values.status}
                         onChange={(selectedOption) => {
                             setFieldValue('status', selectedOption || absenceRequestTypeStatusOptions.find(option => option.value === absenceRequestTypeStatusConstant.all));
                         }}
                     />
-                    <button type="submit" className="btn-new h-10">
+                    <div className='flex gap-4 xs:w-full'>
+                    <button 
+                    type="submit" 
+                    className="btn-search">
                         {t('SEARCH')}
                     </button>
                     <button
                         type="button"
                         onClick={() => handleClear(setFieldValue)}
-                        className="btn-cancel lg:w-[10rem] md:w-[10rem] sm:w-full sx:w-full"
+                        className="btn-clear"
                     >
                         {t("CLEAR")}
                     </button>
+                    </div>
                 </Form>
             )}
         </Formik>

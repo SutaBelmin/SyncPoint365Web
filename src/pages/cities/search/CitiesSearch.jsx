@@ -71,7 +71,7 @@ export const CitiesSearch = ({ fetchData }) => {
       onSubmit={handleSearch}
     >
       {({ setFieldValue, values }) => (
-        <Form className="flex flex-col gap-4 md:flex-row">
+        <Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
           <Field
             type="text"
             name="searchQuery"
@@ -79,7 +79,7 @@ export const CitiesSearch = ({ fetchData }) => {
             value={values.searchQuery}
             onChange={(e) => setFieldValue('searchQuery', e.target.value)}
             autoComplete="off"
-            className="input-search h-10 rounded-md border-gray-300 min-w-[14rem] w-full"
+            className="input-search h-10 rounded-md border-gray-300 w-full"
           />
           <Select
             name="countryId"
@@ -89,20 +89,23 @@ export const CitiesSearch = ({ fetchData }) => {
             placeholder={t("SELECT_A_COUNTRY")}
             isClearable
             isSearchable
-            className="h-10 border-gray-300 input-select-border min-w-[14rem] w-full"
+            className="h-10 border-gray-300 input-select-border w-full min-w-[11rem]"
           />
-          <button type="submit"
-            className="btn-new h-10"
-          >
-            {t("SEARCH")}
-          </button>
-          <button
-            type="button"
-            onClick={() => handleClear(setFieldValue)}
-            className="btn-cancel h-10"
-          >
-            {t("CLEAR")}
-          </button>
+          <div className='flex gap-4 xs:w-full'>
+						<button
+							type="submit"
+							className="btn-search"
+						>
+							{t('SEARCH')}
+						</button>
+						<button
+							type="button"
+							onClick={() => handleClear(setFieldValue)}
+							className="btn-clear"
+						>
+							{t("CLEAR")}
+						</button>
+					</div>
         </Form>
       )}
     </Formik>

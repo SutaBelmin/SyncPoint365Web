@@ -14,10 +14,10 @@ import countriesSearchStore from "./stores/CountriesSearchStore";
 import { reaction } from "mobx";
 import { useTranslation } from 'react-i18next';
 import { NoDataMessage } from "../../components/common-ui";
-import { PaginationOptions } from "../../components/common-ui/PaginationOptions";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { useSearchParams } from "react-router-dom";
 import debounce from "lodash/debounce";
+import { PaginationOptions } from "../../utils";
 
 
 export const CountriesList = observer(() => {
