@@ -12,6 +12,7 @@ import { absenceRequestTypesService } from '../../../services';
 import { localeConstant } from '../../../constants';
 
 export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
+	const [isFirstLoad, setIsFirstLoad] = useState(true);
 	const [absenceRequestTypes, setAbsenceRequestTypes] = useState([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { t, i18n } = useTranslation();
@@ -76,10 +77,17 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 			return absenceRequestsSearchStore.absenceRequestTypeId;
 		})(),
 		year: (() => {
-			const yearFromParams = searchParams.get("year");
-			if (yearFromParams) {
-				const parsedYear = parseInt(yearFromParams);
-				return parsedYear;
+			if (isFirstLoad) {
+				const yearFromParams = searchParams.get("year");
+				if (yearFromParams) {
+					const parsedYear = parseInt(yearFromParams);
+					absenceRequestsSearchStore.setYear(parsedYear);
+					return parsedYear;
+				}
+				const currentYear = new Date().getFullYear();
+				absenceRequestsSearchStore.setYear(currentYear);
+				setIsFirstLoad(false);
+				return currentYear;
 			}
 			return absenceRequestsSearchStore.year;
 		})(),
@@ -118,14 +126,14 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 					<div className='flex gap-4 xs:w-full'>
 						<button
 							type="submit"
-							className="btn-new h-10 ss:w-full"
+							className="btn-search"
 						>
 							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
 							onClick={() => handleClear(setFieldValue)}
-							className="btn-cancel h-10 ss:w-full"
+							className="btn-clear"
 						>
 							{t("CLEAR")}
 						</button>

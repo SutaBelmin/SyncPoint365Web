@@ -192,7 +192,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                                 {t('COMMENT')}
                             </label>
                             <Field
-                                type="block"
+                                type="text"
                                 id="name"
                                 as="textarea"
                                 rows="4"

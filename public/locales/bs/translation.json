@@ -116,6 +116,7 @@
     "DATE_FROM": "Datum od", 
     "DATE_TO": "Datum do",
     "DATE_RETURN": "Povratak",
+    "DATE_OF_RETURN": "Date of Return",
     "TYPE": "Tip", 
     "NEW_REQUEST": "Novi zahtjev",
     "SELECT_USER": "Odaberi korisnika",

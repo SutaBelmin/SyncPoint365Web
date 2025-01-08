@@ -48,3 +48,11 @@
   padding: 16px; 
   z-index: 50;
 }
+
+.react-datepicker__input-container input {
+  box-shadow: none;
+  padding-right: 10px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-color: #cccccc;
+}

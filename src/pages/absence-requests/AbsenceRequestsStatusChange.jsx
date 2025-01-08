@@ -112,8 +112,9 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                     <label className="text-sm font-medium text-gray-700 mb-1">
                                         {t('COMMENT')}:
                                     </label>
-                                    <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-9">
-                                        <span className="text-gray-700">{absenceRequest.comment && absenceRequest.comment.trim() ? absenceRequest.comment : null}</span>
+                                    <div className="mt-1 block bg-white p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[6rem]">
+                                        <span 
+                                            className="text-gray-700">{absenceRequest.comment && absenceRequest.comment.trim() ? absenceRequest.comment : null}</span>
                                     </div>
                                 </div>
 

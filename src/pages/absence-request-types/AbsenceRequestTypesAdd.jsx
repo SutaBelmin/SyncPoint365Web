@@ -15,7 +15,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
         .required(t('NAME_IS_REQUIRED'))
     });
 
-    const addHandling = async (values, actions) => {
+    const addAbsenceRequestType = async (values, actions) => {
         const { setSubmitting } = actions;
         try {
             await absenceRequestTypesService.add(values, signal);
@@ -39,7 +39,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                     isActive: false,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, actions) => addHandling(values, actions)}
+                onSubmit={(values, actions) => addAbsenceRequestType(values, actions)}
             >
                 <Form>
                     <div className="mb-4">

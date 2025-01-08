@@ -94,14 +94,14 @@ export const CitiesSearch = ({ fetchData }) => {
           <div className='flex gap-4 xs:w-full'>
 						<button
 							type="submit"
-							className="btn-new h-10 ss:w-full"
+							className="btn-search"
 						>
 							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
 							onClick={() => handleClear(setFieldValue)}
-							className="btn-cancel h-10 ss:w-full"
+							className="btn-clear"
 						>
 							{t("CLEAR")}
 						</button>

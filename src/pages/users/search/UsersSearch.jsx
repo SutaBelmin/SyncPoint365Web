@@ -87,7 +87,7 @@ export const UsersSearch = ({ fetchData }) => {
             onSubmit={handleSearch}
         >
             {({ setFieldValue, values }) => (
-                <Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 ss:grid-cols-1">
+                <Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
                     <Field
                         type="text"
                         name="searchQuery"
@@ -124,14 +124,14 @@ export const UsersSearch = ({ fetchData }) => {
                     <div className='flex gap-4 xs:w-full'>
 						<button
 							type="submit"
-							className="btn-new h-10 ss:w-full"
+							className="btn-search"
 						>
 							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
 							onClick={() => handleClear(setFieldValue)}
-							className="btn-cancel h-10 ss:w-full"
+							className="btn-clear"
 						>
 							{t("CLEAR")}
 						</button>

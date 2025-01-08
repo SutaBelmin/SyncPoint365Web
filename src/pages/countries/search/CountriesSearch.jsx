@@ -49,14 +49,14 @@ export const CountriesSearch = ({fetchData}) => {
           <div className='flex gap-4 '>
 						<button
 							type="submit"
-							className="btn-new h-10 ss:w-full"
+							className="btn-search"
 						>
 							{t('SEARCH')}
 						</button>
 						<button
 							type="button"
 							onClick={() => handleClearFilters(setFieldValue)}
-							className="btn-cancel h-10 ss:w-full"
+							className="btn-clear"
 						>
 							{t("CLEAR")}
 						</button>
