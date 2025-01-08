@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal } from "../../components/modal";
-import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
+import { NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
 import { AbsenceRequestsSearch } from "./search";
 import { absenceRequestsService } from "../../services"
@@ -19,6 +19,7 @@ import { useSearchParams } from "react-router-dom";
 import debounce from "lodash.debounce";
 import { useModal } from "../../context";
 import { AbsenceRequestsStatusChange } from "../absence-requests";
+import { PaginationOptions } from "../../utils";
 
 export const AbsenceRequestsList = observer(() => {
     const { t } = useTranslation();

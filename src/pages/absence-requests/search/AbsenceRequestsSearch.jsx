@@ -12,8 +12,9 @@ import { format } from 'date-fns';
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService, usersService, enumsService } from '../../../services';
 import { localeConstant, absenceRequestStatusConstant } from '../../../constants';
+import { yearOptions } from '../../../utils/';
 import '../AbsenceRequestsList.css'
-import { yearOptions } from '../../../components/utils/yearOptions';
+
 
 export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const [isFirstLoad, setIsFirstLoad] = useState(true);

@@ -10,7 +10,7 @@ import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { absenceRequestsSearchStore } from '../stores';
 import { absenceRequestTypesService } from '../../../services';
 import { localeConstant } from '../../../constants';
-import { yearOptions } from '../../../components/utils/yearOptions';
+import { yearOptions } from '../../../utils';
 
 export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 	const [isFirstLoad, setIsFirstLoad] = useState(true);

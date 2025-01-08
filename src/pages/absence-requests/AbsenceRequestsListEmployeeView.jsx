@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
-import { PaginationOptions, NoDataMessage } from "../../components/common-ui";
+import { NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
 import { AbsenceRequestsSearchEmployeeView } from "./search";
 import { AbsenceRequestsAddEmployeeView, AbsenceRequestsEditEmployeeView } from "../absence-requests";
@@ -20,6 +20,7 @@ import { useSearchParams } from "react-router-dom";
 import { useModal } from "../../context";
 import debounce from "lodash.debounce";
 import { useAuth } from "../../context/AuthProvider";
+import { PaginationOptions } from "../../utils";
 
 export const AbsenceRequestsListEmployeeView = observer(() => {
     const { t } = useTranslation();

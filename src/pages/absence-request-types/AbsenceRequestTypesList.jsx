@@ -9,7 +9,7 @@ import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { NoDataMessage } from "../../components/common-ui";
-import { PaginationOptions } from "../../components/common-ui";
+import { PaginationOptions } from "../../utils";
 import { useRequestAbort } from "../../components/hooks";
 import AbsenceRequestTypesSearch from "./search";
 import { AbsenceRequestTypesAdd, AbsenceRequestTypesEdit } from "../absence-request-types";
