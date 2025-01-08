@@ -28,17 +28,13 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
         setOpenDropdown(prevState => (prevState === dropdown ? null : dropdown));
     }
 
-    const userHasAnyRole = () => {
-        return userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator) || userHasRole(roleConstant.employee);
-    };
-
     const menuItems = [
-        { icon: faHome, label: t('HOME'), link: '/home', isVisible: userHasAnyRole() },
-        { icon: faUser, label: t('USERS'), link: '/users', isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee) },
-        { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types', isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee) },
-        { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests', isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee) },
+        { icon: faHome, label: t('HOME'), link: '/home', isVisible: userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator) || userHasRole(roleConstant.employee) },
+        { icon: faUser, label: t('USERS'), link: '/users', isVisible: userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator) },
+        { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types', isVisible: userHasRole(roleConstant.superAdministrator) },
+        { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests', isVisible: userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator)  },
         { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests-user', isVisible: userHasRole(roleConstant.employee) },
-        { icon: faLocationCrosshairs, label: t('LOCATION'), link: null, isVisible: userHasAnyRole() && !userHasRole(roleConstant.employee),
+        { icon: faLocationCrosshairs, label: t('LOCATION'), link: null, isVisible: userHasRole(roleConstant.superAdministrator),
             items: [
                 { icon: faEarthAmerica, label: t('COUNTRIES'), link: '/countries' },
                 { icon: faCity, label: t('CITIES'), link: '/cities' },
