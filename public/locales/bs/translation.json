@@ -151,5 +151,8 @@
     "APPLICANT": "Podnositelj",
     "DATE_FROM_TO": "Datum od - do",
     "COMMENT": "Komentar",
-    "NO_COMMENT": "Nema komentara"
+    "NO_COMMENT": "Nema komentara",
+    "PAGE_NOT_FOUND":"Stranica nije pronađena",
+    "BACK_TO_HOME":"Nazad na početnu stranicu",
+    "PAGE_NOT_FOUND_MESSAGE":"Nismo uspjeli pronaći stranicu koju tražite."
 }
