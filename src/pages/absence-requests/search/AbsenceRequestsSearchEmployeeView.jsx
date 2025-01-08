@@ -35,7 +35,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 
 	const yearOptions = () => {
 		const currentYear = new Date().getFullYear();
-		const years = Array.from({ length: 11 }, (_, i) => currentYear - 5 + i);
+		const years = Array.from({ length: 6 }, (_, i) => currentYear + i);
 		return years.map(year => ({ value: year, label: year.toString() }));
 	};
 
