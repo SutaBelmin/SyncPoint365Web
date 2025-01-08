@@ -17,6 +17,8 @@ import { citiesService, enumsService, usersService } from '../../services';
 import { genderConstant, localeConstant, roleConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import defaultUserImage from '../../assets/images/defaultUser.PNG';
+import defaultUserImage from '../../assets/images';
+import { useDropzone } from 'react-dropzone';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -26,7 +28,27 @@ export const UsersAdd = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
     const [profilePicture, setProfilePicture] = useState(null);
+    
+    const onDrop = useCallback(
+        (acceptedFiles) => {
+            const file = acceptedFiles[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    setProfilePicture(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        [setProfilePicture]
+    );
 
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        multiple: false,
+        accept: 'image/*',
+    });
+    
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const addUser = async (values) => {
@@ -182,7 +204,7 @@ export const UsersAdd = () => {
                         roleId: null,
                         password: '',
                         passwordConfirm: '',
-                        ImagePath: null
+                        imageFile: null
                     }}
                     validationSchema={validationSchema}
                     onSubmit={addUser}
@@ -202,53 +224,40 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div
+                                        {...getRootProps()}
                                         className="w-full sm:w-2/5 md:w-2/3 lg:w-1/2 xl:w-full h-52 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
-                                        onDrop={(e) => {
-                                            e.preventDefault();
-                                            const file = e.dataTransfer.files[0];
-                                            if (file) {
-                                                setFieldValue("ImagePath", file);
-                                                setProfilePicture(URL.createObjectURL(file));
-                                            }
-                                        }}
-                                        onDragOver={(e) => e.preventDefault()}
                                     >
+                                        <input
+                                            {...getInputProps()}
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (file) {
+                                                    setFieldValue("imageFile", file);
+                                                }
+                                            }}
+                                        />
                                         <p className="text-center">
                                             {t('DRAG_AND_DROP')}
                                             <br />
                                         </p>
                                     </div>
 
-                                    <input
-                                        type="file"
-                                        id="ImagePath"
-                                        name="ImagePath"
-                                        onChange={(event) => {
-                                            const file = event.target.files[0];
-                                            if (file) {
-                                                setFieldValue("ImagePath", file);
-                                                setProfilePicture(URL.createObjectURL(file));
-                                            }
-                                        }}
-                                        className="mt-2 hidden"
-                                    />
-
                                     <div className="flex justify-center items-center space-x-2 mt-2 h-14">
                                         <div className="flex justify-center items-center">
                                             <label
-                                                htmlFor="ImagePath"
+                                                htmlFor="imageFile"
                                                 className="btn-save inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 text-center"
                                             >
-                                                <FaUpload className="mr-1"></FaUpload> 
+                                                <FaUpload className="mr-1"></FaUpload>
                                                 {t('CHOOSE_PICTURE')}
                                             </label>
                                         </div>
                                         <div className="flex justify-center items-center">
                                             <button
                                                 className="btn-cancel inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer text-white text-center"
-                                                onClick={ handleDeleteImage }
+                                                onClick={handleDeleteImage}
                                                 disabled={!profilePicture}
-                                                >
+                                            >
                                                 {t('DELETE_PICTURE')}
                                             </button>
                                         </div>

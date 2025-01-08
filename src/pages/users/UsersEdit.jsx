@@ -17,7 +17,8 @@ import { FaArrowLeft, FaUpload } from 'react-icons/fa';
 import { roleConstant, genderConstant, localeConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import defaultUserImage from '../../assets/images/defaultUser.PNG';
-
+import defaultUserImage from '../../assets/images';
+import { allowedExtensions } from '../../constants';
 
 export const UsersEdit = () => {
     const { t, i18n } = useTranslation();
@@ -30,14 +31,13 @@ export const UsersEdit = () => {
     const [user, setUser] = useState(null);
     
     const [profilePicture, setProfilePicture] = useState(null);
-    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
     const updateUser = async (values) => {
         try {
-            if (values.ImagePath) {
-                const fileExtension = values.ImagePath.name.substring(values.ImagePath.name.lastIndexOf('.')).toLowerCase();
+            if (values.imageFile) {
+                const fileExtension = values.imageFile.name.substring(values.imageFile.name.lastIndexOf('.')).toLowerCase();
 
                 if (!allowedExtensions.includes(fileExtension)) {
                     toast.error(t('WRONG_EXTENSION'));
@@ -46,14 +46,14 @@ export const UsersEdit = () => {
             }
 
             const formData = new FormData();
-            if (values.ImagePath) {
-                formData.append("ImagePath", values.ImagePath);
+            if (values.imageFile) {
+                formData.append("imageFile", values.imageFile);
             }
 
-            await usersService.update({ ...values, id: userId, ImagePath: values.ImagePath });
+            await usersService.update({ ...values, id: userId, imageFile: values.imageFile });
 
-            if (values.ImagePath) {
-                setProfilePicture(URL.createObjectURL(values.ImagePath));
+            if (values.imageFile) {
+                setProfilePicture(URL.createObjectURL(values.imageFile));
             }
 
             toast.success(t('UPDATED'));
@@ -136,8 +136,8 @@ export const UsersEdit = () => {
             const response = await usersService.getById(userId, signal);
             setUser(response.data);
 
-            const userImage = response.data.imagePath
-                ? `data:image/jpeg;base64,${response.data.imagePath}`
+            const userImage = response.data.imageFile
+                ? `data:image/jpeg;base64,${response.data.imageFile}`
                 : defaultUserImage;
             setProfilePicture(userImage);
 
@@ -223,7 +223,7 @@ export const UsersEdit = () => {
                         address: user.address || '',
                         phone: user.phone || '',
                         role: roles.find(r => r.label.toLowerCase() === user.role.toLowerCase())?.value,
-                        ImagePath: user.ImagePath
+                        imageFile: null
                     }}
                     validationSchema={validationSchema}
                     onSubmit={updateUser}
@@ -249,7 +249,7 @@ export const UsersEdit = () => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
                                             if (file) {
-                                                setFieldValue("ImagePath", file);
+                                                setFieldValue("imageFile", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -263,12 +263,12 @@ export const UsersEdit = () => {
 
                                     <input
                                         type="file"
-                                        id="ImagePath"
-                                        name="ImagePath"
+                                        id="imageFile"
+                                        name="imageFile"
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
-                                                setFieldValue("ImagePath", file);
+                                                setFieldValue("imageFile", file);
                                                 setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
@@ -278,7 +278,7 @@ export const UsersEdit = () => {
                                     <div className="flex justify-center items-center space-x-2 mt-2 h-14">
                                         <div className="flex justify-center items-center">
                                             <label
-                                                htmlFor="ImagePath"
+                                                htmlFor="imageFile"
                                                 className="btn-save inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 text-center"
                                             >
                                                 <FaUpload className="mr-1"></FaUpload> 
