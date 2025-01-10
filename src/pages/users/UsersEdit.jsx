@@ -30,6 +30,7 @@ export const UsersEdit = () => {
     const [user, setUser] = useState(null);
     
     const [profilePicture, setProfilePicture] = useState(null);
+    
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
@@ -37,7 +38,7 @@ export const UsersEdit = () => {
         try {
             if (values.imageFile) {
                 const fileExtension = values.imageFile.name.substring(values.imageFile.name.lastIndexOf('.')).toLowerCase();
-
+                
                 if (!allowedExtensions.includes(fileExtension)) {
                     toast.error(t('WRONG_EXTENSION'));
                     return;
@@ -248,6 +249,7 @@ export const UsersEdit = () => {
                                             type="file"
                                             name="imageFile"
                                             onChange={(event) => {
+                                                const fileInput = event.target;
                                                 const file = event.target.files[0];
                                                 if (file) {
                                                     const reader = new FileReader();
@@ -256,6 +258,7 @@ export const UsersEdit = () => {
                                                     };
                                                     reader.readAsDataURL(file);
                                                     setFieldValue("imageFile", file);
+                                                    fileInput.value = '';
                                                 }
                                             }}
                                             className="hidden"
@@ -271,6 +274,7 @@ export const UsersEdit = () => {
                                         type="file"
                                         name="imageFile"
                                         onChange={(event) => {
+                                            const fileInput = event.target;
                                             const file = event.target.files[0];
                                             if (file) {
                                                 const reader = new FileReader();
@@ -279,6 +283,7 @@ export const UsersEdit = () => {
                                                 };
                                                 reader.readAsDataURL(file);
                                                 setFieldValue("imageFile", file);
+                                                fileInput.value = '';
                                             }
                                         }}
                                         className="mt-2 hidden"
