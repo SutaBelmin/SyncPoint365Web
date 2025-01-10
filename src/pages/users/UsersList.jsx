@@ -104,8 +104,8 @@ export const UsersList = observer(() => {
             cell: (row) => (
                 <button
                     onClick={() => handleStatusChange(row.id, row.isActive)}
-                    className={`relative inline-flex items-center h-6 rounded-full w-11 ${
-                        row.isActive ? "bg-green-400" : "bg-gray-300"
+                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${
+                        row.isActive ? "bg-green-600" : "bg-gray-300"
                     }`}
                 >
                     <span
