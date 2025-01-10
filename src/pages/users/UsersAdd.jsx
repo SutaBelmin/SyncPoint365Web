@@ -16,9 +16,7 @@ import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
 import { genderConstant, localeConstant, roleConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import defaultUserImage from '../../assets/images/defaultUser.PNG';
-import defaultUserImage from '../../assets/images';
-import { useDropzone } from 'react-dropzone';
+import {defaultUserImage} from '../../assets/images';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -28,26 +26,6 @@ export const UsersAdd = () => {
     const [roles, setRoles] = useState([]);
     const [genders, setGenders] = useState([]);
     const [profilePicture, setProfilePicture] = useState(null);
-    
-    const onDrop = useCallback(
-        (acceptedFiles) => {
-            const file = acceptedFiles[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    setProfilePicture(event.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        },
-        [setProfilePicture]
-    );
-
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop,
-        multiple: false,
-        accept: 'image/*',
-    });
     
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
@@ -159,15 +137,7 @@ export const UsersAdd = () => {
     }, [signal, t]);
 
     const handleDeleteImage = async () => {
-        try {
             setProfilePicture(null);
-        } catch (error) {
-            if (error.response && error.response.status === 404) {
-                toast.info(t('IMAGE_NOT_FOUND'));
-            } else {
-                toast.error(t('IMAGE_ERROR'));
-            }
-        }
     };
 
     useEffect(() => {
@@ -214,7 +184,7 @@ export const UsersAdd = () => {
                             <div className="w-full md:w-1/4 pl-0 md:pl-4 bg-white rounded-xl mr-4 mb-0 py-10 flex flex-col items-center pr-4">
                                 <div className="mb-4 mt-12 xl:w-4/5">
                                     <div className="flex justify-center mb-4">
-                                        <div className="w-[200px] h-[200px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
+                                        <div className="w-[200px] h-[200px] rounded-full mb-4 -mt-16 border-4 border-blue-400 overflow-hidden">
                                             <img
                                                 src={profilePicture || defaultUserImage}
                                                 alt="Profile"
@@ -224,23 +194,61 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div
-                                        {...getRootProps()}
                                         className="w-full sm:w-2/5 md:w-2/3 lg:w-1/2 xl:w-full h-52 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            const file = e.dataTransfer.files[0];
+                                            if(file){
+                                                const reader = new FileReader();
+                                                reader.onload = (event) => {
+                                                    setProfilePicture(event.target.result);
+                                                };
+                                                reader.readAsDataURL(file);
+                                                setFieldValue("imageFile", file);
+                                            }
+                                        }}
                                     >
                                         <input
-                                            {...getInputProps()}
+                                             id="imageFile"
+                                             type="file"
+                                             name="imageFile"
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 if (file) {
+                                                    const reader = new FileReader();
+                                                    reader.onloadend = () => {
+                                                        setProfilePicture(reader.result);
+                                                    };
+                                                    reader.readAsDataURL(file);
                                                     setFieldValue("imageFile", file);
                                                 }
                                             }}
+                                            className="hidden"
                                         />
                                         <p className="text-center">
                                             {t('DRAG_AND_DROP')}
                                             <br />
                                         </p>
                                     </div>
+
+                                    <input
+                                    id="imageFile"
+                                    type="file"
+                                    name="imageFile"
+                                    onChange={(event) => {
+                                        const file = event.target.files[0];
+                                        if(file){
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => {
+                                                setProfilePicture(reader.result);
+                                            };
+                                            reader.readAsDataURL(file);
+                                            setFieldValue("imageFile", file);
+                                        }
+                                    }}
+                                    className="mt-2 hidden"
+                                    />
 
                                     <div className="flex justify-center items-center space-x-2 mt-2 h-14">
                                         <div className="flex justify-center items-center">
@@ -257,6 +265,7 @@ export const UsersAdd = () => {
                                                 className="btn-cancel inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer text-white text-center"
                                                 onClick={handleDeleteImage}
                                                 disabled={!profilePicture}
+                                                style={{display: profilePicture && profilePicture !== defaultUserImage ? 'inline-flex' : 'none'}}
                                             >
                                                 {t('DELETE_PICTURE')}
                                             </button>

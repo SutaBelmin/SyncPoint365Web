@@ -180,5 +180,6 @@
     "IMAGE_NOT_FOUND": "Dodajte sliku da bi je izbrisali!",
     "SYSTEM_DATA": "Sistemski podaci",
     "DELETE_PICTURE":"Ukloni sliku",
-    "PERSONAL_INFO":"Lični podaci"
+    "PERSONAL_INFO":"Lični podaci",
+    "SELECT_GENDER":"Odaberi spol"
 }

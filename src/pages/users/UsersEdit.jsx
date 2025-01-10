@@ -16,8 +16,7 @@ import { registerLocale } from "react-datepicker";
 import { FaArrowLeft, FaUpload } from 'react-icons/fa';
 import { roleConstant, genderConstant, localeConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import defaultUserImage from '../../assets/images/defaultUser.PNG';
-import defaultUserImage from '../../assets/images';
+import {defaultUserImage} from '../../assets/images';
 import { allowedExtensions } from '../../constants';
 
 export const UsersEdit = () => {
@@ -49,12 +48,8 @@ export const UsersEdit = () => {
             if (values.imageFile) {
                 formData.append("imageFile", values.imageFile);
             }
-
-            await usersService.update({ ...values, id: userId, imageFile: values.imageFile });
-
-            if (values.imageFile) {
-                setProfilePicture(URL.createObjectURL(values.imageFile));
-            }
+            
+            await usersService.update({ ...values, id: userId, imageFile: values.imageFile });            
 
             toast.success(t('UPDATED'));
             navigate('/users');
@@ -63,20 +58,9 @@ export const UsersEdit = () => {
         }
     }
 
-
     const handleDeleteImage = async () => {
-        try {
-            await usersService.deleteUserImage(userId);
-            setProfilePicture(null);
-        } catch (error) {
-            if (error.response && error.response.status === 404) {
-                toast.info(t('IMAGE_NOT_FOUND'));
-            } else {
-                toast.error(t('IMAGE_ERROR'));
-            }
-        }
+        setProfilePicture(null);
     };
-
 
     const validationSchema = Yup.object({
         firstName: Yup.string().required(t('FIRST_NAME_IS_REQUIRED')),
@@ -123,7 +107,7 @@ export const UsersEdit = () => {
             role.label === roleConstant.administrator ? t('ADMINISTRATOR') :
                 role.label === roleConstant.employee ? t('EMPLOYEE') : role.label
     }));
-
+    
     const genderOptions = genders.map(gender => ({
         ...gender,
         label: gender.label === genderConstant.male ? t('MALE') :
@@ -234,9 +218,9 @@ export const UsersEdit = () => {
 
                                 <div className="mb-4 mt-12 xl:w-4/5">
                                     <div className="flex justify-center mb-4">
-                                        <div className="w-[200px] h-[200px] rounded-full mb-4 border-4 border-blue-400 overflow-hidden">
+                                        <div className="w-[200px] h-[200px] rounded-full mb-4 -mt-16 border-4 border-blue-400 overflow-hidden">
                                             <img
-                                                src={profilePicture}
+                                                src={profilePicture || defaultUserImage}
                                                 alt="Profile"
                                                 className="w-full h-full object-cover"
                                             />
@@ -245,16 +229,37 @@ export const UsersEdit = () => {
 
                                     <div
                                         className="w-full sm:w-2/5 md:w-2/3 lg:w-1/2 xl:w-full h-40 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
+                                        onDragOver={(e) => e.preventDefault()} 
                                         onDrop={(e) => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
                                             if (file) {
+                                                const reader = new FileReader();
+                                                reader.onload = (event) => {
+                                                    setProfilePicture(event.target.result);
+                                                };
+                                                reader.readAsDataURL(file);
                                                 setFieldValue("imageFile", file);
-                                                setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
-                                        onDragOver={(e) => e.preventDefault()}
                                     >
+                                        <input
+                                            id="imageFile"
+                                            type="file"
+                                            name="imageFile"
+                                            onChange={(event) => {
+                                                const file = event.target.files[0];
+                                                if (file) {
+                                                    const reader = new FileReader();
+                                                    reader.onloadend = () => {
+                                                        setProfilePicture(reader.result);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                    setFieldValue("imageFile", file);
+                                                }
+                                            }}
+                                            className="hidden"
+                                        />
                                         <p className="text-center">
                                             {t('DRAG_AND_DROP')}
                                             <br />
@@ -262,14 +267,18 @@ export const UsersEdit = () => {
                                     </div>
 
                                     <input
-                                        type="file"
                                         id="imageFile"
+                                        type="file"
                                         name="imageFile"
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
+                                                const reader = new FileReader();
+                                                reader.onloadend = () => {
+                                                    setProfilePicture(reader.result);
+                                                };
+                                                reader.readAsDataURL(file);
                                                 setFieldValue("imageFile", file);
-                                                setProfilePicture(URL.createObjectURL(file));
                                             }
                                         }}
                                         className="mt-2 hidden"
@@ -281,25 +290,27 @@ export const UsersEdit = () => {
                                                 htmlFor="imageFile"
                                                 className="btn-save inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 text-center"
                                             >
-                                                <FaUpload className="mr-1"></FaUpload> 
+                                                <FaUpload className="mr-1"></FaUpload>
                                                 {t('CHOOSE_PICTURE')}
                                             </label>
                                         </div>
                                         <div className="flex justify-center items-center">
                                             <button
                                                 className="btn-cancel inline-flex items-center mt-4 px-10 py-4 mr-1 rounded-md cursor-pointer text-white text-center"
-                                                onClick={ handleDeleteImage }
+                                                onClick={handleDeleteImage}
                                                 disabled={!profilePicture}
-                                                >
+                                                style={{ display: profilePicture && profilePicture !== defaultUserImage ? 'inline-flex' : 'none' }}
+                                            >
                                                 {t('DELETE_PICTURE')}
                                             </button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
 
                             <div className="ml-5 pr-7 md:pr-30 bg-white p-3 md:w-2/3 pl-0 md:pl-4 bg-white rounded-xl">
-                            <h2 className="text-l font-bold col-span-2 mb-2">{t('PERSONAL_INFO')}</h2>
+                                <h2 className="text-l font-bold col-span-2 mb-2">{t('PERSONAL_INFO')}</h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     <div className="mb-4">
                                         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
@@ -317,28 +328,28 @@ export const UsersEdit = () => {
 
                                     <div className="mb-4 mt-1">
                                         <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                                            {t('PHONE')} <span className='text-red-500'>*</span>
+                                            {t('PHONE')} <span className="text-red-500">*</span>
                                         </label>
-                                        <Field
-                                            name="phone"
-                                            render={({ field }) => (
+                                        <Field name="phone">
+                                            {({ field, form }) => (
                                                 <PhoneInput
                                                     inputProps={{
                                                         name: 'phone',
                                                         id: 'phone',
-                                                        className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                                        className: 'w-full px-11 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500',
                                                     }}
                                                     {...field}
-                                                    onChange={(value) => setFieldValue('phone', value)}
-                                                    value={values.phone}
+                                                    onChange={(value) => form.setFieldValue('phone', value)}
+                                                    value={field.value}
                                                     enableSearch
-                                                    country={'ba'}
+                                                    country="ba"
                                                     className="phone-input"
                                                 />
                                             )}
-                                        />
+                                        </Field>
                                         <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
                                     </div>
+
 
 
                                     <div className="mb-4">
@@ -408,25 +419,25 @@ export const UsersEdit = () => {
                                         <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    
-                                        <div className="mb-4">
-                                            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-                                                {t('GENDER')} <span className='text-red-500'>*</span>
-                                            </label>
-                                            <Select
-                                                id="gender"
-                                                name="gender"
-                                                onChange={(option) => setFieldValue('gender', option ? option.value : '')}
-                                                options={genderOptions}
-                                                placeholder={t('SELECT_GENDER')}
-                                                value={genderOptions.find((gender) => gender.value === values.gender)}
-                                                getOptionLabel={option => option.label}
-                                                getOptionValue={option => option.value}
-                                                className='input-select-border mt-1'
-                                            />
-                                            <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                
+
+                                    <div className="mb-4">
+                                        <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                                            {t('GENDER')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Select
+                                            id="gender"
+                                            name="gender"
+                                            onChange={(option) => setFieldValue('gender', option ? option.value : '')}
+                                            options={genderOptions}
+                                            placeholder={t('SELECT_GENDER')}
+                                            value={genderOptions.find((gender) => gender.value === values.gender)}
+                                            getOptionLabel={option => option.label}
+                                            getOptionValue={option => option.value}
+                                            className='input-select-border mt-1'
+                                        />
+                                        <ErrorMessage name="gender" component="div" className="text-red-500 text-sm" />
+                                    </div>
+
 
                                     <div className="mb-4">
                                         <label htmlFor="cityId" className="block text-sm font-medium text-gray-700">
@@ -447,22 +458,22 @@ export const UsersEdit = () => {
                                     <h2 className="text-l font-bold col-span-2">{t('SYSTEM_DATA')}</h2>
 
                                     <div className="w-full col-span-1">
-                                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                                                {t('ROLE')} <span className='text-red-500'>*</span>
-                                            </label>
-                                            <Select
-                                                id="role"
-                                                name="role"
-                                                onChange={(option) => setFieldValue('role', option ? option.value : '')}
-                                                options={rolesOptions}
-                                                value={rolesOptions.find((role) => role.value === values.role)}
-                                                getOptionLabel={option => option.label}
-                                                getOptionValue={option => option.value}
-                                                placeholder={t('SELECT_ROLE')}
-                                                className='input-select-border mt-1'
-                                            />
-                                            <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
-                                        </div>
+                                        <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                                            {t('ROLE')} <span className='text-red-500'>*</span>
+                                        </label>
+                                        <Select
+                                            id="role"
+                                            name="role"
+                                            onChange={(option) => setFieldValue('role', option ? option.value : '')}
+                                            options={rolesOptions}
+                                            value={rolesOptions.find((role) => role.value === values.role)}
+                                            getOptionLabel={option => option.label}
+                                            getOptionValue={option => option.value}
+                                            placeholder={t('SELECT_ROLE')}
+                                            className='input-select-border mt-1'
+                                        />
+                                        <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
+                                    </div>
 
                                 </div>
                                 <div className="flex justify-end mt-7">

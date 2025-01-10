@@ -180,5 +180,6 @@
     "IMAGE_NOT_FOUND": "Add picture to delete it!",
     "SYSTEM_DATA": "System data",
     "DELETE_PICTURE": "Delete picture",
-    "PERSONAL_INFO":"Personal information"
+    "PERSONAL_INFO":"Personal information",
+    "SELECT_GENDER":"Select gender"
 }
