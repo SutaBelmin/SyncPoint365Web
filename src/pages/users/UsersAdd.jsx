@@ -136,7 +136,7 @@ export const UsersAdd = () => {
         }
     }, [signal, t]);
 
-    const handleDeleteImage = async () => {
+    const handleDeleteImage = () => {
             setProfilePicture(null);
     };
 
@@ -193,6 +193,20 @@ export const UsersAdd = () => {
                                         </div>
                                     </div>
 
+                                    <div className="flex justify-center items-center mb-4">
+                                            <button
+                                                className="btn-cancel inline-flex items-center px-10 py-4 rounded-md cursor-pointer text-white text-center"
+                                                onClick={() => {
+                                                    handleDeleteImage();
+                                                    setFieldValue("imageFile", null);
+                                                }}                                                
+                                                disabled={!profilePicture}
+                                                style={{visibility: profilePicture && profilePicture !== defaultUserImage ? 'visible' : 'hidden'}}
+                                            >
+                                                {t('DELETE_PICTURE')}
+                                            </button>
+                                        </div>
+
                                     <div
                                         className="w-full sm:w-2/5 md:w-2/3 lg:w-1/2 xl:w-full h-52 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
                                         onDragOver={(e) => e.preventDefault()}
@@ -210,10 +224,11 @@ export const UsersAdd = () => {
                                         }}
                                     >
                                         <input
-                                             id="imageFile"
+                                             id="imageFile1"
                                              type="file"
                                              name="imageFile"
                                             onChange={(e) => {
+                                                const fileInput = e.target;
                                                 const file = e.target.files[0];
                                                 if (file) {
                                                     const reader = new FileReader();
@@ -222,6 +237,7 @@ export const UsersAdd = () => {
                                                     };
                                                     reader.readAsDataURL(file);
                                                     setFieldValue("imageFile", file);
+                                                    fileInput.value = '';
                                                 }
                                             }}
                                             className="hidden"
@@ -233,10 +249,11 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <input
-                                    id="imageFile"
+                                    id="imageFile2"
                                     type="file"
                                     name="imageFile"
                                     onChange={(event) => {
+                                        const fileInput = event.target;
                                         const file = event.target.files[0];
                                         if(file){
                                             const reader = new FileReader();
@@ -245,6 +262,7 @@ export const UsersAdd = () => {
                                             };
                                             reader.readAsDataURL(file);
                                             setFieldValue("imageFile", file);
+                                            fileInput.value = '';
                                         }
                                     }}
                                     className="mt-2 hidden"
@@ -253,23 +271,14 @@ export const UsersAdd = () => {
                                     <div className="flex justify-center items-center space-x-2 mt-2 h-14">
                                         <div className="flex justify-center items-center">
                                             <label
-                                                htmlFor="imageFile"
+                                                htmlFor="imageFile1"
                                                 className="btn-save inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 text-center"
                                             >
                                                 <FaUpload className="mr-1"></FaUpload>
                                                 {t('CHOOSE_PICTURE')}
                                             </label>
                                         </div>
-                                        <div className="flex justify-center items-center">
-                                            <button
-                                                className="btn-cancel inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer text-white text-center"
-                                                onClick={handleDeleteImage}
-                                                disabled={!profilePicture}
-                                                style={{display: profilePicture && profilePicture !== defaultUserImage ? 'inline-flex' : 'none'}}
-                                            >
-                                                {t('DELETE_PICTURE')}
-                                            </button>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -278,7 +287,7 @@ export const UsersAdd = () => {
                             <h2 className="text-l font-bold col-span-2 mb-2">{t('PERSONAL_INFO')}</h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     <div className="mb-4">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                                             {t('FIRST_NAME')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Field
@@ -292,7 +301,7 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div className="mb-4 mt-1">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                                             {t('PHONE')} <span className='text-red-500'>*</span>
                                         </label>
                                         <PhoneInput
@@ -311,7 +320,7 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div className="mb-4">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
                                             {t('LAST_NAME')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Field
@@ -326,7 +335,7 @@ export const UsersAdd = () => {
 
 
                                     <div className="mb-4">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                             {t('EMAIL')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Field
@@ -373,7 +382,7 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div className="mb-4">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                                             {t('ADDRESS')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Field
@@ -388,7 +397,7 @@ export const UsersAdd = () => {
 
 
                                     <div className="mb-4">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
                                             {t('GENDER')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Select
@@ -405,7 +414,7 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div className="mb-4">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="cityId" className="block text-sm font-medium text-gray-700">
                                             {t('CITY')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Select
@@ -425,7 +434,7 @@ export const UsersAdd = () => {
                                     <h2 className="text-l font-bold col-span-2">{t('SYSTEM_DATA')}</h2>
 
                                     <div className="w-1/2 col-span-2">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">
                                             {t('ROLE')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Select
@@ -464,7 +473,7 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <div className="w-1/2 col-span-2">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700">
                                             {t('PASSWORD_CONFIRM')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Field

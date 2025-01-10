@@ -30,6 +30,7 @@ export const UsersEdit = () => {
     const [user, setUser] = useState(null);
     
     const [profilePicture, setProfilePicture] = useState(null);
+    const [isImageDeleted, setIsImageDeleted] = useState(false);
     
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
@@ -44,23 +45,26 @@ export const UsersEdit = () => {
                     return;
                 }
             }
-
+    
             const formData = new FormData();
             if (values.imageFile) {
                 formData.append("imageFile", values.imageFile);
             }
-            
-            await usersService.update({ ...values, id: userId, imageFile: values.imageFile });            
 
+            formData.append("isImageDeleted", isImageDeleted);
+    
+            await usersService.update({ ...values, id: userId, imageFile: values.imageFile, isImageDeleted });
+    
             toast.success(t('UPDATED'));
             navigate('/users');
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }
+    };
 
-    const handleDeleteImage = async () => {
+    const handleDeleteImage = () => {
         setProfilePicture(null);
+        setIsImageDeleted(true);  
     };
 
     const validationSchema = Yup.object({
@@ -228,6 +232,17 @@ export const UsersEdit = () => {
                                         </div>
                                     </div>
 
+                                    <div className="flex justify-center items-center mb-4">
+                                            <button
+                                                className="btn-cancel inline-flex items-center px-10 py-4 mr-1 rounded-md cursor-pointer text-white text-center"
+                                                onClick={handleDeleteImage}
+                                                disabled={!profilePicture}
+                                                style={{ visibility: profilePicture && profilePicture !== defaultUserImage ? 'visible' : 'hidden' }}
+                                            >
+                                                {t('DELETE_PICTURE')}
+                                            </button>
+                                        </div>
+
                                     <div
                                         className="w-full sm:w-2/5 md:w-2/3 lg:w-1/2 xl:w-full h-40 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
                                         onDragOver={(e) => e.preventDefault()} 
@@ -241,6 +256,7 @@ export const UsersEdit = () => {
                                                 };
                                                 reader.readAsDataURL(file);
                                                 setFieldValue("imageFile", file);
+                                                setIsImageDeleted(false);
                                             }
                                         }}
                                     >
@@ -259,6 +275,7 @@ export const UsersEdit = () => {
                                                     reader.readAsDataURL(file);
                                                     setFieldValue("imageFile", file);
                                                     fileInput.value = '';
+                                                    setIsImageDeleted(false);
                                                 }
                                             }}
                                             className="hidden"
@@ -284,6 +301,7 @@ export const UsersEdit = () => {
                                                 reader.readAsDataURL(file);
                                                 setFieldValue("imageFile", file);
                                                 fileInput.value = '';
+                                                setIsImageDeleted(false);
                                             }
                                         }}
                                         className="mt-2 hidden"
@@ -298,16 +316,6 @@ export const UsersEdit = () => {
                                                 <FaUpload className="mr-1"></FaUpload>
                                                 {t('CHOOSE_PICTURE')}
                                             </label>
-                                        </div>
-                                        <div className="flex justify-center items-center">
-                                            <button
-                                                className="btn-cancel inline-flex items-center mt-4 px-10 py-4 mr-1 rounded-md cursor-pointer text-white text-center"
-                                                onClick={handleDeleteImage}
-                                                disabled={!profilePicture}
-                                                style={{ display: profilePicture && profilePicture !== defaultUserImage ? 'inline-flex' : 'none' }}
-                                            >
-                                                {t('DELETE_PICTURE')}
-                                            </button>
                                         </div>
 
                                     </div>
