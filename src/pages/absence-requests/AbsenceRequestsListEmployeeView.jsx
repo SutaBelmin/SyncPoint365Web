@@ -227,6 +227,11 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
                     paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
                     onSort={sortAbsenceRequest}
+                    onRowClicked={(row) => {
+                        if (row.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
+                            changeStatus(row);
+                        }
+                    }}
                 />
             </div>
         </div >

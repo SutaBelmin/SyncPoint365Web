@@ -19,3 +19,9 @@
     color: #1F2937;
     font-family: sans-serif;
 }
+
+.ReactModal__Content {
+    max-width: 200px; 
+    padding: 16px; 
+    z-index: 50;
+  }

@@ -12,17 +12,15 @@ import { reaction } from "mobx";
 import { useModal } from '../../context';
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { faCircleCheck, faCircleXmark, faEdit, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
-import { ConfirmationModal } from '../../components/modal';
+import { faEdit, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
-import { roleConstant } from '../../constants';
 import { UsersPreview } from './UsersPreview';
 import { UsersChangePassword } from './UsersChangePassword';
 import './UsersList.css';
 import debounce from 'lodash.debounce';
-import { PaginationOptions } from '../../utils';
+import { formatPhoneNumber, PaginationOptions } from '../../utils';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -98,21 +96,25 @@ export const UsersList = observer(() => {
         },
         {
             name: t('PHONE'),
-            selector: row => row.phone,
-            sortable: false,
-        },
-        {
-            name: t('ROLE'),
-            selector: row => {
-                return row.role === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
-                    row.role === roleConstant.administrator ? t('ADMINISTRATOR') :
-                        row.role === roleConstant.employee ? t('EMPLOYEE') : t(row.role);
-            },
+            selector: row => formatPhoneNumber(row.phone),
             sortable: false,
         },
         {
             name: t('STATUS'),
-            selector: row => row.isActive ? t('ACTIVE') : t('INACTIVE'),
+            cell: (row) => (
+                <button
+                    onClick={() => handleStatusChange(row.id, row.isActive)}
+                    className={`relative inline-flex items-center h-6 rounded-full w-11 ${
+                        row.isActive ? "bg-green-400" : "bg-gray-300"
+                    }`}
+                >
+                    <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${
+                            row.isActive ? "translate-x-5" : "translate-x-1"
+                        }`}
+                    ></span>
+                </button>
+            ),
             sortable: false,
         },
         {
@@ -126,13 +128,11 @@ export const UsersList = observer(() => {
                         <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
-                        onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-lg tpr-2 ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
+                        onClick={() => changePasswordClick(row.id)}
+                        className={'text-lg text-gray-400'}
                     >
-                        {row.isActive ? (
-                            <FontAwesomeIcon icon={faCircleXmark} />
-                        ) : (
-                            <FontAwesomeIcon icon={faCircleCheck} />
+                        {(
+                            <FontAwesomeIcon icon={faLock} />
                         )}
                     </button>
                     <button
@@ -143,14 +143,7 @@ export const UsersList = observer(() => {
                     >
                         <FontAwesomeIcon icon={faEye} />
                     </button>
-                    <button
-                        onClick={() => changePasswordClick(row.id)}
-                        className={'text-lg text-gray-400'}
-                    >
-                        {(
-                            <FontAwesomeIcon icon={faLock} />
-                        )}
-                    </button>
+                    
                 </div>
             ),
         },
@@ -159,16 +152,6 @@ export const UsersList = observer(() => {
     const navigateToEdit = (userId) => {
         navigate(`/users/update/${userId}`);
     }
-
-    const statusChange = (userId, isActive) => {
-        openModal(
-            <ConfirmationModal
-                title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
-                onConfirm={() => handleStatusChange(userId)}
-                onCancel={closeModal}
-            />
-        );
-    };
 
     const changePasswordClick = (userId) => {
         openModal(
