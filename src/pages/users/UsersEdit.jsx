@@ -265,7 +265,6 @@ export const UsersEdit = () => {
                                             type="file"
                                             name="imageFile"
                                             onChange={(event) => {
-                                                const fileInput = event.target;
                                                 const file = event.target.files[0];
                                                 if (file) {
                                                     const reader = new FileReader();
@@ -274,7 +273,7 @@ export const UsersEdit = () => {
                                                     };
                                                     reader.readAsDataURL(file);
                                                     setFieldValue("imageFile", file);
-                                                    fileInput.value = '';
+                                                    event.target.value = '';
                                                     setIsImageDeleted(false);
                                                 }
                                             }}
@@ -291,7 +290,6 @@ export const UsersEdit = () => {
                                         type="file"
                                         name="imageFile"
                                         onChange={(event) => {
-                                            const fileInput = event.target;
                                             const file = event.target.files[0];
                                             if (file) {
                                                 const reader = new FileReader();
@@ -300,7 +298,7 @@ export const UsersEdit = () => {
                                                 };
                                                 reader.readAsDataURL(file);
                                                 setFieldValue("imageFile", file);
-                                                fileInput.value = '';
+                                                event.target.value = null;
                                                 setIsImageDeleted(false);
                                             }
                                         }}

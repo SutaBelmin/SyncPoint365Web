@@ -228,7 +228,6 @@ export const UsersAdd = () => {
                                              type="file"
                                              name="imageFile"
                                             onChange={(e) => {
-                                                const fileInput = e.target;
                                                 const file = e.target.files[0];
                                                 if (file) {
                                                     const reader = new FileReader();
@@ -237,7 +236,7 @@ export const UsersAdd = () => {
                                                     };
                                                     reader.readAsDataURL(file);
                                                     setFieldValue("imageFile", file);
-                                                    fileInput.value = '';
+                                                    e.target.value = null;
                                                 }
                                             }}
                                             className="hidden"
@@ -253,7 +252,6 @@ export const UsersAdd = () => {
                                     type="file"
                                     name="imageFile"
                                     onChange={(event) => {
-                                        const fileInput = event.target;
                                         const file = event.target.files[0];
                                         if(file){
                                             const reader = new FileReader();
@@ -262,7 +260,7 @@ export const UsersAdd = () => {
                                             };
                                             reader.readAsDataURL(file);
                                             setFieldValue("imageFile", file);
-                                            fileInput.value = '';
+                                            event.target.value = null;
                                         }
                                     }}
                                     className="mt-2 hidden"
