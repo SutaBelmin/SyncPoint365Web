@@ -37,24 +37,7 @@ export const UsersEdit = () => {
 
     const updateUser = async (values) => {
         try {
-            if (values.imageFile) {
-                const fileExtension = values.imageFile.name.substring(values.imageFile.name.lastIndexOf('.')).toLowerCase();
-                
-                if (!allowedExtensions.includes(fileExtension)) {
-                    toast.error(t('WRONG_EXTENSION'));
-                    return;
-                }
-            }
-    
-            const formData = new FormData();
-            if (values.imageFile) {
-                formData.append("imageFile", values.imageFile);
-            }
-
-            formData.append("isImageDeleted", isImageDeleted);
-    
             await usersService.update({ ...values, id: userId, imageFile: values.imageFile, isImageDeleted });
-    
             toast.success(t('UPDATED'));
             navigate('/users');
         } catch (error) {
@@ -125,8 +108,8 @@ export const UsersEdit = () => {
             const response = await usersService.getById(userId, signal);
             setUser(response.data);
 
-            const userImage = response.data.imageFile
-                ? `data:image/jpeg;base64,${response.data.imageFile}`
+            const userImage = response.data.imagePath
+                ? `data:image/jpeg;base64,${response.data.imagePath}`
                 : defaultUserImage;
             setProfilePicture(userImage);
 
@@ -250,6 +233,14 @@ export const UsersEdit = () => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
                                             if (file) {
+                                                const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+                                                if(!allowedExtensions.includes(fileExtension)){
+                                                    toast.error(t('WRONG_EXTENSION'));
+                                                    e.target.value = '';
+                                                    return;
+                                                }
+
                                                 const reader = new FileReader();
                                                 reader.onload = (event) => {
                                                     setProfilePicture(event.target.result);
@@ -267,6 +258,14 @@ export const UsersEdit = () => {
                                             onChange={(event) => {
                                                 const file = event.target.files[0];
                                                 if (file) {
+                                                    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+                                                    if(!allowedExtensions.includes(fileExtension)){
+                                                        toast.error(t('WRONG_EXTENSION'));
+                                                        event.target.value = '';
+                                                        return;
+                                                    }
+
                                                     const reader = new FileReader();
                                                     reader.onloadend = () => {
                                                         setProfilePicture(reader.result);
@@ -292,6 +291,14 @@ export const UsersEdit = () => {
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
+                                                const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+                                                if(!allowedExtensions.includes(fileExtension)){
+                                                    toast.error(t('WRONG_EXTENSION'));
+                                                    event.target.value = '';
+                                                    return;
+                                                }
+
                                                 const reader = new FileReader();
                                                 reader.onloadend = () => {
                                                     setProfilePicture(reader.result);

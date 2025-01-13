@@ -174,7 +174,7 @@ export const UsersAdd = () => {
                         roleId: null,
                         password: '',
                         passwordConfirm: '',
-                        imageFile: null
+                        imagePath: null
                     }}
                     validationSchema={validationSchema}
                     onSubmit={addUser}
@@ -198,7 +198,7 @@ export const UsersAdd = () => {
                                                 className="btn-cancel inline-flex items-center px-10 py-4 rounded-md cursor-pointer text-white text-center"
                                                 onClick={() => {
                                                     handleDeleteImage();
-                                                    setFieldValue("imageFile", null);
+                                                    setFieldValue("imagePath", null);
                                                 }}                                                
                                                 disabled={!profilePicture}
                                                 style={{visibility: profilePicture && profilePicture !== defaultUserImage ? 'visible' : 'hidden'}}
@@ -219,14 +219,14 @@ export const UsersAdd = () => {
                                                     setProfilePicture(event.target.result);
                                                 };
                                                 reader.readAsDataURL(file);
-                                                setFieldValue("imageFile", file);
+                                                setFieldValue("imagePath", file);
                                             }
                                         }}
                                     >
                                         <input
-                                             id="imageFile1"
+                                             id="dragAndDrop"
                                              type="file"
-                                             name="imageFile"
+                                             name="dragAndDrop"
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 if (file) {
@@ -235,7 +235,7 @@ export const UsersAdd = () => {
                                                         setProfilePicture(reader.result);
                                                     };
                                                     reader.readAsDataURL(file);
-                                                    setFieldValue("imageFile", file);
+                                                    setFieldValue("imagePath", file);
                                                     e.target.value = null;
                                                 }
                                             }}
@@ -248,7 +248,7 @@ export const UsersAdd = () => {
                                     </div>
 
                                     <input
-                                    id="imageFile2"
+                                    id="imageFile"
                                     type="file"
                                     name="imageFile"
                                     onChange={(event) => {
@@ -259,7 +259,7 @@ export const UsersAdd = () => {
                                                 setProfilePicture(reader.result);
                                             };
                                             reader.readAsDataURL(file);
-                                            setFieldValue("imageFile", file);
+                                            setFieldValue("imagePath", file);
                                             event.target.value = null;
                                         }
                                     }}
@@ -269,7 +269,7 @@ export const UsersAdd = () => {
                                     <div className="flex justify-center items-center space-x-2 mt-2 h-14">
                                         <div className="flex justify-center items-center">
                                             <label
-                                                htmlFor="imageFile1"
+                                                htmlFor="imageFile"
                                                 className="btn-save inline-flex items-center mt-4 px-10 py-4 rounded-md cursor-pointer transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 text-center"
                                             >
                                                 <FaUpload className="mr-1"></FaUpload>
