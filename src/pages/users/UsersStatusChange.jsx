@@ -13,16 +13,12 @@ export const UsersStatusChange = ({ title, user, fetchData, closeModal }) => {
 	const { t } = useTranslation();
 
 	const changeStatus = async () => {
-		console.log(user.id);
 		try {
-			console.log(user.id);
-
 			await usersService.updateUserStatus(user.id);
 			fetchData();
 			toast.success(t('UPDATED'));
 			closeModal();
 		} catch (error) {
-			console.log("kjsdbkb");
 			toast.error(t('FAIL_UPDATE'));
 		}
 	}
