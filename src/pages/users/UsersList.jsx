@@ -21,6 +21,7 @@ import { UsersChangePassword } from './UsersChangePassword';
 import './UsersList.css';
 import debounce from 'lodash.debounce';
 import { formatPhoneNumber, PaginationOptions } from '../../utils';
+import { UsersStatusChange } from './UsersStatusChange';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -103,7 +104,7 @@ export const UsersList = observer(() => {
             name: t('STATUS'),
             cell: (row) => (
                 <button
-                    onClick={() => handleStatusChange(row.id, row.isActive)}
+                    onClick={() => changeStatus(row)}
                     className={`relative inline-flex items-center h-6 rounded-full w-10 ${
                         row.isActive ? "bg-green-600" : "bg-gray-300"
                     }`}
@@ -164,15 +165,15 @@ export const UsersList = observer(() => {
         );
     };
 
-    const handleStatusChange = async (userId) => {
-        try {
-            await usersService.updateUserStatus(userId, signal);
-            fetchData();
-            toast.success(t('UPDATED'));
-            closeModal();
-        } catch (error) {
-            toast.error(t('FAIL_UPDATE'));
-        }
+    const changeStatus = (user) => {
+        openModal(
+            <UsersStatusChange
+                title={user.isActive ? t('DEACTIVATE_USER') : t('ACTIVATE_USER')}
+                user={user}
+                fetchData={fetchData}
+                closeModal={closeModal}
+            />
+        );
     }
 
     return (
