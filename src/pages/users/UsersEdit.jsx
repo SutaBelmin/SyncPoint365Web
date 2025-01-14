@@ -16,8 +16,8 @@ import { registerLocale } from "react-datepicker";
 import { FaArrowLeft, FaUpload } from 'react-icons/fa';
 import { roleConstant, genderConstant, localeConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import {defaultUserImage} from '../../assets/images';
 import { allowedExtensions } from '../../constants';
+import { defaultUserImage } from '../../assets/images';
 
 export const UsersEdit = () => {
     const { t, i18n } = useTranslation();
@@ -31,7 +31,7 @@ export const UsersEdit = () => {
     
     const [profilePicture, setProfilePicture] = useState(null);
     const [isImageDeleted, setIsImageDeleted] = useState(false);
-    
+
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
@@ -47,7 +47,7 @@ export const UsersEdit = () => {
 
     const handleDeleteImage = () => {
         setProfilePicture(null);
-        setIsImageDeleted(true);  
+        setIsImageDeleted(true);
     };
 
     const validationSchema = Yup.object({
@@ -95,7 +95,7 @@ export const UsersEdit = () => {
             role.label === roleConstant.administrator ? t('ADMINISTRATOR') :
                 role.label === roleConstant.employee ? t('EMPLOYEE') : role.label
     }));
-    
+
     const genderOptions = genders.map(gender => ({
         ...gender,
         label: gender.label === genderConstant.male ? t('MALE') :
@@ -201,11 +201,11 @@ export const UsersEdit = () => {
                     onSubmit={updateUser}
                 >
                     {({ setFieldValue, values }) => (
-                        <Form className="w-full flex mt-10 flex-col md:flex-row">
-                            <div className="w-full md:w-1/4 pl-0 md:pl-4 bg-white rounded-xl mr-4 mb-0 py-10 flex flex-col items-center pr-4">
+                        <Form className="w-full flex mt-10 flex-col md:flex-row h-full">
+                            <div className="w-full md:w-1/4 pl-0 md:pl-4 bg-white rounded-xl mr-0 md:mr-4 mb-4 md:mb-0 py-10 flex flex-col items-center pr-4">
 
                                 <div className="mb-4 mt-12 xl:w-4/5">
-                                    <div className="flex justify-center mb-4">
+                                    <div className="flex justify-center mb-4 mt-4">
                                         <div className="w-[200px] h-[200px] rounded-full mb-4 -mt-16 border-4 border-blue-400 overflow-hidden">
                                             <img
                                                 src={profilePicture || defaultUserImage}
@@ -215,32 +215,24 @@ export const UsersEdit = () => {
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-center items-center mb-4">
-                                            <button
-                                                className="btn-cancel inline-flex items-center px-10 py-4 mr-1 rounded-md cursor-pointer text-white text-center"
-                                                onClick={handleDeleteImage}
-                                                disabled={!profilePicture}
-                                                style={{ visibility: profilePicture && profilePicture !== defaultUserImage ? 'visible' : 'hidden' }}
-                                            >
-                                                {t('DELETE_PICTURE')}
-                                            </button>
-                                        </div>
+                                    <div className="flex justify-center items-center mb-6 -mt-5">
+                                        <button
+                                            className="btn-cancel inline-flex items-center px-10 py-4 mr-1 rounded-md cursor-pointer text-white text-center"
+                                            onClick={handleDeleteImage}
+                                            disabled={!profilePicture}
+                                            style={{ visibility: profilePicture && profilePicture !== defaultUserImage ? 'visible' : 'hidden' }}
+                                        >
+                                            {t('DELETE_PICTURE')}
+                                        </button>
+                                    </div>
 
                                     <div
                                         className="w-full sm:w-2/5 md:w-2/3 lg:w-1/2 xl:w-full h-40 border-2 border-dashed border-blue-400 rounded-md flex justify-center items-center text-blue-400 hover:bg-blue-100 transition duration-200 mx-auto sm:ml-auto sm:mr-auto"
-                                        onDragOver={(e) => e.preventDefault()} 
+                                        onDragOver={(e) => e.preventDefault()}
                                         onDrop={(e) => {
                                             e.preventDefault();
                                             const file = e.dataTransfer.files[0];
                                             if (file) {
-                                                const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-
-                                                if(!allowedExtensions.includes(fileExtension)){
-                                                    toast.error(t('WRONG_EXTENSION'));
-                                                    e.target.value = '';
-                                                    return;
-                                                }
-
                                                 const reader = new FileReader();
                                                 reader.onload = (event) => {
                                                     setProfilePicture(event.target.result);
@@ -255,17 +247,10 @@ export const UsersEdit = () => {
                                             id="imageFile"
                                             type="file"
                                             name="imageFile"
+                                            accept=".jpg, .jpeg, .png, .gif"
                                             onChange={(event) => {
                                                 const file = event.target.files[0];
                                                 if (file) {
-                                                    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-
-                                                    if(!allowedExtensions.includes(fileExtension)){
-                                                        toast.error(t('WRONG_EXTENSION'));
-                                                        event.target.value = '';
-                                                        return;
-                                                    }
-
                                                     const reader = new FileReader();
                                                     reader.onloadend = () => {
                                                         setProfilePicture(reader.result);
@@ -288,17 +273,10 @@ export const UsersEdit = () => {
                                         id="imageFile"
                                         type="file"
                                         name="imageFile"
+                                        accept=".jpg, .jpeg, .png, .gif"
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
-                                                const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-
-                                                if(!allowedExtensions.includes(fileExtension)){
-                                                    toast.error(t('WRONG_EXTENSION'));
-                                                    event.target.value = '';
-                                                    return;
-                                                }
-
                                                 const reader = new FileReader();
                                                 reader.onloadend = () => {
                                                     setProfilePicture(reader.result);
@@ -327,10 +305,10 @@ export const UsersEdit = () => {
                                 </div>
                             </div>
 
-                            <div className="ml-5 pr-7 md:pr-30 bg-white p-3 md:w-2/3 pl-0 md:pl-4 bg-white rounded-xl">
+                            <div className="w-full md:w-2/3 ml-0 md:ml-5 pr-4 md:pr-7 bg-white p-3 pl-4 rounded-xl">
                                 <h2 className="text-l font-bold col-span-2 mb-2">{t('PERSONAL_INFO')}</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <div className="mb-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="mb-4 w-full">
                                         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                                             {t('FIRST_NAME')} <span className='text-red-500'>*</span>
                                         </label>
@@ -344,7 +322,7 @@ export const UsersEdit = () => {
                                         <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    <div className="mb-4 mt-1">
+                                    <div className="mb-4 w-full mt-1">
                                         <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                                             {t('PHONE')} <span className="text-red-500">*</span>
                                         </label>
@@ -370,7 +348,7 @@ export const UsersEdit = () => {
 
 
 
-                                    <div className="mb-4">
+                                    <div className="mb-4 w-full">
                                         <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
                                             {t('LAST_NAME')} <span className='text-red-500'>*</span>
                                         </label>
@@ -384,7 +362,7 @@ export const UsersEdit = () => {
                                         <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    <div className="mb-4">
+                                    <div className="mb-4 w-full">
                                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                             {t('EMAIL')} <span className='text-red-500'>*</span>
                                         </label>
@@ -398,7 +376,7 @@ export const UsersEdit = () => {
                                         <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    <div className="mb-4 mt-1">
+                                    <div className="mb-4 w-full mt-1">
                                         <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
                                             {t('BIRTH_DATE')} <span className='text-red-500'>*</span>
                                         </label>
@@ -423,7 +401,7 @@ export const UsersEdit = () => {
                                         <ErrorMessage name="birthDate" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    <div className="mb-4">
+                                    <div className="mb-4 w-full">
                                         <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                                             {t('ADDRESS')} <span className='text-red-500'>*</span>
                                         </label>
@@ -438,7 +416,7 @@ export const UsersEdit = () => {
                                     </div>
 
 
-                                    <div className="mb-4">
+                                    <div className="mb-4 w-full">
                                         <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
                                             {t('GENDER')} <span className='text-red-500'>*</span>
                                         </label>
@@ -457,7 +435,7 @@ export const UsersEdit = () => {
                                     </div>
 
 
-                                    <div className="mb-4">
+                                    <div className="mb-4 w-full">
                                         <label htmlFor="cityId" className="block text-sm font-medium text-gray-700">
                                             {t('CITY')} <span className='text-red-500'>*</span>
                                         </label>
@@ -473,9 +451,9 @@ export const UsersEdit = () => {
                                         <ErrorMessage name="cityId" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    <h2 className="text-l font-bold col-span-2">{t('SYSTEM_DATA')}</h2>
+                                    <h2 className="text-l font-bold col-span-1 sm:col-span-2 mt-4">{t('SYSTEM_DATA')}</h2>
 
-                                    <div className="w-full col-span-1">
+                                    <div className="w-full sm:w-1/2 col-span-1 sm:col-span-2">
                                         <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                                             {t('ROLE')} <span className='text-red-500'>*</span>
                                         </label>
