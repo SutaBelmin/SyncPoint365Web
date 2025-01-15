@@ -107,8 +107,8 @@ export const UsersEdit = () => {
             const response = await usersService.getById(userId, signal);
             setUser(response.data);
 
-            const userImage = response.data.imagePath
-                ? `data:image/jpeg;base64,${response.data.imagePath}`
+            const userImage = response.data.imageContent
+                ? `data:image/jpeg;base64,${response.data.imageContent}`
                 : defaultUserImage;
             setProfilePicture(userImage);
 
@@ -116,7 +116,6 @@ export const UsersEdit = () => {
             toast.error(t('ERROR_LOADING_USER'));
         }
     }, [userId, signal, t]);
-
 
     const fetchCities = useCallback(async () => {
         try {

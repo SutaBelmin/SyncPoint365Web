@@ -85,13 +85,7 @@ class UsersService extends BaseService {
             signal: signal
         });
         return response.data;
-    }    
-
-    async deleteUserImage(userId) {
-        const response = await this.api.delete(`/users/delete-image?id=${userId}`);
-        return response.data;
-    }    
-    
+    }       
 }
 
 const usersService = new UsersService();
