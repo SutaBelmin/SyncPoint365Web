@@ -105,7 +105,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                     <div className="mt-1 mb-3 block bg-gradient-to-r from-gray-100 to-zinc-100 p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[3.5rem]" id="preComment">
                                         <span
                                             id="preComment"
-                                            className="text-gray-500">{absenceRequest.preComment && absenceRequest.preComment.trim() ? absenceRequest.preComment : null}</span>
+                                            className="text-gray-500">{absenceRequest.preComment && absenceRequest.preComment ? absenceRequest.preComment : null}</span>
                                     </div>
                                 </div>
                                 <div className="border-t border-gray-300 pb-2"></div>
@@ -168,7 +168,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                                 <span
                                                     id="preComment"
                                                     className="text-gray-500">
-                                                    {absenceRequest.preComment && absenceRequest.preComment.trim() ? absenceRequest.preComment : null}
+                                                    {absenceRequest.preComment && absenceRequest.postComment ? absenceRequest.postComment : null}
                                                 </span>
                                             </div>
                                         </div>

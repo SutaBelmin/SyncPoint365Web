@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { NoDataMessage } from "../../components/common-ui";
@@ -119,8 +119,9 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
                     ) : (
                         <button
                             onClick={() => changeStatus(row)}
-                            className="text-lg text-green-700 hover:underline p-2">
-                            <FontAwesomeIcon icon={faCircleCheck} />
+                            className="text-lg text-blue-600 hover:underline p-2"
+                        >
+                            <FontAwesomeIcon icon={faEye} />
                         </button>
                     )}
                 </div>

@@ -3,19 +3,11 @@ import { useTranslation } from "react-i18next";
 import { formatPhoneNumber } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { format } from "date-fns";
 import './UsersList.css';
 
 export const UsersPreview = ({ user, closeModal }) => {
   const { t } = useTranslation();
-
-  const formatDate = (date) => {
-    if (!date) return "";
-    return new Intl.DateTimeFormat("bs-BA", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    }).format(new Date(date)).replace(/-/g, "/");
-  };
 
   return (
     <div className="p-6">
@@ -40,7 +32,7 @@ export const UsersPreview = ({ user, closeModal }) => {
           <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col">
               <span className="font-medium text-gray-600">{t('BIRTH_DATE')}:</span>
-              <span className="text-gray-600">{formatDate(user.birthDate)}</span>
+              <span className="text-gray-800 tabular-nums">{format(new Date(user.birthDate), t('DATE_FORMAT'))}</span>
             </div>
             <div className="flex flex-col ml-auto">
               <span className="font-medium text-gray-600 ml-auto">{t('ADDRESS')}:</span>
