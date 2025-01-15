@@ -36,7 +36,7 @@ export const UsersEdit = () => {
 
     const updateUser = async (values) => {
         try {
-            await usersService.update({ ...values, id: userId, imageFile: values.imageFile, isImageDeleted });
+            await usersService.update({ ...values, id: userId, imageFile: values.imageFile, isImageDeleted }, signal);
             toast.success(t('UPDATED'));
             navigate('/users');
         } catch (error) {

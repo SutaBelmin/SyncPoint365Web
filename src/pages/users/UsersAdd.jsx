@@ -31,18 +31,7 @@ export const UsersAdd = () => {
 
     const addUser = async (values) => {
         try {
-            const userId = values.id;
-            
-            await usersService.getById(userId);
-
-            const formData = new FormData();
-            if (values.File){
-                formData.append("File", values.File);
-                formData.append("UserId", userId); 
-            }
-
-            await usersService.uploadProfilePicture(formData);
-            await usersService.add(values);
+            await usersService.add(values, signal);
             toast.success(t('ADDED'));
             navigate('/users');
         } catch (error) {

@@ -44,11 +44,12 @@ class UsersService extends BaseService {
         return response;
     }
 
-    async add(userData) {
+    async add(userData, signal) {
         const response = await this.api.post(`/users`, userData, {
             headers: {
                 'Content-Type': 'multipart/form-data' 
-            }
+            },
+            signal
         });
     
         return response.data;
@@ -71,11 +72,12 @@ class UsersService extends BaseService {
         return response;
     }   
 
-    async update(userData) {
+    async update(userData, signal) {
         const response = await this.api.put(`/users`, userData, {
             headers: {
                 'Content-Type': 'multipart/form-data' 
-            }
+            }, 
+            signal
         });
         return response;
     }
