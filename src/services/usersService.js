@@ -44,16 +44,14 @@ class UsersService extends BaseService {
         return response;
     }
 
-    async add(userData, signal = null) {
-        const dataToSend = {
-            ...userData,
-            role: userData.roleId
-        };
-
-        const response = await this.api.post(`/users`, dataToSend, {
-            signal: signal
+    async add(userData, signal) {
+        const response = await this.api.post(`/users`, userData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' 
+            },
+            signal
         });
-
+    
         return response.data;
     }
 
@@ -72,11 +70,14 @@ class UsersService extends BaseService {
             signal: signal
         })
         return response;
-    }
+    }   
 
-    async update(userData, signal = null) {
+    async update(userData, signal) {
         const response = await this.api.put(`/users`, userData, {
-            signal: signal
+            headers: {
+                'Content-Type': 'multipart/form-data' 
+            }, 
+            signal
         });
         return response;
     }
@@ -86,7 +87,7 @@ class UsersService extends BaseService {
             signal: signal
         });
         return response.data;
-    }    
+    }       
 }
 
 const usersService = new UsersService();

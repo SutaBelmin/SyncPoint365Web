@@ -36,4 +36,5 @@ export const absenceRequestTypeStatusConstant = {
     inactive: 'inactive',
 };
 
+export const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 

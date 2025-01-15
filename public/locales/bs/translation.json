@@ -171,7 +171,15 @@
     "SELECT_DATE_RETURN": "Odaberi datum povratka",
     "ADD_ABSENCE_REQUEST": "Dodaj zahtjev za odsustvo",
     "ADD_NEW_REQUEST": "Dodaj zahtjev",
-    "ADD_ABSENCE_REQUEST_TYPE": "Dodaj tip zahtjeva"
-
-
+    "ADD_ABSENCE_REQUEST_TYPE": "Dodaj tip zahtjeva",
+    "PROFILE_PICTURE": "Profilna slika.",
+    "CHOOSE_PICTURE": "Odaberi sliku",
+    "DRAG_AND_DROP":"Prevucite sliku",
+    "WRONG_EXTENSION":"Format slike nije podržan!",
+    "IMAGE_ERROR":"Greška prilikom brisanja slike!",
+    "IMAGE_NOT_FOUND": "Dodajte sliku da bi je izbrisali!",
+    "SYSTEM_DATA": "Sistemski podaci",
+    "DELETE_PICTURE":"Ukloni sliku",
+    "PERSONAL_INFO":"Lični podaci",
+    "SELECT_GENDER":"Odaberi spol"
 }
