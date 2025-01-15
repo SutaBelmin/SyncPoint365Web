@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal } from "../../components/modal";
 import { NoDataMessage } from "../../components/common-ui";
