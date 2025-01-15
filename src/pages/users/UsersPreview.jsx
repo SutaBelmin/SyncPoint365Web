@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { genderConstant } from "../../constants/constants";
 import { formatPhoneNumber } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -16,11 +15,6 @@ export const UsersPreview = ({ user, closeModal }) => {
       month: "2-digit",
       year: "numeric",
     }).format(new Date(date)).replace(/-/g, "/");
-  };
-
-  const translateGender = (gender) => {
-    if (gender === genderConstant.male) return t('MALE');
-    else return t('FEMALE');
   };
 
   return (
@@ -55,12 +49,12 @@ export const UsersPreview = ({ user, closeModal }) => {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="pt-4">
-              <span className="font-medium text-gray-600 pr-1">{t('STATUS')}:</span>
-              <span className="text-gray-600">{user.isActive ? t('ACTIVE') : t('INACTIVE')}</span>
+              <span className="font-medium text-gray-600 pr-1">{t('ROLE')}:</span>
+              <span className="text-gray-600">{user.role}</span>
             </div>
             <div className="pt-4 ml-auto">
-              <span className="font-medium text-gray-600 pr-1">{t('GENDER')}:</span>
-              <span className="text-gray-600">{translateGender(user.gender)}</span>
+              <span className="font-medium text-gray-600 pr-1">{t('STATUS')}:</span>
+              <span className="text-gray-600">{user.isActive ? t('ACTIVE') : t('INACTIVE')}</span>
             </div>
           </div>
         </div>

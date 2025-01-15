@@ -22,6 +22,7 @@ import './UsersList.css';
 import debounce from 'lodash.debounce';
 import { formatPhoneNumber, PaginationOptions } from '../../utils';
 import { UsersStatusChange } from './UsersStatusChange';
+import { roleConstant } from '../../constants';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -86,13 +87,17 @@ export const UsersList = observer(() => {
             sortField: 'lastName'
         },
         {
-            name: t('CITY'),
-            selector: row => row.cityName,
+            name: t('ROLE'),
+            selector: row => {
+                return row.role === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
+                    row.role === roleConstant.administrator ? t('ADMINISTRATOR') :
+                        row.role === roleConstant.employee ? t('EMPLOYEE') : t(row.role);
+            },
             sortable: false,
         },
         {
-            name: t('ADDRESS'),
-            selector: row => row.address,
+            name: t('EMAIL'),
+            selector: row => row.email,
             sortable: false,
         },
         {
