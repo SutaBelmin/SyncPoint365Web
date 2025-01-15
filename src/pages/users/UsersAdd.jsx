@@ -14,8 +14,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
-import { genderConstant, localeConstant, roleConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { genderConstant, localeConstant, roleConstant, allowedExtensions } from '../../constants';
 import { defaultUserImage } from '../../assets/images';
 
 export const UsersAdd = () => {
@@ -227,7 +227,7 @@ export const UsersAdd = () => {
                                             id="dragAndDropFile"
                                             type="file"
                                             name="dragAndDropFile"
-                                            accept=".jpg, .jpeg, .png, .gif"
+                                            accept={allowedExtensions}
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 if (file) {
@@ -252,7 +252,7 @@ export const UsersAdd = () => {
                                         id="imageFile"
                                         type="file"
                                         name="imageFile"
-                                        accept=".jpg, .jpeg, .png, .gif"
+                                        accept={allowedExtensions}
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {

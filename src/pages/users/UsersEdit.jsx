@@ -14,9 +14,8 @@ import 'react-phone-input-2/lib/style.css';
 import { format } from 'date-fns';
 import { registerLocale } from "react-datepicker";
 import { FaArrowLeft, FaUpload } from 'react-icons/fa';
-import { roleConstant, genderConstant, localeConstant } from '../../constants';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { allowedExtensions } from '../../constants';
+import { roleConstant, genderConstant, localeConstant, allowedExtensions } from '../../constants';
 import { defaultUserImage } from '../../assets/images';
 
 export const UsersEdit = () => {
@@ -247,7 +246,7 @@ export const UsersEdit = () => {
                                             id="imageFile"
                                             type="file"
                                             name="imageFile"
-                                            accept=".jpg, .jpeg, .png, .gif"
+                                            accept={allowedExtensions}
                                             onChange={(event) => {
                                                 const file = event.target.files[0];
                                                 if (file) {
@@ -273,7 +272,7 @@ export const UsersEdit = () => {
                                         id="imageFile"
                                         type="file"
                                         name="imageFile"
-                                        accept=".jpg, .jpeg, .png, .gif"
+                                        accept={allowedExtensions}
                                         onChange={(event) => {
                                             const file = event.target.files[0];
                                             if (file) {
