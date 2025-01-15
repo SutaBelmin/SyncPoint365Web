@@ -185,5 +185,9 @@
     "EMPLOYEE_COMMENT": "Employee Comment",
     "ADMIN_COMMENT": "Admin Comment",
     "REQUEST_STATUS":"Request Status:",
-    "REQUIRED_FIELD": "Required Field"
+    "REQUIRED_FIELD": "Required Field",
+    "COMPANY_DOCUMENTS": "Company Documents",
+    "DOCUMENT_NAME": "Document Name",
+    "CONTENT_TYPE": "Content Type"
+
 }

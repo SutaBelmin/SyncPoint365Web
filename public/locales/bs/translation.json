@@ -185,6 +185,10 @@
     "EMPLOYEE_COMMENT": "Komentar zaposlenika",
     "ADMIN_COMMENT": "Komentar admina",
     "REQUEST_STATUS":"Status zahtjeva:",
-    "REQUIRED_FIELD": "Obavezno polje."
+    "REQUIRED_FIELD": "Obavezno polje.",
+    "COMPANY_DOCUMENTS": "Dokumenti kompanije",
+    "DOCUMENT_NAME": "Naziv dokumenta",
+    "CONTENT_TYPE": "Vrsta sadržaja"
+
 
 }

@@ -12,6 +12,7 @@ import { AbsenceRequestsList, AbsenceRequestsListEmployeeView } from '../pages/a
 import PrivateRoutes from '../routes/PrivateRoutes';
 import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
+import { CompanyDocumentsList } from '../pages/company-documents/CompanyDocumentsList';
 
 const AppRoutes = () => {
 	const { userHasRole } = useAuth();
@@ -21,6 +22,7 @@ const AppRoutes = () => {
 			<Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
 				<Route path="/home" element={<Home />} />
 				<Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />
+				<Route path="/company-documents" element={<CompanyDocumentsList />} />
 				{!userHasRole(roleConstant.employee) && (
 					<>
 						<Route path="/users">
