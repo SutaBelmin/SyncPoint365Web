@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthStore } from '../stores/AuthStore';
 
 const AuthContext = createContext();
@@ -12,14 +12,14 @@ export const AuthProvider = ({ children }) => {
     const authStore = useMemo(() => new AuthStore(), []);
     const [loggedUser, setloggedUser] = useState(authStore.getUser());
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const handleStorageChange = () => {
-            const token = localStorage.getItem('token');
-            const storedUser = localStorage.getItem('loggedUser');
+            const token = authStore.getToken();
+            const storedUser = authStore.getUser();
 
             if (!token || !storedUser) {
-                authStore.removeUser();
                 setloggedUser(null);
                 navigate('/', { replace: true });
             }
@@ -31,6 +31,14 @@ export const AuthProvider = ({ children }) => {
             window.removeEventListener('storage', handleStorageChange);
         };
     }, [authStore, navigate]);
+
+    useEffect(() => {
+        if (loggedUser) {
+            if (location.pathname === '/') {
+                navigate('/home', { replace: true });
+            }
+        }
+    }, [loggedUser, location, navigate]);
 
     const setUser = (user, token) => {
         authStore.setUser(user, token);

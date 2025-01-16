@@ -25,7 +25,11 @@ export class AuthStore {
     const loggedUser = localStorage.getItem('loggedUser');
     const token = localStorage.getItem('token');
     this.loggedUser = loggedUser ? JSON.parse(loggedUser) : null;
-    this.token = token || null; 
+    this.token = token || null;
+  }
+
+  getToken() {
+    return localStorage.getItem('token');
   }
 
 }
