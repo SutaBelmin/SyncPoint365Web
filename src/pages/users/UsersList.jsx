@@ -136,7 +136,7 @@ export const UsersList = observer(() => {
                     </button>
                     <button
                         type="button"
-                        onClick={() => onPreviewUserClick(row)}
+                        onClick={() => onPreviewUserClick(row.id)}
                         className="text-lg text-blue-500 hover:underline p-2"
                         style={{ color: '#276EEC' }}
                     >
@@ -152,9 +152,9 @@ export const UsersList = observer(() => {
         navigate(`/users/update/${userId}`);
     }
 
-    const onPreviewUserClick = (user) => {
+    const onPreviewUserClick = (userId) => {
         openModal(
-            <UsersPreview user={user} closeModal={closeModal} />
+            <UsersPreview userId={userId} closeModal={closeModal} />
         );
     };
 
@@ -223,7 +223,7 @@ export const UsersList = observer(() => {
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={paginationComponentOptions}
-                    onRowClicked={(row) => onPreviewUserClick(row)}
+                    onRowClicked={(row) => onPreviewUserClick(row.id)}
                     onSort={(column, sortDirection) => {
                         const sortField = column.sortField;
                         if (sortField) {

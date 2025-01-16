@@ -8,15 +8,17 @@ import './UsersList.css';
 import { usersService } from "../../services";
 import { defaultUserImage } from "../../assets/images";
 import { toast } from "react-toastify";
+import { useRequestAbort } from "../../components/hooks";
 
-export const UsersPreview = ({ user, closeModal }) => {
+export const UsersPreview = ({ userId, closeModal }) => {
 	const [profilePicture, setProfilePicture] = useState(null);
-	const [, setUser] = useState(null);
+	const { signal } = useRequestAbort();
+	const [user, setUser] = useState(null);
 	const { t } = useTranslation();
 
 	const fetchUser = useCallback(async () => {
 		try {
-			const response = await usersService.getById(user.id);
+			const response = await usersService.getById(userId, signal);
 			setUser(response.data);
 
 			const userImage = response.data.imageContent
@@ -27,11 +29,15 @@ export const UsersPreview = ({ user, closeModal }) => {
 		} catch (error) {
 			toast.error(t('ERROR_LOADING_USER'));
 		}
-	}, [user.id, t]);
+	}, [userId, signal, t]);
 
 	useEffect(() => {
 		fetchUser();
 	}, [fetchUser]);
+
+	if (!user) {
+		return <div>{t('LOADING')}</div>;
+	}
 
 
 	return (
