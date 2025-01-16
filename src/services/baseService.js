@@ -24,10 +24,31 @@ class BaseService {
 
     this.api.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
+        if(error.response && error.response.status === 401){
+          await this.refreshToken();
+          return this.api(error.config);
+        }
         return Promise.reject(error);
       }
     );
+  }
+
+  async refreshToken() {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if(refreshToken){
+      try {
+        const response = await this.api.post('/refresh/generate', {refreshToken});
+        const {token, refreshToken: newRefreshToken} = response.data;
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', newRefreshToken);
+      } catch (error) {
+        console.error('Refresh token failed!', error);
+      }
+    } else {
+      console.error('No refresh token available!');
+    }
   }
 }
 
