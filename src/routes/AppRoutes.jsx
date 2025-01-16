@@ -13,6 +13,7 @@ import PrivateRoutes from '../routes/PrivateRoutes';
 import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
 import { CompanyDocumentsList } from '../pages/company-documents/CompanyDocumentsList';
+import { CompanyDocumentsListEmployeeView } from '../pages/company-documents/CompanyDocumentsListEmployeeView';
 
 const AppRoutes = () => {
 	const { userHasRole } = useAuth();
@@ -22,7 +23,7 @@ const AppRoutes = () => {
 			<Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
 				<Route path="/home" element={<Home />} />
 				<Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />
-				<Route path="/company-documents" element={<CompanyDocumentsList />} />
+				<Route path="/company-documents-employee" element={<CompanyDocumentsListEmployeeView />} />
 				{!userHasRole(roleConstant.employee) && (
 					<>
 						<Route path="/users">
@@ -34,6 +35,7 @@ const AppRoutes = () => {
 						<Route path="/countries" element={<CountriesList />} />
 						<Route path="/cities" element={<CitiesList />} />
 						<Route path="/users/update/:userId" element={<UsersEdit />} />
+						<Route path="/company-documents" element={<CompanyDocumentsList />} />
 					</>
 				)}
 			</Route>
