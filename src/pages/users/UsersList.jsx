@@ -45,11 +45,6 @@ export const UsersList = observer(() => {
 
     }, [signal, t]);
 
-    const onPreviewUserClick = (user) => {
-        openModal(
-            <UsersPreview user={user} closeModal={closeModal} />
-        );
-    };
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
     useEffect(() => {
@@ -110,14 +105,12 @@ export const UsersList = observer(() => {
             cell: (row) => (
                 <button
                     onClick={() => changeStatus(row)}
-                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${
-                        row.isActive ? "bg-green-600" : "bg-gray-300"
-                    }`}
+                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${row.isActive ? "bg-green-600" : "bg-gray-300"
+                        }`}
                 >
                     <span
-                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${
-                            row.isActive ? "translate-x-5" : "translate-x-1"
-                        }`}
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isActive ? "translate-x-5" : "translate-x-1"
+                            }`}
                     ></span>
                 </button>
             ),
@@ -149,7 +142,7 @@ export const UsersList = observer(() => {
                     >
                         <FontAwesomeIcon icon={faEye} />
                     </button>
-                    
+
                 </div>
             ),
         },
@@ -158,6 +151,12 @@ export const UsersList = observer(() => {
     const navigateToEdit = (userId) => {
         navigate(`/users/update/${userId}`);
     }
+
+    const onPreviewUserClick = (user) => {
+        openModal(
+            <UsersPreview user={user} closeModal={closeModal} />
+        );
+    };
 
     const changePasswordClick = (userId) => {
         openModal(
@@ -200,7 +199,7 @@ export const UsersList = observer(() => {
             <div className="flex flex-col gap-4 xs:flex-row">
                 <UsersSearch fetchData={fetchData} />
             </div>
-        
+
             <BaseModal />
 
             <div className="table max-w-full">
