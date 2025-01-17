@@ -54,7 +54,7 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
                     return true;
                 }
             ),
-        comment: Yup.string(),
+        preComment: Yup.string(),
     });
 
     const editAbsenceRequest = async (values, actions) => {
@@ -66,7 +66,8 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
                 dateTo: values.dateTo,
                 dateReturn: values.dateReturn,
                 absenceRequestStatus: absenceRequest.absenceRequestStatus,
-                comment: values.comment,
+                preComment: values.preComment,
+                postComment: null,
                 absenceRequestTypeId: values.absenceRequestTypeId,
                 userId: absenceRequest.userId
             }, signal);
@@ -91,7 +92,7 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
                     dateFrom: absenceRequest.dateFrom,
                     dateTo: absenceRequest.dateTo,
                     dateReturn: absenceRequest.dateReturn,
-                    comment: absenceRequest.comment || "",
+                    preComment: absenceRequest.preComment || "",
                     userId: absenceRequest.userId,
                 }}
                 validationSchema={validationSchema}
@@ -192,10 +193,10 @@ export const AbsenceRequestsEditEmployeeView = ({ absenceRequest, closeModal, fe
                             </label>
                             <Field
                                 type="block"
-                                id="comment"
+                                id="preComment"
                                 as="textarea"
                                 rows="4"
-                                name="comment"
+                                name="preComment"
                                 placeholder={t('COMMENT')}
                                 autoComplete="off"
                                 className="mt-1 mb-4 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"

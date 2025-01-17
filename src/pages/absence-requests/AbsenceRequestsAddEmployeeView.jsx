@@ -39,7 +39,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
         dateFrom: null,
         dateTo: null,
         dateReturn: null,
-        comment: '',
+        preComment: '',
     };
 
     const validationSchema = Yup.object().shape({
@@ -61,7 +61,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                     return true;
                 }
             ),
-        comment: Yup.string(),
+        preComment: Yup.string(),
     });
 
 
@@ -73,7 +73,8 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                 dateTo: values.dateTo,
                 dateReturn: values.dateReturn,
                 absenceRequestStatus: absenceRequestStatusConstant.pending,
-                comment: values.comment,
+                preComment: values.preComment,
+                postComment: null,
                 absenceRequestTypeId: values.absenceRequestTypeId,
                 userId: userId
             }, signal);
@@ -193,10 +194,10 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
                             </label>
                             <Field
                                 type="text"
-                                id="name"
+                                id="preComment"
                                 as="textarea"
                                 rows="4"
-                                name="name"
+                                name="preComment"
                                 placeholder={t('COMMENT')}
                                 autoComplete="off"
                                 className="mt-1 mb-4 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"

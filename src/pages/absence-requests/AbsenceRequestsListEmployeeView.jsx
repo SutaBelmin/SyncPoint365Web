@@ -5,13 +5,13 @@ import { toast } from "react-toastify";
 import { observer } from "mobx-react";
 import { reaction } from "mobx"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useRequestAbort } from "../../components/hooks";
 import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { NoDataMessage } from "../../components/common-ui";
 import { format } from 'date-fns';
 import { AbsenceRequestsSearchEmployeeView } from "./search";
-import { AbsenceRequestsAddEmployeeView, AbsenceRequestsEditEmployeeView } from "../absence-requests";
+import { AbsenceRequestsAddEmployeeView, AbsenceRequestsEditEmployeeView, AbsenceRequestsStatusChange } from "../absence-requests";
 import { absenceRequestsService } from "../../services"
 import { absenceRequestsSearchStore } from "./stores"
 import "./AbsenceRequestsList.css";
@@ -102,23 +102,31 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
         {
             name: t('ACTIONS'),
             cell: row => (
-                row.absenceRequestStatus === absenceRequestStatusConstant.pending && (
-                    <div className="flex">
+                <div className="flex">
+                    {row.absenceRequestStatus === absenceRequestStatusConstant.pending ? (
+                        <>
+                            <button
+                                onClick={() => editRequestClick(row)}
+                                className="text-lg text-blue-500 hover:underline p-2">
+                                <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
+                            </button>
+                            <button
+                                onClick={() => deleteRequestClick(row)}
+                                className="text-lg text-red-500 hover:underline p-2">
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                        </>
+                    ) : (
                         <button
-                            onClick={() => editRequestClick(row)}
-                            className="text-lg text-blue-500 hover:underline p-2">
-                            <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
+                            onClick={() => changeStatus(row)}
+                            className="text-lg text-blue-600 hover:underline p-2"
+                        >
+                            <FontAwesomeIcon icon={faEye} />
                         </button>
-                        <button
-                            onClick={() => deleteRequestClick(row)}
-                            className="text-lg text-red-500 hover:underline p-2">
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    </div>
-                )
-            ),
+                    )}
+                </div>
+            )
         }
-
     ];
 
     const addNewRequestClick = () => {
@@ -127,6 +135,15 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
 
     const editRequestClick = (absenceRequest) => {
         openModal(<AbsenceRequestsEditEmployeeView absenceRequest={absenceRequest} closeModal={closeModal} fetchData={fetchData} />);
+    };
+
+    const changeStatus = (absenceRequest) => {
+        openModal(<AbsenceRequestsStatusChange
+            absenceRequest={absenceRequest}
+            closeModal={closeModal}
+            fetchData={fetchData}
+            isStatusLocked={true}
+        />);
     };
 
     const deleteRequestClick = (absenceRequest) => {
@@ -176,7 +193,7 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <div className="flex flex-col xs:flex-row justify-between">
                 <h1 className="h1">{t('ABSENCE_REQUESTS')}</h1>
-               
+
                 <div className="flex justify-end mt-4 pb-4 pt-14 md:pt-14 sm:pt-14 xs:pt-14 ss:pt-0">
                     <button
                         type="button"
@@ -211,6 +228,11 @@ export const AbsenceRequestsListEmployeeView = observer(() => {
                     paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
                     onSort={sortAbsenceRequest}
+                    onRowClicked={(row) => {
+                        if (row.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
+                            changeStatus(row);
+                        }
+                    }}
                 />
             </div>
         </div >

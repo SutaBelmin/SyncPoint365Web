@@ -38,7 +38,7 @@ class UsersService extends BaseService {
     }
 
     async updateUserStatus(id, signal = null) {
-        const response = await this.api.post(`/users/change-status?id=${id}`, {
+        const response = await this.api.put(`/users/change-status?id=${id}`, {
             signal: signal
         });
         return response;

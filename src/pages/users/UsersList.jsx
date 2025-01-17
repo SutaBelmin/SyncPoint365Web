@@ -12,17 +12,17 @@ import { reaction } from "mobx";
 import { useModal } from '../../context';
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { faCircleCheck, faCircleXmark, faEdit, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
-import { ConfirmationModal } from '../../components/modal';
+import { faEdit, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
-import { roleConstant } from '../../constants';
 import { UsersPreview } from './UsersPreview';
 import { UsersChangePassword } from './UsersChangePassword';
 import './UsersList.css';
 import debounce from 'lodash.debounce';
-import { PaginationOptions } from '../../utils';
+import { formatPhoneNumber, PaginationOptions } from '../../utils';
+import { UsersStatusChange } from './UsersStatusChange';
+import { roleConstant } from '../../constants';
 
 export const UsersList = observer(() => {
     const { openModal, closeModal } = useModal();
@@ -45,11 +45,6 @@ export const UsersList = observer(() => {
 
     }, [signal, t]);
 
-    const onPreviewUserClick = (user) => {
-        openModal(
-            <UsersPreview user={user} closeModal={closeModal} />
-        );
-    };
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
     useEffect(() => {
@@ -87,21 +82,6 @@ export const UsersList = observer(() => {
             sortField: 'lastName'
         },
         {
-            name: t('CITY'),
-            selector: row => row.cityName,
-            sortable: false,
-        },
-        {
-            name: t('ADDRESS'),
-            selector: row => row.address,
-            sortable: false,
-        },
-        {
-            name: t('PHONE'),
-            selector: row => row.phone,
-            sortable: false,
-        },
-        {
             name: t('ROLE'),
             selector: row => {
                 return row.role === roleConstant.superAdministrator ? t('SUPER_ADMINISTRATOR') :
@@ -111,8 +91,29 @@ export const UsersList = observer(() => {
             sortable: false,
         },
         {
+            name: t('EMAIL'),
+            selector: row => row.email,
+            sortable: false,
+        },
+        {
+            name: t('PHONE'),
+            selector: row => formatPhoneNumber(row.phone),
+            sortable: false,
+        },
+        {
             name: t('STATUS'),
-            selector: row => row.isActive ? t('ACTIVE') : t('INACTIVE'),
+            cell: (row) => (
+                <button
+                    onClick={() => changeStatus(row)}
+                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${row.isActive ? "bg-green-600" : "bg-gray-300"
+                        }`}
+                >
+                    <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isActive ? "translate-x-5" : "translate-x-1"
+                            }`}
+                    ></span>
+                </button>
+            ),
             sortable: false,
         },
         {
@@ -126,24 +127,6 @@ export const UsersList = observer(() => {
                         <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
-                        onClick={() => statusChange(row.id, row.isActive)}
-                        className={`text-lg tpr-2 ${row.isActive ? 'text-red-500' : 'text-green-500'}`}
-                    >
-                        {row.isActive ? (
-                            <FontAwesomeIcon icon={faCircleXmark} />
-                        ) : (
-                            <FontAwesomeIcon icon={faCircleCheck} />
-                        )}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => onPreviewUserClick(row)}
-                        className="text-lg text-blue-500 hover:underline p-2"
-                        style={{ color: '#276EEC' }}
-                    >
-                        <FontAwesomeIcon icon={faEye} />
-                    </button>
-                    <button
                         onClick={() => changePasswordClick(row.id)}
                         className={'text-lg text-gray-400'}
                     >
@@ -151,6 +134,15 @@ export const UsersList = observer(() => {
                             <FontAwesomeIcon icon={faLock} />
                         )}
                     </button>
+                    <button
+                        type="button"
+                        onClick={() => onPreviewUserClick(row.id)}
+                        className="text-lg text-blue-500 hover:underline p-2"
+                        style={{ color: '#276EEC' }}
+                    >
+                        <FontAwesomeIcon icon={faEye} />
+                    </button>
+
                 </div>
             ),
         },
@@ -160,13 +152,9 @@ export const UsersList = observer(() => {
         navigate(`/users/update/${userId}`);
     }
 
-    const statusChange = (userId, isActive) => {
+    const onPreviewUserClick = (userId) => {
         openModal(
-            <ConfirmationModal
-                title={isActive ? t('DEACTIVATE') : t('ACTIVATE')}
-                onConfirm={() => handleStatusChange(userId)}
-                onCancel={closeModal}
-            />
+            <UsersPreview userId={userId} closeModal={closeModal} />
         );
     };
 
@@ -181,15 +169,15 @@ export const UsersList = observer(() => {
         );
     };
 
-    const handleStatusChange = async (userId) => {
-        try {
-            await usersService.updateUserStatus(userId, signal);
-            fetchData();
-            toast.success(t('UPDATED'));
-            closeModal();
-        } catch (error) {
-            toast.error(t('FAIL_UPDATE'));
-        }
+    const changeStatus = (user) => {
+        openModal(
+            <UsersStatusChange
+                title={user.isActive ? t('DEACTIVATE_USER') : t('ACTIVATE_USER')}
+                user={user}
+                fetchData={fetchData}
+                closeModal={closeModal}
+            />
+        );
     }
 
     return (
@@ -211,7 +199,7 @@ export const UsersList = observer(() => {
             <div className="flex flex-col gap-4 xs:flex-row">
                 <UsersSearch fetchData={fetchData} />
             </div>
-        
+
             <BaseModal />
 
             <div className="table max-w-full">
@@ -235,7 +223,7 @@ export const UsersList = observer(() => {
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={paginationComponentOptions}
-                    onRowClicked={(row) => onPreviewUserClick(row)}
+                    onRowDoubleClicked={(row) => onPreviewUserClick(row.id)}
                     onSort={(column, sortDirection) => {
                         const sortField = column.sortField;
                         if (sortField) {
