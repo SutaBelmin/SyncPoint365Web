@@ -5,14 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { format } from "date-fns";
 import './UsersList.css';
-import { citiesService, usersService } from "../../services";
+import { usersService } from "../../services";
 import { defaultUserImage } from "../../assets/images";
 import { toast } from "react-toastify";
 import { useRequestAbort } from "../../components/hooks";
 
 export const UsersPreview = ({ userId, closeModal }) => {
 	const [profilePicture, setProfilePicture] = useState(null);
-	const [cities, setCities] = useState([]);
 	const { signal } = useRequestAbort();
 	const [user, setUser] = useState(null);
 	const { t } = useTranslation();
@@ -32,19 +31,9 @@ export const UsersPreview = ({ userId, closeModal }) => {
 		}
 	}, [userId, signal, t]);
 
-	const fetchCities = useCallback(async () => {
-		try {
-			const response = await citiesService.getList(signal);
-			setCities(response.data);
-		} catch (error) {
-			toast.error(t('ERROR_LOADING_CITIES'));
-		}
-	}, [signal, t]);
-
 	useEffect(() => {
 		fetchUser();
-		fetchCities();
-	}, [fetchUser, fetchCities]);
+	}, [fetchUser]);
 
 	if (!user) {
 		return <div>{t('LOADING')}</div>;
@@ -87,7 +76,7 @@ export const UsersPreview = ({ userId, closeModal }) => {
 						</div>
 						<div className="flex flex-col ml-auto">
 							<span className="font-medium text-gray-600 ml-auto">{t('ADDRESS')}:</span>
-							<span className="text-gray-600">{`${user.address}, ${Array.isArray(cities) && cities.find(city => city.id === user.cityId)?.name}`}</span>
+							<span className="text-gray-600">{`${user.address}, ${user.cityName}`}</span>
 						</div>
 					</div>
 					<div className="grid grid-cols-2 gap-2">
