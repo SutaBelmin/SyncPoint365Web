@@ -188,7 +188,8 @@
     "REQUIRED_FIELD": "Obavezno polje.",
     "COMPANY_DOCUMENTS": "Dokumenti kompanije",
     "DOCUMENT_NAME": "Naziv dokumenta",
-    "CONTENT_TYPE": "Vrsta sadržaja"
+    "CONTENT_TYPE": "Vrsta sadržaja",
+    "SEARCH_BY_NAME":"Pretraži po nazivu"
 
 
 }

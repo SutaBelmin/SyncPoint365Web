@@ -188,6 +188,7 @@
     "REQUIRED_FIELD": "Required Field",
     "COMPANY_DOCUMENTS": "Company Documents",
     "DOCUMENT_NAME": "Document Name",
-    "CONTENT_TYPE": "Content Type"
+    "CONTENT_TYPE": "Content Type",
+    "SEARCH_BY_NAME":"Search by name"
 
 }

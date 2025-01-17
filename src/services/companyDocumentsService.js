@@ -2,8 +2,13 @@ import BaseService from "./baseService";
 
 
 class CompanyDocumentsService extends BaseService {
-    getList(signal = null) {
-        const response = this.api.get("/companyDocuments/paged-list", {
+    getList(filter, signal = null) {
+        const response = this.api.get("/companyDocuments/paged", {
+            params: {
+                query: filter.searchQuery,
+                page: filter.page,
+                pageSize: filter.pageSize
+            },
             signal: signal,
         });
         return response;

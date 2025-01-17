@@ -7,6 +7,7 @@ import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
 import { CompanyDocumentsSearch } from './search/CompanyDocumentsSearch';
+import companyDocumentsSearchStore from './stores/CompanyDocumentsSearchStore';
 
 export const CompanyDocumentsListEmployeeView = () => {
     const [data, setData] = useState([]);
@@ -15,9 +16,14 @@ export const CompanyDocumentsListEmployeeView = () => {
 
     const fetchData = useCallback(async () => {
         try {
-            const response = await companyDocumentsService.getList(signal);
-            console.log(response);
+            const filter = {
+                ...companyDocumentsSearchStore.companyDocumentFilter
+            };
+
+            const response = await companyDocumentsService.getList(filter, signal);
+
             setData(response.data.items);
+            companyDocumentsSearchStore.setTotalItemCount(response.data.totalItemCount);
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -71,7 +77,7 @@ export const CompanyDocumentsListEmployeeView = () => {
         <div className="pl-3">
             <h1 className="h1">{t('COMPANY_DOCUMENTS')}</h1>
 
-            <CompanyDocumentsSearch />
+            <CompanyDocumentsSearch fetchData={fetchData}/>
 
             <div className='pt-5'>
                 <DataTable
