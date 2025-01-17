@@ -37,7 +37,6 @@ export const UsersPreview = ({ userId, closeModal }) => {
 
 	if (!user) {
 		return <div>{t('LOADING')}</div>;
-
 	}
 
 
@@ -56,8 +55,8 @@ export const UsersPreview = ({ userId, closeModal }) => {
 						</div>
 					</div>
 					<div className="flex flex-col gap-3 pb-4">
-						<div className="flex gap-4 pt-16  ml-auto">
-							<span className="text-gray-900 font-semibold text-2xl ml:auto">{`${user.firstName} ${user.lastName}`}</span>
+						<div className="flex gap-4 pt-16 ml-auto">
+							<span className="text-gray-900 font-semibold text-2xl text-right">{`${user.firstName} ${user.lastName}`}</span>
 						</div>
 						<div className="flex gap-4 ml-auto">
 							<span className="text-gray-600"><FontAwesomeIcon icon={faEnvelope} className="pr-1" /> {user.email}</span>
