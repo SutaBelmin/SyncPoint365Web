@@ -184,5 +184,6 @@
     "SELECT_GENDER":"Select gender",
     "EMPLOYEE_COMMENT": "Employee Comment",
     "ADMIN_COMMENT": "Admin Comment",
-    "REQUEST_STATUS":"Request Status:"
+    "REQUEST_STATUS":"Request Status:",
+    "REQUIRED_FIELD": "Required Field"
 }

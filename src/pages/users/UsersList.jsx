@@ -223,7 +223,7 @@ export const UsersList = observer(() => {
                     persistTableHead={true}
                     noDataComponent={<NoDataMessage />}
                     paginationComponentOptions={paginationComponentOptions}
-                    onRowClicked={(row) => onPreviewUserClick(row.id)}
+                    onRowDoubleClicked={(row) => onPreviewUserClick(row.id)}
                     onSort={(column, sortDirection) => {
                         const sortField = column.sortField;
                         if (sortField) {

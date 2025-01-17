@@ -1,4 +1,4 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useTranslation } from 'react-i18next';
 import { absenceRequestsService, enumsService } from "../../services";
 import { toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { absenceRequestStatusConstant } from "../../constants";
 import { format } from "date-fns";
+import * as Yup from "yup"
 
 export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchData, isStatusLocked }) => {
     const [statuses, setAbsenceRequestsStatuses] = useState([]);
@@ -48,6 +49,10 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     };
+    
+    const validationSchema = Yup.object().shape({
+        absenceRequestStatus: Yup.string().required(t('REQUIRED_FIELD')),
+    });
 
     const initialValues = {
         absenceRequestId: absenceRequest.id,
@@ -70,6 +75,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
 
             <Formik
                 initialValues={initialValues}
+                validationSchema={validationSchema}
                 onSubmit={saveAbsenceRequestStatus}
             >
                 {({ setFieldValue, values }) => (
@@ -102,30 +108,36 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                     <label className="text-sm font-medium text-gray-700 mb-1">
                                         {t('COMMENT')}:
                                     </label>
-                                    <div className="mt-1 mb-3 block bg-gradient-to-r from-gray-100 to-zinc-100 p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[3.5rem]" id="preComment">
-                                        <span
-                                            id="preComment"
-                                            className="text-gray-500">{absenceRequest.preComment && absenceRequest.preComment ? absenceRequest.preComment : null}</span>
+                                    <div id="preComment">
+                                        <Field
+                                                id="preComment"
+                                                as="textarea"
+                                                name="postComment"
+                                                placeholder={t('COMMENT')}
+                                                autoComplete="off"
+                                                className="mt-1 text-gray-500 bg-gradient-to-r from-gray-100 to-zinc-100 w-full px-3 py-2 border border-gray-300 rounded-md min-h-[3.5rem] max-h-[7rem]"
+                                                disabled
+                                            />
                                     </div>
                                 </div>
                                 <div className="border-t border-gray-300 pb-2"></div>
                                 {!isStatusLocked && (
                                     <div>
                                         <div>
-                                            <label className="text-sm font-medium text-gray-700" id="absenceRequestStatus">
+                                            <label className="text-sm font-medium text-gray-700">
                                                 {t('REQUEST_STATUS')}
                                             </label>
                                             <Select
-                                                id="absenceRequestStatus"
                                                 name="absenceRequestStatus"
-                                                value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatus) || null}
-                                                onChange={(option) => setFieldValue('absenceRequestStatus', option && option.value)}
+                                                id="absenceRequestStatus"
                                                 options={statuses}
+                                                value={statuses.find(requestStatus => requestStatus.value === values.absenceRequestStatus) || null}
+                                                onChange={(option) => setFieldValue('absenceRequestStatus', option ? option.value : '')}
+                                                isSearchable
                                                 placeholder={t('SELECT_STATUS')}
                                                 className="border-blue-400 pb-3 input-select-border w-full min-w-[11rem] md:w-auto"
-                                                isClearable
-                                                isSearchable
                                             />
+                                            <ErrorMessage name="absenceRequestStatus" component="div" className="text-red-500 text-sm" />
                                         </div>
                                         <div>
                                             <label className="text-sm font-medium text-gray-700" id="postComment">
@@ -164,11 +176,17 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                             <label className="text-sm font-medium text-gray-700 mb-1">
                                                 {t('COMMENT')}:
                                             </label>
-                                            <div
-                                                className="mt-1 block bg-zinc-100 p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[3.5rem] text-gray-500 whitespace-pre-wrap break-words"
-                                                id="preComment"
+                                            <div id="postComment"
                                             >
-                                                {absenceRequest.preComment && absenceRequest.postComment ? absenceRequest.postComment : null}
+                                                <Field
+                                                id="postComment"
+                                                as="textarea"
+                                                name="postComment"
+                                                placeholder={t('COMMENT')}
+                                                autoComplete="off"
+                                                className="mt-1 text-gray-500 bg-gradient-to-r from-gray-100 to-zinc-100 w-full px-3 py-2 border border-gray-300 rounded-md min-h-[3.5rem] max-h-[7rem]"
+                                                disabled
+                                            />
                                             </div>
                                         </div>
                                         <button

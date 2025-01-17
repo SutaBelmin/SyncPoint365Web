@@ -184,6 +184,7 @@
     "SELECT_GENDER":"Odaberi spol",
     "EMPLOYEE_COMMENT": "Komentar zaposlenika",
     "ADMIN_COMMENT": "Komentar admina",
-    "REQUEST_STATUS":"Status zahtjeva:"
+    "REQUEST_STATUS":"Status zahtjeva:",
+    "REQUIRED_FIELD": "Obavezno polje."
 
 }

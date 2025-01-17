@@ -193,7 +193,7 @@ export const AbsenceRequestsList = observer(() => {
                     paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
                     onSort={sortAbsenceRequest}
-                    onRowClicked={(row) => {
+                    onRowDoubleClicked={(row) => {
                         if (row.absenceRequestStatus !== absenceRequestStatusConstant.pending) {
                             changeStatus(row);
                         }
