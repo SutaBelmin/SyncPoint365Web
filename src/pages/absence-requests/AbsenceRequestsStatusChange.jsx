@@ -49,7 +49,7 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     };
-    
+
     const validationSchema = Yup.object().shape({
         absenceRequestStatus: Yup.string().required(t('REQUIRED_FIELD')),
     });
@@ -108,16 +108,17 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                     <label className="text-sm font-medium text-gray-700 mb-1">
                                         {t('COMMENT')}:
                                     </label>
-                                    <div id="preComment">
+                                    <div>
                                         <Field
-                                                id="preComment"
-                                                as="textarea"
-                                                name="postComment"
-                                                placeholder={t('COMMENT')}
-                                                autoComplete="off"
-                                                className="mt-1 text-gray-500 bg-gradient-to-r from-gray-100 to-zinc-100 w-full px-3 py-2 border border-gray-300 rounded-md min-h-[3.5rem] max-h-[7rem]"
-                                                disabled
-                                            />
+                                            id="preComment"
+                                            as="textarea"
+                                            name="preComment"
+                                            value={absenceRequest.preComment && absenceRequest.preComment ? absenceRequest.preComment : null}
+                                            placeholder={t('COMMENT')}
+                                            autoComplete="off"
+                                            className="mt-1 text-gray-500 bg-gradient-to-r from-gray-100 to-zinc-100 w-full px-3 py-2 border border-gray-300 rounded-md min-h-[3.5rem] max-h-[7rem]"
+                                            disabled
+                                        />
                                     </div>
                                 </div>
                                 <div className="border-t border-gray-300 pb-2"></div>
@@ -176,17 +177,16 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                             <label className="text-sm font-medium text-gray-700 mb-1">
                                                 {t('COMMENT')}:
                                             </label>
-                                            <div id="postComment"
-                                            >
+                                            <div>
                                                 <Field
-                                                id="postComment"
-                                                as="textarea"
-                                                name="postComment"
-                                                placeholder={t('COMMENT')}
-                                                autoComplete="off"
-                                                className="mt-1 text-gray-500 bg-gradient-to-r from-gray-100 to-zinc-100 w-full px-3 py-2 border border-gray-300 rounded-md min-h-[3.5rem] max-h-[7rem]"
-                                                disabled
-                                            />
+                                                    id="postComment"
+                                                    as="textarea"
+                                                    name="postComment"
+                                                    placeholder={t('COMMENT')}
+                                                    autoComplete="off"
+                                                    className="mt-1 text-gray-500 bg-gradient-to-r from-gray-100 to-zinc-100 w-full px-3 py-2 border border-gray-300 rounded-md min-h-[3.5rem] max-h-[7rem]"
+                                                    disabled
+                                                />
                                             </div>
                                         </div>
                                         <button
