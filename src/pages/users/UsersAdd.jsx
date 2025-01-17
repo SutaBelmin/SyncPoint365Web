@@ -437,7 +437,7 @@ export const UsersAdd = () => {
                                         <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    <div className="w-full col-span-1 sm:col-span-2 mt-1">
+                                    <div className="w-full col-span-1 sm:col-span-2 mt-1 sm:w-1/2">
                                         <div className="flex items-center">
                                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                                 {t('PASSWORD')} <span className='text-red-500'>*</span>
@@ -459,7 +459,7 @@ export const UsersAdd = () => {
                                         <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
                                     </div>
 
-                                    <div className="w-full col-span-1 sm:col-span-2">
+                                    <div className="w-full col-span-1 sm:col-span-2 sm:w-1/2">
                                         <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700">
                                             {t('PASSWORD_CONFIRM')} <span className='text-red-500'>*</span>
                                         </label>
