@@ -136,11 +136,11 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                                 onChange={(option) => setFieldValue('absenceRequestStatus', option ? option.value : '')}
                                                 isSearchable
                                                 placeholder={t('SELECT_STATUS')}
-                                                className="border-blue-400 pb-3 input-select-border w-full min-w-[11rem] md:w-auto"
+                                                className="border-blue-400 input-select-border w-full min-w-[11rem] md:w-auto"
                                             />
                                             <ErrorMessage name="absenceRequestStatus" component="div" className="text-red-500 text-sm" />
                                         </div>
-                                        <div>
+                                        <div className="pt-1.5">
                                             <label className="text-sm font-medium text-gray-700" id="postComment">
                                                 {t('COMMENT')}
                                             </label>
