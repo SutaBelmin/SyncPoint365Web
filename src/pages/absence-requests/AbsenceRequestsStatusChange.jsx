@@ -164,12 +164,11 @@ export const AbsenceRequestsStatusChange = ({ absenceRequest, closeModal, fetchD
                                             <label className="text-sm font-medium text-gray-700 mb-1">
                                                 {t('COMMENT')}:
                                             </label>
-                                            <div className="mt-1 block bg-zinc-100 p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[3.5rem]" id="preComment">
-                                                <span
-                                                    id="preComment"
-                                                    className="text-gray-500">
-                                                    {absenceRequest.preComment && absenceRequest.postComment ? absenceRequest.postComment : null}
-                                                </span>
+                                            <div
+                                                className="mt-1 block bg-zinc-100 p-1.5 border border-gray-300 rounded-md shadow-sm select-none min-h-[3.5rem] text-gray-500 whitespace-pre-wrap break-words"
+                                                id="preComment"
+                                            >
+                                                {absenceRequest.preComment && absenceRequest.postComment ? absenceRequest.postComment : null}
                                             </div>
                                         </div>
                                         <button
