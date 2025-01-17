@@ -200,6 +200,11 @@
     "ADD_NEW_DOCUMENT":"Dodaj novi dokument",
     "CITY_DELETED_SUCCESSFULLY":"Grad uspješno obrisan.",
     "DOCUMENT_DELETED_SUCCESSFULLY":"Dokument uspješno obrisan.",
-    "UPDATE_DOCUMENT":"Uredi dokument"
-
+    "UPDATE_DOCUMENT":"Uredi dokument",
+    "COMPANY_NEWS": "Novosti",
+    "ADD_NEW_ARTICLE": "Dodaj novi članak",
+    "AUTHOR": "Autor",
+    "ARTICLE_TITLE": "Naslov",
+    "PUBLISHED": "Objavljeno",
+    "PRIVATE": "Privatno"
 }

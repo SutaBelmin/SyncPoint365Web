@@ -200,6 +200,11 @@
     "ADD_NEW_DOCUMENT":"Add New Document",
     "CITY_DELETED_SUCCESSFULLY":"City deleted successfully.",
     "DOCUMENT_DELETED_SUCCESSFULLY":"Document deleted successfully.",
-    "UPDATE_DOCUMENT":"Update document"
-
+    "UPDATE_DOCUMENT":"Update document",
+    "COMPANY_NEWS": "Company News",
+    "ADD_NEW_ARTICLE": "Add New Article",
+    "AUTHOR": "Author",
+    "ARTICLE_TITLE": "Title",
+    "PUBLISHED": "Published",
+    "PRIVATE": "Private"
 }
