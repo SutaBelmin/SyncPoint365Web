@@ -189,6 +189,7 @@
     "COMPANY_DOCUMENTS": "Company Documents",
     "DOCUMENT_NAME": "Document Name",
     "CONTENT_TYPE": "Content Type",
-    "SEARCH_BY_NAME":"Search by name"
+    "SEARCH_BY_NAME":"Search by name",
+    "VISIBILITY_CHANGED_SUCCESS":"Successfully changed document visibility."
 
 }

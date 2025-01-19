@@ -4,6 +4,8 @@ import { makeObservable, action, observable } from "mobx";
 class CompanyDocumentsSearchStore {
     totalItemCount = 0;
     searchQuery = "";
+    dateFrom = null;
+    dateTo = null;
     page = 1;
     pageSize = 10;
 
@@ -14,6 +16,14 @@ class CompanyDocumentsSearchStore {
             page: observable,
             pageSize: observable
         });
+    }
+
+    setDateFrom(value) {
+        this.dateFrom = value;
+    }
+
+    setDateTo(value) {
+        this.dateTo = value;
     }
 
     setQuery(query) {
@@ -34,11 +44,15 @@ class CompanyDocumentsSearchStore {
 
     clearFilters() {
         this.setQuery("");
+        this.setDateFrom(null);
+        this.setDateTo(null);
     }
 
     get companyDocumentFilter() {
         return {
             searchQuery: this.searchQuery,
+            dateFrom: this.dateFrom,
+            dateTo: this.dateTo,
             page: this.page,
             pageSize: this.pageSize,
         };

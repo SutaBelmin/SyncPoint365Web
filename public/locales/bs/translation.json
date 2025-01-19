@@ -189,7 +189,7 @@
     "COMPANY_DOCUMENTS": "Dokumenti kompanije",
     "DOCUMENT_NAME": "Naziv dokumenta",
     "CONTENT_TYPE": "Vrsta sadržaja",
-    "SEARCH_BY_NAME":"Pretraži po nazivu"
-
+    "SEARCH_BY_NAME":"Pretraži po nazivu",
+    "VISIBILITY_CHANGED_SUCCESS":"Uspješno promijenjena vidljivost dokumenta."
 
 }

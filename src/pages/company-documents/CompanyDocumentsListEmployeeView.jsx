@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState,useMemo } from 'react';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import companyDocumentsService from '../../services/companyDocumentsService';
@@ -8,8 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
 import { CompanyDocumentsSearch } from './search/CompanyDocumentsSearch';
 import companyDocumentsSearchStore from './stores/CompanyDocumentsSearchStore';
+import { NoDataMessage } from '../../components/common-ui';
+import { PaginationOptions } from "../../utils";
+import { observer } from 'mobx-react-lite';
+import { reaction } from 'mobx';
+import debounce from "lodash.debounce";
 
-export const CompanyDocumentsListEmployeeView = () => {
+export const CompanyDocumentsListEmployeeView = observer(() => {
     const [data, setData] = useState([]);
     const { signal } = useRequestAbort();
     const { t } = useTranslation();
@@ -29,9 +34,24 @@ export const CompanyDocumentsListEmployeeView = () => {
         }
     }, [signal, t]);
 
+    const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
+    
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        const disposeReaction = reaction(
+            () => ({
+                page: companyDocumentsSearchStore.page,
+                pageSize: companyDocumentsSearchStore.pageSize
+            }),
+            () => {
+                debouncedFetchData();
+            },
+            {
+                fireImmediately: true
+            }
+        );
+
+        return () => disposeReaction();
+    }, [debouncedFetchData]);
 
     const columns = [
         {
@@ -73,8 +93,9 @@ export const CompanyDocumentsListEmployeeView = () => {
         return URL.createObjectURL(blob);
     };
 
+    const filteredData = data.filter(x => x.isVisible);
     return (
-        <div className="pl-3">
+        <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <h1 className="h1">{t('COMPANY_DOCUMENTS')}</h1>
 
             <CompanyDocumentsSearch fetchData={fetchData}/>
@@ -82,11 +103,26 @@ export const CompanyDocumentsListEmployeeView = () => {
             <div className='pt-5'>
                 <DataTable
                     columns={columns}
-                    data={data}
+                    data={filteredData || []}
                     pagination
+                    paginationServer
+                    paginationTotalRows={companyDocumentsSearchStore.totalItemCount}
+                    paginationDefaultPage={companyDocumentsSearchStore.page}
+                    onChangePage={(newPage) => {
+                        companyDocumentsSearchStore.setPage(newPage);
+                    }}
+                    paginationPerPage={companyDocumentsSearchStore.pageSize}
+                    onChangeRowsPerPage={
+                        (newPageSize) => {
+                            companyDocumentsSearchStore.setPageSize(newPageSize);
+                        }
+                    }
                     highlightOnHover
+                    persistTableHead={true}
+                    paginationComponentOptions={PaginationOptions}
+                    noDataComponent={<NoDataMessage />}
                 />
             </div>
         </div>
     );
-};
+});
