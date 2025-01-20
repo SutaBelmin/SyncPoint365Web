@@ -34,8 +34,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
         { icon: faCalendarCheck, label: t('REQUEST_TYPES'), link: '/absence-request-types', isVisible: userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator) },
         { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests', isVisible: userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator)  },
         { icon: faCalendarDays, label: t('ABSENCE_REQUESTS'), link: '/absence-requests-user', isVisible: userHasRole(roleConstant.employee) },
-        { icon: faFile, label: t('COMPANY_DOCUMENTS'), link: '/company-documents', isVisible: userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator) },
-        { icon: faFile, label: t('COMPANY_DOCUMENTS'), link: '/company-documents-employee', isVisible: userHasRole(roleConstant.employee) },
+        { icon: faFile, label: t('COMPANY_DOCUMENTS'), link: '/company-documents', isVisible: userHasRole(roleConstant.superAdministrator) || userHasRole(roleConstant.administrator) || userHasRole(roleConstant.employee) },
         { icon: faLocationCrosshairs, label: t('LOCATION'), link: null, isVisible: userHasRole(roleConstant.superAdministrator),
             items: [
                 { icon: faEarthAmerica, label: t('COUNTRIES'), link: '/countries' },

@@ -1,6 +1,5 @@
 import BaseService from "./baseService";
 
-
 class CompanyDocumentsService extends BaseService {
     getList(filter, signal = null) {
         const response = this.api.get("/companyDocuments/paged", {
@@ -22,6 +21,35 @@ class CompanyDocumentsService extends BaseService {
             { signal: signal });
 
         return response;
+    }
+
+    async add(data, signal = null) {
+        const response = await this.api.post(`/companyDocuments`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            signal: signal
+        });
+
+        return response.data;
+    }
+
+    async update(data, signal = null) {
+        const response = await this.api.put(`/companyDocuments`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            signal: signal
+        });
+
+        return response.data;
+    }
+
+    async delete(companyDocumentId, signal = null) {
+        const response = await this.api.delete(`/companyDocuments/${companyDocumentId}`, {
+            signal: signal
+        });
+        return response.data;
     }
 
 }

@@ -1,2 +1,3 @@
 export { CompanyDocumentsList } from './CompanyDocumentsList';
-export { CompanyDocumentsListEmployeeView } from './CompanyDocumentsListEmployeeView';
+export { CompanyDocumentsAdd } from './CompanyDocumentsAdd';
+export { CompanyDocumentsEdit } from './CompanyDocumentsEdit';

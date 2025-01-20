@@ -190,6 +190,16 @@
     "DOCUMENT_NAME": "Naziv dokumenta",
     "CONTENT_TYPE": "Vrsta sadržaja",
     "SEARCH_BY_NAME":"Pretraži po nazivu",
-    "VISIBILITY_CHANGED_SUCCESS":"Uspješno promijenjena vidljivost dokumenta."
+    "VISIBILITY_CHANGED_SUCCESS":"Uspješno promijenjena vidljivost dokumenta.",
+    "SHOW_DOCUMENT":"Prikaži dokument?",
+    "HIDE_DOCUMENT":"Sakrij dokument?",
+    "ADD_DOCUMENT":"Dodaj dokument",
+    "VISIBILITY":"Vidljivost",
+    "FILE_IS_REQUIRED":"Obavezan fajl.",
+    "FILE":"Fajl",
+    "ADD_NEW_DOCUMENT":"Dodaj novi dokument",
+    "CITY_DELETED_SUCCESSFULLY":"Grad uspješno obrisan.",
+    "DOCUMENT_DELETED_SUCCESSFULLY":"Dokument uspješno obrisan.",
+    "UPDATE_DOCUMENT":"Uredi dokument"
 
 }

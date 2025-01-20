@@ -5,19 +5,30 @@ import companyDocumentsService from '../../services/companyDocumentsService';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faFileDownload } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faFileDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { CompanyDocumentsSearch } from './search/CompanyDocumentsSearch';
 import companyDocumentsSearchStore from './stores/CompanyDocumentsSearchStore';
 import { NoDataMessage } from '../../components/common-ui';
 import { PaginationOptions } from "../../utils";
 import { observer } from 'mobx-react-lite';
 import { reaction } from 'mobx';
+import { useModal } from '../../context';
 import debounce from "lodash.debounce";
+import { useSearchParams } from 'react-router-dom';
+import { ConfirmationModal, DeleteConfirmationModal } from '../../components/modal';
+import { BaseModal } from '../../components/modal';
+import { CompanyDocumentsAdd } from './CompanyDocumentsAdd';
+import { useAuth } from '../../context/AuthProvider';
+import { CompanyDocumentsEdit } from './CompanyDocumentsEdit';
 
 export const CompanyDocumentsList = observer(() => {
     const [data, setData] = useState([]);
     const { signal } = useRequestAbort();
     const { t } = useTranslation();
+    const [, setSearchParams] = useSearchParams();
+    const { openModal, closeModal } = useModal();
+    const { loggedUser } = useAuth();
+    const isEmployee = loggedUser?.role === 'Employee';
 
     const fetchData = useCallback(async () => {
         try {
@@ -34,9 +45,6 @@ export const CompanyDocumentsList = observer(() => {
         }
     }, [signal, t]);
 
-    // useEffect(() => {
-    //     fetchData();
-    // }, [fetchData]);
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
     useEffect(() => {
@@ -67,27 +75,53 @@ export const CompanyDocumentsList = observer(() => {
             selector: row => `${row.user.firstName} ${row.user.lastName}`,
             sortable: true,
         },
-        {
-            name: t('ACTIONS'),
-            cell: row => (
-                <div className="flex">
-                    <button
-                        onClick={() => handleDownload(row.name, row.file, row.contentType)}
-                        className="text-lg text-blue-500 hover:underline p-2">
-                        <FontAwesomeIcon icon={faFileDownload} style={{ color: '#276EEC' }} />
-                    </button>
-                    <button
-                        onClick={() => handleDocumentVisibility(row.id, row.isVisible)}
-                        className="text-lg text-blue-500 hover:underline p-2"
-                        style={{ color:row.isVisible ? 'green' : 'red' }}
-                    >
-                        <FontAwesomeIcon icon={faEye} />
-                    </button>
-                </div>
-            ),
-            ignoreRowClick: true,
-        }
     ];
+
+    if (!isEmployee) {
+        columns.push({
+            name: t('VISIBILITY'),
+            cell: row => (
+                <button
+                    onClick={() => documentVisibility(row.id, row.isVisible)}
+                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${row.isVisible ? "bg-green-600" : "bg-gray-300"}`}
+                >
+                    <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isVisible ? "translate-x-5" : "translate-x-1"
+                            }`}
+                    ></span>
+                </button>
+            ),
+            sortable: true,
+        });
+    }
+
+    columns.push({
+        name: t('ACTIONS'),
+        cell: row => (
+            <div className="flex justify-between items-center space-x-4">
+                <button
+                    onClick={() => handleDownload(row.name, row.file, row.contentType)}
+                    className="text-lg text-blue-500 hover:underline">
+                    <FontAwesomeIcon icon={faFileDownload} style={{ color: '#276EEC' }} />
+                </button>
+                {!isEmployee && (
+                    <button
+                        onClick={() => onEditDocumentClick(row)}
+                        className="text-lg hover:underline">
+                        <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                )}
+                {!isEmployee && (
+                    <button
+                        onClick={() => onDeleteCompanyDocumentClick(row)}
+                        className="text-lg text-red-500 hover:underline">
+                        <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                )}
+            </div>
+        ),
+        ignoreRowClick: true,
+    });
 
     const handleDownload = (name, file, contentType) => {
         const link = document.createElement('a');
@@ -103,21 +137,77 @@ export const CompanyDocumentsList = observer(() => {
         return URL.createObjectURL(blob);
     };
 
+    const documentVisibility = (documentId, isVisible) => {
+        openModal(
+            <ConfirmationModal
+                title={isVisible ? t('HIDE_DOCUMENT') : t('SHOW_DOCUMENT')}
+                onConfirm={() => handleDocumentVisibility(documentId, isVisible)}
+                onCancel={closeModal}
+            />
+        );
+    };
+
     const handleDocumentVisibility = async (documentId, isVisible) => {
         try {
             await companyDocumentsService.updateDocumentVisibility(documentId, !isVisible, signal);
             toast.success(t('VISIBILITY_CHANGED_SUCCESS'));
-            fetchData(); 
+            fetchData();
+            closeModal();
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     };
 
+    const onAddDocumentClick = () => {
+        openModal(
+            <CompanyDocumentsAdd onClose={closeModal} fetchData={fetchData} />
+        );
+    };
+
+    const onEditDocumentClick = (companyDocument) => {
+        openModal(
+            <CompanyDocumentsEdit companyDocument={companyDocument} onClose={closeModal} fetchData={fetchData} />
+        );
+    };
+
+    const onDeleteCompanyDocumentClick = (companyDocument) => {
+        openModal(<DeleteConfirmationModal entityName={companyDocument.name} id={companyDocument.id} onDelete={handleDelete} onCancel={closeModal} />);
+    };
+    
+    const handleDelete = async (companyDocumentId) => {
+        try {
+            await companyDocumentsService.delete(companyDocumentId);
+            fetchData();
+            closeModal();
+            toast.success(t('DOCUMENT_DELETED_SUCCESSFULLY'));
+        } catch (error) {
+            toast.error(t('ERROR_CONTACT_ADMIN'));
+        }
+    }
+
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
-            <h1 className="h1">{t('COMPANY_DOCUMENTS')}</h1>
+            <div className='flex justify-between items-center'>
+                <h1 className="h1">{t('COMPANY_DOCUMENTS')}</h1>
+
+                {!isEmployee && (
+                    <div className="flex justify-end mt-4 pt-14 pb-4">
+                        <button
+                            type='button'
+                            onClick={onAddDocumentClick}
+                            className="btn-common h-10"
+                        >
+                            {t('ADD_DOCUMENT')}
+                        </button>
+                    </div>
+                )}
+
+            </div>
+
 
             <CompanyDocumentsSearch fetchData={fetchData} />
+
+            <BaseModal />
 
             <div className='pt-5'>
                 <DataTable
@@ -129,11 +219,13 @@ export const CompanyDocumentsList = observer(() => {
                     paginationDefaultPage={companyDocumentsSearchStore.page}
                     onChangePage={(newPage) => {
                         companyDocumentsSearchStore.setPage(newPage);
+                        setSearchParams(companyDocumentsSearchStore.queryParams);
                     }}
                     paginationPerPage={companyDocumentsSearchStore.pageSize}
                     onChangeRowsPerPage={
                         (newPageSize) => {
                             companyDocumentsSearchStore.setPageSize(newPageSize);
+                            setSearchParams(companyDocumentsSearchStore.queryParams);
                         }
                     }
                     highlightOnHover

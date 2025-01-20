@@ -6,6 +6,7 @@ import LanguageSwitcher from '../localization';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
 import { useAuth } from '../../context/AuthProvider';
+import companyDocumentsSearchStore from '../../pages/company-documents/stores/CompanyDocumentsSearchStore';
 
 const Header = ({ isCollapsed }) => {
     const { t } = useTranslation();
@@ -14,6 +15,7 @@ const Header = ({ isCollapsed }) => {
 
     const handleLogout = () => {
         removeUser();
+        companyDocumentsSearchStore.clearFilters();
         navigate('/');
     }
 

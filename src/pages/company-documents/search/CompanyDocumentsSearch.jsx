@@ -3,30 +3,41 @@ import { Formik, Form, Field } from "formik";
 import companyDocumentsSearchStore from "../stores/CompanyDocumentsSearchStore";
 import DatePicker from "react-datepicker";
 import { format } from 'date-fns';
+import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 export const CompanyDocumentsSearch = ({ fetchData }) => {
     const { t, i18n } = useTranslation();
+    const [, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        setSearchParams(companyDocumentsSearchStore.queryParams);
+    }, [setSearchParams]);
 
     const handleSearch = (values) => {
         companyDocumentsSearchStore.setQuery(values.searchQuery);
         companyDocumentsSearchStore.setDateFrom(values.dateFrom);
         companyDocumentsSearchStore.setDateTo(values.dateTo);
 
+        const queryParams = companyDocumentsSearchStore.syncWithQueryParams();
+        setSearchParams(queryParams);
+
         fetchData();
     };
 
     const handleClear = (setFieldValue) => {
+        setSearchParams({});
         setFieldValue("searchQuery", "");
         setFieldValue("dateFrom", null);
         setFieldValue("dateTo", null);
-
         companyDocumentsSearchStore.clearFilters();
-
         fetchData();
     };
 
     const initialValues = {
-        searchQuery: companyDocumentsSearchStore.searchQuery
+        searchQuery: companyDocumentsSearchStore.searchQuery,
+        dateFrom: companyDocumentsSearchStore.dateFrom,
+        dateTo: companyDocumentsSearchStore.dateTo
     }
 
     return (

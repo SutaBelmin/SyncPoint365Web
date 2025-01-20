@@ -190,6 +190,16 @@
     "DOCUMENT_NAME": "Document Name",
     "CONTENT_TYPE": "Content Type",
     "SEARCH_BY_NAME":"Search by name",
-    "VISIBILITY_CHANGED_SUCCESS":"Successfully changed document visibility."
+    "VISIBILITY_CHANGED_SUCCESS":"Successfully changed document visibility.",
+    "SHOW_DOCUMENT":"Show document?",
+    "HIDE_DOCUMENT":"Hide document?",
+    "ADD_DOCUMENT":"Add Document",
+    "VISIBILITY":"Visibility",
+    "FILE_IS_REQUIRED":"File is required.",
+    "FILE":"File",
+    "ADD_NEW_DOCUMENT":"Add New Document",
+    "CITY_DELETED_SUCCESSFULLY":"City deleted successfully.",
+    "DOCUMENT_DELETED_SUCCESSFULLY":"Document deleted successfully.",
+    "UPDATE_DOCUMENT":"Update document"
 
 }
