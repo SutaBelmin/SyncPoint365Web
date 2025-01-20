@@ -62,7 +62,6 @@ class CompanyNewsSearchStore {
         this.setQuery(null);
         this.setDateFrom(null);
         this.setDateTo(null);
-        this.setYear(null);
         this.syncWithQueryParams();
     }
 

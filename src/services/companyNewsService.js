@@ -1,6 +1,5 @@
 import BaseService from "./baseService";
 
-
 class CompanyNewsService extends BaseService {
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
@@ -38,6 +37,11 @@ class CompanyNewsService extends BaseService {
         const response = await this.api.delete(`/company-news/${companyNewsId}`, {
             signal: signal,
         });
+        return response.data;
+    }
+
+    async updateVisibility(id, isVisible) {
+        const response = await this.api.put(`/company-news/Change-visibility?id=${id}`, isVisible);
         return response.data;
     }
 }

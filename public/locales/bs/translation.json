@@ -206,5 +206,15 @@
     "AUTHOR": "Autor",
     "ARTICLE_TITLE": "Naslov",
     "PUBLISHED": "Objavljeno",
-    "PRIVATE": "Privatno"
+    "PRIVATE": "Privatno",
+    "ADD_COMPANY_NEWS": "Dodaj vijest",
+    "TITLE_IS_REQUIRED":"Naslov je obavezan",
+    "TEXT_IS_REQUIRED":"Tekst je obavezan",
+    "TITLE_NEWS": "Naslov",
+    "TEXT":"Sadrzaj",
+    "IS_VISIBLE":"Vidljivo",
+    "HIDDEN":"Skriveno",
+    "EDIT_COMPANY_NEWS":"Uredi novosti",
+    "STATUS_CHANGED":"Status promjenjen",
+    "SEARCH_BY_TITLE":"Pretraga po naslovu"
 }

@@ -206,5 +206,15 @@
     "AUTHOR": "Author",
     "ARTICLE_TITLE": "Title",
     "PUBLISHED": "Published",
-    "PRIVATE": "Private"
+    "PRIVATE": "Private",
+    "ADD_COMPANY_NEWS": "Add company news",
+    "TITLE_IS_REQUIRED":"Title is required",
+    "TEXT_IS_REQUIRED":"Text is required",
+    "TITLE_NEWS": "Title",
+    "TEXT":"Text",
+    "IS_VISIBLE":"Visible",
+    "HIDDEN":"Hidden",
+    "EDIT_COMPANY_NEWS":"Edit company news",
+    "STATUS_CHANGED":"Status changed",
+    "SEARCH_BY_TITLE":"Search by title"
 }

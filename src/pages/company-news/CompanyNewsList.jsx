@@ -5,29 +5,34 @@ import { useRequestAbort } from "../../components/hooks";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import DataTable from "react-data-table-component";
-import { BaseModal } from "../../components/modal";
+import { BaseModal, DeleteConfirmationModal } from "../../components/modal";
 import { NoDataMessage } from "../../components/common-ui";
 import { PaginationOptions } from "../../utils";
 import { observer } from "mobx-react-lite";
 import debounce from "lodash.debounce";
 import { reaction } from "mobx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye, faEyeSlash, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useSearchParams } from "react-router-dom";
-
+import { useModal } from "../../context/ModalProvider";
+import { CompanyNewsAdd } from "./CompanyNewsAdd";
+import { CompanyNewsEdit } from "./CompanyNewsEdit";
+import { useAuth } from "../../context/AuthProvider";
+import { CompanyNewsSearch } from "./search/CompanyNewsSearch";
 
 export const CompanyNewsList = observer(() => {
     const { signal } = useRequestAbort();
     const [, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
+    const { openModal, closeModal } = useModal();
 
     const [data, setData] = useState([]);
-
+    const {loggedUser} = useAuth();
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = { ...companyNewsSearchStore.companyNewsFilter };
+            const filter = { ...companyNewsSearchStore.companyNewsFilter, userId: loggedUser.id };
             const response = await companyNewsService.getPagedList(filter, signal);
 
             setData(response.items);
@@ -37,7 +42,7 @@ export const CompanyNewsList = observer(() => {
         } finally {
             setLoading(false);
         }
-    }, [signal, t]);
+    }, [signal, loggedUser, t]);
 
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
@@ -77,21 +82,52 @@ export const CompanyNewsList = observer(() => {
             name: t('ACTIONS'),
             cell: row => (
                 <div className="flex">
+                    <button 
+                    onClick={() => onEditCompanyNewsClick(row)}
+                    className="text-lg text-blue-500 hover:underline p-2">
+                    <FontAwesomeIcon icon={faEdit} style={{color: '#276EEC'}}/>
+                    </button>
                     <button
-                    //onClick={() => changeStatus(row)}
+                    onClick={()=>deleteRequestClick(row)}
+                    className="text-lg text-red-500 hover:underline p-2">
+                    <FontAwesomeIcon icon={faTrash}/>
+                    </button>
+                    <button
+                    onClick={()=>handleVisibilityChange(row.id, !row.isVisible)}
                     >
-                        {
-                            //row.absenceRequestStatus === absenceRequestStatusConstant.pending ? (
-                            <FontAwesomeIcon icon={faEdit} className="text-blue-600 hover:underline p-2" />
-                            //) : (
-                            //    <FontAwesomeIcon icon={faCircleCheck} className="text-green-700 hover:underline p-2" />
-                            //)
-                        }
+                     {row.isVisible ? (
+                        <FontAwesomeIcon icon={faEye} style={{color: '#276EEC'}}/>
+                     ) : (
+                        <FontAwesomeIcon icon={faEyeSlash} style={{color: '#276EEC'}}/>
+                     )}
                     </button>
                 </div>
             ),
         }
     ];
+
+    const onAddCompanyNewsClick = () => {
+        openModal(<CompanyNewsAdd userId={loggedUser.id} closeModal={closeModal} fetchData={fetchData}/>)
+    }
+
+    const onEditCompanyNewsClick = (companyNews) => {
+        openModal(<CompanyNewsEdit companyNews={companyNews} closeModal={closeModal} fetchData={fetchData}/>)
+    }
+
+    const deleteRequestClick = (companyNews) => {
+        openModal(<DeleteConfirmationModal entityName={companyNews.name} onDelete={()=> handleDelete(companyNews.id)} onCancel={closeModal}/>)
+    }
+
+    const handleDelete = async (companyNewsId) => {
+        try {
+            await companyNewsService.delete(companyNewsId, signal);
+            fetchData();
+            closeModal();
+            toast.success(t('DELETED'));
+        } catch (error) {
+            toast.error(t('FAILED_TO_DELETE'));
+        }
+    }
 
     const handlePageChange = (newPage) => {
         companyNewsSearchStore.setPage(newPage);
@@ -112,6 +148,16 @@ export const CompanyNewsList = observer(() => {
         setSearchParams(companyNewsSearchStore.queryParams);
     };
 
+    const handleVisibilityChange = async (id, isVisible) => {
+        try {   
+            await companyNewsService.updateVisibility(id, isVisible);
+            fetchData();
+            toast.success(t('STATUS_CHANGED'));
+        } catch (error) {
+            toast.error(t('FAIL_UPDATE'));
+        }
+    };
+
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <div className="flex flex-col xs:flex-row justify-between">
@@ -120,7 +166,7 @@ export const CompanyNewsList = observer(() => {
                 <div className="flex justify-end mt-4 pb-4 pt-14 md:pt-14 sm:pt-14 xs:pt-14 ss:pt-0">
                     <button
                         type="button"
-                        //onClick={addNewRequestClick}
+                        onClick={onAddCompanyNewsClick}
                         className="btn-common h-10 md:max-w-[9rem] sm:max-w-[9rem] xs:max-w-full ss:max-w-full md:ml-auto"
                     >
                         {t('ADD_NEW_ARTICLE')}
@@ -128,14 +174,8 @@ export const CompanyNewsList = observer(() => {
                 </div>
             </div>
             <div className="flex flex-col gap-4 xs:flex-row">
-                {/* <AbsenceRequestTypesSearch fetchData={fetchData} /> */}
+                <CompanyNewsSearch fetchData={fetchData}/>
             </div>
-
-            <div className="flex flex-col gap-4 md:flex-row">
-
-            </div>
-
-
 
             <BaseModal />
             <div className="table max-w-full">
