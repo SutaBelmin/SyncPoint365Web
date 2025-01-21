@@ -1,30 +1,31 @@
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import { observer } from 'mobx-react-lite';
+import { useSearchParams } from 'react-router-dom';
+import DataTable from "react-data-table-component";
+import { reaction } from 'mobx';
+import debounce from "lodash.debounce";
 import companyDocumentsService from '../../services/companyDocumentsService';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import DataTable from "react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faFileDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { CompanyDocumentsSearch } from './search/CompanyDocumentsSearch';
 import companyDocumentsSearchStore from './stores/CompanyDocumentsSearchStore';
 import { NoDataMessage } from '../../components/common-ui';
-import { PaginationOptions } from "../../utils";
-import { observer } from 'mobx-react-lite';
-import { reaction } from 'mobx';
+import { PaginationOptions } from '../../utils';
 import { useModal } from '../../context';
-import debounce from "lodash.debounce";
-import { useSearchParams } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider';
 import { ConfirmationModal, DeleteConfirmationModal } from '../../components/modal';
 import { BaseModal } from '../../components/modal';
 import { CompanyDocumentsAdd } from './CompanyDocumentsAdd';
-import { useAuth } from '../../context/AuthProvider';
 import { CompanyDocumentsEdit } from './CompanyDocumentsEdit';
 
 export const CompanyDocumentsList = observer(() => {
     const [data, setData] = useState([]);
     const { signal } = useRequestAbort();
     const { t } = useTranslation();
+    const paginationComponentOptions = PaginationOptions();
     const [, setSearchParams] = useSearchParams();
     const { openModal, closeModal } = useModal();
     const { loggedUser } = useAuth();
@@ -38,12 +39,21 @@ export const CompanyDocumentsList = observer(() => {
 
             const response = await companyDocumentsService.getList(filter, signal);
 
-            setData(response.data.items);
-            companyDocumentsSearchStore.setTotalItemCount(response.data.totalItemCount);
+            var fetchedData = response.data.items;
+            if(isEmployee){
+                fetchedData = fetchedData.filter(x=> x.isVisible);
+            }
+
+            setData(fetchedData);
+
+            companyDocumentsSearchStore.setTotalItemCount(
+                isEmployee ? fetchedData.length : response.data.totalItemCount
+            );
+
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
-    }, [signal, t]);
+    }, [signal, t, isEmployee]);
 
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
@@ -70,12 +80,15 @@ export const CompanyDocumentsList = observer(() => {
             selector: row => row.name,
             sortable: true,
         },
-        {
-            name: t('USER'),
-            selector: row => `${row.user.firstName} ${row.user.lastName}`,
-            sortable: true,
-        },
     ];
+
+    if (!isEmployee) {
+        columns.push({
+            name: t('USER'),
+            cell: row => `${row.user.firstName} ${row.user.lastName}`,
+            sortable: true,
+        });
+    }
 
     if (!isEmployee) {
         columns.push({
@@ -108,7 +121,7 @@ export const CompanyDocumentsList = observer(() => {
                     <button
                         onClick={() => onEditDocumentClick(row)}
                         className="text-lg hover:underline">
-                        <FontAwesomeIcon icon={faEdit} />
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                 )}
                 {!isEmployee && (
@@ -160,20 +173,20 @@ export const CompanyDocumentsList = observer(() => {
 
     const onAddDocumentClick = () => {
         openModal(
-            <CompanyDocumentsAdd onClose={closeModal} fetchData={fetchData} />
+            <CompanyDocumentsAdd closeModal={closeModal} fetchData={fetchData} />
         );
     };
 
     const onEditDocumentClick = (companyDocument) => {
         openModal(
-            <CompanyDocumentsEdit companyDocument={companyDocument} onClose={closeModal} fetchData={fetchData} />
+            <CompanyDocumentsEdit companyDocument={companyDocument} closeModal={closeModal} fetchData={fetchData} />
         );
     };
 
     const onDeleteCompanyDocumentClick = (companyDocument) => {
         openModal(<DeleteConfirmationModal entityName={companyDocument.name} id={companyDocument.id} onDelete={handleDelete} onCancel={closeModal} />);
     };
-    
+
     const handleDelete = async (companyDocumentId) => {
         try {
             await companyDocumentsService.delete(companyDocumentId);
@@ -204,8 +217,9 @@ export const CompanyDocumentsList = observer(() => {
 
             </div>
 
-
-            <CompanyDocumentsSearch fetchData={fetchData} />
+            <div className="flex flex-col gap-4 xs:flex-row">
+                <CompanyDocumentsSearch fetchData={fetchData} />
+            </div>
 
             <BaseModal />
 
@@ -230,8 +244,9 @@ export const CompanyDocumentsList = observer(() => {
                     }
                     highlightOnHover
                     persistTableHead={true}
-                    paginationComponentOptions={PaginationOptions}
+                    paginationComponentOptions={paginationComponentOptions}
                     noDataComponent={<NoDataMessage />}
+                    sortServer={true}
                 />
             </div>
         </div>

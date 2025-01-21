@@ -167,7 +167,7 @@ export const CitiesList = observer(() => {
                     }
                     highlightOnHover
                     persistTableHead={true}
-                    paginationComponentOptions={PaginationOptions}
+                    paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
                     onSort={(column, sortDirection) => {
                         const sortField = column.sortField;

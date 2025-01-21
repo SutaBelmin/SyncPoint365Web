@@ -4,13 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as Yup from "yup";
 import companyDocumentsService from '../../services/companyDocumentsService';
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { allowedDocumentExtensions } from '../../constants';
 
-export const CompanyDocumentsEdit = ({ companyDocument, onClose, fetchData }) => {
+export const CompanyDocumentsEdit = ({ companyDocument, closeModal, fetchData }) => {
     const { t } = useTranslation();
+    const { signal } = useRequestAbort();
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(t('NAME_IS_REQUIRED')),
-        file: Yup.string().required(t('FILE_IS_REQUIRED')),
+        name: Yup.string().required(t('NAME_IS_REQUIRED'))
     });
 
     const handleSubmit = async (values) => {
@@ -21,12 +23,12 @@ export const CompanyDocumentsEdit = ({ companyDocument, onClose, fetchData }) =>
                 userId: companyDocument.userId
             };
 
-            await companyDocumentsService.update(newCompanyDocument);
+            await companyDocumentsService.update(newCompanyDocument, signal);
             toast.success(t('UPDATED'));
             fetchData();
-            onClose();
+            closeModal();
         } catch (error) {
-
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     };
 
@@ -46,7 +48,7 @@ export const CompanyDocumentsEdit = ({ companyDocument, onClose, fetchData }) =>
                 {({ setFieldValue, values }) => (
                     <Form className="space-y-4">
                         <div>
-                            <label htmlFor="name" className="block text-md font-medium">{t('NAME')}</label>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">{t('NAME')}</label>
                             <input
                                 id="name"
                                 name="name"
@@ -59,33 +61,29 @@ export const CompanyDocumentsEdit = ({ companyDocument, onClose, fetchData }) =>
                         </div>
 
                         <div>
-                            <label htmlFor="file" className="block text-md font-medium">{t('FILE')}</label>
+                            <label htmlFor="file" className="block text-sm font-medium text-gray-700">{t('FILE')}</label>
                             <input
                                 id="file"
                                 name="file"
                                 type="file"
+                                accept={allowedDocumentExtensions}
                                 onChange={(e) => setFieldValue("file", e.target.files[0])}
                                 className="mt-2 p-2 border border-gray-300 rounded w-full"
                             />
                             <ErrorMessage name="file" component="div" className="text-red-500 text-sm" />
                         </div>
 
-                        <div>
-                            <label htmlFor="isVisible" className="block text-md font-medium">{t('VISIBILITY')}</label>
-                            <input
-                                id="isVisible"
-                                name="isVisible"
-                                type="checkbox"
-                                checked={values.isVisible}
-                                onChange={() => setFieldValue("isVisible", !values.isVisible)}
-                                className="mt-2"
-                            />
-                        </div>
-
-                        <div className='flex justify-end'>
+                        <div className="flex justify-end gap-4 pt-2">
+                            <button
+                                type="button"
+                                onClick={closeModal}
+                                className="btn-cancel"
+                            >
+                                {t('CANCEL')}
+                            </button>
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                                className="btn-save"
                             >
                                 {t('SAVE')}
                             </button>

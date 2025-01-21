@@ -1,34 +1,39 @@
 import React from 'react';
-import { Formik, Form, ErrorMessage } from 'formik';
-import companyDocumentsService from '../../services/companyDocumentsService';
 import { toast } from 'react-toastify';
-import * as Yup from "yup";
 import { useTranslation } from 'react-i18next';
+import { Formik, Form, ErrorMessage } from 'formik';
+import * as Yup from "yup";
 import { useAuth } from '../../context/AuthProvider';
+import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import companyDocumentsService from '../../services/companyDocumentsService';
+import { allowedDocumentExtensions } from '../../constants';
 
-export const CompanyDocumentsAdd = ({ onClose, fetchData }) => {
+export const CompanyDocumentsAdd = ({ closeModal, fetchData }) => {
     const { t } = useTranslation();
     const { loggedUser } = useAuth();
+    const { signal } = useRequestAbort();
 
     const handleSubmit = async (values) => {
         try {
             const newCompanyDocument = {
                 ...values,
-                userId: loggedUser.id
+                userId: loggedUser.id,
+                isVisible: false
             };
 
-            await companyDocumentsService.add(newCompanyDocument);
+            await companyDocumentsService.add(newCompanyDocument, signal);
             toast.success(t('ADDED'));
             fetchData();
-            onClose();
+            closeModal();
         } catch (error) {
-
+            toast.error(t('ERROR_CONTACT_ADMIN'));
         }
     };
 
     const validationSchema = Yup.object({
         name: Yup.string().required(t('NAME_IS_REQUIRED')),
-        file: Yup.string().required(t('FILE_IS_REQUIRED')),
+        file: Yup.mixed()
+        .required(t('FILE_IS_REQUIRED'))
     });
 
     return (
@@ -60,30 +65,26 @@ export const CompanyDocumentsAdd = ({ onClose, fetchData }) => {
                                 id="file"
                                 name="file"
                                 type="file"
+                                accept={allowedDocumentExtensions}
                                 onChange={(e) => setFieldValue("file", e.target.files[0])}
                                 className="mt-2 p-2 border border-gray-300 rounded w-full"
                             />
                             <ErrorMessage name="file" component="div" className="text-red-500 text-sm" />
                         </div>
 
-                        <div>
-                            <label htmlFor="isVisible" className="block text-md font-medium">{t('VISIBILITY')}</label>
-                            <input 
-                               id="isVisible"
-                               name="isVisible"
-                               type="checkbox"
-                               checked={values.isVisible}
-                               onChange={() => setFieldValue("isVisible", !values.isVisible)}
-                               className="mt-2"
-                            />
-                        </div>
-
-                        <div className='flex justify-end'>
+                        <div className="flex justify-end gap-4 pt-2">
+                            <button
+                                type="button"
+                                onClick={closeModal}
+                                className="btn-cancel"
+                            >
+                                {t('CANCEL')}
+                            </button>
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                                className="btn-save"
                             >
-                               {t('SAVE')}
+                                {t('SAVE')}
                             </button>
                         </div>
 

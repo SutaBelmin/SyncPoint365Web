@@ -1,14 +1,18 @@
 import { useTranslation } from "react-i18next";
-import { Formik, Form, Field } from "formik";
-import companyDocumentsSearchStore from "../stores/CompanyDocumentsSearchStore";
 import DatePicker from "react-datepicker";
-import { format } from 'date-fns';
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+import { registerLocale } from "react-datepicker";
+import { Formik, Form, Field } from "formik";
+import { format } from 'date-fns';
+import { localeConstant } from '../../../constants';
+import companyDocumentsSearchStore from "../stores/CompanyDocumentsSearchStore";
 
 export const CompanyDocumentsSearch = ({ fetchData }) => {
     const { t, i18n } = useTranslation();
     const [, setSearchParams] = useSearchParams();
+
+    registerLocale(i18n.language, localeConstant[i18n.language]);
 
     useEffect(() => {
         setSearchParams(companyDocumentsSearchStore.queryParams);
@@ -46,7 +50,7 @@ export const CompanyDocumentsSearch = ({ fetchData }) => {
           initialValues={initialValues}
           onSubmit={handleSearch}>
             {({setFieldValue, values}) => (
-            <Form className="flex items-centar gap-4 w-full">
+            <Form className="grid gap-4 w-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 ss:grid-cols-1">
                 <Field
                     type="text"
                     name="searchQuery"
@@ -54,7 +58,7 @@ export const CompanyDocumentsSearch = ({ fetchData }) => {
                     value={values.searchQuery}
                     onChange={(e) => setFieldValue('searchQuery', e.target.value)}
                     autoComplete="off"
-                    className="input-search h-10 rounded-md border-gray-300 min-w-[25rem]"
+                    className="input-search h-10 rounded-md border-gray-300"
                 />
                 <DatePicker
                    id="dateFrom"
@@ -66,7 +70,10 @@ export const CompanyDocumentsSearch = ({ fetchData }) => {
                    }}
                    dateFormat={t('DATE_FORMAT')}
                    placeholderText={t('DATE_FROM')}
+                   autoComplete='off'
+                   enableTabLoop={false}
                    locale={i18n.language}
+                   className="h-10"
                 />
                 <DatePicker
                    id="dateTo"
@@ -78,11 +85,13 @@ export const CompanyDocumentsSearch = ({ fetchData }) => {
                    }}
                    dateFormat={t('DATE_FORMAT')}
                    placeholderText={t('DATE_TO')}
+                    autoComplete='off'
+                    enableTabLoop={false}
                    locale={i18n.language}
+                    className="h-10"
                 />
                  
-
-                <div className="flex gap-4">
+                <div className="flex gap-4 xs:w-full">
                     <button
                         type="submit"
                         className="btn-search"
