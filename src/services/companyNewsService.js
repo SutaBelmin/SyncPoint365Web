@@ -7,7 +7,7 @@ class CompanyNewsService extends BaseService {
             {
                 params: {
                     query: filter.query,
-                    dateFrom: filter.datefrom,
+                    dateFrom: filter.dateFrom,
                     dateTo: filter.dateTo,
                     orderBy: filter.orderBy,
                     page: filter.page,

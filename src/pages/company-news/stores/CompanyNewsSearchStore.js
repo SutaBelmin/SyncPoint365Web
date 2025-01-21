@@ -65,46 +65,32 @@ class CompanyNewsSearchStore {
         this.syncWithQueryParams();
     }
 
-    syncWithQueryParams(){
+    syncWithQueryParams() {
         const params = new URLSearchParams();
-
-        if(this.query)
-            params.set("query", this.query)
-
-        if(this.dateFrom)
-            params.set("dateFrom", this.dateFrom);
-
-        if(this.dateTo)
-            params.set("dateTo", this.dateTo);
-        
-        if(this.orderBy)
-            params.set("orderBy", this.orderBy);
-
-        if(this.page)
-            params.set("page", this.page);
-        
-        if(this.pageSize)
-            params.set("pageSize", this.pageSize);
-
+    
+        if (this.query) params.set("query", this.query);
+        if (this.dateFrom) params.set("dateFrom", this.dateFrom.toISOString());
+        if (this.dateTo) params.set("dateTo", this.dateTo.toISOString());
+        if (this.orderBy) params.set("orderBy", this.orderBy);
+        if (this.page) params.set("page", this.page);
+        if (this.pageSize) params.set("pageSize", this.pageSize);
+    
+        const queryString = params.toString();
+        window.history.replaceState(null, "", `?${queryString}`);
+    
         this.currentQueryParams = params;
         return params;
     }
-
+    
     initializeQueryParams() {
         const params = new URLSearchParams(window.location.search);
-        const query = params.get("query") || null;
-        const dateFrom = params.get("dateFrom") || null;
-        const dateTo = params.get("dateTo") || null;
-        const orderBy = params.get("orderBy") || null;
-        const page = parseInt(params.get("page")) || 1;
-        const pageSize = parseInt(params.get("pageSize")) || 10;
-
-        this.setQuery(query);
-        this.setDateFrom(dateFrom);
-        this.setDateTo(dateTo);
-        this.setOrderBy(orderBy);
-        this.setPage(page);
-        this.setPageSize(pageSize);
+    
+        this.setQuery(params.get("query") || null);
+        this.setDateFrom(params.get("dateFrom") ? new Date(params.get("dateFrom")) : null);
+        this.setDateTo(params.get("dateTo") ? new Date(params.get("dateTo")) : null);
+        this.setOrderBy(params.get("orderBy") || null);
+        this.setPage(parseInt(params.get("page")) || 1);
+        this.setPageSize(parseInt(params.get("pageSize")) || 10);
     }
 
     get companyNewsFilter() {
@@ -116,9 +102,7 @@ class CompanyNewsSearchStore {
             page: this.page, 
             pageSize: this.pageSize, 
             totalItemCount: this.totalItemCount,
-
         };
-
     }
 
     get queryParams() {

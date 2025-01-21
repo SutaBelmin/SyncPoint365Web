@@ -28,9 +28,9 @@ export const CompanyNewsSearch = ({ fetchData }) => {
   }, [fetchCompanyNews])
 
   useEffect(() => {
+    companyNewsSearchStore.initializeQueryParams();
     setSearchParams(companyNewsSearchStore.queryParams);
   }, [setSearchParams])
-
 
   const handleSearch = (values) => {
     companyNewsSearchStore.setQuery(values.title);
@@ -38,25 +38,23 @@ export const CompanyNewsSearch = ({ fetchData }) => {
     companyNewsSearchStore.setDateTo(values.dateTo);
 
     const queryParams = companyNewsSearchStore.syncWithQueryParams();
-    console.log("Query params:", queryParams);
     setSearchParams(queryParams);
     fetchData();
   }
 
   const handleClear = (setFieldValue) => {
-    setSearchParams({})
-    setFieldValue("title", "")
-    setFieldValue("dateFrom", null)
-    setFieldValue("dateTo", null)
-
     companyNewsSearchStore.clearFilters();
+    setSearchParams(new URLSearchParams());
+    setFieldValue("title", "");
+    setFieldValue("dateFrom", null);
+    setFieldValue("dateTo", null);
     fetchData();
-  };
+    };
 
   const initialValues = {
-    title: companyNewsSearchStore.query?.title || "",
-    dateFrom: companyNewsSearchStore.query?.dateFrom || null,
-    dateTo: companyNewsSearchStore.query?.dateTo || null
+    title: companyNewsSearchStore.query || "",
+    dateFrom: companyNewsSearchStore.dateFrom || null,
+    dateTo: companyNewsSearchStore.dateTo || null
   }
 
   return (
