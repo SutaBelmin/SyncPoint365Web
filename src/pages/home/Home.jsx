@@ -19,16 +19,8 @@ const Home = () => {
     const loadNews = async (page) => {
         setLoading(true);
         try {
-            const filter = {
-                query: null,
-                dateFrom: null,
-                dateTo: null,
-                orderBy: "DateCreated|desc",
-                page: page,
-                pageSize: itemsPerPage
-            };
-            const response = await companyNewsService.getPagedList(filter);
-            setNews(response.items.filter(item => item.isVisible) || []);
+            const response = await companyNewsService.getVisibleList(page, itemsPerPage);
+            setNews(response.items || []);
             const remainingItems = response.totalItemCount - page * itemsPerPage;
             setHasMore(remainingItems > 0);
             setCurrentPage(page);
@@ -39,6 +31,7 @@ const Home = () => {
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         loadNews(currentPage);
