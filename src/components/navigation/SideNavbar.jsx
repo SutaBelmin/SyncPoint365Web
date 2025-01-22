@@ -20,7 +20,7 @@ const SideNavbar = ({ isCollapsed, onToggle }) => {
         if (!isChild)
             setOpenDropdown(null);
 
-        navigate(path);
+        navigate(path, { replace: true });
     }
 
     const toggleDropdown = (e, dropdown) => {

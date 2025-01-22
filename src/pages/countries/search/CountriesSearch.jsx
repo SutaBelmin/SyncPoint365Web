@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import countriesSearchStore from "../stores/CountriesSearchStore";
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 
 export const CountriesSearch = ({fetchData}) => {
   const { t } = useTranslation();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   countriesSearchStore.setSearchQuery(searchParams.get('searchQuery') || '');
@@ -27,8 +28,9 @@ export const CountriesSearch = ({fetchData}) => {
   };
             
   useEffect(() => {
+    countriesSearchStore.initializeQueryParams(location.search)
     setSearchParams(countriesSearchStore.queryParams);
-  }, [setSearchParams]);
+  }, [setSearchParams, location.search]);
 
   return (
     <Formik

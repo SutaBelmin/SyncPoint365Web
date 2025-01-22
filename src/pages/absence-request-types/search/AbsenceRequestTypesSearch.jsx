@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Select from 'react-select';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field } from 'formik';
 import { absenceRequestTypesSearchStore } from '../stores';
@@ -10,10 +10,14 @@ import { absenceRequestTypeStatusConstant } from '../../../constants';
 const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
+    const location = useLocation();
+
+    absenceRequestTypesSearchStore.initializeQueryParams(location);
 
     useEffect(() => {
+        absenceRequestTypesSearchStore.initializeQueryParams(location.search);
         setSearchParams(absenceRequestTypesSearchStore.queryParams);
-    }, [setSearchParams]);
+    }, [setSearchParams, location.search]);
 
     const absenceRequestTypeStatusOptions = ([
         { value: absenceRequestTypeStatusConstant.all, label: t('ALL') },

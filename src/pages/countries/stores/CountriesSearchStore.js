@@ -17,8 +17,6 @@ class CountriesStore {
       pageSize: observable,
       orderBy: observable
     });
-
-    this.initializeQueryParams();
   }
 
   setSearchQuery(query) {
@@ -71,8 +69,8 @@ class CountriesStore {
     return params;
   }
 
-  initializeQueryParams() {
-    const params = new URLSearchParams(window.location.search);
+  initializeQueryParams(searchParams) {
+    const params = new URLSearchParams(searchParams);
     const searchQuery = params.get("searchQuery") || "";
     const orderBy = params.get("orderBy") || "";
     const page = parseInt(params.get("page")) || 1;

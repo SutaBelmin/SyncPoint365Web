@@ -19,8 +19,6 @@ class AbsenceRequestTypesSearchStore {
             pageSize: observable,
             orderBy: observable
         });
-
-        this.initializeQueryParams();
     }
 
     setQuery(value) {
@@ -81,8 +79,8 @@ class AbsenceRequestTypesSearchStore {
         return params;
     }
 
-    initializeQueryParams() {
-        const params = new URLSearchParams(window.location.search);
+    initializeQueryParams(searchParams) {
+        const params = new URLSearchParams(searchParams);
 
         const searchQuery = params.get("searchQuery") || '';
         const status = params.get("status");
