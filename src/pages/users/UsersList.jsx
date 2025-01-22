@@ -10,6 +10,7 @@ import { BaseModal } from '../../components/modal';
 import { observer } from "mobx-react";
 import { reaction } from "mobx";
 import { useModal } from '../../context';
+import { useAuth } from '../../context/AuthProvider';
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { faEdit, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -32,10 +33,14 @@ export const UsersList = observer(() => {
     const { signal } = useRequestAbort();
     const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams();
+    const { loggedUser } = useAuth();
 
     const fetchData = useCallback(async () => {
         try {
-            const filter = { ...usersSearchStore.userFilter };
+            const filter = {
+                ...usersSearchStore.userFilter,
+                loggedUserRole: loggedUser.role
+            };
             const response = await usersService.getPagedUsersFilter(filter, signal);
             setData(response.data.items);
             usersSearchStore.setTotalItemCount(response.data.totalItemCount);
@@ -43,7 +48,7 @@ export const UsersList = observer(() => {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
 
-    }, [signal, t]);
+    }, [signal, t, loggedUser.role]);
 
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 
@@ -103,16 +108,18 @@ export const UsersList = observer(() => {
         {
             name: t('STATUS'),
             cell: (row) => (
-                <button
-                    onClick={() => changeStatus(row)}
-                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${row.isActive ? "bg-green-600" : "bg-gray-300"
+                    <button
+                        onClick={() => changeStatus(row)}
+                        disabled={row.id === loggedUser.id}
+                         className={`relative inline-flex items-center h-6 rounded-full w-10 ${
+                             row.id === loggedUser.id ? "bg-gray-300 cursor-not-allowed"  : row.isActive ? "bg-green-600" : "bg-gray-300"
                         }`}
-                >
-                    <span
-                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isActive ? "translate-x-5" : "translate-x-1"
-                            }`}
-                    ></span>
-                </button>
+                    >
+                        <span
+                            className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isActive ? "translate-x-5" : "translate-x-1"
+                                }`}
+                        ></span>
+                    </button>
             ),
             sortable: false,
         },
