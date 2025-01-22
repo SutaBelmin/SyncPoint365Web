@@ -216,5 +216,10 @@
     "HIDDEN":"Hidden",
     "EDIT_COMPANY_NEWS":"Edit company news",
     "STATUS_CHANGED":"Status changed",
-    "SEARCH_BY_TITLE":"Search by title"
+    "SEARCH_BY_TITLE":"Search by title",
+    "PAGE":"Page",
+    "NEWS":"News",
+    "NO_NEWS_TO_DISPLAY":"No news to display.",
+    "LOAD_MORE":"Load more",
+    "YOU_ARE_ALL_CAUGHT_UP":"You're all caught up"
 }

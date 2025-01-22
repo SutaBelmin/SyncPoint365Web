@@ -216,5 +216,10 @@
     "HIDDEN":"Skriveno",
     "EDIT_COMPANY_NEWS":"Uredi novosti",
     "STATUS_CHANGED":"Status promjenjen",
-    "SEARCH_BY_TITLE":"Pretraga po naslovu"
+    "SEARCH_BY_TITLE":"Pretraga po naslovu",
+    "PAGE":"Stranica",
+    "NEWS":"Novosti",
+    "NO_NEWS_TO_DISPLAY":"Nema novosti za prikazati.",
+    "LOAD_MORE":"Učitaj još",
+     "YOU_ARE_ALL_CAUGHT_UP":"Sve je učitano"
 }
