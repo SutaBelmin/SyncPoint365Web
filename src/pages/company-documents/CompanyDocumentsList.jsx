@@ -6,10 +6,10 @@ import { useSearchParams } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { reaction } from 'mobx';
 import debounce from "lodash.debounce";
-import companyDocumentsService from '../../services/companyDocumentsService';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faFileDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
+import companyDocumentsService from '../../services/companyDocumentsService';
 import { CompanyDocumentsSearch } from './search/CompanyDocumentsSearch';
 import companyDocumentsSearchStore from './stores/CompanyDocumentsSearchStore';
 import { NoDataMessage } from '../../components/common-ui';
@@ -34,21 +34,13 @@ export const CompanyDocumentsList = observer(() => {
     const fetchData = useCallback(async () => {
         try {
             const filter = {
-                ...companyDocumentsSearchStore.companyDocumentFilter
+                ...companyDocumentsSearchStore.companyDocumentFilter,
+                isVisible: isEmployee ? true : null
             };
-
             const response = await companyDocumentsService.getList(filter, signal);
 
-            var fetchedData = response.data.items;
-            if(isEmployee){
-                fetchedData = fetchedData.filter(x=> x.isVisible);
-            }
-
-            setData(fetchedData);
-
-            companyDocumentsSearchStore.setTotalItemCount(
-                isEmployee ? fetchedData.length : response.data.totalItemCount
-            );
+            setData(response.data.items);
+            companyDocumentsSearchStore.setTotalItemCount(response.data.totalItemCount);
 
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));

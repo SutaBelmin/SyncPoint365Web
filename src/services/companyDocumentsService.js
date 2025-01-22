@@ -7,6 +7,7 @@ class CompanyDocumentsService extends BaseService {
                 dateFrom: filter.dateFrom,
                 dateTo: filter.dateTo,
                 query: filter.searchQuery,
+                isVisible: filter.isVisible,
                 page: filter.page,
                 pageSize: filter.pageSize
             },
@@ -17,7 +18,7 @@ class CompanyDocumentsService extends BaseService {
 
     updateDocumentVisibility(documentId, isVisibile, signal = null) {
 
-        const response = this.api.patch(`/companyDocuments/update-document-visibility?documentId=${documentId}&isVisibile=${isVisibile}`,
+        const response = this.api.patch(`/companyDocuments/update-company-document-visibility?documentId=${documentId}&isVisibile=${isVisibile}`,
             { signal: signal });
 
         return response;
