@@ -23,7 +23,6 @@ class AbsenceRequestsSearchStore {
             pageSize: observable,
             orderBy: observable
         });
-        this.initializeQueryParams();
     }
 
     setAbsenceTypeId(value) {
@@ -119,8 +118,9 @@ class AbsenceRequestsSearchStore {
         return params;
     }
 
-    initializeQueryParams() {
-        const params = new URLSearchParams(window.location.search);
+    initializeQueryParams(searchParams) {
+        const params = new URLSearchParams(searchParams);
+
         const absenceRequestTypeId = params.get("absenceRequestTypeId") || null;
         const userId = params.get("userId") || null;
         const absenceRequestStatusId = params.get("absenceRequestStatusId") || null;

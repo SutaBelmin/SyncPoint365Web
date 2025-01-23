@@ -1,6 +1,6 @@
 import Select from "react-select";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import React, { useState, useCallback, useEffect } from "react";
 
 import { toast } from "react-toastify";
@@ -13,9 +13,11 @@ import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 export const CitiesSearch = ({ fetchData }) => {
   const { t } = useTranslation();
   const { signal } = useRequestAbort();
-
   const [countries, setCountries] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+
+  citiesSearchStore.setQuery(searchParams.get('searchQuery') || '');
 
   const fetchCountries = useCallback(async () => {
     try {
@@ -33,8 +35,9 @@ export const CitiesSearch = ({ fetchData }) => {
   }, [signal, t]);
 
   useEffect(() => {
+    citiesSearchStore.initializeQueryParams(location.search)
     fetchCountries();
-  }, [fetchCountries]);
+  }, [fetchCountries, location.search]);
 
   useEffect(() => {
     setSearchParams(citiesSearchStore.queryParams);

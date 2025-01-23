@@ -17,8 +17,6 @@ class CitiesSearchStore {
             pageSize: observable,
             orderBy: observable
         });
-
-        this.initializeQueryParams();
     }
 
     setQuery(query) {
@@ -80,8 +78,9 @@ class CitiesSearchStore {
     }
 
 
-    initializeQueryParams() {
-        const params = new URLSearchParams(window.location.search);
+    initializeQueryParams(searchParams) {
+        const params = new URLSearchParams(searchParams);
+
         const searchQuery = params.get("searchQuery") || "";
         const countryId = params.get("countryId") || null;
         const orderBy = params.get("orderBy") || "";

@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from 'react-i18next';
 import { registerLocale } from "react-datepicker";
 import { toast } from "react-toastify";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { Formik, Form } from 'formik';
 import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
 import { absenceRequestsSearchStore } from '../stores';
@@ -18,6 +18,7 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { t, i18n } = useTranslation();
 	const { signal } = useRequestAbort();
+	const location = useLocation();
 
 	registerLocale(i18n.language, localeConstant[i18n.language]);
 
@@ -35,8 +36,9 @@ export const AbsenceRequestsSearchEmployeeView = ({ fetchData }) => {
 	}, [t, signal])
 
 	useEffect(() => {
+		absenceRequestsSearchStore.initializeQueryParams(location.search);
 		setSearchParams(absenceRequestsSearchStore.queryParams);
-	}, [setSearchParams]);
+	}, [setSearchParams, location.search]);
 
 	useEffect(() => {
 		fetchAbsenceRequestTypes();
