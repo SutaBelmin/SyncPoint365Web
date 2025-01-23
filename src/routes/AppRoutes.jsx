@@ -18,7 +18,7 @@ const AppRoutes = () => {
 	const { userHasRole } = useAuth();
 	return (
 		<Routes>
-			<Route path="/" element={<Login />} />
+			<Route path="/login" element={<Login />} />
 			<Route element={<PrivateRoutes><MainLayout /></PrivateRoutes>}>
 				<Route path="/home" element={<Home />} />
 				<Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />

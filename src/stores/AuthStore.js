@@ -3,18 +3,22 @@ export class AuthStore {
     this.initialize();
   }
 
-  setUser(user, token) {
+  setUser(user, accessToken, refreshToken) {
     localStorage.setItem('loggedUser', JSON.stringify(user));
-    localStorage.setItem('token', token);
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
     this.loggedUser = user;
-    this.token = token;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken
   }
 
   removeUser() {
     localStorage.removeItem('loggedUser');
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken')
     this.loggedUser = null;
-    this.token = null;
+    this.accessToken = null;
+    this.refreshToken = null;
   }
 
   getUser() {
@@ -23,14 +27,19 @@ export class AuthStore {
 
   initialize() {
     const loggedUser = localStorage.getItem('loggedUser');
-    const token = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     this.loggedUser = loggedUser ? JSON.parse(loggedUser) : null;
-    this.token = token || null;
+    this.accessToken = accessToken || null;
+    this.refreshToken = refreshToken || null;
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  getAccessToken() {
+    return localStorage.getItem('accessToken');
   }
 
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken');
+  }
 }
 

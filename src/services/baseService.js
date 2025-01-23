@@ -1,55 +1,109 @@
 import axios from 'axios';
 
 class BaseService {
-  constructor() {
-    this.api = axios.create({
-      baseURL: process.env['REACT_APP_API_URL'],  
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
+	constructor() {
+		this.api = axios.create({
+			baseURL: process.env['REACT_APP_API_URL'],
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
 
-    this.api.interceptors.request.use(
-      (config) => { 
-        const token = localStorage.getItem('token') || '';
-        if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
+		this.isRefreshing = false;
+		this.refreshSubscribers = [];
 
-    this.api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if(error.response && error.response.status === 401){
-          await this.refreshToken();
-          return this.api(error.config);
-        }
-        return Promise.reject(error);
-      }
-    );
-  }
+		this.api.interceptors.request.use(
+			(config) => {
+				const accessToken = localStorage.getItem('accessToken');
+				if (accessToken) {
+					config.headers['Authorization'] = `Bearer ${accessToken}`;
+				}
+				return config;
+			},
+			(error) => Promise.reject(error)
+		);
 
-  async refreshToken() {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if(refreshToken){
-      try {
-        const response = await this.api.post('/refresh/generate', {refreshToken});
-        const {token, refreshToken: newRefreshToken} = response.data;
+		this.api.interceptors.response.use(
+			(response) => response,
+			(error) => this.handleResponseError(error)
+		);
+	}
 
-        localStorage.setItem('token', token);
-        localStorage.setItem('refreshToken', newRefreshToken);
-      } catch (error) {
-        console.error('Refresh token failed!', error);
-      }
-    } else {
-      console.error('No refresh token available!');
-    }
-  }
+	addRefreshSubscriber(callback) {
+		this.refreshSubscribers.push(callback);
+	}
+
+	notifySubscribers(newToken) {
+		this.refreshSubscribers.forEach((callback) => callback(newToken));
+		this.refreshSubscribers = []; 
+	}
+
+	async handleResponseError(error) {
+		const originalRequest = error.config;
+	
+		if (error.response && error.response.status === 401 && !originalRequest._retry) {
+			originalRequest._retry = true;
+	
+			if (!this.isRefreshing) {
+				this.isRefreshing = true;
+	
+				try {
+					const newAccessToken = await this.refreshAccessToken();
+					this.notifySubscribers(newAccessToken);
+					this.isRefreshing = false;
+					return this.api(originalRequest);
+				} catch (refreshError) {
+					if (refreshError.response && refreshError.response.status === 401) {
+						localStorage.removeItem('accessToken');
+						localStorage.removeItem('refreshToken');
+						localStorage.removeItem('loggedUser');
+						window.location.href = '/login';
+					}
+	
+					this.isRefreshing = false;
+					return Promise.reject(refreshError);
+				}
+			} else {
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('refreshToken');
+				localStorage.removeItem('loggedUser');
+			}
+	
+			return new Promise((resolve) => {
+				this.addRefreshSubscriber((newToken) => {
+					originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+					resolve(this.api(originalRequest));
+				});
+			});
+		}
+	
+		return Promise.reject(error);
+	}
+	
+	async refreshAccessToken() {
+		try {
+			const accessToken = localStorage.getItem('accessToken');
+			const refreshToken = localStorage.getItem('refreshToken');
+			const encodedRefreshToken = encodeURIComponent(refreshToken);
+	
+			const response = await this.api.get(`/refreshtokens/compare-tokens?accessToken=${accessToken}&refreshToken=${encodedRefreshToken}`);
+			const newAccessToken = response.data;
+			localStorage.setItem('accessToken', newAccessToken);
+			return newAccessToken;
+		} catch (error) {
+			if (
+				error.response &&
+				error.response.status === 401
+			) {
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('refreshToken');
+				localStorage.removeItem('loggedUser');
+				window.location.href = '/login';
+			}
+			throw error;
+		}
+	}
+	
 }
 
 export default BaseService;

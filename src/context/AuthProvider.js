@@ -16,12 +16,11 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const handleStorageChange = () => {
-            const token = authStore.getToken();
-            const storedUser = authStore.getUser();
+            const refreshToken = authStore.getRefreshToken();
 
-            if (!token || !storedUser) {
+            if (refreshToken == null) {
                 setloggedUser(null);
-                navigate('/', { replace: true });
+                navigate('/login', { replace: true });
             }
         };
 
@@ -34,14 +33,14 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (loggedUser) {
-            if (location.pathname === '/') {
+            if (location.pathname === '/login') {
                 navigate('/home', { replace: true });
             }
         }
     }, [loggedUser, location, navigate]);
 
-    const setUser = (user, token) => {
-        authStore.setUser(user, token);
+    const setUser = (user, accessToken, refreshToken) => {
+        authStore.setUser(user, accessToken, refreshToken);
         setloggedUser(user);
     };
 

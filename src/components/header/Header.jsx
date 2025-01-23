@@ -20,7 +20,7 @@ const Header = ({ isCollapsed }) => {
 
     const handleLogout = () => {
         removeUser();
-        navigate('/');
+        navigate('/login');
     }
 
     const toggleDropdown = () => {
