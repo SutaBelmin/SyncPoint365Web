@@ -200,7 +200,6 @@
     "ADD_NEW_DOCUMENT":"Add New Document",
     "CITY_DELETED_SUCCESSFULLY":"City deleted successfully.",
     "DOCUMENT_DELETED_SUCCESSFULLY":"Document deleted successfully.",
-    "UPDATE_DOCUMENT":"Update document",
-    "INVALID_FILE_TYPE":"Invalid file type"
+    "UPDATE_DOCUMENT":"Update document"
 
 }

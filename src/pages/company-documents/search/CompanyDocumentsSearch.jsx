@@ -6,7 +6,7 @@ import { registerLocale } from "react-datepicker";
 import { Formik, Form, Field } from "formik";
 import { format } from 'date-fns';
 import { localeConstant } from '../../../constants';
-import companyDocumentsSearchStore from "../stores/CompanyDocumentsSearchStore";
+import { companyDocumentsSearchStore } from "../stores";
 
 export const CompanyDocumentsSearch = ({ fetchData }) => {
     const { t, i18n } = useTranslation();

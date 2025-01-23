@@ -195,12 +195,11 @@
     "HIDE_DOCUMENT":"Sakrij dokument?",
     "ADD_DOCUMENT":"Dodaj dokument",
     "VISIBILITY":"Vidljivost",
-    "FILE_IS_REQUIRED":"Obavezan fajl.",
-    "FILE":"Fajl",
+    "FILE_IS_REQUIRED":"Obavezan dokument.",
+    "FILE":"Dokument",
     "ADD_NEW_DOCUMENT":"Dodaj novi dokument",
     "CITY_DELETED_SUCCESSFULLY":"Grad uspješno obrisan.",
     "DOCUMENT_DELETED_SUCCESSFULLY":"Dokument uspješno obrisan.",
-    "UPDATE_DOCUMENT":"Uredi dokument",
-    "INVALID_FILE_TYPE":"Nevažeći tip datatoteke"
+    "UPDATE_DOCUMENT":"Uredi dokument"
 
 }

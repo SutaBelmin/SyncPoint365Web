@@ -9,17 +9,17 @@ import debounce from "lodash.debounce";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faFileDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
-import companyDocumentsService from '../../services/companyDocumentsService';
+import { companyDocumentsService } from '../../services';
 import { CompanyDocumentsSearch } from './search/CompanyDocumentsSearch';
-import companyDocumentsSearchStore from './stores/CompanyDocumentsSearchStore';
+import { companyDocumentsSearchStore } from './stores';
 import { NoDataMessage } from '../../components/common-ui';
 import { PaginationOptions } from '../../utils';
 import { useModal } from '../../context';
 import { useAuth } from '../../context/AuthProvider';
 import { ConfirmationModal, DeleteConfirmationModal } from '../../components/modal';
 import { BaseModal } from '../../components/modal';
-import { CompanyDocumentsAdd } from './CompanyDocumentsAdd';
-import { CompanyDocumentsEdit } from './CompanyDocumentsEdit';
+import { CompanyDocumentsAdd, CompanyDocumentsEdit } from '../company-documents';
+import { roleConstant } from '../../constants';
 
 export const CompanyDocumentsList = observer(() => {
     const [data, setData] = useState([]);
@@ -29,7 +29,7 @@ export const CompanyDocumentsList = observer(() => {
     const [, setSearchParams] = useSearchParams();
     const { openModal, closeModal } = useModal();
     const { loggedUser } = useAuth();
-    const isEmployee = loggedUser?.role === 'Employee';
+    const isEmployee = loggedUser?.role === roleConstant.employee;
 
     const fetchData = useCallback(async () => {
         try {
@@ -72,18 +72,14 @@ export const CompanyDocumentsList = observer(() => {
             selector: row => row.name,
             sortable: true,
         },
-    ];
-
-    if (!isEmployee) {
-        columns.push({
+        !isEmployee &&
+        {
             name: t('USER'),
             cell: row => `${row.user.firstName} ${row.user.lastName}`,
             sortable: true,
-        });
-    }
-
-    if (!isEmployee) {
-        columns.push({
+        },
+        !isEmployee &&
+        {
             name: t('VISIBILITY'),
             cell: row => (
                 <button
@@ -97,42 +93,45 @@ export const CompanyDocumentsList = observer(() => {
                 </button>
             ),
             sortable: true,
-        });
-    }
-
-    columns.push({
-        name: t('ACTIONS'),
-        cell: row => (
-            <div className="flex justify-between items-center space-x-4">
-                <button
-                    onClick={() => handleDownload(row.name, row.file, row.contentType)}
-                    className="text-lg text-blue-500 hover:underline">
-                    <FontAwesomeIcon icon={faFileDownload} style={{ color: '#276EEC' }} />
-                </button>
-                {!isEmployee && (
+        },
+        {
+            name: t('ACTIONS'),
+            cell: row => (
+                <div className="flex justify-between items-center space-x-4">
                     <button
-                        onClick={() => onEditDocumentClick(row)}
-                        className="text-lg hover:underline">
-                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
+                        onClick={() => handleDownload(row.name, row.file, row.contentType)}
+                        className="text-lg text-blue-500 hover:underline">
+                        <FontAwesomeIcon icon={faFileDownload} style={{ color: '#276EEC' }} />
                     </button>
-                )}
-                {!isEmployee && (
-                    <button
-                        onClick={() => onDeleteCompanyDocumentClick(row)}
-                        className="text-lg text-red-500 hover:underline">
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                )}
-            </div>
-        ),
-        ignoreRowClick: true,
-    });
+                    {!isEmployee && (
+                        <button
+                            onClick={() => onEditDocumentClick(row)}
+                            className="text-lg hover:underline">
+                            <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
+                        </button>
+                    )}
+                    {!isEmployee && (
+                        <button
+                            onClick={() => onDeleteCompanyDocumentClick(row)}
+                            className="text-lg text-red-500 hover:underline">
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    )}
+                </div>
+            ),
+            ignoreRowClick: true,
+        },
+    ].filter(Boolean);
 
     const handleDownload = (name, file, contentType) => {
+        const fileURL = decodeFile(file, contentType);
         const link = document.createElement('a');
-        link.href = decodeFile(file, contentType);
+        link.href = fileURL;
         link.download = name;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(fileURL);
     };
 
     const decodeFile = (base64String, contentType) => {
@@ -179,9 +178,9 @@ export const CompanyDocumentsList = observer(() => {
         openModal(<DeleteConfirmationModal entityName={companyDocument.name} id={companyDocument.id} onDelete={handleDelete} onCancel={closeModal} />);
     };
 
-    const handleDelete = async (companyDocumentId) => {
+    const handleDelete = async (id) => {
         try {
-            await companyDocumentsService.delete(companyDocumentId);
+            await companyDocumentsService.delete(id);
             fetchData();
             closeModal();
             toast.success(t('DOCUMENT_DELETED_SUCCESSFULLY'));

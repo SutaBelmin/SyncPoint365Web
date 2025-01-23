@@ -12,7 +12,7 @@ import { AbsenceRequestsList, AbsenceRequestsListEmployeeView } from '../pages/a
 import PrivateRoutes from '../routes/PrivateRoutes';
 import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
-import { CompanyDocumentsList } from '../pages/company-documents/CompanyDocumentsList';
+import { CompanyDocumentsList } from '../pages/company-documents';
 
 const AppRoutes = () => {
 	const { userHasRole } = useAuth();

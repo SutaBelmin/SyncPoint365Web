@@ -19,8 +19,7 @@ export const CompanyDocumentsEdit = ({ companyDocument, closeModal, fetchData })
         try {
             const newCompanyDocument = {
                 ...values,
-                id: companyDocument.id,
-                userId: companyDocument.userId
+                id: companyDocument.id
             };
 
             await companyDocumentsService.update(newCompanyDocument, signal);
