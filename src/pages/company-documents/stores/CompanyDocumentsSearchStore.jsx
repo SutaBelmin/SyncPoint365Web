@@ -16,8 +16,6 @@ class CompanyDocumentsSearchStore {
             page: observable,
             pageSize: observable
         });
-
-        this.initializeQueryParams();
     }
 
     setDateFrom(value) {
@@ -79,8 +77,9 @@ class CompanyDocumentsSearchStore {
         return params;
     }
 
-    initializeQueryParams() {
-        const params = new URLSearchParams(window.location.search);
+    initializeQueryParams(searchParams) {
+        const params = new URLSearchParams(searchParams);
+        
         const searchQuery = params.get("searchQuery") || "";
         const dateFrom = params.get("dateFrom") || null;
         const dateTo = params.get("dateTo") || null;

@@ -7,3 +7,4 @@ export { default as absenceRequestsService } from './absenceRequestsService';
 export { default as citiesService } from './citiesService';
 export { default as localizationsService } from './localizationsService';
 export { default as enumsService } from './enumsService';
+export { default as companyDocumentsService } from './companyDocumentsService';

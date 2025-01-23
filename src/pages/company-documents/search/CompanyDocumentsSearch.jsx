@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import DatePicker from "react-datepicker";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { registerLocale } from "react-datepicker";
 import { Formik, Form, Field } from "formik";
@@ -10,13 +10,19 @@ import companyDocumentsSearchStore from "../stores/CompanyDocumentsSearchStore";
 
 export const CompanyDocumentsSearch = ({ fetchData }) => {
     const { t, i18n } = useTranslation();
-    const [, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
+
+    companyDocumentsSearchStore.setQuery(searchParams.get('searchQuery') || '');
+    companyDocumentsSearchStore.setDateFrom(searchParams.get('dateFrom') || null);
+    companyDocumentsSearchStore.setDateTo(searchParams.get('dateTo') || null);
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 
     useEffect(() => {
+        companyDocumentsSearchStore.initializeQueryParams(location.search);
         setSearchParams(companyDocumentsSearchStore.queryParams);
-    }, [setSearchParams]);
+    }, [setSearchParams, location.search]);
 
     const handleSearch = (values) => {
         companyDocumentsSearchStore.setQuery(values.searchQuery);

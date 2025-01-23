@@ -5,7 +5,7 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import { useAuth } from '../../context/AuthProvider';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import companyDocumentsService from '../../services/companyDocumentsService';
+import { companyDocumentsService } from '../../services';
 import { allowedDocumentExtensions } from '../../constants';
 
 export const CompanyDocumentsAdd = ({ closeModal, fetchData }) => {
