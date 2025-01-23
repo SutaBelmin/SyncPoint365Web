@@ -7,6 +7,7 @@ class CompanyNewsService extends BaseService {
             {
                 params: {
                     query: filter.query,
+                    visible: filter.visible,
                     dateFrom: filter.dateFrom,
                     dateTo: filter.dateTo,
                     orderBy: filter.orderBy,
@@ -18,15 +19,6 @@ class CompanyNewsService extends BaseService {
         );
         return response.data;
     }
-
-    async getVisibleList(page, pageSize, signal = null) {
-        const response = await this.api.get("/company-news/visible", {
-            params: { page, pageSize },
-            signal: signal
-        });
-        return response.data;
-    }
-    
 
     async add(companyNewsData, signal = null) {
         const response = await this.api.post(`/company-news`, companyNewsData, {

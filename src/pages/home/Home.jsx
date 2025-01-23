@@ -19,7 +19,17 @@ const Home = () => {
     const loadNews = async (page) => {
         setLoading(true);
         try {
-            const response = await companyNewsService.getVisibleList(page, itemsPerPage);
+            const filter = {
+                query: "",
+                visible: true,
+                dateFrom: null, 
+                dateTo: null, 
+                orderBy: "DateCreated|desc", 
+                page: page,
+                pageSize: itemsPerPage
+            };
+
+            const response = await companyNewsService.getPagedList(filter);
             setNews(response.items || []);
             const remainingItems = response.totalItemCount - page * itemsPerPage;
             setHasMore(remainingItems > 0);
