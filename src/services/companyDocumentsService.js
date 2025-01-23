@@ -16,11 +16,10 @@ class CompanyDocumentsService extends BaseService {
         return response;
     }
 
-    updateDocumentVisibility(id, isVisibile, signal = null) {
+    updateDocumentVisibility(id, signal = null) {
         const response = this.api.patch('/companyDocuments/update-company-document-visibility', null, {
             params: {
-                id: id,
-                isVisibile: isVisibile
+                id: id
             },
             signal: signal
         });

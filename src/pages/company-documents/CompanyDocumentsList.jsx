@@ -6,11 +6,11 @@ import { useSearchParams } from 'react-router-dom';
 import DataTable from "react-data-table-component";
 import { reaction } from 'mobx';
 import debounce from "lodash.debounce";
-import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { useRequestAbort } from "../../components/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faFileDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { companyDocumentsService } from '../../services';
-import { CompanyDocumentsSearch } from './search/CompanyDocumentsSearch';
+import { CompanyDocumentsSearch } from './search';
 import { companyDocumentsSearchStore } from './stores';
 import { NoDataMessage } from '../../components/common-ui';
 import { PaginationOptions } from '../../utils';
@@ -145,15 +145,15 @@ export const CompanyDocumentsList = observer(() => {
         openModal(
             <ConfirmationModal
                 title={isVisible ? t('HIDE_DOCUMENT') : t('SHOW_DOCUMENT')}
-                onConfirm={() => handleDocumentVisibility(id, isVisible)}
+                onConfirm={() => handleDocumentVisibility(id)}
                 onCancel={closeModal}
             />
         );
     };
 
-    const handleDocumentVisibility = async (id, isVisible) => {
+    const handleDocumentVisibility = async (id) => {
         try {
-            await companyDocumentsService.updateDocumentVisibility(id, !isVisible, signal);
+            await companyDocumentsService.updateDocumentVisibility(id, signal);
             toast.success(t('VISIBILITY_CHANGED_SUCCESS'));
             fetchData();
             closeModal();

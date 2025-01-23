@@ -10,12 +10,8 @@ import { companyDocumentsSearchStore } from "../stores";
 
 export const CompanyDocumentsSearch = ({ fetchData }) => {
     const { t, i18n } = useTranslation();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [, setSearchParams] = useSearchParams();
     const location = useLocation();
-
-    companyDocumentsSearchStore.setQuery(searchParams.get('searchQuery') || '');
-    companyDocumentsSearchStore.setDateFrom(searchParams.get('dateFrom') || null);
-    companyDocumentsSearchStore.setDateTo(searchParams.get('dateTo') || null);
 
     registerLocale(i18n.language, localeConstant[i18n.language]);
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import { useAuth } from '../../context/AuthProvider';
-import { useRequestAbort } from "../../components/hooks/useRequestAbort";
+import { useRequestAbort } from "../../components/hooks";
 import { companyDocumentsService } from '../../services';
 import { allowedDocumentExtensions } from '../../constants';
 
