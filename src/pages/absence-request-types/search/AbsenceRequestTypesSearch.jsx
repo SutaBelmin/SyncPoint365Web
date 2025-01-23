@@ -12,8 +12,6 @@ const AbsenceRequestTypesSearch = ({ fetchData }) => {
     const { t } = useTranslation();
     const location = useLocation();
 
-    absenceRequestTypesSearchStore.setQuery(searchParams.get('searchQuery') || '');
-
     useEffect(() => {
         absenceRequestTypesSearchStore.initializeQueryParams(location.search);
         setSearchParams(absenceRequestTypesSearchStore.queryParams);
