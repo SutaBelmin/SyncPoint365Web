@@ -14,7 +14,7 @@ const Home = () => {
     const itemsPerPage = 5;
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const {openModal} = useModal();
+    const {openModal, closeModal} = useModal();
 
     const loadNews = async (page) => {
         setLoading(true);
@@ -61,7 +61,7 @@ const Home = () => {
 
     const handleOpenModal = (item) => {
         openModal(
-            <CompanyNewsDetails title={item.title} content={item.text} date={item.dateCreated}/>
+            <CompanyNewsDetails title={item.title} content={item.text} date={item.dateCreated} closeModal={closeModal}/>
         );
     };
 
@@ -79,7 +79,7 @@ const Home = () => {
                     {news.map((item, index) => (
                         <div
                             key={index}
-                            className="border border-blue-400 rounded-lg p-4 mb-4 bg-white shadow-md hover:shadow-lg transition-all cursor-pointer"
+                            className="border border-blue-400 rounded-lg p-4 mb-2 mt-2 bg-white shadow-md hover:shadow-lg transition-all cursor-pointer"
                             onClick={() => handleOpenModal(item)}
                         >
                             <h3 className="text-l font-bold">{item.title}</h3>
