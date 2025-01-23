@@ -141,19 +141,19 @@ export const CompanyDocumentsList = observer(() => {
         return URL.createObjectURL(blob);
     };
 
-    const documentVisibility = (documentId, isVisible) => {
+    const documentVisibility = (id, isVisible) => {
         openModal(
             <ConfirmationModal
                 title={isVisible ? t('HIDE_DOCUMENT') : t('SHOW_DOCUMENT')}
-                onConfirm={() => handleDocumentVisibility(documentId, isVisible)}
+                onConfirm={() => handleDocumentVisibility(id, isVisible)}
                 onCancel={closeModal}
             />
         );
     };
 
-    const handleDocumentVisibility = async (documentId, isVisible) => {
+    const handleDocumentVisibility = async (id, isVisible) => {
         try {
-            await companyDocumentsService.updateDocumentVisibility(documentId, !isVisible, signal);
+            await companyDocumentsService.updateDocumentVisibility(id, !isVisible, signal);
             toast.success(t('VISIBILITY_CHANGED_SUCCESS'));
             fetchData();
             closeModal();
