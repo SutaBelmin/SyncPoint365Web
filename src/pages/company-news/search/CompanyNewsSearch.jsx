@@ -6,11 +6,14 @@ import { companyNewsService } from "../../../services"
 import { toast } from "react-toastify"
 import { Form, Formik } from "formik"
 import { companyNewsSearchStore } from "../stores"
+import { useLocation } from "react-router-dom"
+
 
 export const CompanyNewsSearch = ({ fetchData }) => {
   const [, setCompanyNews] = useState([])
   const [searchParams, setSearchParams] = useState({})
   const { t, i18n } = useTranslation()
+  const location = useLocation();
 
   registerLocale(i18n.language, localeConstant[i18n.language])
 
@@ -24,13 +27,13 @@ export const CompanyNewsSearch = ({ fetchData }) => {
   }, [searchParams, t])
 
   useEffect(() => {
+    companyNewsSearchStore.initializeQueryParams(location.search);
+    setSearchParams(companyNewsSearchStore.queryParams);
+  }, [setSearchParams, location.search])
+  
+  useEffect(() => {
     fetchCompanyNews();
   }, [fetchCompanyNews])
-
-  useEffect(() => {
-    companyNewsSearchStore.initializeQueryParams();
-    setSearchParams(companyNewsSearchStore.queryParams);
-  }, [setSearchParams])
 
   const handleSearch = (values) => {
     companyNewsSearchStore.setQuery(values.title);
@@ -39,26 +42,27 @@ export const CompanyNewsSearch = ({ fetchData }) => {
 
     const queryParams = companyNewsSearchStore.syncWithQueryParams();
     setSearchParams(queryParams);
+
     fetchData();
   }
 
   const handleClear = (setFieldValue) => {
-    companyNewsSearchStore.clearFilters();
-    setSearchParams(new URLSearchParams());
+    setSearchParams({});
     setFieldValue("title", "");
     setFieldValue("dateFrom", null);
     setFieldValue("dateTo", null);
+    companyNewsSearchStore.clearFilters();
     fetchData();
     };
 
   const initialValues = {
-    title: companyNewsSearchStore.query || "",
-    dateFrom: companyNewsSearchStore.dateFrom || null,
-    dateTo: companyNewsSearchStore.dateTo || null
+    title: companyNewsSearchStore.query,
+    dateFrom: companyNewsSearchStore.dateFrom,
+    dateTo: companyNewsSearchStore.dateTo
   }
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSearch}>
+    <Formik enableReinitialize initialValues={initialValues} onSubmit={handleSearch}>
       {({ setFieldValue, values }) => (
         <Form className="grid gap-4 w-full">
           <div className="grid gap-4 md:grid-cols-3 sm:grid-cols-2">

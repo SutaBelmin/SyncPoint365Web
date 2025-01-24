@@ -21,7 +21,6 @@ class CompanyNewsSearchStore {
             pageSize: observable,
             orderBy: observable
         });
-        this.initializeQueryParams();
     }
     
     setQuery(value) {
@@ -56,6 +55,7 @@ class CompanyNewsSearchStore {
 
     setTotalItemCount(value) {
         this.totalItemCount = value;
+        this.syncWithQueryParams();
     }
 
     clearFilters() {
@@ -75,15 +75,12 @@ class CompanyNewsSearchStore {
         if (this.page) params.set("page", this.page);
         if (this.pageSize) params.set("pageSize", this.pageSize);
     
-        const queryString = params.toString();
-        window.history.replaceState(null, "", `?${queryString}`);
-    
         this.currentQueryParams = params;
         return params;
     }
     
-    initializeQueryParams() {
-        const params = new URLSearchParams(window.location.search);
+    initializeQueryParams(searchParams) {
+        const params = new URLSearchParams(searchParams);
     
         this.setQuery(params.get("query") || null);
         this.setDateFrom(params.get("dateFrom") ? new Date(params.get("dateFrom")) : null);
