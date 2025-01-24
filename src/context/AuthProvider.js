@@ -1,6 +1,7 @@
 import { useState, createContext, useContext, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthStore } from '../stores/AuthStore';
+import eventEmitter from '../utils/EventEmitter';
 
 const AuthContext = createContext();
 
@@ -14,27 +15,13 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // const handleStorageChange = useCallback(() => {
-    //     const refreshToken = authStore.getRefreshToken();
-    //     const accessToken = authStore.getAccessToken();
-    //     const storedUser = authStore.getUserFromLocalStorage();
-    //     console.log("adgslaglaidgldag");
-
-    //     if (!refreshToken || !accessToken || !storedUser) {
-    //         console.log('Redirecting to login...');
-    //         navigate('/login', { replace: true });
-    //     }
-    // }, [navigate, authStore])
-
-    // useEffect(() => {
-    //     window.addEventListener('storage', handleStorageChange);
-
-    //     return () => {
-    //         window.removeEventListener('storage', handleStorageChange);
-    //     };
-    // }, [ handleStorageChange]);
-
     useEffect(() => {
+
+        const handleNavigation = () => {
+            setloggedUser(null);
+            navigate('/login');
+        };
+
         const handleStorageChange = () => {
             const accessToken = authStore.getAccessToken();
             const storedUser = authStore.getUser();
@@ -47,9 +34,11 @@ export const AuthProvider = ({ children }) => {
         };
 
         window.addEventListener('storage', handleStorageChange);
+        eventEmitter.on('navigateToLogin', handleNavigation);
 
         return () => {
             window.removeEventListener('storage', handleStorageChange);
+            eventEmitter.off('navigateToLogin', handleNavigation);
         };
     }, [authStore, navigate]);
 

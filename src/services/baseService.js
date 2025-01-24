@@ -1,4 +1,5 @@
 import axios from 'axios';
+import eventEmitter from '../utils/EventEmitter';
 
 class BaseService {
 	constructor() {
@@ -9,7 +10,6 @@ class BaseService {
 				'Content-Type': 'application/json',
 			},
 		});
-
 		this.isRefreshing = false;
 		this.refreshSubscribers = [];
 
@@ -65,11 +65,11 @@ class BaseService {
 				});
 			});
 		}
-		else if ((error.response?.data?.code === "TOKEN_EXPIRED" ||
-			error.response?.data?.code === "TOKEN_EMPTY")) {
+		else if ((error.response?.data?.code === "TOKEN_EXPIRED" || error.response?.data?.code === "TOKEN_EMPTY")) {
 			localStorage.removeItem('accessToken');
 			localStorage.removeItem('refreshToken');
 			localStorage.removeItem('loggedUser');
+			eventEmitter.emit('navigateToLogin');
 			//window.location.href = "/login";
 		}
 		return Promise.reject(error);
