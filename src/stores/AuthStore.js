@@ -9,7 +9,7 @@ export class AuthStore {
     localStorage.setItem('refreshToken', refreshToken);
     this.loggedUser = user;
     this.accessToken = accessToken;
-    this.refreshToken = refreshToken
+    this.refreshToken = refreshToken;
   }
 
   removeUser() {
@@ -40,6 +40,10 @@ export class AuthStore {
 
   getRefreshToken() {
     return localStorage.getItem('refreshToken');
+  }
+
+  getUserFromLocalStorage() {
+    return localStorage.getItem('loggedUser');
   }
 }
 

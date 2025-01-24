@@ -14,11 +14,33 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // const handleStorageChange = useCallback(() => {
+    //     const refreshToken = authStore.getRefreshToken();
+    //     const accessToken = authStore.getAccessToken();
+    //     const storedUser = authStore.getUserFromLocalStorage();
+    //     console.log("adgslaglaidgldag");
+
+    //     if (!refreshToken || !accessToken || !storedUser) {
+    //         console.log('Redirecting to login...');
+    //         navigate('/login', { replace: true });
+    //     }
+    // }, [navigate, authStore])
+
+    // useEffect(() => {
+    //     window.addEventListener('storage', handleStorageChange);
+
+    //     return () => {
+    //         window.removeEventListener('storage', handleStorageChange);
+    //     };
+    // }, [ handleStorageChange]);
+
     useEffect(() => {
         const handleStorageChange = () => {
+            const accessToken = authStore.getAccessToken();
+            const storedUser = authStore.getUser();
             const refreshToken = authStore.getRefreshToken();
-
-            if (refreshToken == null) {
+            console.log(refreshToken);
+            if (!accessToken || !refreshToken || !storedUser) {
                 setloggedUser(null);
                 navigate('/login', { replace: true });
             }
@@ -32,10 +54,8 @@ export const AuthProvider = ({ children }) => {
     }, [authStore, navigate]);
 
     useEffect(() => {
-        if (loggedUser) {
-            if (location.pathname === '/login') {
-                navigate('/home', { replace: true });
-            }
+        if (loggedUser && location.pathname === '/login') {
+            navigate('/home', { replace: true });
         }
     }, [loggedUser, location, navigate]);
 
