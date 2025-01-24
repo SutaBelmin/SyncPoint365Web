@@ -66,7 +66,7 @@ const Home = () => {
     };
 
     return (
-        <div className="p-8 w-1/2">
+        <div className="p-8 w-full sm:w-1/2">
             <h2 className="h1 text-2xl font-bold mb-4">{t('WELCOME_TO_HOME_SCREEN')}</h2>
             <h1 className="text-xl font-bold mb-4">{t('NEWS')}</h1>
             <div className='border border-blue-400 rounded-lg p-2'>
