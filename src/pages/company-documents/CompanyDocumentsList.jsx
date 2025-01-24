@@ -34,9 +34,11 @@ export const CompanyDocumentsList = observer(() => {
     const fetchData = useCallback(async () => {
         try {
             const filter = {
-                ...companyDocumentsSearchStore.companyDocumentFilter,
-                isVisible: isEmployee ? true : null
+                ...companyDocumentsSearchStore.companyDocumentFilter
             };
+            if(isEmployee)
+                filter.isVisible = true;
+            
             const response = await companyDocumentsService.getList(filter, signal);
 
             setData(response.data.items);
