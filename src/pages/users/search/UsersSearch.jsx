@@ -17,8 +17,6 @@ export const UsersSearch = ({ fetchData }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
 
-    usersSearchStore.setQuery(searchParams.get('searchQuery') || '');
-
     const fetchRoles = useCallback(async () => {
         try {
             const response = await enumsService.getRoles(signal);

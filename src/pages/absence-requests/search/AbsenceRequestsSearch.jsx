@@ -29,9 +29,6 @@ export const AbsenceRequestsSearch = ({ fetchData }) => {
 	const nextYear = new Date().getFullYear() + 1;
 	const maxDate = new Date(nextYear, 11, 31);
 
-	absenceRequestsSearchStore.setDateFrom(searchParams.get('dateFrom') || null);
-	absenceRequestsSearchStore.setDateTo(searchParams.get('dateTo') || null);
-
 	registerLocale(i18n.language, localeConstant[i18n.language]);
 
 

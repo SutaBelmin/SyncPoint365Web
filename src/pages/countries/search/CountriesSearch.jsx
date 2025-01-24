@@ -7,9 +7,7 @@ import { useSearchParams, useLocation } from "react-router-dom";
 export const CountriesSearch = ({fetchData}) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  countriesSearchStore.setSearchQuery(searchParams.get('searchQuery') || '');
+  const [, setSearchParams] = useSearchParams();
 
   const handleSearch = (values) => {
     countriesSearchStore.setSearchQuery(values.searchQuery);

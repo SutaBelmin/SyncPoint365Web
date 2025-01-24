@@ -17,8 +17,6 @@ export const CitiesSearch = ({ fetchData }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
-  citiesSearchStore.setQuery(searchParams.get('searchQuery') || '');
-
   const fetchCountries = useCallback(async () => {
     try {
       const response = await countriesService.getList(signal);
