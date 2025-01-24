@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Select from "react-select";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
 import { Formik, Form, Field } from "formik";
@@ -15,6 +15,7 @@ export const UsersSearch = ({ fetchData }) => {
     const [roles, setRoles] = useState([]);
     const [userStatusOptions, setUserStatusOptions] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
 
     const fetchRoles = useCallback(async () => {
         try {
@@ -43,8 +44,9 @@ export const UsersSearch = ({ fetchData }) => {
     }, [fetchRoles, t]);
 
     useEffect(() => {
+        usersSearchStore.initializeQueryParams(location.search)
         setSearchParams(usersSearchStore.queryParams);
-    }, [setSearchParams]);
+    }, [setSearchParams, location.search]);
 
 
     const handleSearch = (values) => {

@@ -20,8 +20,6 @@ class UsersSearchStore {
             pageSize: observable,
             orderBy: observable
         });
-
-        this.initializeQueryParams();
     }
 
     setTotalItemCount(count) {
@@ -91,8 +89,9 @@ class UsersSearchStore {
         return params;
     }
 
-    initializeQueryParams() { 
-        const params = new URLSearchParams(window.location.search);
+    initializeQueryParams(searchParams) { 
+        const params = new URLSearchParams(searchParams);
+
         const searchQuery = params.get("searchQuery") || "";
         const roleId = params.get("roleId") || null;
         const isActive = params.get("isActive") || null;
