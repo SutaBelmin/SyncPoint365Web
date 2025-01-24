@@ -1,39 +1,22 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect} from "react"
 import DatePicker, { registerLocale } from "react-datepicker"
 import { useTranslation } from "react-i18next"
 import { localeConstant } from "../../../constants"
-import { companyNewsService } from "../../../services"
-import { toast } from "react-toastify"
 import { Form, Formik } from "formik"
 import { companyNewsSearchStore } from "../stores"
-import { useLocation } from "react-router-dom"
-
+import { useLocation, useSearchParams } from "react-router-dom"
 
 export const CompanyNewsSearch = ({ fetchData }) => {
-  const [, setCompanyNews] = useState([])
-  const [searchParams, setSearchParams] = useState({})
+  const [, setSearchParams] = useSearchParams()
   const { t, i18n } = useTranslation()
   const location = useLocation();
 
   registerLocale(i18n.language, localeConstant[i18n.language])
 
-  const fetchCompanyNews = useCallback(async () => {
-    try {
-      const response = await companyNewsService.getPagedList(searchParams)
-      setCompanyNews(response.data)
-    } catch (error) {
-      toast.error(t("ERROR_CONTACT_ADMIN"))
-    }
-  }, [searchParams, t])
-
   useEffect(() => {
     companyNewsSearchStore.initializeQueryParams(location.search);
     setSearchParams(companyNewsSearchStore.queryParams);
   }, [setSearchParams, location.search])
-  
-  useEffect(() => {
-    fetchCompanyNews();
-  }, [fetchCompanyNews])
 
   const handleSearch = (values) => {
     companyNewsSearchStore.setQuery(values.title);

@@ -1,11 +1,11 @@
 import { makeObservable, action, observable } from "mobx";
 
 class CompanyNewsSearchStore {
-    query = null;
+    query = "";
     dateFrom = null;
     dateTo = null;
     year = null;
-    orderBy = null;
+    orderBy = "";
     page = 1;
     pageSize = 10;
     totalItemCount = 0;
@@ -59,7 +59,7 @@ class CompanyNewsSearchStore {
     }
 
     clearFilters() {
-        this.setQuery(null);
+        this.setQuery("");
         this.setDateFrom(null);
         this.setDateTo(null);
         this.syncWithQueryParams();
@@ -82,10 +82,10 @@ class CompanyNewsSearchStore {
     initializeQueryParams(searchParams) {
         const params = new URLSearchParams(searchParams);
     
-        this.setQuery(params.get("query") || null);
+        this.setQuery(params.get("query") || "");
         this.setDateFrom(params.get("dateFrom") ? new Date(params.get("dateFrom")) : null);
         this.setDateTo(params.get("dateTo") ? new Date(params.get("dateTo")) : null);
-        this.setOrderBy(params.get("orderBy") || null);
+        this.setOrderBy(params.get("orderBy") || "");
         this.setPage(parseInt(params.get("page")) || 1);
         this.setPageSize(parseInt(params.get("pageSize")) || 10);
     }

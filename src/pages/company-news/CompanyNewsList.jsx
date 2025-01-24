@@ -144,8 +144,8 @@ export const CompanyNewsList = observer(() => {
         if (field) {
             const orderBy = `${field}|${direction}`;
             companyNewsSearchStore.setOrderBy(orderBy);
+            setSearchParams(companyNewsSearchStore.queryParams);
         }
-        setSearchParams(companyNewsSearchStore.queryParams);
     };
 
     const handleVisibilityChange = async (id, isVisible) => {
