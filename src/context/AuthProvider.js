@@ -1,7 +1,7 @@
 import { useState, createContext, useContext, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthStore } from '../stores/AuthStore';
-import eventEmitter from '../utils/EventEmitter';
+import { eventEmitter } from '../utils/EventEmitter';
 
 const AuthContext = createContext();
 
@@ -19,17 +19,16 @@ export const AuthProvider = ({ children }) => {
 
         const handleNavigation = () => {
             setloggedUser(null);
-            navigate('/login');
+            navigate('/');
         };
 
         const handleStorageChange = () => {
             const accessToken = authStore.getAccessToken();
             const storedUser = authStore.getUser();
             const refreshToken = authStore.getRefreshToken();
-            console.log(refreshToken);
             if (!accessToken || !refreshToken || !storedUser) {
                 setloggedUser(null);
-                navigate('/login', { replace: true });
+                navigate('/', { replace: true });
             }
         };
 
@@ -43,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     }, [authStore, navigate]);
 
     useEffect(() => {
-        if (loggedUser && location.pathname === '/login') {
+        if (loggedUser && location.pathname === '/') {
             navigate('/home', { replace: true });
         }
     }, [loggedUser, location, navigate]);

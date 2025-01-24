@@ -12,7 +12,7 @@ export const NotFound = () => {
         if (loggedUser) 
             navigate('/home', { replace: true });
         else 
-            navigate('/login', { replace: true });
+            navigate('/', { replace: true });
     };
 
     return (

@@ -1,9 +1,8 @@
 import axios from 'axios';
-import eventEmitter from '../utils/EventEmitter';
+import { eventEmitter } from '../utils';
 
 class BaseService {
 	constructor() {
-		//this.navigate = navigate;
 		this.api = axios.create({
 			baseURL: process.env['REACT_APP_API_URL'],
 			headers: {
@@ -70,7 +69,6 @@ class BaseService {
 			localStorage.removeItem('refreshToken');
 			localStorage.removeItem('loggedUser');
 			eventEmitter.emit('navigateToLogin');
-			//window.location.href = "/login";
 		}
 		return Promise.reject(error);
 	}
