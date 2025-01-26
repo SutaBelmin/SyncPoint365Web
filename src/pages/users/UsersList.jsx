@@ -38,8 +38,7 @@ export const UsersList = observer(() => {
     const fetchData = useCallback(async () => {
         try {
             const filter = {
-                ...usersSearchStore.userFilter,
-                loggedUserRole: loggedUser.role
+                ...usersSearchStore.userFilter
             };
             const response = await usersService.getPagedUsersFilter(filter, signal);
             setData(response.data.items);
@@ -48,7 +47,7 @@ export const UsersList = observer(() => {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
 
-    }, [signal, t, loggedUser.role]);
+    }, [signal, t]);
 
     const debouncedFetchData = useMemo(() => debounce(fetchData, 100), [fetchData]);
 

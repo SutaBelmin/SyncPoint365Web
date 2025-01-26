@@ -27,7 +27,6 @@ class UsersService extends BaseService {
                 isActive: filter.isActive,
                 query: filter.searchQuery,
                 roleId: filter.roleId,
-                loggedUserRole: filter.loggedUserRole,
                 orderBy: filter.orderBy,
                 page: filter.page,
                 pageSize: filter.pageSize
