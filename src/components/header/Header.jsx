@@ -8,7 +8,7 @@ import './Header.css';
 import { useAuth } from '../../context/AuthProvider';
 import { toast } from "react-toastify";
 import { usersService } from '../../services';
-import defaultUserImage from '../../assets/images/defaultUser.PNG';
+import { defaultUserImage } from '../../assets/images';
 
 const Header = ({ isCollapsed }) => {
     const { t } = useTranslation();

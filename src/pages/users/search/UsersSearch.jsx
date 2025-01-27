@@ -100,18 +100,18 @@ export const UsersSearch = ({ fetchData }) => {
                         className="input-search h-10 rounded-md border-gray-300 input-select-width"
                     />
 
-                    {loggedUser.role !== "Administrator" &&
-                        <Select
-                            id="roleId"
-                            name="roleId"
-                            value={roles.find(role => role.value === values.roleId) || null}
-                            onChange={(option) => setFieldValue('roleId', option && option.value)}
-                            options={roles}
-                            placeholder={t('SELECT_ROLE')}
-                            isClearable
-                            isSearchable
-                            className='input-select-border input-select-width'
-                        />
+                    {loggedUser.role === roleConstant.superAdministrator && 
+                    <Select
+                        id="roleId"
+                        name="roleId"
+                        value={roles.find(role => role.value === values.roleId) || null}
+                        onChange={(option) => setFieldValue('roleId', option && option.value)}
+                        options={roles}
+                        placeholder={t('SELECT_ROLE')}
+                        isClearable
+                        isSearchable
+                        className='input-select-border input-select-width'
+                    />
                     }
 
                     <Select
