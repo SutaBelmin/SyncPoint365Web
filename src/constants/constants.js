@@ -38,3 +38,5 @@ export const absenceRequestTypeStatusConstant = {
 
 export const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 
+export const allowedDocumentExtensions = ['.pdf','.doc','.docx','.xls','.xlsx'];
+

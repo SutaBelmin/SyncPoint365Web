@@ -120,7 +120,7 @@ export const CitiesList = observer(() => {
             await citiesService.delete(cityId, signal);
             fetchData();
             closeModal();
-            toast.success("Country deleted successfully!");
+            toast.success(t('CITY_DELETED_SUCCESSFULLY'));
         } catch (error) {
             toast.error(t('ERROR_CONTACT_ADMIN'));
         }
@@ -167,7 +167,7 @@ export const CitiesList = observer(() => {
                     }
                     highlightOnHover
                     persistTableHead={true}
-                    paginationComponentOptions={PaginationOptions}
+                    paginationComponentOptions={PaginationOptions()}
                     noDataComponent={<NoDataMessage />}
                     onSort={(column, sortDirection) => {
                         const sortField = column.sortField;

@@ -5,3 +5,4 @@ export { genderConstant } from './constants';
 export { absenceRequestStatusConstant  } from './constants';
 export { absenceRequestTypeStatusConstant } from  './constants';
 export {allowedExtensions} from './constants';
+export { allowedDocumentExtensions } from './constants';

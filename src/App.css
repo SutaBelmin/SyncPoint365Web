@@ -46,11 +46,11 @@
   width: 100%;
   border: 1px solid #cbd5e1; 
   border-radius: 5px; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  box-shadow: none; 
   outline: none;
   font-size: 1rem; 
   transition: box-shadow 0.3s, border-color 0.3s;
-  background-color: #f9fafb; 
+  background-color: #ffffff; 
   color: #374151; 
 }
 
@@ -61,9 +61,9 @@
 
 .react-datepicker {
   font-family: 'Inter', sans-serif; 
-  border: 1px solid #e5e7eb; 
+  border: 1px solid rgb(209 213 219); 
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  box-shadow: none; 
   padding: 10px;
 }
 

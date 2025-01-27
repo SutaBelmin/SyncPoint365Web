@@ -13,7 +13,7 @@ class AbsenceRequestsSearchStore {
     pageSize = 10;
     currentQueryParams = null;
 
-
+    
     constructor(){
         makeObservable(this, {
             setPage: action, 
