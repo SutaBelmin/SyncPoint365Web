@@ -17,11 +17,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
 
-        const handleNavigation = () => {
-            setloggedUser(null);
-            navigate('/');
-        };
-
         const handleStorageChange = () => {
             const accessToken = authStore.getAccessToken();
             const storedUser = authStore.getUser();
@@ -33,11 +28,11 @@ export const AuthProvider = ({ children }) => {
         };
 
         window.addEventListener('storage', handleStorageChange);
-        eventEmitter.on('navigateToLogin', handleNavigation);
+        eventEmitter.on('navigateToLogin', handleStorageChange);
 
         return () => {
             window.removeEventListener('storage', handleStorageChange);
-            eventEmitter.off('navigateToLogin', handleNavigation);
+            eventEmitter.off('navigateToLogin', handleStorageChange);
         };
     }, [authStore, navigate]);
 

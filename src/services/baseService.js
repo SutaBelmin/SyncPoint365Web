@@ -40,7 +40,7 @@ class BaseService {
 	async handleResponseError(error) {
 		const originalRequest = error.config;
 
-		if (!originalRequest.url.includes("/refreshtokens/") && error.response && error.response.status === 401 && !originalRequest._retry) {
+		if (!originalRequest.url.includes("/auth/") && error.response && error.response.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
 
 			if (!this.isRefreshing) {
@@ -74,11 +74,12 @@ class BaseService {
 	}
 
 	async refreshAccessToken() {
-
-		const accessToken = localStorage.getItem('accessToken');
 		const refreshToken = localStorage.getItem('refreshToken');
-		const encodedRefreshToken = encodeURIComponent(refreshToken);
-		const response = await this.api.get(`/refreshtokens/compare-tokens?accessToken=${accessToken}&refreshToken=${encodedRefreshToken}`);
+		const response = await this.api.get("/auth/validate-token", {
+			params: {
+				refreshToken: refreshToken
+			},
+		});
 		const newAccessToken = response?.data;
 		localStorage.setItem('accessToken', newAccessToken);
 		return newAccessToken;
