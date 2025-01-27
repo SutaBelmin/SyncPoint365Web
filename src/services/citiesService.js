@@ -3,7 +3,7 @@ import BaseService from "./baseService";
 
 class CitiesService extends BaseService {
     async getList(signal = null) {
-        const response = this.api.get("/cities/list", {
+        const response = this.api.get("/lookup/cities", {
             signal: signal,
         });
         return response;

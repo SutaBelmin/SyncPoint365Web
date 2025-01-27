@@ -12,6 +12,13 @@ class AbsenceRequestTypesService extends BaseService {
         return response;
     }
 
+    async getLookupList(signal = null) {
+        const response = await this.api.get("/lookup/absenceRequestTypes", {
+            signal: signal
+        });
+        return response;
+    }
+
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
             "/absence-request-types/paged",
