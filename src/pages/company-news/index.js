@@ -1,3 +1,3 @@
 export { CompanyNewsList } from './CompanyNewsList';
 export {CompanyNewsAdd} from './CompanyNewsAdd';
-export {CompanyNewsDetails} from './CompanyNewsDetails';
+export {CompanyNewsPreview} from './CompanyNewsPreview';

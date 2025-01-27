@@ -17,7 +17,6 @@ class CountriesStore {
       pageSize: observable,
       orderBy: observable
     });
-    this.initializeQueryParams();
   }
 
   setSearchQuery(query) {

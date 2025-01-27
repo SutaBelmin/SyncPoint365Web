@@ -2,12 +2,15 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { t } from 'i18next';
 import React from 'react';
+import DOMPurify from 'dompurify';
 
-export const CompanyNewsDetails = ({ title, content, date, closeModal }) => {
+export const CompanyNewsPreview = ({ title, content, date, closeModal }) => {
 
     if (!content) {
         return <div>{t('LOADING')}</div>;
     }
+
+    const sanitizedContent = DOMPurify.sanitize(content); 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center p-4 bg-black bg-opacity-50">
@@ -25,7 +28,7 @@ export const CompanyNewsDetails = ({ title, content, date, closeModal }) => {
                 </div>
                 <div className="px-8 overflow-y-auto flex-grow mb-[5%]">
                     <div className="prose max-w-none pl-7 pr-7 text-justify pb-8">
-                        <p>{content}</p>
+                        <div dangerouslySetInnerHTML={{__html: sanitizedContent}}/>
                     </div>
 
                 </div>

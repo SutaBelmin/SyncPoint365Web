@@ -4,7 +4,7 @@ import { companyNewsService } from '../../services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useModal } from '../../context/ModalProvider';
-import { CompanyNewsDetails } from '../company-news';
+import {CompanyNewsPreview } from '../company-news';
 import { BaseModal } from '../../components/modal';
 
 const Home = () => {
@@ -16,12 +16,12 @@ const Home = () => {
     const [hasMore, setHasMore] = useState(true);
     const {openModal, closeModal} = useModal();
 
-    const loadNews = async (page) => {
+    const fetchNews = async (page) => {
         setLoading(true);
         try {
             const filter = {
                 query: "",
-                visible: true,
+                isVisible: true,
                 dateFrom: null, 
                 dateTo: null, 
                 orderBy: "DateCreated|desc", 
@@ -31,8 +31,7 @@ const Home = () => {
 
             const response = await companyNewsService.getPagedList(filter);
             setNews(response.items || []);
-            const remainingItems = response.totalItemCount - page * itemsPerPage;
-            setHasMore(remainingItems > 0);
+            setHasMore(response.hasNextPage);
             setCurrentPage(page);
         } catch (error) {
             setNews([]);
@@ -42,9 +41,8 @@ const Home = () => {
         }
     };
     
-
     useEffect(() => {
-        loadNews(currentPage);
+        fetchNews(currentPage);
     }, [currentPage]);
 
     const handleNextPage = () => {
@@ -61,7 +59,7 @@ const Home = () => {
 
     const handleOpenModal = (item) => {
         openModal(
-            <CompanyNewsDetails title={item.title} content={item.text} date={item.dateCreated} closeModal={closeModal}/>
+            <CompanyNewsPreview title={item.title} content={item.text} date={item.dateCreated} closeModal={closeModal}/>
         );
     };
 

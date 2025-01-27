@@ -7,7 +7,7 @@ class CompanyNewsService extends BaseService {
             {
                 params: {
                     query: filter.query,
-                    visible: filter.visible,
+                    isVisible: filter.isVisible,
                     dateFrom: filter.dateFrom,
                     dateTo: filter.dateTo,
                     orderBy: filter.orderBy,
@@ -41,8 +41,8 @@ class CompanyNewsService extends BaseService {
         return response.data;
     }
 
-    async updateVisibility(id, isVisible) {
-        const response = await this.api.put(`/company-news/Change-visibility?id=${id}`, isVisible);
+    async updateVisibility(id) {
+        const response = await this.api.put(`/company-news/change-visibility?id=${id}`);
         return response.data;
     }
 }

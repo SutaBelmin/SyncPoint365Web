@@ -18,7 +18,7 @@ import { useModal } from "../../context/ModalProvider";
 import { CompanyNewsAdd } from "./CompanyNewsAdd";
 import { CompanyNewsEdit } from "./CompanyNewsEdit";
 import { useAuth } from "../../context/AuthProvider";
-import { CompanyNewsSearch } from "./search/CompanyNewsSearch";
+import { CompanyNewsSearch } from "../company-news/search";
 
 export const CompanyNewsList = observer(() => {
     const { signal } = useRequestAbort();
@@ -93,7 +93,9 @@ export const CompanyNewsList = observer(() => {
                     <FontAwesomeIcon icon={faTrash}/>
                     </button>
                     <button
-                    onClick={()=>handleVisibilityChange(row.id, !row.isVisible)}
+                    onClick={()=>handleVisibilityChange(row.id
+                        
+                    )}
                     >
                      {row.isVisible ? (
                         <FontAwesomeIcon icon={faEye} style={{color: '#276EEC'}}/>
@@ -107,7 +109,7 @@ export const CompanyNewsList = observer(() => {
     ];
 
     const onAddCompanyNewsClick = () => {
-        openModal(<CompanyNewsAdd userId={loggedUser.id} closeModal={closeModal} fetchData={fetchData}/>)
+        openModal(<CompanyNewsAdd closeModal={closeModal} fetchData={fetchData}/>)
     }
 
     const onEditCompanyNewsClick = (companyNews) => {
@@ -148,9 +150,9 @@ export const CompanyNewsList = observer(() => {
         }
     };
 
-    const handleVisibilityChange = async (id, isVisible) => {
+    const handleVisibilityChange = async (id) => {
         try {   
-            await companyNewsService.updateVisibility(id, isVisible);
+            await companyNewsService.updateVisibility(id);
             fetchData();
             toast.success(t('STATUS_CHANGED'));
         } catch (error) {
