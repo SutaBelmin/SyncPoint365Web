@@ -72,6 +72,10 @@ export const AbsenceRequestTypesList = observer(() => {
             selector: (row) => row.isActive ? t('YES') : t('NO'),
         },
         {
+            name: t('COLOR'),
+            selector: (row) => row.color,
+        },
+        {
             name: t('ACTIONS'),
             cell: (row) => (
                 <div className="flex">

@@ -222,5 +222,8 @@
     "NO_NEWS_TO_DISPLAY":"No news to display.",
     "LOAD_MORE":"Load more",
     "YOU_ARE_ALL_CAUGHT_UP":"You're all caught up",
-    "DATE_CREATED":"Date created"
+    "DATE_CREATED":"Date created",
+    "CHOOSE_COLOR":"Choose color",
+    "COLOR":"Color"
+
 }

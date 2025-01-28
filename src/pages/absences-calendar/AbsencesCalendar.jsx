@@ -17,7 +17,6 @@ export const AbsencesCalendar = () => {
     const { signal } = useRequestAbort();
     const [, setData] = useState([]);
     const [absences, setAbsences] = useState([]);
-    const typeColors = {}
 
     const locales = {
         "en-US": require("date-fns/locale/en-US"),
@@ -42,7 +41,7 @@ export const AbsencesCalendar = () => {
                 title: `${item.absenceRequestType.name} - ${item.user.firstName} ${item.user.lastName}`,
                 start: new Date(item.dateFrom),
                 end: new Date(item.dateTo),
-                type: item.absenceRequestType.name.toLowerCase(),
+                color: item.absenceRequestType.color,
             }));
 
             setAbsences(transformedData);
@@ -56,23 +55,8 @@ export const AbsencesCalendar = () => {
         fetchData();
     }, [fetchData]);
 
-
-    const generateColor = () => {
-        const hue = Math.floor(Math.random() * 360);
-        return `hsl(${hue}, 70%, 50%)`;
-      };
-    
-      const getColorForType = (type) => {
-        if (typeColors[type]) 
-          return typeColors[type];
-        
-        const newColor = generateColor();
-        typeColors[type] = newColor;
-        return newColor;
-      };
-    
       const eventStyleGetter = (event) => {
-        const backgroundColor = getColorForType(event.type); 
+        const backgroundColor = event.color || "#ffffff"; 
         return {
           style: {
             backgroundColor,
