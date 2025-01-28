@@ -1,2 +1,2 @@
-export {default as defaultUserImage} from './defaultUser.png'
+export {default as defaultuser} from './defaultUser.png'
 

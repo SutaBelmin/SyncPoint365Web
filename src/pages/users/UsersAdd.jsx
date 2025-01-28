@@ -16,7 +16,7 @@ import { registerLocale } from "react-datepicker";
 import { citiesService, enumsService, usersService } from '../../services';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { genderConstant, localeConstant, roleConstant, allowedExtensions } from '../../constants';
-import { defaultUserImage } from '../../assets/images';
+import { defaultuser } from '../../assets/images';
 
 export const UsersAdd = () => {
     const { t, i18n } = useTranslation();
@@ -175,7 +175,7 @@ export const UsersAdd = () => {
                                     <div className="flex justify-center mb-4">
                                         <div className="w-[200px] h-[200px] rounded-full mb-4 -mt-16 border-4 border-blue-400 overflow-hidden">
                                             <img
-                                                src={profilePicture || defaultUserImage}
+                                                src={profilePicture || defaultuser}
                                                 alt="Profile"
                                                 className="w-full h-full object-cover"
                                             />
@@ -190,7 +190,7 @@ export const UsersAdd = () => {
                                                 setFieldValue("imageFile", null);
                                             }}
                                             disabled={!profilePicture}
-                                            style={{ visibility: profilePicture && profilePicture !== defaultUserImage ? 'visible' : 'hidden' }}
+                                            style={{ visibility: profilePicture && profilePicture !== defaultuser ? 'visible' : 'hidden' }}
                                         >
                                             {t('DELETE_PICTURE')}
                                         </button>

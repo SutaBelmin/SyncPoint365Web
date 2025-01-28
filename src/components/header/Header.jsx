@@ -8,7 +8,7 @@ import './Header.css';
 import { useAuth } from '../../context/AuthProvider';
 import { toast } from "react-toastify";
 import { usersService } from '../../services';
-import { defaultUserImage } from '../../assets/images';
+import { defaultuser } from '../../assets/images';
 
 const Header = ({ isCollapsed }) => {
     const { t } = useTranslation();
@@ -30,7 +30,7 @@ const Header = ({ isCollapsed }) => {
     const fetchUserImage = useCallback(async () => {
         try {
             const user = await usersService.getById(loggedUser.id);
-            const userImage = user.data.imageContent ? `data:image/jpeg;base64,${user.data.imageContent}` : defaultUserImage;
+            const userImage = user.data.imageContent ? `data:image/jpeg;base64,${user.data.imageContent}` : defaultuser;
             setProfilePicture(userImage);
         } catch (error) {
             toast.error(t('ERROR_LOADING_USER'));

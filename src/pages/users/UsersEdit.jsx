@@ -16,7 +16,7 @@ import { registerLocale } from "react-datepicker";
 import { FaArrowLeft, FaUpload } from 'react-icons/fa';
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
 import { roleConstant, genderConstant, localeConstant, allowedExtensions } from '../../constants';
-import { defaultUserImage } from '../../assets/images';
+import { defaultuser } from '../../assets/images';
 
 export const UsersEdit = () => {
     const { t, i18n } = useTranslation();
@@ -109,7 +109,7 @@ export const UsersEdit = () => {
 
             const userImage = response.data.imageContent
                 ? `data:image/jpeg;base64,${response.data.imageContent}`
-                : defaultUserImage;
+                : defaultuser;
             setProfilePicture(userImage);
 
         } catch (error) {
@@ -206,7 +206,7 @@ export const UsersEdit = () => {
                                     <div className="flex justify-center mb-4 mt-4">
                                         <div className="w-[200px] h-[200px] rounded-full mb-4 -mt-16 border-4 border-blue-400 overflow-hidden">
                                             <img
-                                                src={profilePicture || defaultUserImage}
+                                                src={profilePicture || defaultuser}
                                                 alt="Profile"
                                                 className="w-full h-full object-cover"
                                             />
@@ -218,7 +218,7 @@ export const UsersEdit = () => {
                                             className="btn-cancel inline-flex items-center px-10 py-4 mr-1 rounded-md cursor-pointer text-white text-center"
                                             onClick={handleDeleteImage}
                                             disabled={!profilePicture}
-                                            style={{ visibility: profilePicture && profilePicture !== defaultUserImage ? 'visible' : 'hidden' }}
+                                            style={{ visibility: profilePicture && profilePicture !== defaultuser ? 'visible' : 'hidden' }}
                                         >
                                             {t('DELETE_PICTURE')}
                                         </button>

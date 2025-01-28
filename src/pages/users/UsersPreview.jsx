@@ -6,7 +6,7 @@ import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { format } from "date-fns";
 import './UsersList.css';
 import { usersService } from "../../services";
-import { defaultUserImage } from "../../assets/images";
+import { defaultuser } from "../../assets/images";
 import { toast } from "react-toastify";
 import { useRequestAbort } from "../../components/hooks";
 
@@ -23,7 +23,7 @@ export const UsersPreview = ({ userId, closeModal }) => {
 
 			const userImage = response.data.imageContent
 				? `data:image/jpeg;base64,${response.data.imageContent}`
-				: defaultUserImage;
+				: defaultuser;
 			setProfilePicture(userImage);
 
 		} catch (error) {
