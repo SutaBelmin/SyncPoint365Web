@@ -1,3 +1,4 @@
-export { yearOptions } from './yearOptions'
-export { PaginationOptions } from './PaginationOptions'
+export { eventEmitter } from './EventEmitter'
 export { formatPhoneNumber } from './formatPhoneNumber'
+export { PaginationOptions } from './PaginationOptions'
+export { yearOptions } from './yearOptions'

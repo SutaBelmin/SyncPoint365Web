@@ -21,11 +21,11 @@ const Login = () => {
   });
 
 
-  const handleLogin = async (values, { setSubmitting, setErrors }) => {
+  const handleLogin = async (values, { setSubmitting }) => {
     try {
       const response = await authService.login(values.email, values.password);
-      const { user, token } = response;
-      setUser(user, token);
+      const { user, accessToken, refreshToken } = response;
+      setUser(user, accessToken, refreshToken);
       navigate('/home');
     } catch (error) {
       if (error.response && error.response.status === 401) {
