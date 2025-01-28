@@ -19,7 +19,7 @@ export const AbsenceRequestsAddEmployeeView = ({ userId, closeModal, fetchData }
 
     const fetchAbsenceRequestTypes = useCallback(async () => {
         try {
-            const response = await absenceRequestTypesService.getList(true, signal);
+            const response = await absenceRequestTypesService.getLookupList(signal);
             const typesOptions = response.data.map(type => ({
                 value: type.id,
                 label: type.name

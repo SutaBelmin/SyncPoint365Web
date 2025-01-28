@@ -8,6 +8,7 @@ import usersSearchStore from "../stores/UsersSearchStore";
 import { enumsService } from "../../../services";
 import { userStatusConstant, roleConstant } from '../../../constants';
 import { useRequestAbort } from "../../../components/hooks/useRequestAbort";
+import { useAuth } from '../../../context/AuthProvider';
 
 export const UsersSearch = ({ fetchData }) => {
     const { t } = useTranslation();
@@ -16,6 +17,7 @@ export const UsersSearch = ({ fetchData }) => {
     const [userStatusOptions, setUserStatusOptions] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
+    const { loggedUser } = useAuth();
 
     const fetchRoles = useCallback(async () => {
         try {
@@ -98,6 +100,7 @@ export const UsersSearch = ({ fetchData }) => {
                         className="input-search h-10 rounded-md border-gray-300 input-select-width"
                     />
 
+                    {loggedUser.role === roleConstant.superAdministrator && 
                     <Select
                         id="roleId"
                         name="roleId"
@@ -109,6 +112,7 @@ export const UsersSearch = ({ fetchData }) => {
                         isSearchable
                         className='input-select-border input-select-width'
                     />
+                    }
 
                     <Select
                         id="isActive"
@@ -124,19 +128,19 @@ export const UsersSearch = ({ fetchData }) => {
                         className='input-select-border input-select-width'
                     />
                     <div className='flex gap-4 xs:w-full'>
-						<button
-							type="submit"
-							className="btn-search"
-						>
-							{t('SEARCH')}
-						</button>
-						<button
-							type="button"
-							onClick={() => handleClear(setFieldValue)}
-							className="btn-clear"
-						>
-							{t("CLEAR")}
-						</button>
+                        <button
+                            type="submit"
+                            className="btn-search"
+                        >
+                            {t('SEARCH')}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => handleClear(setFieldValue)}
+                            className="btn-clear"
+                        >
+                            {t("CLEAR")}
+                        </button>
                     </div>
 
                 </Form>
