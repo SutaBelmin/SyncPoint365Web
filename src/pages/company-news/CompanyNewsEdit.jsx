@@ -68,12 +68,14 @@ export const CompanyNewsEdit = ({ companyNews, closeModal, fetchData }) => {
                 {t('TEXT')} <span className="text-red-500">*</span>
               </label>
               <Editor
-                apiKey="85ai2xbmrgab9myn4by7p9pdrvyukic5lec82j3ra04eyo6y"
+                apiKey={process.env.REACT_APP_TEXT_EDITOR_API_KEY}
                 value={values.text}
                 onEditorChange={(content) => setFieldValue("text", content)}
                 init={{
                   height: 300,
                   menubar: true,
+                  branding: false,
+                  cookie_samesite: "None",
                   toolbar:
                     "undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist | link image",
                   content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
