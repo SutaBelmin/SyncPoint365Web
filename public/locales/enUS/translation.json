@@ -202,12 +202,12 @@
     "DOCUMENT_DELETED_SUCCESSFULLY":"Document deleted successfully.",
     "UPDATE_DOCUMENT":"Update document",
     "COMPANY_NEWS": "Company News",
-    "ADD_NEW_ARTICLE": "Add New Article",
+    "ADD_NEW_ARTICLE": "Add News",
     "AUTHOR": "Author",
     "ARTICLE_TITLE": "Title",
     "PUBLISHED": "Published",
     "PRIVATE": "Private",
-    "ADD_COMPANY_NEWS": "Add company news",
+    "ADD_COMPANY_NEWS": "Add news",
     "TITLE_IS_REQUIRED":"Title is required",
     "TEXT_IS_REQUIRED":"Text is required",
     "TITLE_NEWS": "Title",
@@ -221,5 +221,6 @@
     "NEWS":"News",
     "NO_NEWS_TO_DISPLAY":"No news to display.",
     "LOAD_MORE":"Load more",
-    "YOU_ARE_ALL_CAUGHT_UP":"You're all caught up"
+    "YOU_ARE_ALL_CAUGHT_UP":"You're all caught up",
+    "DATE_CREATED":"Date created"
 }

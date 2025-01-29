@@ -211,7 +211,7 @@
     "TITLE_IS_REQUIRED":"Naslov je obavezan",
     "TEXT_IS_REQUIRED":"Tekst je obavezan",
     "TITLE_NEWS": "Naslov",
-    "TEXT":"Sadrzaj",
+    "TEXT":"Sadržaj",
     "IS_VISIBLE":"Vidljivo",
     "HIDDEN":"Skriveno",
     "EDIT_COMPANY_NEWS":"Uredi novosti",
@@ -221,5 +221,6 @@
     "NEWS":"Novosti",
     "NO_NEWS_TO_DISPLAY":"Nema novosti za prikazati.",
     "LOAD_MORE":"Učitaj još",
-     "YOU_ARE_ALL_CAUGHT_UP":"Sve je učitano"
+    "YOU_ARE_ALL_CAUGHT_UP":"Sve je učitano",
+    "DATE_CREATED":"Datum kreiranja"
 }

@@ -21,7 +21,7 @@ class CompanyNewsService extends BaseService {
     }
 
     async add(companyNewsData, signal = null) {
-        const response = await this.api.post(`/company-news`, companyNewsData, {
+        const response = await this.api.post(`/company-news/add`, companyNewsData, {
             signal: signal,
         });
         return response.data;

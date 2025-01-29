@@ -12,11 +12,10 @@ import { observer } from "mobx-react-lite";
 import debounce from "lodash.debounce";
 import { reaction } from "mobx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faEye, faEyeSlash, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useSearchParams } from "react-router-dom";
 import { useModal } from "../../context/ModalProvider";
-import { CompanyNewsAdd } from "./CompanyNewsAdd";
-import { CompanyNewsEdit } from "./CompanyNewsEdit";
+import { CompanyNewsAdd, CompanyNewsEdit } from "../company-news";
 import { useAuth } from "../../context/AuthProvider";
 import { CompanyNewsSearch } from "../company-news/search";
 
@@ -28,7 +27,7 @@ export const CompanyNewsList = observer(() => {
     const { openModal, closeModal } = useModal();
 
     const [data, setData] = useState([]);
-    const {loggedUser} = useAuth();
+    const { loggedUser } = useAuth();
 
     const fetchData = useCallback(async () => {
         try {
@@ -71,37 +70,39 @@ export const CompanyNewsList = observer(() => {
             sortField: 'user.lastName',
         },
         {
-            name: t('ARTICLE_TITLE'),
+            name: t('COMPANY_NEWS'),
             selector: (row) => row.title,
         },
         {
-            name: t('STATUS'),
-            selector: (row) => row.isVisible ? t('PUBLISHED') : t('HIDDEN'),
+            name: t('DATE_CREATED'),
+            selector: (row) => new Date(row.dateCreated).toLocaleDateString(),
+        },
+        {
+            name: t('VISIBILITY'),
+            cell: (row) => (
+                <button
+                    onClick={() => handleVisibilityChange(row.id)}
+                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${row.isVisible ? "bg-green-600" : "bg-gray-300"}`}
+                >
+                    <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isVisible ? "translate-x-5" : "translate-x-1"}`}
+                    ></span>
+                </button>
+            ),
         },
         {
             name: t('ACTIONS'),
             cell: row => (
                 <div className="flex">
-                    <button 
-                    onClick={() => onEditCompanyNewsClick(row)}
-                    className="text-lg text-blue-500 hover:underline p-2">
-                    <FontAwesomeIcon icon={faEdit} style={{color: '#276EEC'}}/>
+                    <button
+                        onClick={() => onEditCompanyNewsClick(row)}
+                        className="text-lg text-blue-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faEdit} style={{ color: '#276EEC' }} />
                     </button>
                     <button
-                    onClick={()=>deleteRequestClick(row)}
-                    className="text-lg text-red-500 hover:underline p-2">
-                    <FontAwesomeIcon icon={faTrash}/>
-                    </button>
-                    <button
-                    onClick={()=>handleVisibilityChange(row.id
-                        
-                    )}
-                    >
-                     {row.isVisible ? (
-                        <FontAwesomeIcon icon={faEye} style={{color: '#276EEC'}}/>
-                     ) : (
-                        <FontAwesomeIcon icon={faEyeSlash} style={{color: '#276EEC'}}/>
-                     )}
+                        onClick={() => onDelete(row)}
+                        className="text-lg text-red-500 hover:underline p-2">
+                        <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
             ),
@@ -109,15 +110,15 @@ export const CompanyNewsList = observer(() => {
     ];
 
     const onAddCompanyNewsClick = () => {
-        openModal(<CompanyNewsAdd closeModal={closeModal} fetchData={fetchData}/>)
+        openModal(<CompanyNewsAdd closeModal={closeModal} fetchData={fetchData} />)
     }
 
     const onEditCompanyNewsClick = (companyNews) => {
-        openModal(<CompanyNewsEdit companyNews={companyNews} closeModal={closeModal} fetchData={fetchData}/>)
+        openModal(<CompanyNewsEdit companyNews={companyNews} closeModal={closeModal} fetchData={fetchData} />)
     }
 
-    const deleteRequestClick = (companyNews) => {
-        openModal(<DeleteConfirmationModal entityName={companyNews.name} onDelete={()=> handleDelete(companyNews.id)} onCancel={closeModal}/>)
+    const onDelete = (companyNews) => {
+        openModal(<DeleteConfirmationModal entityName={companyNews.name} onDelete={() => handleDelete(companyNews.id)} onCancel={closeModal} />)
     }
 
     const handleDelete = async (companyNewsId) => {
@@ -151,7 +152,7 @@ export const CompanyNewsList = observer(() => {
     };
 
     const handleVisibilityChange = async (id) => {
-        try {   
+        try {
             await companyNewsService.updateVisibility(id);
             fetchData();
             toast.success(t('STATUS_CHANGED'));
@@ -171,12 +172,12 @@ export const CompanyNewsList = observer(() => {
                         onClick={onAddCompanyNewsClick}
                         className="btn-common h-10 md:max-w-[9rem] sm:max-w-[9rem] xs:max-w-full ss:max-w-full md:ml-auto"
                     >
-                        {t('ADD_NEW_ARTICLE')}
+                        {t('ADD_COMPANY_NEWS')}
                     </button>
                 </div>
             </div>
             <div className="flex flex-col gap-4 xs:flex-row">
-                <CompanyNewsSearch fetchData={fetchData}/>
+                <CompanyNewsSearch fetchData={fetchData} />
             </div>
 
             <BaseModal />
