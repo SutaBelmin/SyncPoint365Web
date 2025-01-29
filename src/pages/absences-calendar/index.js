@@ -1,1 +1,0 @@
-export { AbsencesCalendar } from './AbsencesCalendar';

@@ -224,6 +224,14 @@
     "YOU_ARE_ALL_CAUGHT_UP":"Sve je učitano",
     "DATE_CREATED":"Datum kreiranja",
     "CHOOSE_COLOR":"Odaberi boju",
-    "COLOR":"Boja"
+    "COLOR":"Boja",
+    "TODAY": "Danas",
+    "MONTH": "Mjesec",
+    "WEEK": "Sedmica",
+    "DAY": "Dan",
+    "AGENDA": "Agenda",
+    "NEXT": "Naprijed",
+    "CALENDAR":"Kalendar",
+    "ABSENCE_REQUEST_CALENDAR":"Odsustva - Kalendar"
 
 }

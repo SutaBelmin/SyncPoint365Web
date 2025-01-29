@@ -224,6 +224,13 @@
     "YOU_ARE_ALL_CAUGHT_UP":"You're all caught up",
     "DATE_CREATED":"Date created",
     "CHOOSE_COLOR":"Choose color",
-    "COLOR":"Color"
-
+    "COLOR":"Color",
+    "TODAY": "Today",
+    "MONTH": "Month",
+    "WEEK": "Week",
+    "DAY": "Day",
+    "AGENDA": "Agenda",
+    "NEXT": "Next",
+    "CALENDAR":"Calendar",
+    "ABSENCE_REQUEST_CALENDAR":"Absence Requst - Calendar"
 }

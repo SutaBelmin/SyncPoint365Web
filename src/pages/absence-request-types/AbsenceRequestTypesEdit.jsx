@@ -5,7 +5,7 @@ import { absenceRequestTypesService } from "../../services";
 import { useRequestAbort } from "../../components/hooks";
 import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
-import { SketchPicker } from 'react-color';
+import { HexColorPicker } from "react-colorful";
 
 export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchData }) => {
     const { t } = useTranslation();
@@ -36,7 +36,6 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
             setSubmitting(false);
         }
     }
-
 
     return (
         <div className="p-4">
@@ -80,9 +79,9 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                             <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="color">
                                 {t('CHOOSE_COLOR')} 
                             </label>
-                            <SketchPicker
+                            <HexColorPicker
                                 color={values.color}
-                                onChangeComplete={(color) => setFieldValue("color", color.hex)}
+                                onChange={(color) => setFieldValue("color", color)}
                             />
                             <ErrorMessage name="color" component="div" className="text-red-500 text-sm" />
                         </div>

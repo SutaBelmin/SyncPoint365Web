@@ -1,12 +1,11 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { SketchPicker } from 'react-color';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from "yup"
 import { absenceRequestTypesService } from "../../services";
 import { useRequestAbort } from "../../components/hooks";
-
+import { HexColorPicker } from "react-colorful";
 
 export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
     const { t } = useTranslation();
@@ -76,11 +75,11 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
                             <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="color">
                                 {t('CHOOSE_COLOR')}
                             </label>
-                            <SketchPicker
+                            <HexColorPicker
                                 color={values.color}
-                                onChangeComplete={(color) => setFieldValue("color", color.hex)}
+                                onChange={(color) => setFieldValue("color", color)}
                             />
-                             <ErrorMessage name="color" component="div" className="text-red-500 text-sm" />
+                            <ErrorMessage name="color" component="div" className="text-red-500 text-sm" />
                         </div>
                         <div className="flex justify-end gap-4">
                             <button
