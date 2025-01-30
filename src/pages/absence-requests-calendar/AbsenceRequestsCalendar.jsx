@@ -26,7 +26,8 @@ export const AbsenceRequestsCalendar = () => {
         ...absenceRequestsSearchStore.absenceRequestFilter,
         userId: userId
       };
-      const response = await absenceRequestsService.getPagedList(filter, signal);
+      //Dodati filter za period
+      const response = await absenceRequestsService.getList(filter, signal);
       const items = response.data.items;
 
       const transformedData = items.map(item => ({

@@ -2,6 +2,18 @@ import BaseService from "./baseService";
 
 
 class AbsenceRequestsService extends BaseService {
+    async getList(filter, signal = null) {
+        const response = await this.api.get(
+            "/absence-requests/paged", 
+            {
+                params: {
+                    userId: filter.userId,
+                },
+                signal: signal,
+            }
+        );
+        return response;
+    }
     async getPagedList(filter, signal = null) {
         const response = await this.api.get(
             "/absence-requests/paged", 
