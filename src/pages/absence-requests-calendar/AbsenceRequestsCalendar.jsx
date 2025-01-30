@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import format from "date-fns/format";
 import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { useRequestAbort } from "../../components/hooks";
 import { absenceRequestsSearchStore } from "../absence-requests/stores";
@@ -13,6 +12,7 @@ import { absenceRequestsService } from "../../services";
 import { AbsenceRequestsCalendarSearch } from "./search";
 import { localeConstant, roleConstant } from '../../constants';
 import { useAuth } from '../../context/AuthProvider';
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, startOfDay, endOfDay } from 'date-fns';
 
 export const AbsenceRequestsCalendar = () => {
   const { t, i18n } = useTranslation();
@@ -20,33 +20,67 @@ export const AbsenceRequestsCalendar = () => {
   const [absences, setAbsences] = useState([]);
   const { loggedUser } = useAuth();
 
-  const fetchData = useCallback(async (userId = null) => {
+  const [view, setView] = useState('month');
+  const [dateRange, setDateRange] = useState({ from: null, to: null });
+
+  const handleViewChange = (newView) => {
+    setView(newView);
+  };
+  
+  const handleNavigate = (newDate) => {
+    let from, to;
+    switch (view) {
+      case 'month':
+        from = startOfMonth(newDate);
+        to = endOfMonth(newDate);
+        break;
+      case 'week':
+        from = startOfWeek(newDate);
+        to = endOfWeek(newDate);
+        break;
+      case 'day':
+        from = startOfDay(newDate);
+        to = endOfDay(newDate);
+        break;
+      default:
+        return;
+    }
+    fetchData(null, from, to);
+  
+    setDateRange({ from, to });
+  };
+  
+  const fetchData = useCallback(async (userId = null, dateFrom = null, dateTo = null) => {
     try {
       const filter = {
         ...absenceRequestsSearchStore.absenceRequestFilter,
-        userId: userId
+        userId: userId,
+        dateFrom: dateFrom ? dateFrom.toISOString() : null,
+        dateTo: dateTo ? dateTo.toISOString() : null,
       };
-      //Dodati filter za period
+  
       const response = await absenceRequestsService.getList(filter, signal);
-      const items = response.data.items;
-
+      const items = response.data;
+  
       const transformedData = items.map(item => ({
         title: `${item.absenceRequestType.name} - ${item.user.firstName} ${item.user.lastName}`,
         start: new Date(item.dateFrom),
         end: new Date(item.dateTo),
         color: item.absenceRequestType.color,
       }));
-
+  
       setAbsences(transformedData);
-
+  
     } catch (error) {
       toast.error(t('ERROR_CONTACT_ADMIN'));
     }
   }, [signal, t]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (!dateRange.from && !dateRange.to) {
+      fetchData(); 
+    }
+  }, [dateRange, fetchData]);
 
   const localizer = dateFnsLocalizer({
     format,
@@ -97,6 +131,8 @@ export const AbsenceRequestsCalendar = () => {
         eventPropGetter={eventStyleGetter}
         messages={period}
         culture={i18n.language}
+        onView={handleViewChange}
+        onNavigate={handleNavigate}
       />
     </div>
   );
