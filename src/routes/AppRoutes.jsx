@@ -13,6 +13,7 @@ import PrivateRoutes from '../routes/PrivateRoutes';
 import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
 import { CompanyDocumentsList } from '../pages/company-documents';
+import { CompanyNewsList } from '../pages/company-news';
 
 const AppRoutes = () => {
 	const { userHasRole } = useAuth();
@@ -33,6 +34,7 @@ const AppRoutes = () => {
 						<Route path="/absence-requests" element={<AbsenceRequestsList />} />
 						<Route path="/countries" element={<CountriesList />} />
 						<Route path="/cities" element={<CitiesList />} />
+						<Route path="/company-news" element={<CompanyNewsList />} />
 						<Route path="/users/update/:userId" element={<UsersEdit />} />
 					</>
 				)}

@@ -1,0 +1,1 @@
+export {CompanyNewsSearch} from './CompanyNewsSearch';
