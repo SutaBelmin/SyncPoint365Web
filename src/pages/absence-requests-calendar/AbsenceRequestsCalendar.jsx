@@ -45,7 +45,7 @@ export const AbsenceRequestsCalendar = () => {
       default:
         return;
     }
-    fetchData(null, from, to);
+    fetchData(absenceRequestsSearchStore.absenceRequestFilter.userId, from, to);
   
     setDateRange({ from, to });
   };
@@ -54,7 +54,7 @@ export const AbsenceRequestsCalendar = () => {
     try {
       const filter = {
         ...absenceRequestsSearchStore.absenceRequestFilter,
-        userId: userId ?? absenceRequestsSearchStore.absenceRequestFilter.userId,
+        userId: userId,
         dateFrom: dateFrom ? dateFrom.toISOString() : null,
         dateTo: dateTo ? dateTo.toISOString() : null,
       };
