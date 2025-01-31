@@ -13,7 +13,7 @@ import { useModal } from '../../context';
 import { useAuth } from '../../context/AuthProvider';
 import { NoDataMessage } from "../../components/common-ui";
 import { useRequestAbort } from "../../components/hooks/useRequestAbort";
-import { faEdit, faEye, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye, faFileArrowUp, faLock } from '@fortawesome/free-solid-svg-icons';
 import { UsersSearch } from './search/UsersSearch';
 import { usersSearchStore } from './stores';
 import { usersService } from '../../services';
@@ -107,18 +107,17 @@ export const UsersList = observer(() => {
         {
             name: t('STATUS'),
             cell: (row) => (
-                    <button
-                        onClick={() => changeStatus(row)}
-                        disabled={row.id === loggedUser.id}
-                         className={`relative inline-flex items-center h-6 rounded-full w-10 ${
-                             row.id === loggedUser.id ? "bg-gray-300 cursor-not-allowed"  : row.isActive ? "bg-green-600" : "bg-gray-300"
+                <button
+                    onClick={() => changeStatus(row)}
+                    disabled={row.id === loggedUser.id}
+                    className={`relative inline-flex items-center h-6 rounded-full w-10 ${row.id === loggedUser.id ? "bg-gray-300 cursor-not-allowed" : row.isActive ? "bg-green-600" : "bg-gray-300"
                         }`}
-                    >
-                        <span
-                            className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isActive ? "translate-x-5" : "translate-x-1"
-                                }`}
-                        ></span>
-                    </button>
+                >
+                    <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${row.isActive ? "translate-x-5" : "translate-x-1"
+                            }`}
+                    ></span>
+                </button>
             ),
             sortable: false,
         },
@@ -148,7 +147,6 @@ export const UsersList = observer(() => {
                     >
                         <FontAwesomeIcon icon={faEye} />
                     </button>
-
                 </div>
             ),
         },
@@ -186,6 +184,14 @@ export const UsersList = observer(() => {
         );
     }
 
+    const exportEmployeeReport = async () => {
+        try {
+            await usersService.downloadUserReport();
+        } catch (error) {
+            toast.error(t('ERROR_CONTACT_ADMIN'));
+        }
+    };
+
     return (
         <div className="flex-1 p-6 max-w-full bg-gray-100 h-screen">
             <div className="flex justify-between items-center">
@@ -194,12 +200,20 @@ export const UsersList = observer(() => {
                 <div className="flex justify-end mt-4 pt-14 pb-4">
                     <button
                         type='button'
+                        onClick={exportEmployeeReport} 
+                        className="btn-common h-10 pr-4 max-w-[3rem]"
+                    >
+                        <FontAwesomeIcon icon={faFileArrowUp} />
+                    </button>
+                    <button
+                        type='button'
                         onClick={onAddUserClick}
-                        className="btn-common h-10"
+                        className="btn-common h-10 ml-4"
                     >
                         {t('ADD_USER')}
                     </button>
                 </div>
+
             </div>
 
             <div className="flex flex-col gap-4 xs:flex-row">

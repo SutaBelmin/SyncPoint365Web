@@ -47,11 +47,11 @@ class UsersService extends BaseService {
     async add(userData, signal) {
         const response = await this.api.post(`/users`, userData, {
             headers: {
-                'Content-Type': 'multipart/form-data' 
+                'Content-Type': 'multipart/form-data'
             },
             signal
         });
-    
+
         return response.data;
     }
 
@@ -70,24 +70,37 @@ class UsersService extends BaseService {
             signal: signal
         })
         return response;
-    }   
+    }
 
     async update(userData, signal) {
         const response = await this.api.put(`/users`, userData, {
             headers: {
-                'Content-Type': 'multipart/form-data' 
-            }, 
+                'Content-Type': 'multipart/form-data'
+            },
             signal
         });
         return response;
     }
-    
+
     async changePassword(user, signal = null) {
         const response = await this.api.put('users/change-password', user, {
             signal: signal
         });
         return response.data;
-    }       
+    }
+
+    async downloadUserReport() {
+        const response = await this.api.get(`users/generate-user-report`, {
+            responseType: "blob",
+        });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "EmployeeReport.pdf");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    }
 }
 
 const usersService = new UsersService();
