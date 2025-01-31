@@ -44,8 +44,7 @@ export const AbsenceRequestTypesEdit = ({ absenceRequestType, closeModal, fetchD
                 initialValues={{
                     id: absenceRequestType.id,
                     name: absenceRequestType.name,
-                    isActive: absenceRequestType.isActive,
-                    color: "#6FF887",
+                    isActive: absenceRequestType.isActive
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => editAbsenceRequestType(values, actions)}

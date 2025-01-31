@@ -54,7 +54,7 @@ export const AbsenceRequestsCalendar = () => {
     try {
       const filter = {
         ...absenceRequestsSearchStore.absenceRequestFilter,
-        userId: userId,
+        userId: userId ?? absenceRequestsSearchStore.absenceRequestFilter.userId,
         dateFrom: dateFrom ? dateFrom.toISOString() : null,
         dateTo: dateTo ? dateTo.toISOString() : null,
       };

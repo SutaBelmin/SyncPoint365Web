@@ -39,8 +39,7 @@ export const AbsenceRequestTypesAdd = ({ closeModal, fetchData }) => {
             <Formik
                 initialValues={{
                     name: "",
-                    isActive: false,
-                    color: "#6FF887",
+                    isActive: false
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => addAbsenceRequestType(values, actions)}
