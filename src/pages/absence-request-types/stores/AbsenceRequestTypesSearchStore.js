@@ -89,7 +89,7 @@ class AbsenceRequestTypesSearchStore {
         const pageSize = parseInt(params.get("pageSize")) || 10;
 
         this.setQuery(searchQuery);
-        this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.all));
+        this.setIsActive(status === null ? null : (status === absenceRequestTypeStatusConstant.active));
         this.setOrderBy(orderBy);
         this.setPage(page);
         this.setPageSize(pageSize);
