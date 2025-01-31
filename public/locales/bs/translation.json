@@ -222,5 +222,16 @@
     "NO_NEWS_TO_DISPLAY":"Nema novosti za prikazati.",
     "LOAD_MORE":"Učitaj još",
     "YOU_ARE_ALL_CAUGHT_UP":"Sve je učitano",
-    "DATE_CREATED":"Datum kreiranja"
+    "DATE_CREATED":"Datum kreiranja",
+    "CHOOSE_COLOR":"Odaberi boju",
+    "COLOR":"Boja",
+    "TODAY": "Danas",
+    "MONTH": "Mjesec",
+    "WEEK": "Sedmica",
+    "DAY": "Dan",
+    "AGENDA": "Agenda",
+    "NEXT": "Naprijed",
+    "CALENDAR":"Kalendar",
+    "ABSENCE_REQUEST_CALENDAR":"Odsustva - Kalendar"
+
 }

@@ -72,6 +72,22 @@ export const AbsenceRequestTypesList = observer(() => {
             selector: (row) => row.isActive ? t('YES') : t('NO'),
         },
         {
+            name: t('COLOR'),
+            selector: (row) => row.color,
+            cell: (row) => (
+                <div
+                    style={{
+                        backgroundColor: row.color,
+                        width: '30px',
+                        height: '20px',
+                        borderRadius: '4px',
+                        border: '1px solid #ccc'
+                    }}
+                >
+                </div>
+            ),
+        },
+        {
             name: t('ACTIONS'),
             cell: (row) => (
                 <div className="flex">
@@ -145,14 +161,14 @@ export const AbsenceRequestTypesList = observer(() => {
                     >
                         {t('ADD_REQUEST_TYPE')}
                     </button>
-                    </div>
+                </div>
             </div>
             <div className="flex flex-col gap-4 xs:flex-row">
                 <AbsenceRequestTypesSearch fetchData={fetchData} />
-                </div>
+            </div>
 
             <div className="flex flex-col gap-4 md:flex-row">
-                
+
             </div>
 
 

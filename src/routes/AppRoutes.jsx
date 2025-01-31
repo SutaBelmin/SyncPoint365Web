@@ -14,6 +14,7 @@ import { useAuth } from '../context/AuthProvider';
 import { roleConstant } from '../constants';
 import { CompanyDocumentsList } from '../pages/company-documents';
 import { CompanyNewsList } from '../pages/company-news';
+import { AbsenceRequestsCalendar } from '../pages/absence-requests-calendar';
 
 const AppRoutes = () => {
 	const { userHasRole } = useAuth();
@@ -24,6 +25,7 @@ const AppRoutes = () => {
 				<Route path="/home" element={<Home />} />
 				<Route path="/absence-requests-user" element={<AbsenceRequestsListEmployeeView />} />
 				<Route path="/company-documents" element={<CompanyDocumentsList />} />
+				<Route path="/calendar" element={<AbsenceRequestsCalendar />} />
 				{!userHasRole(roleConstant.employee) && (
 					<>
 						<Route path="/users">

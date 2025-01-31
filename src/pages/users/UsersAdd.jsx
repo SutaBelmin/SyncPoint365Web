@@ -75,7 +75,7 @@ export const UsersAdd = () => {
                 /^\+?[1-9]\d{8,14}$|^(\d{3})[-\s]?(\d{3})[-\s]?(\d{4})$/,
                 t('PHONE_IS_NOT_VALID')
             ),
-        roleId: Yup.string().required(t('ROLE_REQUIRED')),
+        role: Yup.string().required(t('ROLE_REQUIRED')),
         password: Yup.string()
             .required(t('PASSWORD_IS_REQUIRED'))
             .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/, t('PASSWORD_RULES')),
@@ -160,7 +160,7 @@ export const UsersAdd = () => {
                         cityId: null,
                         address: '',
                         phone: '',
-                        roleId: null,
+                        role: null,
                         password: '',
                         passwordConfirm: '',
                         imageFile: null
@@ -421,20 +421,20 @@ export const UsersAdd = () => {
                                     <h2 className="text-l font-bold col-span-1 sm:col-span-2 mt-4">{t('SYSTEM_DATA')}</h2>
 
                                     <div className="w-full sm:w-1/2 col-span-1 sm:col-span-2">
-                                        <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                                             {t('ROLE')} <span className='text-red-500'>*</span>
                                         </label>
                                         <Select
-                                            id="roleId"
-                                            name="roleId"
-                                            onChange={(option) => setFieldValue('roleId', option ? option.value : null)}
+                                            id="role"
+                                            name="role"
+                                            onChange={(option) => setFieldValue('role', option ? option.value : null)}
                                             options={roles}
                                             placeholder={t('SELECT_ROLE')}
                                             isClearable
                                             isSearchable
                                             className='input-select-border mt-1'
                                         />
-                                        <ErrorMessage name="roleId" component="div" className="text-red-500 text-sm" />
+                                        <ErrorMessage name="role" component="div" className="text-red-500 text-sm" />
                                     </div>
 
                                     <div className="w-full col-span-1 sm:col-span-2 mt-1 sm:w-1/2">
